@@ -1,0 +1,15 @@
+name: '🛠️ Fix'
+description: '버그 혹은 해결해야할 문제가 생겼나요?'
+title: '[Fix] '
+labels: '🛠️ Fix'
+body:
+  - type: textarea
+    attributes:
+      label: Task Description
+      placeholder: 버그 혹은 해결해야할 문제에 대한 설명을 작성해 주세요.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ETC
+      placeholder: 추가 전달 사항이 있다면 작성해 주세요.
