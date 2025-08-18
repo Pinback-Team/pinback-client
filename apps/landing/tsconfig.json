@@ -1,7 +1,10 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "extends": "@pinback/typescript-config/react.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "plugins": [{ "name": "react" }],
+    "paths": {}
+  },
+  "include": ["src", "vite.config.ts"],
+  "exclude": ["node_modules"]
 }

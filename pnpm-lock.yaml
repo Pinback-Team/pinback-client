@@ -39,6 +39,9 @@ importers:
       '@pinback/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@pinback/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@types/react':
         specifier: ^19.1.10
         version: 19.1.10
@@ -85,6 +88,9 @@ importers:
       '@pinback/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@pinback/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@types/react':
         specifier: ^19.1.10
         version: 19.1.10
