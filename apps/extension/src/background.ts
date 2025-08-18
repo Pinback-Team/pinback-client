@@ -1,2 +1,1 @@
-// This file is ran as a background script
-console.log("Hello from background script!")
+console.log("백그라운드 기능")
