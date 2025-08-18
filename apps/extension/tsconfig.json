@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "module": "esnext",
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable", "WebWorker"],
+    "jsx": "react-jsx",
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "plugins": [{ "name": "react" }],
+    "types": ["vite/client", "chrome"],
+    "resolveJsonModule": true,            
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"],
+      "@constants/*": ["src/constants/*"],
+      "@shared-types/*": ["src/types/*"],
+      "@api/*": ["src/api/*"]
+    }
+  },
+  "include": ["src/**/*", "manifest.json", "popup.html", "vite.config.ts"]
+}
