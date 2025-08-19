@@ -12,11 +12,6 @@ if (rootEl) {
       <App />
     </QueryClientProvider>
   );
-  createRoot(rootEl).render(
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  );
 } else {
   console.error('❌ root element not found!');
 }
