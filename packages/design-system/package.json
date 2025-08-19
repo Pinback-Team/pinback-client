@@ -5,7 +5,7 @@
   "exports": {
     "./ui": "./src/components/index.ts",
     "./icons": "./src/icons/index.ts",
-    "./styles": "./src/styles.css",
+    "./styles": "./styles.css",
     "./utils": "./src/lib/index.ts"
   },
   "scripts": {
