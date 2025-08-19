@@ -15,7 +15,6 @@
     "generate:component": "turbo gen react-component"
   },
   "devDependencies": {
-    "@pinback/design-system": "workspace:*",
     "@pinback/eslint-config": "workspace:*",
     "@pinback/tailwind-config": "workspace:*",
     "@pinback/typescript-config": "workspace:*",
