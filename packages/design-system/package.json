@@ -18,6 +18,7 @@
     "@pinback/eslint-config": "workspace:*",
     "@pinback/tailwind-config": "workspace:*",
     "@pinback/typescript-config": "workspace:*",
+    "@pinback/design-system": "workspace:*",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
