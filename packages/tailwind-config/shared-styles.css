@@ -1,0 +1,240 @@
+@import 'tailwindcss';
+
+/* Head */
+@utility head1 {
+  font-weight: 700;
+  font-size: 4rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility head2 {
+  font-weight: 700;
+  font-size: 3.2rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility head3 {
+  font-weight: 700;
+  font-size: 2.6rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility head4 {
+  font-weight: 700;
+  font-size: 2.4rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility head5 {
+  font-weight: 700;
+  font-size: 2.2rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility head6 {
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+
+/* Subtitle */
+@utility sub1-sb {
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility sub1-m {
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility sub2-b {
+  font-weight: 700;
+  font-size: 1.8rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility sub2-sb {
+  font-weight: 600;
+  font-size: 1.8rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility sub3-b {
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility sub3-sb {
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility sub4-sb {
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+@utility sub5-sb {
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 140%;
+  letter-spacing: -0.02em;
+}
+
+/* Body */
+@utility body1-m {
+  font-weight: 500;
+  font-size: 1.8rem;
+  line-height: 150%;
+  letter-spacing: -0.025em;
+}
+@utility body1-r {
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 150%;
+  letter-spacing: -0.025em;
+}
+@utility body2-m {
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 150%;
+  letter-spacing: -0.025em;
+}
+@utility body2-r {
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 150%;
+  letter-spacing: -0.025em;
+}
+@utility body3-r {
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 150%;
+  letter-spacing: -0.025em;
+}
+@utility body4-r {
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 150%;
+  letter-spacing: -0.025em;
+}
+
+/* Caption */
+@utility caption1-sb {
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 150%;
+  letter-spacing: -0.025em;
+}
+@utility caption1-m {
+  font-weight: 500;
+  font-size: 1.4rem;
+  line-height: 150%;
+  letter-spacing: -0.025em;
+}
+@utility caption2-sb {
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 150%;
+  letter-spacing: -0.025em;
+}
+@utility caption2-m {
+  font-weight: 500;
+  font-size: 1.2rem;
+  line-height: 150%;
+  letter-spacing: -0.025em;
+}
+
+/* Shadow */
+@utility shadow-popup {
+  box-shadow: 0px 0px 32px 0px rgba(0, 0, 0, 0.1);
+}
+
+@theme {
+  --color-*: initial;
+
+  /* Main Color */
+  --color-main0: #f9fffb;
+  --color-main100: #c9f2e1;
+  --color-main200: #99dfc2;
+  --color-main300: #75d8af;
+  --color-main400: #54d19d;
+  --color-main500: #2aa971;
+  --color-main600: #1f7f55;
+
+  /* Gradient */
+  --color-gradient-start: #cff080;
+  --color-gradient-end: #33d08f;
+
+  /* Secondary Color */
+  --color-secondary: #f4f2ec;
+
+  /* Grayscale */
+  --color-gray0: #f7f7fb;
+  --color-gray100: #f1f1f5;
+  --color-gray200: #e5e5ec;
+  --color-gray300: #d4d4de;
+  --color-gray400: #babac7;
+  --color-gray500: #a2a2ae;
+  --color-gray600: #848491;
+  --color-gray700: #5c5c64;
+  --color-gray800: #404048;
+  --color-gray900: #28282f;
+
+  /* Background */
+  --color-white-bg: #ffffff;
+  --color-gray-bg: #fbfbfc;
+
+  /* Font Color */
+  --color-font-black-1: #111111;
+  --color-font-gray-2: #505050;
+  --color-font-gray-3: #767676;
+  --color-font-ltgray-4: #999999;
+  --color-font-ltgray-5: #dddddd;
+
+  /* State */
+  --color-error: #dc0000;
+  --color-success: #00c673;
+
+  /* Category - Text */
+  --color-category-red-text: #b63731;
+  --color-category-purple-text: #612694;
+  --color-category-navyblue-text: #2a378e;
+  --color-category-skyblue-text: #3277b8;
+  --color-category-emerald-text: #38818d;
+  --color-category-navygreen-text: #2c675c;
+  --color-category-khaki-text: #62893d;
+  --color-category-orange-text: #edaa46;
+  --color-category-amber-text: #df732c;
+  --color-category-maroon-text: #4a352f;
+
+  /* Category - Background */
+  --color-category-red-bg: #fcecee;
+  --color-category-purple-bg: #f1e6f4;
+  --color-category-navyblue-bg: #e8eaf6;
+  --color-category-skyblue-bg: #e5f5fd;
+  --color-category-emerald-bg: #e4f6f9;
+  --color-category-navygreen-bg: #e3f1f1;
+  --color-category-khaki-bg: #f2f8ea;
+  --color-category-orange-bg: #fffde9;
+  --color-category-amber-bg: #fdf3e2;
+  --color-category-maroon-bg: #eeebe9;
+}
+
+@layer base {
+  html {
+    font-family: system-ui, sans-serif;
+    font-size: 62.5%;
+  }
+}
+
+@layer components {
+  /* 공통 컴포넌트 스타일 */
+}
