@@ -6,6 +6,7 @@ on:
 
 permissions:
   pull-requests: write
+  issues: write
 
 jobs:
   add-label:
@@ -14,7 +15,7 @@ jobs:
       - name: Add label based on branch prefix
         uses: actions/github-script@v6
         with:
-          script: 
+          script: |
             const labelMapping = {
               'setting': 'setting',
               'feat': 'feat',

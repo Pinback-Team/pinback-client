@@ -14,5 +14,5 @@ jobs:
     steps:
       - uses: hkusu/review-assign-action@v1
         with:
-          assignees: ${{ github.actor }}
+          assignees: ${{ github.event.pull_request.user.login }}
           reviewers: ${{ vars.REVIEWERS }}
