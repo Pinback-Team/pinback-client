@@ -1,0 +1,14 @@
+{
+  "name": "@pinback/tailwind-config",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./shared-styles.css",
+    "./shared-styles.css": "./shared-styles.css"
+  },
+  "devDependencies": {
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12"
+  }
+}

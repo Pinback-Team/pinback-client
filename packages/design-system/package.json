@@ -1,0 +1,38 @@
+{
+  "name": "@pinback/design-system",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./ui": "./src/components/index.ts",
+    "./icons": "./src/icons/index.ts",
+    "./styles": "./styles.css",
+    "./utils": "./src/lib/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "build": "vite build",
+    "check-types": "tsc --noEmit",
+    "generate:component": "turbo gen react-component"
+  },
+  "devDependencies": {
+    "@pinback/eslint-config": "workspace:*",
+    "@pinback/tailwind-config": "workspace:*",
+    "@pinback/typescript-config": "workspace:*",
+    "@types/node": "^22.15.3",
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1",
+    "eslint": "^9.33.0",
+    "tailwindcss": "^4.1.12",
+    "typescript": "5.9.2"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.540.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.3.1",
+    "tw-animate-css": "^1.3.7"
+  }
+}
