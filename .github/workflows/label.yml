@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Add label based on branch prefix
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const labelMapping = {
@@ -29,8 +29,6 @@ jobs:
               'rename': 'rename',
               'remove': 'remove',
               'docs': 'docs',
-              '!HOTFIX': '!HOTFIX',
-              '!BREAKING CHANGE': '!BREAKING CHANGE'
             };
 
             const branchName = context.payload.pull_request.head.ref;
