@@ -3,13 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./*": "./src/*.tsx"
+    "./ui": "./src/components/index.ts",
+    "./icons": "./src/icons/index.ts",
+    "./styles": "./src/styles.css",
+    "./utils": "./src/lib/index.ts"
   },
   "scripts": {
-    "generate:component": "turbo gen react-component",
-    "check-types": "tsc --noEmit"
+    "lint": "eslint .",
+    "build": "vite build",
+    "check-types": "tsc --noEmit",
+    "generate:component": "turbo gen react-component"
   },
   "devDependencies": {
+    "@pinback/eslint-config": "workspace:*",
+    "@pinback/tailwind-config": "workspace:*",
     "@pinback/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",

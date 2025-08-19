@@ -1,8 +1,20 @@
 {
   "extends": "@pinback/typescript-config/react.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    ".storybook",
+    ".storybook/*.ts",
+    "turbo/generators/config.ts",
+    "vitest.config.ts",
+    "vitest.shims.d.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }
