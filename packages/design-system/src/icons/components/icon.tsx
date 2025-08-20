@@ -1,7 +1,5 @@
-import clsx from 'clsx';
-import React from 'react';
-
 import type { IconName } from '../iconNames';
+import clsx from 'clsx';
 
 type IconRotate = 90 | 180 | 270;
 
@@ -11,6 +9,8 @@ type IconColor =
   | 'main200'
   | 'main300'
   | 'main400'
+  | 'main500'
+  | 'main600'
   | 'secondary'
   | 'error400'
   | 'success400'
