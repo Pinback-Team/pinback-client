@@ -6,7 +6,7 @@ import config from '@pinback/eslint-config/react-internal';
 /** @type {import("eslint").Linter.Config} */
 export default [
   ...storybook.configs['flat/recommended'],
-  config,
+  ...config,
   {
     files: ['**/*.js', '**/*.ts'],
     ignores: [
@@ -16,11 +16,8 @@ export default [
       'public',
       'public/**',
       'public/**/*',
+      'storybook-static',
       'icons/**/*',
     ],
-    rules: {
-      'no-undef': 'off',
-      '@typescript-eslint/no-require-imports': 'off',
-    },
   },
 ];
