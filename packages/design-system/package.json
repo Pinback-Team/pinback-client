@@ -13,6 +13,7 @@
     "lint": "eslint .",
     "build": "vite build",
     "check-types": "tsc --noEmit",
+    "icons:clean": "svgo -f src/icons/source --config=./svgo.config.mjs --multipass",
     "generate:icons": "tsx src/icons/scripts/generate-icon-list.ts && prettier --write src/icons/iconNames.ts",
     "generate:component": "turbo gen react-component"
   },
@@ -41,6 +42,7 @@
     "lucide-react": "^0.540.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "svgo": "^4.0.0",
     "tailwind-merge": "^3.3.1",
     "tw-animate-css": "^1.3.7"
   }
