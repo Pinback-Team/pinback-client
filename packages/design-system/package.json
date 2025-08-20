@@ -19,7 +19,7 @@
     "@pinback/eslint-config": "workspace:*",
     "@pinback/tailwind-config": "workspace:*",
     "@pinback/typescript-config": "workspace:*",
-    "@tailwindcss/vite": "^4.1.11",
+    "@tailwindcss/vite": "^4.1.12",
     "@vitejs/plugin-react": "^4.5.2",
     "@turbo/gen": "^2.5.0",
     "@types/node": "^22.15.3",
