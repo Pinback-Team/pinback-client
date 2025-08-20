@@ -48,6 +48,7 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           workingDir: packages/design-system
+          buildScriptName: build:storybook
           onlyChanged: true
           autoAcceptChanges: true
           exitOnceUploaded: true
