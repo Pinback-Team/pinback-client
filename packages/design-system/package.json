@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "build": "vite build",
     "check-types": "tsc --noEmit",
-    "generate:icons": "tsx src/icons/scripts/generate-icon-list.ts",
+    "generate:icons": "tsx src/icons/scripts/generate-icon-list.ts && prettier --write src/icons/iconNames.ts",
     "generate:component": "turbo gen react-component"
   },
   "devDependencies": {
