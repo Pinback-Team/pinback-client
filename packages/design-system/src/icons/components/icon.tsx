@@ -49,8 +49,8 @@ export const Icon = ({
   ariaHidden = true,
   ...rest
 }: IconProps) => {
-  const w = width ?? size ?? 24;
-  const h = height ?? size ?? 24;
+  const w = width ?? size ?? 20;
+  const h = height ?? size ?? 20;
 
   const rotateClass =
     rotate === 90
