@@ -15,7 +15,8 @@
     "check-types": "tsc --noEmit",
     "icons:clean": "svgo -f src/icons/source --config=./svgo.config.mjs --multipass",
     "generate:icons": "tsx src/icons/scripts/generate-icon-list.ts && prettier --write src/icons/iconNames.ts",
-    "generate:component": "turbo gen react-component"
+    "generate:component": "turbo gen react-component",
+    "icons": "pnpm icons:clean && pnpm generate:icons"
   },
   "devDependencies": {
     "@pinback/eslint-config": "workspace:*",
