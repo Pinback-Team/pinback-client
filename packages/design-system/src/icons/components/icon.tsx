@@ -1,4 +1,5 @@
 import type { IconName } from '../iconNames';
+import React from 'react';
 import clsx from 'clsx';
 
 type IconRotate = 90 | 180 | 270;
@@ -11,11 +12,9 @@ type IconColor =
   | 'main400'
   | 'main500'
   | 'main600'
+  | 'gradient-start'
+  | 'gradient-end'
   | 'secondary'
-  | 'error400'
-  | 'success400'
-  | 'white'
-  | 'black'
   | 'gray0'
   | 'gray100'
   | 'gray200'
@@ -25,7 +24,36 @@ type IconColor =
   | 'gray600'
   | 'gray700'
   | 'gray800'
-  | 'gray900';
+  | 'gray900'
+  | 'white-bg'
+  | 'gray-bg'
+  | 'font-black-1'
+  | 'font-gray-2'
+  | 'font-gray-3'
+  | 'font-ltgray-4'
+  | 'font-ltgray-5'
+  | 'error'
+  | 'success'
+  | 'category-red-text'
+  | 'category-purple-text'
+  | 'category-navyblue-text'
+  | 'category-skyblue-text'
+  | 'category-emerald-text'
+  | 'category-navygreen-text'
+  | 'category-khaki-text'
+  | 'category-orange-text'
+  | 'category-amber-text'
+  | 'category-maroon-text'
+  | 'category-red-bg'
+  | 'category-purple-bg'
+  | 'category-navyblue-bg'
+  | 'category-skyblue-bg'
+  | 'category-emerald-bg'
+  | 'category-navygreen-bg'
+  | 'category-khaki-bg'
+  | 'category-orange-bg'
+  | 'category-amber-bg'
+  | 'category-maroon-bg';
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   name: IconName;
