@@ -17,5 +17,6 @@
   "tailwindCSS.suggestions": true,
   "editor.quickSuggestions": {
     "strings": true
-  }
+  },
+  "tailwindCSS.experimental.configFile": "./packages/design-system/styles.css"
 }
