@@ -9,11 +9,12 @@ const preview: Preview = {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
+        text: /(title|label|name|placeholder|text)$/i,
       },
     },
-
-    tags: ['autodocs'],
   },
+
+  tags: ['autodocs'],
 };
 
 export default preview;
