@@ -11,12 +11,12 @@
     "zip": "vite build && node scripts/zip.mjs"
   },
   "dependencies": {
-    "@pivanov/vite-plugin-svg-sprite": "^3.1.3",
     "@tanstack/react-query": "^5.85.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
+    "@pivanov/vite-plugin-svg-sprite": "^3.1.3",
     "@crxjs/vite-plugin": "^2.2.0",
     "@eslint/js": "^9.33.0",
     "@pinback/design-system": "workspace:*",

@@ -1,3 +1,4 @@
+import svgSpritePlugin from '@pivanov/vite-plugin-svg-sprite';
 /// <reference types="vitest/config" />
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
@@ -12,7 +13,15 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    svgSpritePlugin({
+      iconDirs: ['src/icons/source'],
+      symbolId: 'icon-[name]',
+      inject: 'body-last',
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
