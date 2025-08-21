@@ -17,7 +17,7 @@ export default defineConfig({
     tailwindcss(),
     crx({ manifest }),
     svgSpritePlugin({
-      iconDirs: ['src/icons/source'],
+      iconDirs: ['../../packages/design-system/src/icons/source'],
       symbolId: 'icon-[name]',
       inject: 'body-last',
     }),
