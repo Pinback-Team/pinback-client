@@ -6,6 +6,8 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { resolve } from 'path';
 import { crx } from '@crxjs/vite-plugin';
 import manifest from './manifest.json';
+import svgSpritePlugin from '@pivanov/vite-plugin-svg-sprite';
+
 export default defineConfig({
   plugins: [
     react(),
@@ -13,13 +15,17 @@ export default defineConfig({
       projects: [resolve(__dirname, '../../tsconfig.json')],
     }),
     tailwindcss(),
-    crx({ manifest }), 
+    crx({ manifest }),
+    svgSpritePlugin({
+      iconDirs: ['src/icons/source'],
+      symbolId: 'icon-[name]',
+      inject: 'body-last',
+    }),
   ],
 
   build: {
     outDir: 'dist',
     copyPublicDir: true,
-   
   },
   publicDir: 'public',
   resolve: {
