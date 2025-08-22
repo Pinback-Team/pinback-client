@@ -2,9 +2,18 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
+import { Input } from '@pinback/design-system/ui';
+import { useRef } from 'react';
 
 function App() {
   const [count, setCount] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const onChange = () => {
+    if (inputRef.current) {
+      console.log(inputRef.current.value);
+    }
+  };
 
   return (
     <>
@@ -28,6 +37,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <Input ref={inputRef} onChange={onChange} />
     </>
   );
 }
