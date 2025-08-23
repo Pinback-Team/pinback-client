@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 # 증분 빌드 정보 파일
 *.tsbuildinfo
+
+*storybook.log
+storybook-static
