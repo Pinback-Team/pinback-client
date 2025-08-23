@@ -3,12 +3,9 @@ import React, { useRef, useState } from 'react';
 import { within, userEvent, expect } from '@storybook/test';
 import Input from './Input';
 
-// 스토리북 Args 타입에서 ref는 숨깁니다.
-type InputArgs = Omit<React.ComponentProps<typeof Input>, 'ref'>;
-
-const meta: Meta<InputArgs> = {
+const meta: Meta<typeof Input> = {
   title: 'Components/Input',
-  component: Input as unknown as React.FC<any>,
+  component: Input,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -21,12 +18,12 @@ const meta: Meta<InputArgs> = {
     },
   },
   argTypes: {
+    ref: { table: { disable: true } },
+    className: { table: { disable: true } },
     isError: { control: 'boolean' },
     helperText: { control: 'text' },
     placeholder: { control: 'text' },
     disabled: { control: 'boolean' },
-    className: { table: { disable: true } },
-    // ref는 컨트롤/테이블에서 숨김
   },
   args: {
     isError: false,
@@ -35,10 +32,9 @@ const meta: Meta<InputArgs> = {
 };
 
 export default meta;
-type Story = StoryObj<InputArgs>;
+type Story = StoryObj<typeof Input>;
 
-// 공통 렌더: 내부적으로 ref를 만들어 주입(컴포넌트가 ref prop을 기대하므로)
-const WithRef = (args: InputArgs) => {
+const WithRef = (args: React.ComponentProps<typeof Input>) => {
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div style={{ width: 228 }}>
@@ -83,7 +79,6 @@ export const Controlled: Story = {
           ref={inputRef}
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          // 외부 폼 레이어가 에러/문구를 결정한다는 사용 패턴을 시뮬레이션
           isError={args.isError}
           helperText={
             args.isError
@@ -102,7 +97,6 @@ export const Controlled: Story = {
 export const WithInteraction: Story = {
   args: { placeholder: '클릭 후 타이핑 테스트' },
   render: (args) => <WithRef {...args} />,
-  // 간단한 상호작용 테스트: 포커스 후 타이핑이 되는지 확인
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const textbox = await canvas.findByRole('textbox');
