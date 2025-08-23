@@ -47,7 +47,8 @@ export const Basic: Story = {
   render: (args) => <WithRef {...args} />,
 };
 
-export const Error: Story = {
+export const WithError: Story = {
+  name: 'Error',
   args: { isError: true },
   render: (args) => <WithRef {...args} />,
 };
@@ -66,32 +67,34 @@ export const Disabled: Story = {
   render: (args) => <WithRef {...args} />,
 };
 
+const ControlledExample = (args: React.ComponentProps<typeof Input>) => {
+  const [value, setValue] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <div style={{ width: 320 }}>
+      <Input
+        {...args}
+        ref={inputRef}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        isError={args.isError}
+        helperText={
+          args.isError
+            ? (args.helperText ?? '유효하지 않은 값입니다.')
+            : undefined
+        }
+      />
+      <div style={{ marginTop: 8, fontSize: 12, opacity: 0.7 }}>
+        현재 값: {value || '—'}
+      </div>
+    </div>
+  );
+};
+
 export const Controlled: Story = {
   args: { placeholder: '컨트롤드 예시' },
-  render: (args) => {
-    const [value, setValue] = useState('');
-    const inputRef = useRef<HTMLInputElement>(null);
-
-    return (
-      <div style={{ width: 320 }}>
-        <Input
-          {...args}
-          ref={inputRef}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          isError={args.isError}
-          helperText={
-            args.isError
-              ? (args.helperText ?? '유효하지 않은 값입니다.')
-              : undefined
-          }
-        />
-        <div style={{ marginTop: 8, fontSize: 12, opacity: 0.7 }}>
-          현재 값: {value || '—'}
-        </div>
-      </div>
-    );
-  },
+  render: (args) => <ControlledExample {...args} />,
 };
 
 export const WithInteraction: Story = {
