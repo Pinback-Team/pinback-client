@@ -27,7 +27,6 @@ const meta: Meta<InputArgs> = {
     disabled: { control: 'boolean' },
     className: { table: { disable: true } },
     // ref는 컨트롤/테이블에서 숨김
-    ref: { table: { disable: true } as any },
   },
   args: {
     isError: false,
