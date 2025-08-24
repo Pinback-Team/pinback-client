@@ -1,18 +1,31 @@
-import * as React from "react"
+// Textarea.tsx
+import * as React from 'react';
+import { cn } from '@/lib/utils';
 
-import { cn } from "@/lib/utils"
+const MAX_TEXTAREA_LENGTH = 500;
 
-function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+type TextareaProps = React.ComponentProps<'textarea'>;
+
+function Textarea({
+  className,
+  maxLength = MAX_TEXTAREA_LENGTH,
+  ...props
+}: TextareaProps) {
   return (
     <textarea
       data-slot="textarea"
+      maxLength={maxLength}
       className={cn(
-        "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        'h-[12rem] w-[24.8rem]',
+        'resize-none overflow-y-auto',
+        'body3-r border-gray200 bg-white-bg text-font-gray-3 rounded-[0.4rem] border px-[0.8rem] py-[1.2rem]',
+        'focus:border-input outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0',
         className
       )}
+      style={{ scrollbarGutter: 'stable' }}
       {...props}
     />
-  )
+  );
 }
 
-export { Textarea }
+export { Textarea };
