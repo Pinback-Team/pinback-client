@@ -1,4 +1,3 @@
-// Progress.tsx
 import * as React from 'react';
 import * as ProgressPrimitive from '@radix-ui/react-progress';
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -30,12 +29,11 @@ const indicator = cva(
 type RootProps = React.ComponentProps<typeof ProgressPrimitive.Root>;
 type Props = Omit<RootProps, 'value' | 'max'> &
   VariantProps<typeof track> & {
-    /** 0–100 (Controls가 문자열을 줄 수도 있어 number|string 허용) */
-    value: number | string; // ← 필수
+    value: number | string;
   };
 
 export function Progress({ className, variant, value, ...props }: Props) {
-  const v = Math.max(0, Math.min(100, Number(value))); // 숫자 변환 + 클램프
+  const v = Math.max(0, Math.min(100, Number(value)));
 
   return (
     <ProgressPrimitive.Root

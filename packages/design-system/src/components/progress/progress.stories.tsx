@@ -13,10 +13,9 @@ const meta: Meta<typeof Progress> = {
     docs: {
       description: {
         component:
-          '단일 로직을 공유하고 **variant**로 스타일만 분기하는 진행바입니다.\n' +
+          '단일 로직을 공유하고 **variant**로 스타일만 분기하는 progress입니다.\n' +
           '- `variant="profile"`: 얇은 트랙 + 단색 인디케이터 (기본)\n' +
-          '- `variant="tree"`: 두꺼운 트랙 + 그라데이션 인디케이터\n' +
-          '내부 채움은 `width: {value}%`로 처리됩니다.',
+          '- `variant="tree"`: 두꺼운 트랙 + 그라데이션 인디케이터\n',
       },
     },
   },
@@ -49,7 +48,8 @@ const Frame: React.FC<React.ComponentProps<typeof Progress>> = (props) => (
   </div>
 );
 
-export const Basic: Story = {
+export const Profile: Story = {
+  args: { variant: 'profile', value: 70 },
   render: (args) => <Frame {...args} />,
 };
 
@@ -68,7 +68,6 @@ export const Full: Story = {
   render: (args) => <Frame {...args} />,
 };
 
-// 훅은 별도 컴포넌트에서 사용
 const AutoProgressDemo: React.FC<{ variant?: 'profile' | 'tree' }> = ({
   variant = 'profile',
 }) => {
@@ -80,46 +79,63 @@ const AutoProgressDemo: React.FC<{ variant?: 'profile' | 'tree' }> = ({
   return <Frame value={v} variant={variant} />;
 };
 
-export const AutoProgress: Story = {
-  name: 'Auto progress (demo)',
-  args: { variant: 'tree' },
-  render: (args) => (
-    <AutoProgressDemo variant={args.variant as 'profile' | 'tree'} />
+export const AutoProgressBoth: StoryObj<typeof Progress> = {
+  name: 'Auto progress — profile & tree',
+  parameters: {
+    controls: { exclude: ['value', 'variant'] },
+    layout: 'centered',
+  },
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, width: 760 }}>
+      <div>
+        <div style={{ fontSize: 14, opacity: 0.7, marginBottom: 8 }}>
+          profile
+        </div>
+        <AutoProgressDemo variant="profile" />
+      </div>
+      <div>
+        <div style={{ fontSize: 14, opacity: 0.7, marginBottom: 8 }}>tree</div>
+        <AutoProgressDemo variant="tree" />
+      </div>
+    </div>
   ),
 };
-
-const ClickToAdvance: React.FC<{ variant?: 'profile' | 'tree' }> = ({
-  variant = 'profile',
-}) => {
-  const [v, setV] = useState(0);
+const ClickToAdvanceSync: React.FC = () => {
+  const [v, setV] = React.useState(0);
   return (
-    <div style={{ width: 320 }}>
-      <Progress value={v} variant={variant} />
-      <button
-        type="button"
-        onClick={() => setV((p) => Math.min(p + 20, 100))}
-        style={{ marginTop: 12 }}
-      >
-        +20%
-      </button>
+    <div style={{ width: 320, display: 'grid', gap: 12 }}>
+      <Progress value={v} variant="profile" />
+      <Progress value={v} variant="tree" />
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button
+          type="button"
+          onClick={() => setV((p) => Math.min(p + 20, 100))}
+        >
+          +20% (both)
+        </button>
+        <button type="button" onClick={() => setV(0)}>
+          Reset
+        </button>
+        <span style={{ marginLeft: 'auto', fontSize: 12, opacity: 0.7 }}>
+          {v}%
+        </span>
+      </div>
     </div>
   );
 };
 
-export const WithInteraction: Story = {
-  args: { variant: 'profile' },
-  render: (args) => (
-    <ClickToAdvance variant={args.variant as 'profile' | 'tree'} />
-  ),
+export const WithInteractionSync: Story = {
+  name: 'With interaction — sync both',
+  render: () => <ClickToAdvanceSync />,
+  // 2번 클릭 → 두 바 모두 40%가 되었는지 검사
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const btn = await canvas.findByRole('button', { name: '+20%' });
+    const btn = await canvas.findByRole('button', { name: /\+20% \(both\)/i });
     await userEvent.click(btn);
-    await userEvent.click(btn); // 40%
+    await userEvent.click(btn);
 
-    const el = canvasElement.querySelector(
-      '[data-slot="progress-indicator"]'
-    ) as HTMLElement;
-    await expect(el.style.width).toBe('40%'); // width 기반 검증
+    // Progress Root의 aria-valuenow로 검증(로직이 width/transform 어떤 것이든 안전)
+    const roots = canvasElement.querySelectorAll('[data-slot="progress"]');
+    roots.forEach((el) => expect(el.getAttribute('aria-valuenow')).toBe('40'));
   },
 };
