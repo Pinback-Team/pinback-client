@@ -1,4 +1,3 @@
-// packages/design-system/src/components/progress/Progress.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useEffect, useState } from 'react';
 import { within, userEvent, expect } from '@storybook/test';
@@ -127,14 +126,12 @@ const ClickToAdvanceSync: React.FC = () => {
 export const WithInteractionSync: Story = {
   name: 'With interaction — sync both',
   render: () => <ClickToAdvanceSync />,
-  // 2번 클릭 → 두 바 모두 40%가 되었는지 검사
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const btn = await canvas.findByRole('button', { name: /\+20% \(both\)/i });
     await userEvent.click(btn);
     await userEvent.click(btn);
 
-    // Progress Root의 aria-valuenow로 검증(로직이 width/transform 어떤 것이든 안전)
     const roots = canvasElement.querySelectorAll('[data-slot="progress"]');
     roots.forEach((el) => expect(el.getAttribute('aria-valuenow')).toBe('40'));
   },
