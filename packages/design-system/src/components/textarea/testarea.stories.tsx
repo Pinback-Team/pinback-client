@@ -35,7 +35,7 @@ export const Basic: Story = {
   render: (args) => <Textarea {...args} />,
 };
 
-export const WithMaxLength100: Story = {
+export const WithMaxLength500: Story = {
   name: 'MaxLength=500',
   args: { maxLength: 500, placeholder: '최대 500자' },
   render: (args) => <Textarea {...args} />,
