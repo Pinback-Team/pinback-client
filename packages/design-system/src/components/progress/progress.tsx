@@ -7,7 +7,7 @@ const track = cva('relative w-full overflow-hidden rounded-full', {
   variants: {
     variant: {
       profile: 'h-[0.4rem] bg-gray100',
-      tree: 'h-[1.2rem]  bg-gray100',
+      tree: 'h-[1.2rem] bg-gray100',
     },
   },
   defaultVariants: { variant: 'profile' },
@@ -19,34 +19,42 @@ const indicator = cva(
     variants: {
       variant: {
         profile: 'bg-main400',
-        tree: 'h-[1.2rem] bg-gradient-to-r from-gradient-start to-gradient-end',
+        tree: 'bg-gradient-to-r from-gradient-start to-gradient-end',
       },
     },
     defaultVariants: { variant: 'profile' },
   }
 );
 
-type RootProps = React.ComponentProps<typeof ProgressPrimitive.Root>;
-type Props = Omit<RootProps, 'value' | 'max'> &
-  VariantProps<typeof track> & {
-    value: number | string;
-  };
+export interface ProgressProps
+  extends Omit<
+      React.ComponentProps<typeof ProgressPrimitive.Root>,
+      'value' | 'max'
+    >,
+    VariantProps<typeof track> {
+  value: number;
+}
 
-export function Progress({ className, variant, value, ...props }: Props) {
-  const v = Math.max(0, Math.min(100, Number(value)));
+export function Progress({
+  className,
+  variant,
+  value,
+  ...props
+}: ProgressProps) {
+  const progressPercent = Math.max(0, Math.min(100, value));
 
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
       className={cn(track({ variant }), className)}
-      value={v}
+      value={progressPercent}
       max={100}
       {...props}
     >
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
         className={indicator({ variant })}
-        style={{ width: `${v}%` }}
+        style={{ width: `${progressPercent}%` }}
       />
     </ProgressPrimitive.Root>
   );
