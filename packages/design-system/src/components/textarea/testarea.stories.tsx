@@ -1,4 +1,3 @@
-// packages/design-system/src/components/textarea/Textarea.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { within, userEvent, expect } from '@storybook/test';
 import { Textarea } from './textarea';
@@ -22,12 +21,6 @@ const meta: Meta<typeof Textarea> = {
     maxLength: { control: { type: 'number', min: 1 } },
     placeholder: { control: 'text' },
     defaultValue: { control: 'text' },
-    rows: { control: { type: 'number', min: 1 } },
-    disabled: { control: 'boolean' },
-    'aria-invalid': {
-      control: { type: 'select' },
-      options: [false, true, 'grammar', 'spelling'],
-    },
   },
   args: {
     placeholder: '나중에 내가 꺼내줄 수 있게 살짝 적어줘!',
@@ -71,7 +64,7 @@ export const PreventOverflowByMaxLength: Story = {
     const ta = (await canvas.findByRole('textbox')) as HTMLTextAreaElement;
 
     await userEvent.click(ta);
-    await userEvent.type(ta, 'a'.repeat(limit + 10)); // 제한 초과 입력 시도
+    await userEvent.type(ta, 'a'.repeat(limit + 10));
 
     await expect(ta.value.length).toBe(limit);
   },
