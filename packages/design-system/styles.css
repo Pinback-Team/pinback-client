@@ -1,6 +1,7 @@
 @import 'tw-animate-css';
 
 @import '@pinback/tailwind-config/shared-styles.css';
+@import '@pinback/tailwind-config/scrollbar-styles.css';
 
 @source "./src";
 
