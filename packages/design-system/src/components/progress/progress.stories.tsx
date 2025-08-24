@@ -76,10 +76,10 @@ const ClickToAdvance: React.FC = () => {
       <Progress value={v} />
       <button
         type="button"
-        onClick={() => setV((p) => Math.min(p + 25, 100))}
+        onClick={() => setV((p) => Math.min(p + 20, 100))}
         style={{ marginTop: 12 }}
       >
-        +25%
+        +20%
       </button>
     </div>
   );
@@ -89,7 +89,7 @@ export const WithInteraction: Story = {
   render: () => <ClickToAdvance />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const btn = await canvas.findByRole('button', { name: '+25%' });
+    const btn = await canvas.findByRole('button', { name: '+20%' });
 
     // 버튼 2번 클릭 → 50%
     await userEvent.click(btn);
@@ -99,6 +99,6 @@ export const WithInteraction: Story = {
       (canvasElement.querySelector(
         '[data-slot="progress-indicator"]'
       ) as HTMLElement) || null;
-    await expect(el.style.transform).toContain('translateX(-50%)');
+    await expect(el.style.transform).toContain('translateX(-40%)');
   },
 };
