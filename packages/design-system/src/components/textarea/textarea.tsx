@@ -18,8 +18,9 @@ function Textarea({
       className={cn(
         'h-[12rem] w-[24.8rem]',
         'resize-none overflow-y-auto',
-        'body3-r border-gray200 bg-white-bg text-font-gray-3 rounded-[0.4rem] border px-[0.8rem] py-[1.2rem]',
+        'body3-r border-gray200 bg-white-bg text-font-gray-3 rounded-[0.4rem] border px-[0.8rem] py-[1.2rem] pr-[1.4rem]',
         'focus:border-input outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0',
+        'ds-scrollbar',
         className
       )}
       style={{ scrollbarGutter: 'stable' }}

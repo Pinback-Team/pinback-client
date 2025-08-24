@@ -1,37 +1,17 @@
-/* 스크롤바: 이 Textarea에만 적용 (data-slot + 클래스 스코프) */
-:where([data-slot='textarea']).ds-scrollbar {
-  /* Firefox */
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in oklab, currentColor 35%, transparent)
-    color-mix(in oklab, currentColor 10%, transparent);
-  /* 레이아웃 점프 방지용 여유 공간 확보(지원 브라우저에서만) */
-  scrollbar-gutter: stable;
+/* 공통 스크롤바: ds-scrollbar 클래스가 붙은 요소 */
+:where(.ds-scrollbar) {
+  /* Firefox: thumb 색, track 투명 */
+  scrollbar-color: var(--gray100, #e5e7eb) transparent;
 }
 
-/* WebKit (Chrome, Edge, Safari) */
-:where([data-slot='textarea']).ds-scrollbar::-webkit-scrollbar {
-  width: 8px;
+/* WebKit (Chrome/Edge/Safari 일부) */
+:where(.ds-scrollbar)::-webkit-scrollbar {
+  width: 0.4rem; /* 세로 스크롤 폭 */
+  height: 0.4rem; /* 가로 스크롤 높이 */
 }
-:where([data-slot='textarea']).ds-scrollbar::-webkit-scrollbar-track {
-  background: transparent; /* 또는 color-mix(in oklab, currentColor 10%, transparent) */
+:where(.ds-scrollbar)::-webkit-scrollbar-track {
+  background: transparent; /* 배경 제거 */
 }
-:where([data-slot='textarea']).ds-scrollbar::-webkit-scrollbar-thumb {
-  background: color-mix(in oklab, currentColor 35%, transparent);
-  border-radius: 9999px;
-  border: 2px solid transparent; /* 안쪽만 색이 보이게 */
-  background-clip: padding-box;
-}
-:where([data-slot='textarea']).ds-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in oklab, currentColor 55%, transparent);
-}
-:where([data-slot='textarea']).ds-scrollbar::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-/* 다크 모드 톤 보정 (선택) */
-@media (prefers-color-scheme: dark) {
-  :where([data-slot='textarea']).ds-scrollbar {
-    scrollbar-color: color-mix(in oklab, currentColor 50%, transparent)
-      color-mix(in oklab, currentColor 20%, transparent);
-  }
+:where(.ds-scrollbar)::-webkit-scrollbar-thumb {
+  background: var(--gray100, #e5e7eb); /* 토큰 없으면 fallback */
 }
