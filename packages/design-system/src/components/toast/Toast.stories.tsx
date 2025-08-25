@@ -37,11 +37,3 @@ export const LongText: Story = {
   },
   render: (args) => <Toast {...args} />,
 };
-
-export const SuccessMessage: Story = {
-  name: '성공 메시지 예시',
-  args: {
-    text: '저장되었습니다.',
-  },
-  render: (args) => <Toast {...args} />,
-};
