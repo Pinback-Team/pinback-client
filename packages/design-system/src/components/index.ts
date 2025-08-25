@@ -1,5 +1,6 @@
 export { default as Button } from './button/Button';
-export { Switch } from './switch/switch';
+export { Switch } from './switch/Switch';
 export { default as Badge } from './badge/Badge';
 export { default as Input } from './input/Input';
 export { Textarea } from './textarea/Textarea';
+export { Progress } from './progress/Progress';
