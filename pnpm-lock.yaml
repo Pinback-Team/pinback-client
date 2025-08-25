@@ -4850,12 +4850,6 @@ snapshots:
       '@types/react': 19.1.10
       react: 19.1.1
 
-  '@mdx-js/react@3.1.0(@types/react@19.1.10)(react@19.1.1)':
-    dependencies:
-      '@types/mdx': 2.0.13
-      '@types/react': 19.1.10
-      react: 19.1.1
-
   '@napi-rs/wasm-runtime@0.2.12':
     dependencies:
       '@emnapi/core': 1.4.5
