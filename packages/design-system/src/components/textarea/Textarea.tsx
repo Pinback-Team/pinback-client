@@ -2,16 +2,14 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-export const MAX_TEXTAREA_LENGTH = 500;
 export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  stableScrollbarGutter?: boolean;
+  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'maxLength'> {
+  maxLength: number;
 }
 
 export function Textarea({
   className,
-  maxLength = MAX_TEXTAREA_LENGTH,
-  stableScrollbarGutter = true,
+  maxLength,
   style,
   ...props
 }: TextareaProps) {
@@ -27,10 +25,7 @@ export function Textarea({
         'ds-scrollbar',
         className
       )}
-      style={{
-        ...(stableScrollbarGutter ? { scrollbarGutter: 'stable' } : {}),
-        ...style,
-      }}
+      style={{ scrollbarGutter: 'stable', ...style }}
       {...props}
     />
   );
