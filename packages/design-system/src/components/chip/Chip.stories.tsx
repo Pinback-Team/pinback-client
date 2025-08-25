@@ -32,6 +32,7 @@ const meta: Meta<typeof Chip> = {
     },
   },
   parameters: {
+    layout: 'centered',
     docs: {
       description: {
         component:
