@@ -238,3 +238,34 @@
 @layer components {
   /* 공통 컴포넌트 스타일 */
 }
+
+@layer utilities {
+  :where(.ds-scrollbar) {
+    --ds-scroll-size: 0.4rem;
+    --ds-scroll-thumb: var(--color-gray100);
+    --ds-scroll-track: transparent;
+
+    scrollbar-color: var(--ds-scroll-thumb) var(--ds-scroll-track);
+
+    scrollbar-gutter: stable;
+  }
+
+  :where(.ds-scrollbar)::-webkit-scrollbar,
+  :where(.ds-scrollbar)::-webkit-scrollbar:hover,
+  :where(.ds-scrollbar)::-webkit-scrollbar:active {
+    width: var(--ds-scroll-size);
+    height: var(--ds-scroll-size);
+  }
+
+  :where(.ds-scrollbar)::-webkit-scrollbar-track {
+    background: var(--ds-scroll-track);
+  }
+
+  :where(.ds-scrollbar)::-webkit-scrollbar-thumb,
+  :where(.ds-scrollbar)::-webkit-scrollbar-thumb:hover,
+  :where(.ds-scrollbar)::-webkit-scrollbar-thumb:active {
+    background: var(--ds-scroll-thumb);
+    border-radius: 9999px;
+    transition: none;
+  }
+}
