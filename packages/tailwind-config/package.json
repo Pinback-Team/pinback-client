@@ -5,8 +5,7 @@
   "private": true,
   "exports": {
     ".": "./shared-styles.css",
-    "./shared-styles.css": "./shared-styles.css",
-    "./scrollbar-styles.css": "./scrollbar-styles.css"
+    "./shared-styles.css": "./shared-styles.css"
   },
   "devDependencies": {
     "postcss": "^8.5.6",
