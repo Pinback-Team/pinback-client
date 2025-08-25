@@ -38,7 +38,7 @@ const dateTimeTxtStyles = cva(
     variants: {
       state: {
         default: 'text-font-gray-3',
-        disabled: 'text-font-ltgray-4',
+        disabled: 'text-font-ltgray-4 cursor-not-allowed',
         error: 'text-error',
       },
     },
@@ -48,6 +48,7 @@ const dateTimeTxtStyles = cva(
 
 export default function DateTime({ type, value = '', state }: DateTimeProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const isDisabled = state === 'disabled';
   const nextCaretRef = useRef<number | null>(null);
   const [timeDigits, setTimeDigits] = useState(() =>
     digitsOnly(value).slice(0, 4)
@@ -208,6 +209,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
         onChange={handleChange}
         placeholder={type === 'date' ? 'YYYY.MM.DD' : 'HH:MM'}
         inputMode="numeric"
+        disabled={isDisabled}
         maxLength={type === 'date' ? 10 : 8}
         pattern={
           type === 'date'
