@@ -13,7 +13,7 @@ type ChipColor =
 
 interface ChipProps {
   color: ChipColor;
-  category?: string;
+  category: string;
 }
 const ChipColorVariants = cva(
   'caption2-sb rounded-[0.4rem] px-[0.8rem] py-[0.39rem]',
