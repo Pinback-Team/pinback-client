@@ -44,7 +44,7 @@ type Story = StoryObj<typeof DateTime>;
 export const Date_Default: Story = {
   args: {
     type: 'date',
-    value: '20250825',
+    value: '20250819',
   },
 };
 
