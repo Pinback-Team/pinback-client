@@ -3,7 +3,7 @@ import { within, userEvent } from '@storybook/test';
 import Badge, { type BadgeProps } from './Badge';
 
 const meta: Meta<typeof Badge> = {
-  title: 'UI/Badge',
+  title: 'Components/Badge',
   component: Badge,
   tags: ['autodocs'],
   args: {
@@ -21,7 +21,7 @@ const meta: Meta<typeof Badge> = {
     docs: {
       description: {
         component:
-          '클릭 시 내부 state(isClick)가 true로 바뀌며 스타일이 활성화됩니다. 토글 방식은 아닙니다.!',
+          '클릭 시 내부 state(isClick)가 true로 바뀌며 스타일이 활성화됩니다. 토글 방식은 아닙니다.',
       },
     },
   },
