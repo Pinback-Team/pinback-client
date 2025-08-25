@@ -2,13 +2,18 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-const MAX_TEXTAREA_LENGTH = 500;
+export const MAX_TEXTAREA_LENGTH = 500;
+export interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  /** 스크롤바 등장 시 레이아웃 점프 방지(default: true) */
+  stableScrollbarGutter?: boolean;
+}
 
-type TextareaProps = React.ComponentProps<'textarea'>;
-
-function Textarea({
+export function Textarea({
   className,
   maxLength = MAX_TEXTAREA_LENGTH,
+  stableScrollbarGutter = true,
+  style,
   ...props
 }: TextareaProps) {
   return (
@@ -23,10 +28,11 @@ function Textarea({
         'ds-scrollbar',
         className
       )}
-      style={{ scrollbarGutter: 'stable' }}
+      style={{
+        ...(stableScrollbarGutter ? { scrollbarGutter: 'stable' } : {}),
+        ...style, // 사용자가 넘긴 style이 최종 우선
+      }}
       {...props}
     />
   );
 }
-
-export { Textarea };
