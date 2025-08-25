@@ -5,6 +5,9 @@ const meta: Meta<typeof Level> = {
   title: 'Components/Level',
   component: Level,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+  },
   argTypes: {
     level: {
       control: { type: 'number', min: 1, max: 100 },
@@ -26,11 +29,5 @@ export const Default: Story = {
 export const Level10: Story = {
   args: {
     level: 10,
-  },
-};
-
-export const Level99: Story = {
-  args: {
-    level: 99,
   },
 };
