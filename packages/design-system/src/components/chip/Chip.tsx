@@ -11,7 +11,7 @@ type ChipColor =
   | 'amber'
   | 'maroon';
 
-interface ChipProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ChipProps {
   color: ChipColor;
   category?: string;
 }
