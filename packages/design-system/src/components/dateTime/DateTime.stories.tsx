@@ -3,7 +3,7 @@ import { within, userEvent } from '@storybook/test';
 import DateTime from './DateTime';
 
 const meta: Meta<typeof DateTime> = {
-  title: 'UI/DateTime',
+  title: 'Components/DateTime',
   component: DateTime,
   tags: ['autodocs'],
   args: {
@@ -28,6 +28,7 @@ const meta: Meta<typeof DateTime> = {
     },
   },
   parameters: {
+    layout: 'centered',
     docs: {
       description: {
         component:
