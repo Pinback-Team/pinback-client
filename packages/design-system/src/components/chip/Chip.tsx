@@ -4,7 +4,7 @@ type ChipColor =
   | 'purple'
   | 'navyblue'
   | 'skyblue'
-  | 'emerlald'
+  | 'emerald'
   | 'navygreen'
   | 'khaki'
   | 'orange'
@@ -24,7 +24,7 @@ const ChipColorVariants = cva(
         purple: 'bg-category-purple-bg text-category-purple-text',
         navyblue: 'bg-category-navyblue-bg text-category-navyblue-text',
         skyblue: 'bg-category-skyblue-bg text-category-skyblue-text',
-        emerlald: 'bg-category-emerald-bg text-category-emerald-text',
+        emerald: 'bg-category-emerald-bg text-category-emerald-text',
         navygreen: 'bg-category-navygreen-bg text-category-navygreen-text',
         khaki: 'bg-category-khaki-bg text-category-khaki-text',
         orange: 'bg-category-orange-bg text-category-orange-text',
