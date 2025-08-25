@@ -206,7 +206,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
         onBeforeInput={handleBeforeInput}
         onKeyDown={handleKeyDown}
         onChange={handleChange}
-        placeholder={type === 'date' ? 'YYYY.MM.DD' : '오후 HH:MM'}
+        placeholder={type === 'date' ? 'YYYY.MM.DD' : 'HH:MM'}
         inputMode="numeric"
         maxLength={type === 'date' ? 10 : 8}
         pattern={
