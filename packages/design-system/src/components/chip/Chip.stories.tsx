@@ -65,13 +65,13 @@ export const AllColors: Story = {
 
     return (
       <div style={{ display: 'grid', gap: '8px' }}>
-        {colors.map((c) => (
+        {colors.map((color) => (
           <div
-            key={c}
+            key={color}
             style={{ display: 'flex', alignItems: 'center', gap: 8 }}
           >
-            <Chip {...args} color={c} />
-            <code style={{ fontSize: 12 }}>{c}</code>
+            <Chip {...args} color={color} />
+            <code style={{ fontSize: 12 }}>{color}</code>
           </div>
         ))}
       </div>
