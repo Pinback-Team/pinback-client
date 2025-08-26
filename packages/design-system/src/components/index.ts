@@ -3,3 +3,4 @@ export { Switch } from './switch/Switch';
 export { default as Input } from './input/Input';
 export { Textarea } from './textarea/Textarea';
 export { Progress } from './progress/Progress';
+export { default as Toast } from './toast/Toast';
