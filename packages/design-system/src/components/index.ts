@@ -6,3 +6,4 @@ export { default as Chip } from './chip/Chip';
 export { default as Level } from './level/Level';
 export { Textarea } from './textarea/Textarea';
 export { Progress } from './progress/Progress';
+export { default as Popup } from './popup/Popup';

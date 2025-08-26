@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
+import { Popup } from '@pinback/design-system/ui';
 function App() {
   const [count, setCount] = useState(0);
 
@@ -15,7 +16,8 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>\
+      <h1>Vite + React</h1>
+      <Popup type="input" title="title" left="left" right="right" />
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
