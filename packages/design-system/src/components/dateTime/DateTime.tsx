@@ -1,5 +1,11 @@
 import { useRef, useState, type ChangeEvent } from 'react';
 import { cva } from 'class-variance-authority';
+import {
+  digitsOnly,
+  formatDate,
+  formatTime12,
+  mapCaretByDigitsPos,
+} from './utils/DateTimeUtils';
 
 interface DateTimeProps {
   state: 'default' | 'disabled' | 'error';
@@ -56,61 +62,6 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
   const [input, setInput] = useState(() =>
     type === 'date' ? formatDate(digitsOnly(value)) : formatTime12(timeDigits)
   );
-  function digitsOnly(s: string) {
-    return s.replace(/\D/g, '');
-  }
-
-  // [날짜 타입] (2025.08.19) 이런식으로 포맷팅하는 함수 !
-  function formatDate(d: string) {
-    const v = d.slice(0, 8);
-    const y = v.slice(0, 4);
-    const m = v.slice(4, 6);
-    const dd = v.slice(6, 8);
-    let out = y;
-    if (m) out += '.' + m;
-    if (dd) out += '.' + dd;
-    return out;
-  }
-
-  // [시간 타입] 12시간 기준으로 오후/오적 포맷팅
-  function formatTime12(digits: string) {
-    const v = digits.slice(0, 4);
-    if (v.length === 0) return '';
-
-    const hhDigits = v.slice(0, 2);
-    const mmDigits = v.slice(2, 4);
-    const hour24 = parseInt(hhDigits || '0', 10);
-    const ampm = hour24 >= 12 ? '오후' : '오전';
-
-    let h12: number;
-    // 아직 2글자 안채워졌을 때 (ex. 이거 안하면 17이라 입력했을때 오후 05:~가 안되고 01:7~ 이런식으로 되어버림)
-    if (hhDigits.length < 2) {
-      h12 = parseInt(hhDigits || '0', 10) % 12;
-      if (h12 === 0) h12 = 12;
-    } else {
-      h12 = hour24 % 12;
-      if (h12 === 0) h12 = 12;
-    }
-    const displayHour = String(h12).padStart(2, '0');
-
-    let out = `${ampm} ${displayHour}`;
-    if (mmDigits.length > 0) out += `:${mmDigits}`;
-    return out;
-  }
-
-  // [공통 타입] 이건 커서 위치 조정하는거 (특히 지울 때, :나 . 의 접사 기준으로 커서 위치 조정)
-  function mapCaretByDigitsPos(digitsPos: number, kind: 'date' | 'time') {
-    if (kind === 'date') {
-      if (digitsPos <= 4) return digitsPos;
-      if (digitsPos <= 6) return digitsPos + 1;
-      return Math.min(digitsPos + 2, 10);
-    } else {
-      const PREFIX = 3;
-      if (digitsPos === 0) return PREFIX;
-      if (digitsPos <= 2) return PREFIX + 2;
-      return Math.min(PREFIX + 3 + (digitsPos - 2), PREFIX + 5);
-    }
-  }
 
   // [시간 타입] 입력 단계에서의 자잘한 이벤트 처리 ! 얘는 중간 중간 계산해줘야해서 beforeInput에서 처리
   const handleBeforeInput = (e: React.FormEvent<HTMLInputElement>) => {
