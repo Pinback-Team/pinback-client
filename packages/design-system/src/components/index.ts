@@ -1,3 +1,4 @@
 export { default as Button } from './button/Button';
-export { Switch } from './switch/switch';
+export { default as Card } from './card/Card';
 export { default as Input } from './input/Input';
+export { Switch } from './switch/switch';
