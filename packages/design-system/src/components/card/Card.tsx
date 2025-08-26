@@ -1,4 +1,4 @@
-import MyBookMark from './MyBookMark';
+import MyBookmarkCard from './MyBookmarkCard';
 import RemindCard from './RemindCard';
 
 interface CardProps {
@@ -33,7 +33,7 @@ const Card = ({
       )}
 
       {type === 'bookmark' && (
-        <MyBookMark
+        <MyBookmarkCard
           title={title}
           content={content}
           category={category}

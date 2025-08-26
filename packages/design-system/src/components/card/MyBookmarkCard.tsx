@@ -1,7 +1,7 @@
 import { Icon } from '@/icons';
 import BaseCard from './BaseCard';
 
-interface MyBookMarkProps {
+interface MyBookmarkCardProps {
   title: string;
   content?: string;
   category: string;
@@ -9,13 +9,13 @@ interface MyBookMarkProps {
   date?: string;
 }
 
-const MyBookMark = ({
+const MyBookmarkCard = ({
   title,
   content,
   category,
   imageUrl,
   date,
-}: MyBookMarkProps) => {
+}: MyBookmarkCardProps) => {
   return (
     <BaseCard>
       <div className="bg-gray200 h-[12rem] w-full overflow-hidden">
@@ -48,4 +48,4 @@ const MyBookMark = ({
   );
 };
 
-export default MyBookMark;
+export default MyBookmarkCard;
