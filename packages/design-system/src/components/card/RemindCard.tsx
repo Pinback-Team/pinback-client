@@ -1,4 +1,5 @@
 import { Icon } from '@/icons';
+import chippiNoImage from '../../assets/chippi_no_image.svg';
 import BaseCard from './BaseCard';
 
 interface RemindCardProps {
@@ -20,20 +21,26 @@ const RemindCard = ({
     <BaseCard>
       <div className="bg-gray900 flex items-center gap-[0.4rem] py-[1.2rem] pl-[1.6rem] text-sm text-white">
         <Icon name="ic_clock_active" />
-        <span className="body2-m text-main400">
-          {timeRemaining || '4시간 30분'}
-        </span>
+        <span className="body2-m text-main400">{timeRemaining || '-'}</span>
         <span className="body2-m text-white-bg">이후에 사라져요</span>
       </div>
 
-      <div className="bg-gray200 h-[12rem] w-full overflow-hidden">
-        <img src={imageUrl} className="h-full w-full object-cover" />
+      <div className="bg-#F8F8FA flex h-[12rem] w-full items-center justify-center overflow-hidden">
+        {imageUrl ? (
+          <img src={imageUrl} className="h-full w-full object-cover" />
+        ) : (
+          <img
+            src={chippiNoImage}
+            alt="이미지 없을 경우 logo"
+            className="h-[12rem]"
+          />
+        )}
       </div>
 
       <div className="px-[1.6rem] py-[2.4rem]">
-        <div className="mb-[0.8rem] flex justify-between">
+        <div className="mb-[0.8rem] flex h-[5.6rem] justify-between gap-[0.8rem]">
           <h3 className="head6 line-clamp-2">{title}</h3>
-          <button type="button" className="cursor-pointer">
+          <button type="button" className="cursor-pointer self-start">
             <Icon name="ic_details_category" />
           </button>
         </div>

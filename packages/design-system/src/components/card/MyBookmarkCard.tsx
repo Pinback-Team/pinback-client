@@ -1,4 +1,5 @@
 import { Icon } from '@/icons';
+import chippiNoImage from '../../assets/chippi_no_image.svg';
 import BaseCard from './BaseCard';
 
 interface MyBookmarkCardProps {
@@ -18,21 +19,29 @@ const MyBookmarkCard = ({
 }: MyBookmarkCardProps) => {
   return (
     <BaseCard>
-      <div className="bg-gray200 h-[12rem] w-full overflow-hidden">
-        <img src={imageUrl} className="h-full w-full object-cover" />
+      <div className="bg-#F8F8FA flex h-[12rem] w-full items-center justify-center overflow-hidden">
+        {imageUrl ? (
+          <img src={imageUrl} className="h-full w-full object-cover" />
+        ) : (
+          <img
+            src={chippiNoImage}
+            alt="이미지 없을 경우 logo"
+            className="h-[12rem]"
+          />
+        )}
       </div>
 
       <div className="px-[1.6rem] py-[2.4rem]">
-        <p className="body3-r text-font-gray-2 mb-[1.2rem] line-clamp-2">
-          {content}
-        </p>
-
-        <div className="mb-[0.8rem] flex justify-between">
+        <div className="mb-[0.8rem] flex h-[5.6rem] justify-between gap-[0.8rem]">
           <h3 className="head6 line-clamp-2">{title}</h3>
-          <button type="button" className="cursor-pointer">
+          <button type="button" className="cursor-pointer self-start">
             <Icon name="ic_details_category" />
           </button>
         </div>
+
+        <p className="body3-r text-font-gray-2 mb-[1.2rem] line-clamp-2">
+          {content}
+        </p>
 
         {category && (
           <span className="bg-category-red-bg caption2-sb text-category-red-text h-[2.2rem] w-[6.2rem] rounded-[0.4rem] px-[0.8rem] py-[0.2rem]">
@@ -40,9 +49,7 @@ const MyBookmarkCard = ({
           </span>
         )}
 
-        <p className="caption2-m text-font-ltgray-4 mt-[1.2rem]">
-          {date || '2025.08.09'}
-        </p>
+        <p className="caption2-m text-font-ltgray-4 mt-[1.2rem]">{date}</p>
       </div>
     </BaseCard>
   );
