@@ -60,6 +60,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
     return s.replace(/\D/g, '');
   }
 
+  // [날짜 타입] (2025.08.19) 이런식으로 포맷팅하는 함수 !
   function formatDate(d: string) {
     const v = d.slice(0, 8);
     const y = v.slice(0, 4);
@@ -71,6 +72,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
     return out;
   }
 
+  // [시간 타입] 12시간 기준으로 오후/오적 포맷팅
   function formatTime12(digits: string) {
     const v = digits.slice(0, 4);
     if (v.length === 0) return '';
@@ -81,6 +83,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
     const ampm = hour24 >= 12 ? '오후' : '오전';
 
     let h12: number;
+    // 아직 2글자 안채워졌을 때 (ex. 이거 안하면 17이라 입력했을때 오후 05:~가 안되고 01:7~ 이런식으로 되어버림)
     if (hhDigits.length < 2) {
       h12 = parseInt(hhDigits || '0', 10) % 12;
       if (h12 === 0) h12 = 12;
@@ -95,6 +98,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
     return out;
   }
 
+  // [공통 타입] 이건 커서 위치 조정하는거 (특히 지울 때, :나 . 의 접사 기준으로 커서 위치 조정)
   function mapCaretByDigitsPos(digitsPos: number, kind: 'date' | 'time') {
     if (kind === 'date') {
       if (digitsPos <= 4) return digitsPos;
@@ -108,13 +112,14 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
     }
   }
 
+  // [시간 타입] 입력 단계에서의 자잘한 이벤트 처리 ! 얘는 중간 중간 계산해줘야해서 beforeInput에서 처리
   const handleBeforeInput = (e: React.FormEvent<HTMLInputElement>) => {
     if (type !== 'time') return;
 
     const ne = e.nativeEvent as InputEvent;
     const inputType = ne.inputType || '';
     const data = (ne as InputEvent).data;
-
+    // 입력 타입이 insert일때
     if (inputType.startsWith('insert') && data) {
       const add = data.replace(/\D/g, '');
       if (!add) {
@@ -122,6 +127,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
         return;
       }
       if (timeDigits.length >= 4) {
+        // 타입이 4글자 넘어가면 더이상 받지 않기
         e.preventDefault();
         return;
       }
@@ -133,7 +139,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
       return;
     }
 
-    // (b) 백스페이스
+    // 백스페이스 인풋일 때, 포맷팅 조절
     if (inputType === 'deleteContentBackward') {
       if (timeDigits.length === 0) {
         e.preventDefault();
@@ -146,7 +152,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
       e.preventDefault();
       return;
     }
-
+    // paste 이벤트일 때
     const pasted = digitsOnly((ne as InputEvent).data ?? '');
     if (pasted) {
       const next = (timeDigits + pasted).slice(0, 4);
@@ -158,7 +164,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
       e.preventDefault();
     }
   };
-
+  // [날짜 타입] input value에 반영된 후에서의 이벤트 처리 : 왜 날짜/시간 타입에 따라 나눴는지 PR 참고!!
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (type === 'time') return;
     const raw = e.target.value;
