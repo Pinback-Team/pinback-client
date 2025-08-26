@@ -18,9 +18,9 @@ const buttonVariants = cva(
           'bg-white-bg text-font-black-1 hover:bg-gray200 active:bg-white-bg disabled:bg-gray200 disabled:text-font-ltgray-4 outline outline-gray200',
       },
       size: {
-        small: 'py-[0.8rem] sub5-sb',
-        medium: 'py-[1.2rem] sub5-sb',
-        large: 'py-[1.5rem] sub3-sb',
+        small: 'px-[1.2rem] py-[0.8rem] sub5-sb',
+        medium: 'px-[1.2rem] py-[1.2rem] sub5-sb',
+        large: 'px-[1.6rem] py-[1.5rem] sub3-sb',
       },
     },
     defaultVariants: {
