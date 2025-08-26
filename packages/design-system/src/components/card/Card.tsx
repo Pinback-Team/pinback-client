@@ -1,46 +1,35 @@
 import MyBookmarkCard from './MyBookmarkCard';
 import RemindCard from './RemindCard';
 
-interface CardProps {
-  type: 'remind' | 'bookmark';
+type BaseProps = {
   title: string;
   content?: string;
-  category: string;
+  category?: string;
   imageUrl?: string;
-  timeRemaining?: string;
-  date?: string;
-}
+};
 
-const Card = ({
-  type,
-  title,
-  content,
-  category,
-  imageUrl,
-  timeRemaining,
-  date,
-}: CardProps) => {
+type RemindProps = BaseProps & {
+  type: 'remind';
+  timeRemaining: string;
+  date?: never;
+};
+
+type BookmarkProps = BaseProps & {
+  type: 'bookmark';
+  date: string;
+  timeRemaining?: never;
+};
+
+export type CardProps = RemindProps | BookmarkProps;
+
+const Card = (props: CardProps) => {
+  const { type } = props;
+
   return (
     <>
-      {type === 'remind' && (
-        <RemindCard
-          title={title}
-          content={content}
-          category={category}
-          imageUrl={imageUrl}
-          timeRemaining={timeRemaining}
-        />
-      )}
+      {type === 'remind' && <RemindCard {...props} />}
 
-      {type === 'bookmark' && (
-        <MyBookmarkCard
-          title={title}
-          content={content}
-          category={category}
-          imageUrl={imageUrl}
-          date={date}
-        />
-      )}
+      {type === 'bookmark' && <MyBookmarkCard {...props} />}
     </>
   );
 };

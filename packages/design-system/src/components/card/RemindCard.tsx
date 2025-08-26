@@ -5,9 +5,9 @@ import BaseCard from './BaseCard';
 interface RemindCardProps {
   title: string;
   content?: string;
-  category: string;
+  category?: string;
   imageUrl?: string;
-  timeRemaining?: string;
+  timeRemaining: string;
 }
 
 const RemindCard = ({

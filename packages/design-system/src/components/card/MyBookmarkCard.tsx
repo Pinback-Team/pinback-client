@@ -7,7 +7,7 @@ interface MyBookmarkCardProps {
   content?: string;
   category?: string;
   imageUrl?: string;
-  date?: string;
+  date: string;
 }
 
 const MyBookmarkCard = ({
