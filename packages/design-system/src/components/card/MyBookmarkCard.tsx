@@ -39,7 +39,7 @@ const MyBookmarkCard = ({
           </button>
         </div>
 
-        <p className="body3-r text-font-gray-2 mb-[1.2rem] line-clamp-2">
+        <p className="body3-r text-font-gray-2 mb-[1.2rem] line-clamp-2 h-[4.2rem]">
           {content}
         </p>
 

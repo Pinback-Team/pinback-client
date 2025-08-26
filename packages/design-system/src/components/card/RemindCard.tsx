@@ -21,7 +21,9 @@ const RemindCard = ({
     <BaseCard>
       <div className="bg-gray900 flex items-center gap-[0.4rem] py-[1.2rem] pl-[1.6rem] text-sm text-white">
         <Icon name="ic_clock_active" />
-        <span className="body2-m text-main400">{timeRemaining || '-'}</span>
+        <span className="body2-m text-main400 mr-[0.2rem]">
+          {timeRemaining || '-'}
+        </span>
         <span className="body2-m text-white-bg">이후에 사라져요</span>
       </div>
 
@@ -44,11 +46,9 @@ const RemindCard = ({
             <Icon name="ic_details_category" />
           </button>
         </div>
-
-        <p className="body3-r text-font-gray-2 mb-[1.2rem] line-clamp-2">
+        <p className="body3-r text-font-gray-2 mb-[1.2rem] line-clamp-2 h-[4.2rem]">
           {content}
         </p>
-
         <span className="bg-category-red-bg caption2-sb text-category-red-text h-[2.2rem] w-[6.2rem] rounded-[0.4rem] px-[0.8rem] py-[0.2rem]">
           {category}
         </span>

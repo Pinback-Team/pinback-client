@@ -7,6 +7,13 @@ const meta: Meta<typeof Card> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          '**Card** 컴포넌트는 리마인드 카드와 북마크 카드 두 가지 유형을 지원합니다.<br/>' +
+          '**`remind`**, **`bookmark`** 중 type을 선택하여 사용할 수 있으며 이에 따라 다른 인터페이스를 제공합니다..',
+      },
+    },
   },
   argTypes: {
     type: {
