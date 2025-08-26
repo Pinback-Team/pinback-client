@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import Toast from './Toast';
 
 export interface AutoDismissToastProps {
-  text: string;
+  children: React.ReactNode;
   duration?: number;
   fadeMs?: number;
   onClose?: () => void;
@@ -11,7 +10,7 @@ export interface AutoDismissToastProps {
 }
 
 export default function AutoDismissToast({
-  text,
+  children,
   duration = 3000,
   fadeMs = 200,
   onClose,
@@ -21,8 +20,8 @@ export default function AutoDismissToast({
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
-    const t1 = window.setTimeout(() => setFading(true), duration);
-    const t2 = window.setTimeout(() => {
+    const t1 = setTimeout(() => setFading(true), duration);
+    const t2 = setTimeout(() => {
       setVisible(false);
       onClose?.();
     }, duration + fadeMs);
@@ -43,7 +42,7 @@ export default function AutoDismissToast({
         )}
         style={{ transitionDuration: `${fadeMs}ms` }}
       >
-        <Toast text={text} />
+        {children}
       </div>
     </div>
   );
