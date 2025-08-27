@@ -71,6 +71,9 @@ importers:
 
   apps/client:
     dependencies:
+      class-variance-authority:
+        specifier: ^0.7.1
+        version: 0.7.1
       react:
         specifier: ^19.1.1
         version: 19.1.1
