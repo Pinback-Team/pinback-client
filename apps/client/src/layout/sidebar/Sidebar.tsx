@@ -1,14 +1,10 @@
 import { SidebarNavItem } from './components/SidebarNavItem';
-import { SidebarAccordion } from './components/SidebarAccordion';
+// import { SidebarAccordion } from './components/SidebarAccordion';
 
 export const Sidebar = () => {
   return (
     <div>
-      <SidebarNavItem href={''} label={''}></SidebarNavItem>
-      <SidebarAccordion
-        header={undefined}
-        children={undefined}
-      ></SidebarAccordion>
+      <SidebarNavItem label="리마인드" href="/remind" />
     </div>
   );
 };

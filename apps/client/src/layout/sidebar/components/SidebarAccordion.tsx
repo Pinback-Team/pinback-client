@@ -24,6 +24,7 @@ export function SidebarAccordion({
 
   const toggle = () => {
     const next = !open;
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     controlled === undefined ? setUncontrolled(next) : onOpenChange?.(next);
   };
 
@@ -32,7 +33,7 @@ export function SidebarAccordion({
       <SidebarRow
         {...header}
         onClick={(e) => {
-          header.onClick?.(e as any);
+          header.onClick?.(e);
           toggle();
         }}
         aria-expanded={open}
