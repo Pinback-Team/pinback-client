@@ -2,8 +2,8 @@ import { cn } from '@pinback/design-system/utils';
 
 export interface OptionsMenuButtonProps {
   ref?: React.Ref<HTMLDivElement>;
-  onEdit?: () => void;
-  onDelete?: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
   className?: string;
 }
 
