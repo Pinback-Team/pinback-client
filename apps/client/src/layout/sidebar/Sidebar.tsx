@@ -15,14 +15,14 @@ interface SideItemProps {
 }
 
 export function SideItem({
-  iconName,
   activeIconName,
   label,
   active,
   trailing,
   className,
 }: SideItemProps) {
-  const currentIcon = active && activeIconName ? activeIconName : iconName;
+  const currentIcon =
+    active && activeIconName ? 'ic_clock_disable' : 'ic_clock_disable';
 
   return (
     <div
@@ -34,7 +34,7 @@ export function SideItem({
       )}
     >
       {/* 장식용 아이콘은 스크린리더 숨김 */}
-      <Icon name={ic_clock_disable} aria-hidden className="size-5 shrink-0" />
+      <Icon name={currentIcon} aria-hidden className="size-5 shrink-0" />
       <span className="sub2-b flex-1">{label}</span>
       {trailing}
     </div>
