@@ -15,4 +15,8 @@ export const ROUTES_CONFIG = {
     title: '레벨',
     path: '/level',
   },
+  onBoarding: {
+    title: '온보딩',
+    path: '/onBoarding',
+  },
 };
