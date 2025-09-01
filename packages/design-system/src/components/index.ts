@@ -9,5 +9,5 @@ export { Switch } from './switch/Switch';
 export { Textarea } from './textarea/Textarea';
 export { default as AutoDismissToast } from './toast/hooks/uesFadeOut';
 export { default as Toast } from './toast/Toast';
-export { WheelPicker, WheelPickerWrapper } from './wheel-picker';
-export type { WheelPickerOption } from './wheel-picker';
+export { WheelPicker, WheelPickerWrapper } from './wheelPicker/WheelPicker';
+export type { WheelPickerOption } from './wheelPicker/WheelPicker';
