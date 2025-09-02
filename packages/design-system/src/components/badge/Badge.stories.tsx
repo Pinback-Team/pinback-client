@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { within, userEvent } from '@storybook/test';
-import Badge, { type BadgeProps } from './Badge';
+import Badge from './Badge';
 
 const meta: Meta<typeof Badge> = {
   title: 'Components/Badge',
