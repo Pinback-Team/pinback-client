@@ -22,7 +22,13 @@ const meridiemOptions: WheelPickerOption[] = [
   { label: 'PM', value: 'PM' },
 ];
 
-const TimePicker = () => {
+interface TimePickerProps {
+  onSave: (time: { hour: string; minute: string; meridiem: string }) => void;
+  onCancel: () => void;
+  onClick: React.MouseEventHandler<HTMLDivElement>;
+}
+
+const TimePicker = ({ onSave, onCancel, onClick }: TimePickerProps) => {
   const [selectedHour, setSelectedHour] = useState(hourOptions[0].value);
   const [selectedMinute, setSelectedMinute] = useState(minuteOptions[0].value);
   const [selectedMeridiem, setSelectedMeridiem] = useState(
@@ -30,7 +36,10 @@ const TimePicker = () => {
   );
 
   return (
-    <div className="common-shadow flex w-[26rem] flex-col items-center px-[1.6rem]">
+    <div
+      onClick={onClick}
+      className="common-shadow flex w-[26rem] flex-col items-center px-[1.6rem]"
+    >
       <WheelPickerWrapper className="flex h-[16.8rem] !items-center py-[0.8rem]">
         <WheelPicker
           options={hourOptions}
@@ -55,8 +64,21 @@ const TimePicker = () => {
         />
       </WheelPickerWrapper>
       <div className="flex w-full gap-[1.2rem] pb-[2.4rem] pt-[0.8rem]">
-        <Button variant="secondary">취소</Button>
-        <Button variant="primary">확인</Button>
+        <Button variant="secondary" onClick={onCancel}>
+          취소
+        </Button>
+        <Button
+          variant="primary"
+          onClick={() =>
+            onSave({
+              hour: selectedHour,
+              minute: selectedMinute,
+              meridiem: selectedMeridiem,
+            })
+          }
+        >
+          확인
+        </Button>
       </div>
     </div>
   );
