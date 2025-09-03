@@ -1,42 +1,35 @@
-// SideItem.tsx
-import { cn } from '@pinback/design-system/utils';
-import { Icon } from '@pinback/design-system/icons';
+// Sidebar.tsx
+import { NavLink, useNavigate } from 'react-router-dom';
+import SideItem from './components/SideItem';
+import AccordionItem from './components/AccordionItem';
+import { useSidebarActive } from '@shared/hooks/useSidebarActive';
 
-interface SideItemProps {
-  /** 기본 아이콘 (닫힘/비활성) */
-  iconName: string;
-  /** 활성/열림 상태에서 쓸 아이콘 (없으면 iconName 그대로) */
-  activeIconName?: string;
-
-  label: string;
-  active?: boolean; // 스타일/아이콘 선택에만 사용
-  trailing?: React.ReactNode; // 우측 화살표/케밥 등
-  className?: string;
-}
-
-export function SideItem({
-  activeIconName,
-  label,
-  active,
-  trailing,
-  className,
-}: SideItemProps) {
-  const currentIcon =
-    active && activeIconName ? 'ic_clock_disable' : 'ic_clock_disable';
+export function Sidebar() {
+  const navigate = useNavigate();
+  const { isRemindActive, isBookmarkActive } = useSidebarActive();
 
   return (
-    <div
-      className={cn(
-        'flex items-center gap-3 rounded-[0.8rem] px-4 py-3',
-        active ? 'bg-main0 text-main500' : 'hover:bg-gray0',
-        'transition-colors',
-        className
-      )}
-    >
-      {/* 장식용 아이콘은 스크린리더 숨김 */}
-      <Icon name={currentIcon} aria-hidden className="size-5 shrink-0" />
-      <span className="sub2-b flex-1">{label}</span>
-      {trailing}
-    </div>
+    <nav className="space-y-2">
+      <NavLink to="/" end className="block">
+        <SideItem icon="clock" label="리마인드" active={isRemindActive} />
+      </NavLink>
+
+      <AccordionItem
+        icon="bookmark"
+        label="나의 북마크"
+        active={isBookmarkActive}
+        defaultOpen
+        trailing
+        onClick={() => navigate('/my-bookmarks')}
+      >
+        <ul className="bg-white-bg space-y-1">
+          <li className="rounded px-3 py-2 hover:bg-white">카테고리 1</li>
+          <li className="rounded px-3 py-2 hover:bg-white">카테고리 2</li>
+          <button className="text-main500 rounded px-3 py-2 hover:bg-white">
+            + 카테고리 추가
+          </button>
+        </ul>
+      </AccordionItem>
+    </nav>
   );
 }

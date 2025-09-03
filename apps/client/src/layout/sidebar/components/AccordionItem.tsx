@@ -1,53 +1,64 @@
+import * as React from 'react';
 import { cn } from '@pinback/design-system/utils';
-import { Icon } from '@pinback/design-system/icons';
-import { useState } from 'react';
+import SideItem, { type IconToken } from './SideItem';
 
-import SideItem from './SideItem';
-// AccordionItem.tsx
-interface AccordionItemProps {
-  icon: React.ReactNode;
+interface AccordionItemProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  icon: IconToken;
   label: string;
+  children: React.ReactNode;
+  active: boolean;
+  open?: boolean;
   defaultOpen?: boolean;
-  children: React.ReactNode; // 펼쳐질 패널(카테고리 목록/필터/드롭다운 등)
+  onOpenChange?: (open: boolean) => void;
+  trailing?: boolean;
+  className?: string;
 }
 
-export function AccordionItem({
+export default function AccordionItem({
   icon,
   label,
-  defaultOpen,
   children,
+  active,
+  open,
+  defaultOpen = false,
+  onOpenChange,
+  trailing = true,
+  className,
+  ...rest
 }: AccordionItemProps) {
-  const [open, setOpen] = useState(!!defaultOpen);
+  const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
+  const isOpen = open ?? internalOpen;
+
+  const panelId = React.useId();
+
+  const toggle = () => {
+    const next = !isOpen;
+    onOpenChange?.(next);
+    if (open === undefined) setInternalOpen(next);
+  };
+
   return (
-    <div>
-      <button
-        type="button"
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-        className="w-full rounded-[0.8rem] text-left focus:outline-none focus-visible:ring-2"
-      >
-        <SideItem
-          icon={icon}
-          label={label}
-          active={open}
-          trailing={
-            <Icon
-              className={cn('transition', open && 'rotate-180')}
-              name={'ic_arrow_down_active'}
-            />
-          }
-        />
-      </button>
+    <div className={cn('space-y-2', className)} {...rest}>
+      <SideItem
+        icon={icon}
+        label={label}
+        active={active}
+        trailing={trailing}
+        open={isOpen}
+        onTrailingClick={toggle}
+        trailingAriaExpanded={isOpen}
+        trailingAriaControls={panelId}
+      />
 
       <div
-        role="region"
-        aria-hidden={!open}
+        id={panelId}
         className={cn(
           'grid overflow-hidden transition-[grid-template-rows]',
-          open ? 'mt-2 grid-rows-[1fr]' : 'grid-rows-[0fr]'
+          isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
         )}
       >
-        <div className="bg-main0 min-h-0 rounded-[0.8rem] px-2 py-2">
+        <div className="bg-main0 min-h-0 rounded-[0.4rem] px-2 py-2">
           {children}
         </div>
       </div>
