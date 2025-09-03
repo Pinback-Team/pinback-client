@@ -13,9 +13,7 @@ export default function TreeStatusCard({ acorns }: TreeStatusCardProps) {
 
   return (
     <div
-      className={cn(
-        'border-gray200 bg-white-bg w-[32.3rem] rounded-[1.2rem] border p-[1.2rem]'
-      )}
+      className={cn('bg-white-bg w-[32.3rem] rounded-[1.2rem] p-[1.2rem]')}
       role="group"
       aria-label={`${info.name} 진행 카드`}
     >
@@ -23,12 +21,12 @@ export default function TreeStatusCard({ acorns }: TreeStatusCardProps) {
         <span className="head1 text-main500">{barPercent}%</span>
       </div>
 
-      <div className="mt-[0.4rem] flex items-center gap-[0.4rem]">
-        <span className="sub3-sb text-font-gray-2">{info.name}</span>
+      <div className="mt-[0.8rem] flex items-center gap-[0.4rem]">
+        <span className="sub4-sb text-font-gray-2">{info.name}</span>
         <Level level={info.level} />
       </div>
 
-      <div className="mt-[0.8rem]">
+      <div className="mt-[1.6rem]">
         <Progress
           value={barPercent}
           variant="tree"
