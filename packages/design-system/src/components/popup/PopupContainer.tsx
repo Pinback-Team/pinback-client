@@ -1,8 +1,24 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Popup from './Popup';
-import { PopupContainerProps } from './types';
+type PopupType = 'input' | 'subtext' | 'default';
 
+interface BasePopupProps {
+  type: PopupType;
+  title: string;
+  left: string;
+  right: string;
+  subtext?: string;
+  placeholder?: string;
+  isError?: boolean;
+  helperText?: string;
+  onLeftClick?: () => void;
+  onRightClick?: () => void;
+}
+interface PopupContainerProps extends BasePopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 const PopupContainer = ({
   isOpen,
   onClose,
