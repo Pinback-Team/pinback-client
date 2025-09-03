@@ -2,7 +2,7 @@ import TreeStatusCard from './components/TreeStatusCard';
 
 const Level = () => {
   return (
-    <div>
+    <div className="bg-secondary flex flex-col gap-[2rem] p-[1rem]">
       <TreeStatusCard acorns={0} />
       <TreeStatusCard acorns={1} />
       <TreeStatusCard acorns={2} />
