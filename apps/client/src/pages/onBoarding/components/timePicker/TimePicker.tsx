@@ -4,7 +4,7 @@ import {
   WheelPickerOption,
   WheelPickerWrapper,
 } from '@pinback/design-system/ui';
-import { useState } from 'react';
+import { MouseEventHandler, useState } from 'react';
 
 const createArray = (length: number, add = 0): WheelPickerOption[] =>
   Array.from({ length }, (_, i) => {
@@ -25,7 +25,7 @@ const meridiemOptions: WheelPickerOption[] = [
 interface TimePickerProps {
   onSave: (time: { hour: string; minute: string; meridiem: string }) => void;
   onCancel: () => void;
-  onClick: React.MouseEventHandler<HTMLDivElement>;
+  onClick: MouseEventHandler<HTMLDivElement>;
 }
 
 const TimePicker = ({ onSave, onCancel, onClick }: TimePickerProps) => {
@@ -43,15 +43,17 @@ const TimePicker = ({ onSave, onCancel, onClick }: TimePickerProps) => {
       <WheelPickerWrapper className="flex h-[16.8rem] !items-center py-[0.8rem]">
         <WheelPicker
           options={hourOptions}
+          aria-label="시"
           infinite
           optionItemHeight={56}
           onValueChange={(value: string) => setSelectedHour(value)}
         />
-        <p className="body2-m z-2 mx-[0.8rem] flex h-[5.6rem] items-center justify-center">
+        <p className="bod y2-m z-2 mx-[0.8rem] flex h-[5.6rem] items-center justify-center">
           :
         </p>
         <WheelPicker
           options={minuteOptions}
+          aria-label="분"
           infinite
           optionItemHeight={56}
           onValueChange={(value: string) => setSelectedMinute(value)}
@@ -59,6 +61,7 @@ const TimePicker = ({ onSave, onCancel, onClick }: TimePickerProps) => {
         <div className="mx-[0.4rem]" />
         <WheelPicker
           options={meridiemOptions}
+          aria-label="오전/오후"
           optionItemHeight={56}
           onValueChange={(value: string) => setSelectedMeridiem(value)}
         />
