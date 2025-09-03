@@ -15,9 +15,7 @@ interface SideItemProps {
   className?: string;
   trailing?: boolean;
   open?: boolean;
-  onTrailingClick?: () => void;
-  trailingAriaExpanded?: boolean;
-  trailingAriaControls?: string;
+  onTrailingClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function SideItem({
@@ -28,8 +26,6 @@ export default function SideItem({
   trailing,
   open,
   onTrailingClick,
-  trailingAriaExpanded,
-  trailingAriaControls,
 }: SideItemProps) {
   const name = active ? ICON_MAP[icon].on : ICON_MAP[icon].off;
 
@@ -48,17 +44,12 @@ export default function SideItem({
       {trailing && (
         <button
           type="button"
-          aria-expanded={trailingAriaExpanded}
-          aria-controls={trailingAriaControls}
+          className="rounded-[0.4rem] p-1 focus-visible:ring-2"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            onTrailingClick?.();
+            onTrailingClick?.(e);
           }}
-          className={cn(
-            'grid place-items-center rounded-[0.4rem] p-[0.2rem]',
-            'focus-visible:outline-none focus-visible:ring-2'
-          )}
         >
           <Icon
             name="ic_arrow_down_active"

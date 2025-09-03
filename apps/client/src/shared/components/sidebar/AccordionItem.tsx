@@ -9,7 +9,7 @@ interface AccordionItemProps
   children: React.ReactNode;
   active: boolean;
   open?: boolean;
-  defaultOpen?: boolean;
+  defaultOpen: boolean;
   onOpenChange?: (open: boolean) => void;
   trailing?: boolean;
   className?: string;
@@ -25,7 +25,6 @@ export default function AccordionItem({
   onOpenChange,
   trailing = true,
   className,
-  ...rest
 }: AccordionItemProps) {
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
   const isOpen = open ?? internalOpen;
@@ -39,7 +38,7 @@ export default function AccordionItem({
   };
 
   return (
-    <div className={cn('space-y-2', className)} {...rest}>
+    <div className={cn('space-y-2', className)}>
       <SideItem
         icon={icon}
         label={label}
@@ -47,8 +46,6 @@ export default function AccordionItem({
         trailing={trailing}
         open={isOpen}
         onTrailingClick={toggle}
-        trailingAriaExpanded={isOpen}
-        trailingAriaControls={panelId}
       />
 
       <div
