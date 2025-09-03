@@ -5,6 +5,9 @@ const meta: Meta<typeof Popup> = {
   title: 'Components/Popup',
   component: Popup,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+  },
   argTypes: {
     type: {
       control: 'radio',

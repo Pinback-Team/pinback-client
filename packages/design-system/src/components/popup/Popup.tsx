@@ -1,6 +1,19 @@
 import Input from '../input/Input';
-import { BasePopupProps } from './types';
 
+type PopupType = 'input' | 'subtext' | 'default';
+
+interface BasePopupProps {
+  type: PopupType;
+  title: string;
+  left: string;
+  right: string;
+  subtext?: string;
+  placeholder?: string;
+  isError?: boolean;
+  helperText?: string;
+  onLeftClick?: () => void;
+  onRightClick?: () => void;
+}
 const Popup = ({
   type,
   subtext,
