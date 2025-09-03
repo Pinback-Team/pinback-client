@@ -161,6 +161,11 @@
 @theme {
   --color-*: initial;
 
+  /* default */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+
   /* Main Color */
   --color-main0: #f9fffb;
   --color-main100: #c9f2e1;

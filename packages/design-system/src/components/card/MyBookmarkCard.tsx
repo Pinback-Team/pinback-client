@@ -1,5 +1,5 @@
-import { Icon } from '@/icons';
 import chippiNoImage from '../../assets/chippi_no_image.svg';
+import { Icon } from '../../icons';
 import BaseCard from './BaseCard';
 
 interface MyBookmarkCardProps {

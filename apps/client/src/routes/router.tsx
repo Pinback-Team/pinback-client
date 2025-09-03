@@ -1,6 +1,7 @@
 import Category from '@pages/category/Category';
 import Level from '@pages/level/Level';
 import MyBookmark from '@pages/myBookmark/MyBookmark';
+import OnBoarding from '@pages/onBoarding/OnBoarding';
 import Remind from '@pages/remind/Remind';
 import { ROUTES_CONFIG } from '@routes/routesConfig';
 import { createBrowserRouter } from 'react-router-dom';
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES_CONFIG.level.path,
         element: <Level />,
+      },
+      {
+        path: ROUTES_CONFIG.onBoarding.path,
+        element: <OnBoarding />,
       },
     ],
   },

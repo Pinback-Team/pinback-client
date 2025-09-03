@@ -6,8 +6,7 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@lib/*": ["./src/lib/*"]
+      "@/*": ["./src/*"]
     },
     "jsx": "react-jsx"
   },
