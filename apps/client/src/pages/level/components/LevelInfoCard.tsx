@@ -58,7 +58,7 @@ export default function LevelInfoCard() {
       </ul>
 
       <div className="bg-gray0 mt-[0.8rem] rounded-[0.4rem] px-[0.8rem] py-[1.2rem]">
-        <p className="caption2-m text-font-gray-2 flex items-center justify-center">
+        <p className="caption2-m text-font-gray-3 flex items-center justify-center">
           정보를 1분 동안 읽고 도토리를 모아보세요. 치삐를 행복하게 만들 수
           있어요.
         </p>
