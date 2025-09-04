@@ -1,5 +1,11 @@
+import onBoardingBg from '../../assets/onBoarding/background/onBoardingBg.svg';
 const OnBoarding = () => {
-  return <div>OnBoarding</div>;
+  return (
+    <div
+      className={`h-screen w-screen bg-cover bg-center bg-no-repeat`}
+      style={{ backgroundImage: `url(${onBoardingBg})` }}
+    ></div>
+  );
 };
 
 export default OnBoarding;
