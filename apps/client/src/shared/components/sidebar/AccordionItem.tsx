@@ -38,7 +38,7 @@ export default function AccordionItem({
   };
 
   return (
-    <div className={cn('space-y-2', className)}>
+    <div className={cn(className)}>
       <SideItem
         icon={icon}
         label={label}
@@ -55,7 +55,7 @@ export default function AccordionItem({
           isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
         )}
       >
-        <div className="bg-main0 min-h-0 rounded-[0.4rem] px-2 py-2">
+        <div className="min-h-0 gap-[0.2rem] bg-none py-[0.4rem]">
           {children}
         </div>
       </div>

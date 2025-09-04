@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import SideItem from './SideItem';
 import AccordionItem from './AccordionItem';
+import CategoryItem from './CategoryItem';
+import CreateItem from './CreateItem';
 
 export function Sidebar() {
   return (
@@ -20,39 +22,10 @@ export function Sidebar() {
             defaultOpen
           >
             <ul className="bg-white-bg space-y-1">
-              <li className="h-[3.6rem]rounded h-[3.6rem] px-3 py-2 hover:bg-white">
-                카테고리 1
-              </li>
-              <li className="h-[3.6rem] rounded px-3 py-2 hover:bg-white">
-                카테고리 2
-              </li>
-              <li className="h-[3.6rem] rounded px-3 py-2 hover:bg-white">
-                카테고리 2
-              </li>
-              <li className="h-[3.6rem] rounded px-3 py-2 hover:bg-white">
-                카테고리 2
-              </li>
-              <li className="h-[3.6rem] rounded px-3 py-2 hover:bg-white">
-                카테고리 2
-              </li>
-              <li className="h-[3.6rem] rounded px-3 py-2 hover:bg-white">
-                카테고리 2
-              </li>
-              <li className="h-[3.6rem] rounded px-3 py-2 hover:bg-white">
-                카테고리 2
-              </li>
-              <li className="h-[3.6rem] rounded px-3 py-2 hover:bg-white">
-                카테고리 2
-              </li>
-              <li className="h-[3.6rem] rounded px-3 py-2 hover:bg-white">
-                카테고리 2
-              </li>
-              <li className="h-[3.6rem] rounded px-3 py-2 hover:bg-white">
-                카테고리 2
-              </li>
-              <button className="text-main500 rounded px-3 py-2 hover:bg-white">
-                + 카테고리 추가
-              </button>
+              <CategoryItem label="전체" active={true} />
+              <CategoryItem label="카테고리 1" active={false} />
+              <CategoryItem label="카테고리 2" active={false} />
+              <CreateItem />
             </ul>
           </AccordionItem>
         )}
