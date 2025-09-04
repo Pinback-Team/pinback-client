@@ -11,5 +11,6 @@ export const iconNames = [
   'ic_details_disable',
   'ic_info',
   'ic_plus',
+  'main_header_logo',
 ] as const;
 export type IconName = (typeof iconNames)[number];
