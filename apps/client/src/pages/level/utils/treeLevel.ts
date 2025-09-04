@@ -47,12 +47,3 @@ export function getTreeLevel(acorns: number): TreeLevelResult {
     remainingToNext,
   };
 }
-
-export function computeTreeLevel(acorns: number): TreeLevel {
-  const c = Math.max(0, Math.floor(acorns ?? 0));
-  if (c >= 7) return 5;
-  if (c >= 5) return 4;
-  if (c >= 3) return 3;
-  if (c >= 1) return 2;
-  return 1;
-}
