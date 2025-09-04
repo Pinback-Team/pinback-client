@@ -4,7 +4,7 @@ export { default as Card } from './card/Card';
 export { default as Chip } from './chip/Chip';
 export { default as Input } from './input/Input';
 export { default as Level } from './level/Level';
-export { Progress } from './progress/Progress';
+export { default as Progress } from './progress/Progress';
 export { Switch } from './switch/Switch';
 export { Textarea } from './textarea/Textarea';
 export { default as AutoDismissToast } from './toast/hooks/uesFadeOut';
