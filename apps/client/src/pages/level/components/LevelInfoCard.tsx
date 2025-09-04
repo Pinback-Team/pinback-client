@@ -3,13 +3,13 @@ import { Level } from '@pinback/design-system/ui';
 import { Icon, type IconName } from '@pinback/design-system/icons';
 import { TREE_LEVEL_TABLE, type TreeLevel } from '../utils/treeLevel';
 
-const THUMB_BY_LEVEL: Record<TreeLevel, IconName> = {
+const LEVEL_TOOLTIP_ICON = {
   1: 'tooltip_1',
   2: 'tooltip_2',
   3: 'tooltip_3',
   4: 'tooltip_4',
   5: 'tooltip_5',
-} as const;
+} as const satisfies Record<TreeLevel, IconName>;
 
 export default function LevelInfoCard() {
   const rows = [...TREE_LEVEL_TABLE].reverse();
@@ -32,13 +32,13 @@ export default function LevelInfoCard() {
             className="flex w-full items-center justify-between py-[1.2rem]"
           >
             <div className="flex w-full items-center gap-[1.2rem]">
-              {/* 레벨별 썸네일 */}
               <div className="bg-gray0 flex h-[4.6rem] w-[4.6rem] items-center justify-center rounded-[0.8rem]">
                 <Icon
-                  name={THUMB_BY_LEVEL[row.level]}
+                  name={LEVEL_TOOLTIP_ICON[row.level]}
                   width={46}
                   height={46}
                   className="rounded-[0.8rem]"
+                  aria-label={`${row.level} 썸네일 아이콘`}
                 />
               </div>
 
