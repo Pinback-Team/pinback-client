@@ -1,6 +1,6 @@
 import onBoardingBg from '../../assets/onBoarding/background/onBoardingBg.svg';
 import Header from './components/header/Header';
-import MainCard from './components/carousel/MainCard';
+import MainCard from './components/funnel/MainCard';
 const OnBoarding = () => {
   return (
     <div
