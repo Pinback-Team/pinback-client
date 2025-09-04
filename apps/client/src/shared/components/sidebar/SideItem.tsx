@@ -56,7 +56,7 @@ export default function SideItem({
             aria-hidden
             className={cn(
               'h-[2rem] w-[2rem] transition-transform',
-              !open && 'rotate-180'
+              open && 'rotate-180'
             )}
           />
         </button>

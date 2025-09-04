@@ -9,7 +9,7 @@ interface AccordionItemProps
   children: React.ReactNode;
   active: boolean;
   open?: boolean;
-  defaultOpen: boolean;
+  defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   trailing?: boolean;
   className?: string;
