@@ -3,7 +3,7 @@ import { InputHTMLAttributes, Ref } from 'react';
 import { cn } from '../../lib';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  ref: Ref<HTMLInputElement>;
+  ref?: Ref<HTMLInputElement>;
   isError?: boolean;
   helperText?: string;
 }
