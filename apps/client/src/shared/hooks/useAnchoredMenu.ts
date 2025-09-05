@@ -1,4 +1,3 @@
-// shared/hooks/useAnchoredMenu.ts
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export type AnchoredPoint = { top: number; left: number };

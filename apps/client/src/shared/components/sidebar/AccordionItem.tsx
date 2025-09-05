@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useId } from 'react';
 import { cn } from '@pinback/design-system/utils';
 import SideItem, { type IconToken } from './SideItem';
 
@@ -28,10 +28,10 @@ export default function AccordionItem({
   className,
   onClick,
 }: AccordionItemProps) {
-  const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isOpen = open ?? internalOpen;
 
-  const panelId = React.useId();
+  const panelId = useId();
 
   const toggle = () => {
     const next = !isOpen;
