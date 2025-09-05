@@ -2,7 +2,7 @@ import { Icon } from '@pinback/design-system/icons';
 import { cn } from '@pinback/design-system/utils';
 
 interface CreateItemProps {
-  onClick?: () => void;
+  onClick: () => void;
 }
 //TODO: onClick 이벤트 추가
 

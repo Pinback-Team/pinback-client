@@ -5,14 +5,17 @@ interface CategoryItemProps {
   label: string;
   active: boolean;
   className?: string;
+  onClick: () => void;
 }
 //TODO: onClick 이벤트 추가
 //TODO: 버튼 클릭시 활성화 로직 필요
+//TODO: 인덱스 번호
 
 export default function CategoryItem({
   label,
   active = false,
   className,
+  onClick,
 }: CategoryItemProps) {
   return (
     <div
@@ -32,7 +35,7 @@ export default function CategoryItem({
       >
         {label}
       </p>
-      <button type="button">
+      <button type="button" onClick={onClick}>
         <Icon
           name={active ? 'ic_details_category' : 'ic_details_disable'}
           aria-hidden

@@ -6,7 +6,7 @@ import CreateItem from './CreateItem';
 
 export function Sidebar() {
   return (
-    <nav className="w-[22.4rem] space-y-2">
+    <nav className="bg-white-bg w-[22.4rem] border-r border-gray-300 px-[0.8rem]">
       <NavLink to="/" end className="block">
         {({ isActive }) => (
           <SideItem icon="clock" label="리마인드" active={isActive} />
@@ -21,11 +21,33 @@ export function Sidebar() {
             active={isActive}
             defaultOpen
           >
-            <ul className="bg-white-bg space-y-1">
-              <CategoryItem label="전체" active={true} />
-              <CategoryItem label="카테고리 1" active={false} />
-              <CategoryItem label="카테고리 2" active={false} />
-              <CreateItem />
+            <ul className="bg-white-bg">
+              <CategoryItem
+                label="전체"
+                active={true}
+                onClick={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
+              <CategoryItem
+                label="카테고리 1"
+                active={false}
+                onClick={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
+              <CategoryItem
+                label="카테고리 2"
+                active={false}
+                onClick={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
+              <CreateItem
+                onClick={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
             </ul>
           </AccordionItem>
         )}
