@@ -1,4 +1,3 @@
-// CategoryItem.tsx
 import { Icon } from '@pinback/design-system/icons';
 import { cn } from '@pinback/design-system/utils';
 
@@ -8,7 +7,7 @@ interface CategoryItemProps {
   active: boolean;
   className?: string;
   onClick: (id: number) => void;
-  onOptionsClick?: (id: number, anchorEl: HTMLElement) => void; // ⬅️ 추가
+  onOptionsClick?: (id: number, anchorEl: HTMLElement) => void;
 }
 
 export default function CategoryItem({
@@ -28,7 +27,6 @@ export default function CategoryItem({
         className
       )}
     >
-      {/* 행 클릭 */}
       <button
         type="button"
         aria-pressed={active}
@@ -41,15 +39,14 @@ export default function CategoryItem({
         {label}
       </button>
 
-      {/* 옵션(케밥) 버튼 – 행 클릭과 이벤트 분리 */}
       <button
         type="button"
         aria-haspopup="menu"
         aria-label="카테고리 옵션"
         className="ml-2"
         onClick={(e) => {
-          e.preventDefault(); // ⬅️ 링크/포커스 등 기본동작 차단
-          e.stopPropagation(); // ⬅️ 부모 클릭 핸들러로 버블링 차단
+          e.preventDefault();
+          e.stopPropagation();
           onOptionsClick?.(id, e.currentTarget);
         }}
       >

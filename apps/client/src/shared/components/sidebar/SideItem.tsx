@@ -16,6 +16,7 @@ interface SideItemProps {
   trailing?: boolean;
   open?: boolean;
   onTrailingClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick: () => void;
 }
 
 export default function SideItem({
@@ -26,6 +27,7 @@ export default function SideItem({
   trailing,
   open,
   onTrailingClick,
+  onClick,
 }: SideItemProps) {
   const name = active ? ICON_MAP[icon].on : ICON_MAP[icon].off;
 
@@ -37,6 +39,7 @@ export default function SideItem({
         active ? 'bg-main0 text-main600' : 'bg-white-bg text-font-gray-2',
         className
       )}
+      onClick={onClick}
     >
       <Icon name={name} aria-hidden className="h-[2rem] w-[2rem]" />
       <span className="sub5-sb flex-1">{label}</span>

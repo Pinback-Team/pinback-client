@@ -13,6 +13,7 @@ interface AccordionItemProps
   onOpenChange?: (open: boolean) => void;
   trailing?: boolean;
   className?: string;
+  onClick: () => void;
 }
 
 export default function AccordionItem({
@@ -25,6 +26,7 @@ export default function AccordionItem({
   onOpenChange,
   trailing = true,
   className,
+  onClick,
 }: AccordionItemProps) {
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
   const isOpen = open ?? internalOpen;
@@ -46,6 +48,7 @@ export default function AccordionItem({
         trailing={trailing}
         open={isOpen}
         onTrailingClick={toggle}
+        onClick={onClick}
       />
 
       <div

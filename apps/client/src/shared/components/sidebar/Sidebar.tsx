@@ -1,6 +1,4 @@
-// Sidebar.tsx
 import { createPortal } from 'react-dom';
-import { NavLink } from 'react-router-dom';
 import SideItem from './SideItem';
 import AccordionItem from './AccordionItem';
 import CategoryItem from './CategoryItem';
@@ -11,6 +9,7 @@ import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { rightOf } from '@shared/utils/anchorPosition';
 import { useState } from 'react';
 import { Icon } from '@pinback/design-system/icons';
+import { useNavigate } from 'react-router-dom';
 
 // 임시 데이터
 const CATEGORIES = [
@@ -24,6 +23,15 @@ export function Sidebar() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
   );
+  const [activeTab, setActiveTab] = useState<
+    'mybookmark' | 'remind' | 'level' | null
+  >('remind');
+
+  const handleActiveTab = (tab: 'mybookmark' | 'remind' | 'level') => {
+    setActiveTab(tab);
+  };
+
+  const navigate = useNavigate();
 
   const {
     state: menu,
@@ -41,51 +49,49 @@ export function Sidebar() {
         className="my-[2.8rem] h-[2.4rem] w-[8.7rem]"
       />
       <hr className="my-[0.8rem] border-gray-100" />
-      <NavLink
-        to="/"
-        end
-        className="block"
+      <SideItem
+        icon="clock"
+        label="리마인드"
+        active={activeTab === 'remind'}
         onClick={() => {
           setSelectedCategoryId(null);
-          closeMenu();
+          handleActiveTab('remind');
+          navigate('/');
+        }}
+      />
+
+      <AccordionItem
+        icon="bookmark"
+        label="나의 북마크"
+        active={activeTab === 'mybookmark'}
+        defaultOpen
+        onClick={() => {
+          handleActiveTab('mybookmark');
+          setSelectedCategoryId(null);
+          navigate('/my-bookmarks');
         }}
       >
-        {({ isActive }) => (
-          <SideItem icon="clock" label="리마인드" active={isActive} />
-        )}
-      </NavLink>
-
-      <NavLink to="/my-bookmarks" className="block">
-        {({ isActive }) => (
-          <AccordionItem
-            icon="bookmark"
-            label="나의 북마크"
-            active={isActive}
-            defaultOpen
-          >
-            <ul className="bg-none">
-              {CATEGORIES.map((c) => (
-                <CategoryItem
-                  key={c.id}
-                  id={c.id}
-                  label={c.label}
-                  active={selectedCategoryId === c.id}
-                  onClick={(id) => {
-                    setSelectedCategoryId(id);
-                    closeMenu();
-                  }}
-                  onOptionsClick={(id, el) => openMenu(id, el)}
-                />
-              ))}
-              <CreateItem
-                onClick={() => {
-                  /* TODO: 카테고리 추가 */
-                }}
-              />
-            </ul>
-          </AccordionItem>
-        )}
-      </NavLink>
+        <ul className="bg-none">
+          {CATEGORIES.map((c) => (
+            <CategoryItem
+              key={c.id}
+              id={c.id}
+              label={c.label}
+              active={selectedCategoryId === c.id}
+              onClick={(id) => {
+                setSelectedCategoryId(id);
+                handleActiveTab('mybookmark');
+              }}
+              onOptionsClick={(id, el) => openMenu(id, el)}
+            />
+          ))}
+          <CreateItem
+            onClick={() => {
+              /* TODO: 카테고리 추가 */
+            }}
+          />
+        </ul>
+      </AccordionItem>
 
       {menu.open &&
         style &&
@@ -105,7 +111,16 @@ export function Sidebar() {
           document.body
         )}
 
-      <MyLevelItem acorns={0} className="mt-[2.4rem]" />
+      <MyLevelItem
+        acorns={0}
+        active={activeTab === 'level'}
+        onClick={() => {
+          setSelectedCategoryId(null);
+          handleActiveTab('level');
+          navigate('/level');
+        }}
+        className="fixed bottom-[2.8rem]"
+      />
     </nav>
   );
 }
