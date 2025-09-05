@@ -13,7 +13,7 @@ import { Icon } from '@pinback/design-system/icons';
 
 // 임시 데이터
 const CATEGORIES = [
-  { id: 0, label: '전체' },
+  { id: 0, label: '카테고리 0' },
   { id: 1, label: '카테고리 1' },
   { id: 2, label: '카테고리 2' },
   { id: 3, label: '카테고리 3' },
@@ -21,7 +21,7 @@ const CATEGORIES = [
 
 export function Sidebar() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
-    0
+    null
   );
 
   const {
@@ -33,7 +33,7 @@ export function Sidebar() {
   } = useAnchoredMenu((anchor) => rightOf(anchor, 30));
 
   return (
-    <nav className="bg-white-bg w-[22.4rem] border-r border-gray-300 px-[0.8rem]">
+    <nav className="bg-white-bg sticky top-0 h-screen w-[22.4rem] overflow-y-auto border-r border-gray-300 px-[0.8rem]">
       <Icon
         name="logo"
         aria-label="Pinback 로고"
@@ -62,7 +62,7 @@ export function Sidebar() {
             active={isActive}
             defaultOpen
           >
-            <ul className="bg-white-bg">
+            <ul className="bg-none">
               {CATEGORIES.map((c) => (
                 <CategoryItem
                   key={c.id}
@@ -78,7 +78,7 @@ export function Sidebar() {
               ))}
               <CreateItem
                 onClick={() => {
-                  /* 카테고리 추가 */
+                  /* TODO: 카테고리 추가 */
                 }}
               />
             </ul>
