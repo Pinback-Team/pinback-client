@@ -6,6 +6,7 @@ import AccordionItem from './AccordionItem';
 import CategoryItem from './CategoryItem';
 import CreateItem from './CreateItem';
 import OptionsMenuButton from '@shared/components/optionsMenuButton/OptionsMenuButton';
+import MyLevelItem from './MyLevelItem';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { rightOf } from '@shared/utils/anchorPosition';
 import { useState } from 'react';
@@ -103,6 +104,8 @@ export function Sidebar() {
           </div>,
           document.body
         )}
+
+      <MyLevelItem acorns={0} className="mt-[2.4rem]" />
     </nav>
   );
 }

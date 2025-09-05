@@ -1,7 +1,10 @@
 import { cn } from '@pinback/design-system/utils';
 import { Level } from '@pinback/design-system/ui';
 import { Icon, type IconName } from '@pinback/design-system/icons';
-import { TREE_LEVEL_TABLE, type TreeLevel } from '../utils/treeLevel';
+import {
+  TREE_LEVEL_TABLE,
+  type TreeLevel,
+} from '../../../shared/utils/treeLevel';
 
 const LEVEL_TOOLTIP_ICON = {
   1: 'tooltip_1',
