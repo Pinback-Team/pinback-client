@@ -28,6 +28,7 @@ export function Sidebar() {
                 onClick={function (): void {
                   throw new Error('Function not implemented.');
                 }}
+                id={0}
               />
               <CategoryItem
                 label="카테고리 1"
@@ -35,6 +36,7 @@ export function Sidebar() {
                 onClick={function (): void {
                   throw new Error('Function not implemented.');
                 }}
+                id={0}
               />
               <CategoryItem
                 label="카테고리 2"
@@ -42,6 +44,7 @@ export function Sidebar() {
                 onClick={function (): void {
                   throw new Error('Function not implemented.');
                 }}
+                id={0}
               />
               <CreateItem
                 onClick={function (): void {

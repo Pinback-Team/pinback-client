@@ -2,46 +2,43 @@ import { Icon } from '@pinback/design-system/icons';
 import { cn } from '@pinback/design-system/utils';
 
 interface CategoryItemProps {
+  id: number;
   label: string;
   active: boolean;
   className?: string;
-  onClick: () => void;
+  onClick: (id: number) => void;
 }
-//TODO: onClick 이벤트 추가
-//TODO: 버튼 클릭시 활성화 로직 필요
-//TODO: 인덱스 번호
 
 export default function CategoryItem({
+  id,
   label,
   active = false,
   className,
   onClick,
 }: CategoryItemProps) {
   return (
-    <div
-      role="button"
-      tabIndex={0}
+    <button
+      type="button"
       aria-pressed={active}
-      data-state={active ? 'active' : 'default'}
+      onClick={() => onClick(id)}
       className={cn(
-        'flex h-[3.6rem] w-full rounded-[0.4rem] p-[0.8rem]',
-        'items-center justify-between transition-colors',
+        'flex h-[3.6rem] w-full items-center justify-between rounded-[0.4rem] px-[1.2rem]',
+        'transition-colors',
         active ? 'bg-main0' : 'bg-white-bg',
         className
       )}
     >
-      <p
+      <span
         className={cn('body4-r', active ? 'text-main600' : 'text-font-gray-2')}
       >
         {label}
-      </p>
-      <button type="button" onClick={onClick}>
-        <Icon
-          name={active ? 'ic_details_category' : 'ic_details_disable'}
-          aria-hidden
-          className={cn('h-[1.8rem] w-[1.8rem]')}
-        />
-      </button>
-    </div>
+      </span>
+
+      <Icon
+        name={active ? 'ic_details_category' : 'ic_details_disable'}
+        aria-hidden
+        className="h-[1.8rem] w-[1.8rem]"
+      />
+    </button>
   );
 }
