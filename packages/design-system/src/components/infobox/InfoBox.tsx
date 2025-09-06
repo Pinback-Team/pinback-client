@@ -1,7 +1,7 @@
 interface InfoBoxProps {
   title: string;
   source: string;
-  imgUrl: string;
+  imgUrl?: string;
 }
 const InfoBox = ({ title, source, imgUrl }: InfoBoxProps) => {
   return (
