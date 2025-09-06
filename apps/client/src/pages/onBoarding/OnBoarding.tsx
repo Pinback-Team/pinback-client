@@ -1,10 +1,5 @@
-import { InfoBox } from '@pinback/design-system/ui';
 const OnBoarding = () => {
-  return (
-    <div>
-      <InfoBox />
-    </div>
-  );
+  return <div>onBoarding</div>;
 };
 
 export default OnBoarding;
