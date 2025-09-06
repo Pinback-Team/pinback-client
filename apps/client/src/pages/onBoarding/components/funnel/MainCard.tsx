@@ -1,11 +1,10 @@
 import { Progress, Button } from '@pinback/design-system/ui';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import StoryStep from './StoryStep';
 import AlarmStep from './AlarmStep';
 import MacStep from './MacStep';
 import FinalStep from './FinalStep';
-import { AlarmsType } from './alarms';
 import { cva } from 'class-variance-authority';
 const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
 
@@ -36,7 +35,15 @@ const MainCard = () => {
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(0);
   const [alarmSelected, setAlarmSelected] = useState<1 | 2 | 3>(1);
+  const [isMac, setIsMac] = useState(false);
 
+  useEffect(() => {
+    const ua = navigator.userAgent.toLowerCase();
+    // Mac OS (Intel/ARM), iPhone, iPad 까지 포함하고 싶으면 아래처럼 체크 가능
+    if (ua.includes('mac os') || ua.includes('iphone') || ua.includes('ipad')) {
+      setIsMac(true);
+    }
+  }, []);
   const renderStep = () => {
     switch (step) {
       case 0:
@@ -48,7 +55,7 @@ const MainCard = () => {
           <AlarmStep selected={alarmSelected} setSelected={setAlarmSelected} />
         );
       case 4:
-        return <MacStep />;
+        return isMac ? <MacStep /> : <FinalStep />;
       case 5:
         return <FinalStep />;
       default:
@@ -57,7 +64,7 @@ const MainCard = () => {
   };
   const nextStep = () => {
     if (step === 3) {
-      console.log('선택된 알람:', AlarmsType[alarmSelected - 1].time);
+      // 이거 이후에 api 붙일 자리 표시임! console.log('선택된 알람:', AlarmsType[alarmSelected - 1].time);
     }
     if (step < 5) {
       setDirection(1);
