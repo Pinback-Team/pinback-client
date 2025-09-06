@@ -5,6 +5,8 @@ import StoryStep from './StoryStep';
 import AlarmStep from './AlarmStep';
 import MacStep from './MacStep';
 import FinalStep from './FinalStep';
+import { AlarmsType } from './AlarmBox';
+
 const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
 
 const variants = {
@@ -22,6 +24,8 @@ const variants = {
 const MainCard = () => {
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [alarmSelected, setAlarmSelected] = useState<1 | 2 | 3>(1);
+
   const renderStep = () => {
     switch (step) {
       case 0:
@@ -29,7 +33,9 @@ const MainCard = () => {
       case 2:
         return <StoryStep step={step as 0 | 1 | 2} />;
       case 3:
-        return <AlarmStep />;
+        return (
+          <AlarmStep selected={alarmSelected} setSelected={setAlarmSelected} />
+        );
       case 4:
         return <MacStep />;
       case 5:
@@ -39,11 +45,13 @@ const MainCard = () => {
     }
   };
   const nextStep = () => {
+    if (step === 3) {
+      console.log('선택된 알람:', AlarmsType[alarmSelected - 1].time);
+    }
     if (step < 5) {
       setDirection(1);
       setStep((prev) => prev + 1);
-    }
-    if (step === 5) {
+    } else if (step === 5) {
       window.location.href = '/';
     }
   };

@@ -9,11 +9,11 @@ interface AlarmBoxProps {
   onClick?: () => void;
 }
 
-const AlarmsType = [
+export const AlarmsType = [
   { img: avatar1, title: '아침형 치삐', time: '오전 9시' },
   { img: avatar2, title: '저녁형 치삐', time: '오후 8시' },
-  { img: avatar3, title: '사용자 설정' },
-];
+  { img: avatar3, title: '사용자 설정', time: '' },
+] as const;
 
 const boxStyle = cva(
   'flex h-[22.4rem] w-[18rem] flex-col items-center rounded-[1.2rem] px-[3.9rem] pb-[2.6rem] pt-[3.6rem] cursor-pointer transition',

@@ -1,10 +1,10 @@
-import { useState } from 'react';
 import dotori from '../../../../assets/onBoarding/icons/dotori.svg';
 import AlarmBox from './AlarmBox';
-
-const AlarmStep = () => {
-  const [selected, setSelected] = useState<1 | 2 | 3>(1); // 기본값은 1번 선택
-
+interface AlarmStepProps {
+  selected: 1 | 2 | 3;
+  setSelected: (n: 1 | 2 | 3) => void;
+}
+const AlarmStep = ({ selected, setSelected }: AlarmStepProps) => {
   return (
     <div className="flex flex-col items-center justify-between">
       <img src={dotori} className="mb-[1.2rem]" alt="dotori" />
