@@ -5,8 +5,8 @@ import StoryStep from './StoryStep';
 import AlarmStep from './AlarmStep';
 import MacStep from './MacStep';
 import FinalStep from './FinalStep';
-import { AlarmsType } from './AlarmBox';
-
+import { AlarmsType } from './alarms';
+import { cva } from 'class-variance-authority';
 const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
 
 const variants = {
@@ -20,7 +20,18 @@ const variants = {
     opacity: 0,
   }),
 };
-
+const CardStyle = cva(
+  'bg-white-bg flex h-[54.8rem] w-[63.2rem] flex-col items-center justify-between rounded-[2.4rem] pt-[3.2rem]',
+  {
+    variants: {
+      overflow: {
+        true: 'overflow-visible',
+        false: 'overflow-hidden',
+      },
+    },
+    defaultVariants: { overflow: false },
+  }
+);
 const MainCard = () => {
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(0);
@@ -64,7 +75,7 @@ const MainCard = () => {
   };
 
   return (
-    <div className="bg-white-bg flex h-[54.8rem] w-[63.2rem] flex-col items-center justify-between overflow-hidden rounded-[2.4rem] pt-[3.2rem]">
+    <div className={CardStyle({ overflow: step === 3 && alarmSelected === 3 })}>
       {step < 3 && (
         <Progress
           value={stepProgress[step].progress}

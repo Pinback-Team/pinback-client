@@ -1,19 +1,11 @@
-import avatar1 from '../../../../assets/onBoarding/icons/chippi_morning.svg';
-import avatar2 from '../../../../assets/onBoarding/icons/chippi_night.svg';
-import avatar3 from '../../../../assets/onBoarding/icons/chippi_bell.svg';
 import { cva } from 'class-variance-authority';
-
+import TimePicker from '../timePicker/TimePicker';
+import { AlarmsType } from './alarms';
 interface AlarmBoxProps {
   select: 1 | 2 | 3;
   isDisabled: boolean;
   onClick?: () => void;
 }
-
-export const AlarmsType = [
-  { img: avatar1, title: '아침형 치삐', time: '오전 9시' },
-  { img: avatar2, title: '저녁형 치삐', time: '오후 8시' },
-  { img: avatar3, title: '사용자 설정', time: '' },
-] as const;
 
 const boxStyle = cva(
   'flex h-[22.4rem] w-[18rem] flex-col items-center rounded-[1.2rem] px-[3.9rem] pb-[2.6rem] pt-[3.6rem] cursor-pointer transition',
@@ -39,10 +31,31 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
       >
         {AlarmsType[select - 1].title}
       </p>
+
       {select <= 2 && (
         <p className="caption2-m text-font-gray-3">
           {AlarmsType[select - 1].time}
         </p>
+      )}
+
+      {select === 3 && isDisabled && (
+        <>
+          {AlarmsType[2].time && (
+            <p className="caption2-m text-font-gray-3">{AlarmsType[2].time}</p>
+          )}
+
+          <TimePicker
+            onSave={({ hour, minute, meridiem }) => {
+              const formatted = `${meridiem} ${hour}:${minute}`;
+              AlarmsType[2].time = formatted;
+              console.log('저장된 사용자 알람:', AlarmsType[2].time);
+            }}
+            onCancel={() => {
+              AlarmsType[2].time = '';
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </>
       )}
     </div>
   );
