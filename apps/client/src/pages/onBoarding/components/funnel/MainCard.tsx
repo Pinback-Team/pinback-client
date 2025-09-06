@@ -2,9 +2,9 @@ import { Progress, Button } from '@pinback/design-system/ui';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import StoryStep from './StoryStep';
-import AlarmStep from './AlarmStep';
-import MacStep from './MacStep';
-import FinalStep from './FinalStep';
+import AlarmStep from './step/AlarmStep';
+import MacStep from './step/MacStep';
+import FinalStep from './step/FinalStep';
 import { cva } from 'class-variance-authority';
 const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
 

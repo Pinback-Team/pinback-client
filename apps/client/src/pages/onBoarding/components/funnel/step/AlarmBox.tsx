@@ -1,6 +1,7 @@
 import { cva } from 'class-variance-authority';
-import TimePicker from '../timePicker/TimePicker';
-import { AlarmsType } from './alarms';
+import TimePicker from '../../timePicker/TimePicker';
+import { AlarmsType } from '../type/alarms';
+import { useState } from 'react';
 interface AlarmBoxProps {
   select: 1 | 2 | 3;
   isDisabled: boolean;
@@ -21,6 +22,8 @@ const boxStyle = cva(
 );
 
 const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
+  const [showPicker, setShowPicker] = useState(false);
+
   return (
     <div className={boxStyle({ disabled: isDisabled })} onClick={onClick}>
       <img src={AlarmsType[select - 1].img} alt="chippi" />
@@ -44,17 +47,20 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
             <p className="caption2-m text-font-gray-3">{AlarmsType[2].time}</p>
           )}
 
-          <TimePicker
-            onSave={({ hour, minute, meridiem }) => {
-              const formatted = `${meridiem} ${hour}:${minute}`;
-              AlarmsType[2].time = formatted;
-              console.log('저장된 사용자 알람:', AlarmsType[2].time);
-            }}
-            onCancel={() => {
-              AlarmsType[2].time = '';
-            }}
-            onClick={(e) => e.stopPropagation()}
-          />
+          {showPicker && (
+            <TimePicker
+              onSave={({ hour, minute, meridiem }) => {
+                const formatted = `${meridiem} ${hour}:${minute}`;
+                AlarmsType[2].time = formatted;
+                setShowPicker(false);
+                // 이거 나중에 api 연결때 쓸려고 표시한거.. 그떄 지우겠듬여 console.log('저장된 사용자 알람:', AlarmsType[2].time);
+              }}
+              onCancel={() => {
+                AlarmsType[2].time = '';
+              }}
+              onClick={(e) => e.stopPropagation()}
+            />
+          )}
         </>
       )}
     </div>
