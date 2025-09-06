@@ -34,8 +34,9 @@ export default function Level({ acorns = 3 }: LevelPageProps) {
                 <div
                   id="level-info-card"
                   className={cn(
-                    'pointer-events-auto absolute left-0 top-[2.4rem] z-[20]',
+                    'pointer-events-none absolute left-0 top-[3rem] z-[20]',
                     'opacity-0 transition-opacity duration-150',
+                    'peer-hover:pointer-events-auto peer-focus-visible:pointer-events-auto',
                     'peer-hover:opacity-100 peer-focus-visible:opacity-100'
                   )}
                 >
