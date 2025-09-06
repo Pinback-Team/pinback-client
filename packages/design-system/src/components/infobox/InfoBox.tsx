@@ -6,7 +6,9 @@ const InfoBox = () => {
         src="https://previews.123rf.com/images/latkun/latkun1712/latkun171200130/92172856-empty-transparent-background-seamless-pattern.jpg"
       />
       <div className="items-left flex flex-col justify-center gap-[0.2rem] text-left">
-        <p className="sub3-sb">집에서 할수있는 것들은 무엇이 있을 까료</p>
+        <p className="sub3-sb w-[180px] truncate">
+          집에서 할수있는 것들은 무엇이 있을 까료
+        </p>
         <p className="caption2-m text-font-gray-3">네이버 블로그</p>
       </div>
     </div>
