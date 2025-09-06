@@ -1,7 +1,7 @@
 import { Progress, Button } from '@pinback/design-system/ui';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import StoryStep from './StoryStep';
+import StoryStep from './step/StoryStep';
 import AlarmStep from './step/AlarmStep';
 import MacStep from './step/MacStep';
 import FinalStep from './step/FinalStep';

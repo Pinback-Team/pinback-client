@@ -25,7 +25,15 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
   const [showPicker, setShowPicker] = useState(false);
 
   return (
-    <div className={boxStyle({ disabled: isDisabled })} onClick={onClick}>
+    <div
+      className={boxStyle({ disabled: isDisabled })}
+      onClick={() => {
+        if (select === 3 && isDisabled) {
+          setShowPicker(true);
+        }
+        onClick?.();
+      }}
+    >
       <img src={AlarmsType[select - 1].img} alt="chippi" />
       <p
         className={`sub3-sb ${
