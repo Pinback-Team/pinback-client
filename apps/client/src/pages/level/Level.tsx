@@ -19,14 +19,14 @@ export default function Level({ acorns = 3 }: LevelPageProps) {
         <LevelScene level={info.level as TreeLevel} />
 
         <div className="absolute inset-0">
-          <div className="flex flex-col items-start gap-[2.4rem] px-[8rem] py-[5.2rem]">
-            <div className="flex flex-row gap-[0.8rem]">
-              <h1 className="sub2-sb text-font-black-1">치삐의 지식나무 숲</h1>
+          <div className="flex flex-col items-start gap-[2rem] px-[8rem] py-[5.2rem]">
+            <div className="flex flex-row items-center gap-[0.8rem]">
+              <h1 className="head3 text-font-black-1">치삐의 지식나무 숲</h1>
 
-              <div className="relative">
+              <div className="relative items-center">
                 <button
                   type="button"
-                  className="peer p-[0.4rem]"
+                  className="peer flex items-center justify-center p-[0.4rem]"
                   aria-describedby="level-info-card"
                 >
                   <Icon name="ic_info" width={20} height={20} />
