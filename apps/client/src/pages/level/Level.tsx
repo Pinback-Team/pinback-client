@@ -7,7 +7,7 @@ import { getTreeLevel, type TreeLevel } from './utils/treeLevel';
 import { Badge } from '@pinback/design-system/ui';
 
 interface LevelPageProps {
-  acorns: number;
+  acorns?: number;
 }
 
 export default function Level({ acorns = 3 }: LevelPageProps) {
