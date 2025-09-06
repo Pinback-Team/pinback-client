@@ -4,6 +4,7 @@ import LevelScene from './components/LevelScene';
 import LevelInfoCard from './components/LevelInfoCard';
 import TreeStatusCard from './components/TreeStatusCard';
 import { getTreeLevel, type TreeLevel } from './utils/treeLevel';
+import { Badge } from '@pinback/design-system/ui';
 
 interface LevelPageProps {
   acorns: number;
@@ -13,19 +14,19 @@ export default function Level({ acorns = 3 }: LevelPageProps) {
   const info = getTreeLevel(acorns);
 
   return (
-    <div className={cn('bg-subcolor mx-auto w-full max-w-[96rem] p-[1.6rem]')}>
+    <div className={cn('bg-subcolor mx-auto w-full max-w-[96rem]')}>
       <div className="relative overflow-hidden rounded-[1.2rem]">
         <LevelScene level={info.level as TreeLevel} />
 
         <div className="absolute inset-0">
-          <div className="flex flex-col items-start gap-[2.4rem] p-[1.6rem]">
-            <div className="flex flex-row">
+          <div className="flex flex-col items-start gap-[2.4rem] px-[8rem] py-[5.2rem]">
+            <div className="flex flex-row gap-[0.8rem]">
               <h1 className="sub2-sb text-font-black-1">치삐의 지식나무 숲</h1>
 
               <div className="relative">
                 <button
                   type="button"
-                  className="peer rounded-[0.4rem] p-[0.4rem] outline-none focus-visible:ring-2"
+                  className="peer p-[0.4rem]"
                   aria-describedby="level-info-card"
                 >
                   <Icon name="ic_info" width={20} height={20} />
@@ -42,14 +43,9 @@ export default function Level({ acorns = 3 }: LevelPageProps) {
                 </div>
               </div>
             </div>
-            <div className="ml-[1.2rem] inline-flex items-center gap-[0.8rem]">
-              <span className="caption2-m text-font-gray-2">
-                오늘 모은 도토리 개수
-              </span>
-              <span className="sub5-sb bg-main0 text-main500 rounded-[0.4rem] px-[0.6rem] py-[0.2rem]">
-                {acorns}
-              </span>
-            </div>
+            {/* TODO: 오늘 모은 도토리 개수 배지 */}
+            <Badge text={'오늘 모은 도토리 개수'} countNum={acorns} />
+
             <div className="flex">
               <TreeStatusCard acorns={acorns} />
             </div>
