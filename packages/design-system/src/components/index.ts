@@ -13,3 +13,4 @@ export { WheelPicker, WheelPickerWrapper } from './wheelPicker/WheelPicker';
 export type { WheelPickerOption } from './wheelPicker/WheelPicker';
 export { default as Popup } from './popup/Popup';
 export { default as PopupContainer } from './popup/PopupContainer';
+export { default as InfoBox } from './infobox/InfoBox';
