@@ -5,7 +5,7 @@ interface InfoBoxProps {
 }
 const InfoBox = ({ title, source, imgUrl }: InfoBoxProps) => {
   return (
-    <div className="border-main400 flex h-[6.8rem] w-[24.8rem] items-center justify-between gap-[0.8rem] rounded-[0.4rem] border bg-white px-[0.8rem] py-[1.2rem]">
+    <div className="border-main400 flex h-[6.8rem] w-[24.8rem] items-center justify-between gap-[0.8rem] rounded-[4px] border bg-white px-[0.8rem] py-[1.2rem]">
       <img className="h-[4.4rem] w-[4.4rem] rounded-[0.4rem]" src={imgUrl} />
       <div className="items-left flex flex-col justify-center gap-[0.2rem] text-left">
         <p className="sub3-sb w-[180px] truncate">{title}</p>
