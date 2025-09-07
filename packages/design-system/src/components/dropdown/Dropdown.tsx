@@ -5,7 +5,7 @@ interface DropdownProps {
   options: string[];
   selectedValue: string | null;
   onChange: (selected: string | null) => void;
-  placeholder?: string;
+  placeholder: string;
   onAddItem?: () => void;
   addItemLabel?: string;
   limit?: number;
