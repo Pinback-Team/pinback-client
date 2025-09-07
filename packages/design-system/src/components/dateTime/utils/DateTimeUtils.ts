@@ -22,6 +22,10 @@ export function formatTime12(digits: string) {
 
   const hhDigits = value.slice(0, 2);
   const mmDigits = value.slice(2, 4);
+  if (value.length === 1) {
+    return value;
+  }
+
   const hour24 = parseInt(hhDigits || '0', 10);
   const ampm = hour24 >= 12 ? '오후' : '오전';
 
