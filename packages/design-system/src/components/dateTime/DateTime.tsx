@@ -27,7 +27,7 @@ const dateTimeBoxStyles = cva(
   }
 );
 
-const dateTimeLabelStyles = cva(`caption1-sb`, {
+const dateTimeLabelStyles = cva(`caption1-sb whitespace-nowrap`, {
   variants: {
     state: {
       default: 'text-font-black-1',
@@ -39,7 +39,7 @@ const dateTimeLabelStyles = cva(`caption1-sb`, {
 });
 
 const dateTimeTxtStyles = cva(
-  `body3-r m-0 w-[7rem] overflow-hidden outline-none`,
+  `body3-r m-0 w-[7.2rem] overflow-hidden outline-none`,
   {
     variants: {
       state: {
@@ -117,7 +117,6 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
   };
   // [날짜 타입] input value에 반영된 후에서의 이벤트 처리 : 왜 날짜/시간 타입에 따라 나눴는지 PR 참고!!
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (type === 'time') return;
     const raw = e.target.value;
     const only = digitsOnly(raw).slice(0, 8);
     const formatted = formatDate(only);
@@ -130,17 +129,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
     if (type !== 'time') return;
     if (e.nativeEvent.isComposing) return;
 
-    if (e.key === 'Backspace') {
-      if (timeDigits.length > 0) {
-        const next = timeDigits.slice(0, -1);
-        setTimeDigits(next);
-        setInput(formatTime12(next));
-        nextCaretRef.current = mapCaretByDigitsPos(next.length, 'time');
-      }
-      e.preventDefault();
-    }
-
-    if (e.key === 'Delete') {
+    if (['Backspace', 'Delete'].includes(e.key)) {
       if (timeDigits.length > 0) {
         const next = timeDigits.slice(0, -1);
         setTimeDigits(next);
@@ -163,8 +152,8 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
         value={input}
         onBeforeInput={handleBeforeInput}
         onKeyDown={handleKeyDown}
-        onChange={handleChange}
-        placeholder={type === 'date' ? 'YYYY.MM.DD' : 'HH:MM'}
+        onChange={type === 'date' ? handleChange : undefined}
+        placeholder={type === 'date' ? 'YY.MM.DD' : 'HH:MM'}
         inputMode="numeric"
         disabled={isDisabled}
         maxLength={type === 'date' ? 10 : 8}

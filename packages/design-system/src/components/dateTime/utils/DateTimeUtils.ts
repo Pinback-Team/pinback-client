@@ -5,23 +5,23 @@ export function digitsOnly(s: string) {
 
 // 날짜 포맷팅: YYYY.MM.DD
 export function formatDate(d: string) {
-  const v = d.slice(0, 8);
-  const y = v.slice(0, 4);
-  const m = v.slice(4, 6);
-  const dd = v.slice(6, 8);
-  let out = y;
-  if (m) out += '.' + m;
+  const value = d.slice(0, 8);
+  const year = value.slice(0, 4);
+  const month = value.slice(4, 6);
+  const dd = value.slice(6, 8);
+  let out = year;
+  if (month) out += '.' + month;
   if (dd) out += '.' + dd;
   return out;
 }
 
 // 시간 포맷팅: 오전/오후 HH:MM (12시간 기준)
 export function formatTime12(digits: string) {
-  const v = digits.slice(0, 4);
-  if (v.length === 0) return '';
+  const value = digits.slice(0, 4);
+  if (value.length === 0) return '';
 
-  const hhDigits = v.slice(0, 2);
-  const mmDigits = v.slice(2, 4);
+  const hhDigits = value.slice(0, 2);
+  const mmDigits = value.slice(2, 4);
   const hour24 = parseInt(hhDigits || '0', 10);
   const ampm = hour24 >= 12 ? '오후' : '오전';
 
