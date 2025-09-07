@@ -1,28 +1,25 @@
 import { Icon } from '@pinback/design-system/icons';
 import { cn } from '@pinback/design-system/utils';
-import LevelScene from './components/LevelScene';
-import LevelInfoCard from './components/LevelInfoCard';
-import TreeStatusCard from './components/TreeStatusCard';
-import { getTreeLevel, type TreeLevel } from './utils/treeLevel';
+import LevelScene from '@pages/level/components/LevelScene';
+import LevelInfoCard from '@pages/level/components/LevelInfoCard';
+import TreeStatusCard from '@pages/level/components/TreeStatusCard';
+import { getTreeLevel } from '@pages/level/utils/treeLevel';
+import { TreeLevel } from '@pages/level/types/treeLevelType';
 import { Badge } from '@pinback/design-system/ui';
 
-interface LevelPageProps {
-  acorns?: number;
-}
-
-export default function Level({ acorns = 3 }: LevelPageProps) {
+export default function Level() {
+  const acorns = 1; // TODO: API 연결되면 교체
   const info = getTreeLevel(acorns);
 
   return (
-    <div className={cn('bg-subcolor mx-auto w-full max-w-[96rem]')}>
-      <div className="relative overflow-hidden rounded-[1.2rem]">
+    <div className={cn('bg-subcolor mx-auto h-dvh w-full overflow-hidden')}>
+      <div className="relative h-full w-full overflow-hidden rounded-[1.2rem]">
         <LevelScene level={info.level as TreeLevel} />
 
         <div className="absolute inset-0">
           <div className="flex flex-col items-start gap-[2rem] px-[8rem] py-[5.2rem]">
             <div className="flex flex-row items-center gap-[0.8rem]">
               <h1 className="head3 text-font-black-1">치삐의 지식나무 숲</h1>
-
               <div className="relative items-center">
                 <button
                   type="button"
@@ -44,9 +41,8 @@ export default function Level({ acorns = 3 }: LevelPageProps) {
                 </div>
               </div>
             </div>
-            {/* TODO: 오늘 모은 도토리 개수 배지 */}
-            <Badge text={'오늘 모은 도토리 개수'} countNum={acorns} />
 
+            <Badge text="오늘 모은 도토리 개수" countNum={acorns} />
             <div className="flex">
               <TreeStatusCard acorns={acorns} />
             </div>
