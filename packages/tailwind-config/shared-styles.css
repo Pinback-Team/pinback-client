@@ -1,3 +1,4 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 @import 'tailwindcss';
 
 /* Head */
@@ -160,6 +161,11 @@
 @theme {
   --color-*: initial;
 
+  /* default */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+
   /* Main Color */
   --color-main0: #f9fffb;
   --color-main100: #c9f2e1;
@@ -230,8 +236,22 @@
 
 @layer base {
   html {
-    font-family: system-ui, sans-serif;
     font-size: 62.5%;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+  }
+
+  body {
+    font-family:
+      'Pretendard',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
   }
 }
 

@@ -1,11 +1,12 @@
 import svgSpritePlugin from '@pivanov/vite-plugin-svg-sprite';
 /// <reference types="vitest/config" />
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
 import path from 'path';
 import { defineConfig } from 'vite';
-import { fileURLToPath } from 'node:url';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import tsconfigPaths from 'vite-tsconfig-paths';
 const dirname =
   typeof __dirname !== 'undefined'
     ? __dirname
@@ -16,18 +17,13 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    tsconfigPaths(),
     svgSpritePlugin({
       iconDirs: ['src/icons/source'],
       symbolId: 'icon-[name]',
       inject: 'body-last',
     }),
   ],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '@lib': path.resolve(__dirname, '/src/lib'),
-    },
-  },
   build: {
     lib: {
       entry: 'src/components/index.ts',
