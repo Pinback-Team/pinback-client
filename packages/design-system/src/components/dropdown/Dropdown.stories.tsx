@@ -11,8 +11,8 @@ const meta: Meta<typeof Dropdown> = {
     docs: {
       description: {
         component:
-          '**선택형 입력 컴포넌트입니다.** `selectedValue`로 선택 상태를 제어하고 `onChange`로 변경 이벤트를 처리합니다. ' +
-          '`onAddItem`을 지정하면 목록 하단에 “추가” 버튼을 노출하며, `limit`으로 최대 개수를 제어합니다.',
+          'dropdown 컴포넌트는 `select`와 `option` 컴포넌트를 포함하여 여러 항목 중 하나를 선택할 수 있는 UI 요소입니다. <br/>' +
+          '`onAddItem`과 `limit` props를 통해 사용자가 항목을 추가할 수 있는 기능도 제공합니다.',
       },
     },
   },
@@ -48,7 +48,7 @@ const meta: Meta<typeof Dropdown> = {
     className: { table: { disable: true } },
   },
   args: {
-    options: ['사과', '바나나', '체리'],
+    options: ['사과', '바나나', '체리', '포도'],
     selectedValue: null,
     placeholder: '항목을 선택하세요',
     addItemLabel: '항목 추가',
@@ -64,7 +64,7 @@ function ControlledRender(args: any) {
   const [value, setValue] = useState<string | null>(args.selectedValue ?? null);
 
   return (
-    <div className="h-[20rem]">
+    <div className="h-[25rem]">
       <Dropdown
         {...args}
         selectedValue={value}
@@ -79,12 +79,6 @@ function ControlledRender(args: any) {
 
 export const Default: Story = {
   name: '기본',
-  render: ControlledRender,
-};
-
-export const WithPreselected: Story = {
-  name: '선택값 초기화',
-  args: { selectedValue: '바나나' },
   render: ControlledRender,
 };
 
