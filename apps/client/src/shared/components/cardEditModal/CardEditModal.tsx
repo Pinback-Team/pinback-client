@@ -1,7 +1,13 @@
 import { Icon } from '@pinback/design-system/icons';
-import { Button, InfoBox, Switch, Textarea } from '@pinback/design-system/ui';
+import {
+  Button,
+  DateTime,
+  InfoBox,
+  Switch,
+  Textarea,
+} from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, useState, useMemo } from 'react';
 
 export interface CardEditModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose?: () => void;
@@ -10,23 +16,26 @@ export interface CardEditModalProps extends HTMLAttributes<HTMLDivElement> {
 export default function CardEditModal({
   className,
   onClose,
-  ...rest
 }: CardEditModalProps) {
+  const [remindOn, setRemindOn] = useState<boolean>(true);
+
+  const dateTimeState = useMemo(
+    () => (remindOn ? 'default' : 'disabled'),
+    [remindOn]
+  );
+
   return (
     <div
       role="dialog"
       aria-modal="true"
       className={cn(
-        'w-[31.2rem] rounded-[1.2rem] bg-white p-[2.4rem] shadow-xl',
+        'w-[31.2rem] rounded-[1.2rem] bg-white px-[3.2rem] py-[2.4rem] shadow-xl',
         'flex flex-col gap-[1.6rem]',
         className
       )}
-      {...rest}
     >
       <header className="flex items-center justify-between">
         <Icon name="ic_close" size={20} />
-        {/* 머지후 로고로 변경 예정 */}
-
         <button
           type="button"
           aria-label="닫기"
@@ -41,8 +50,6 @@ export default function CardEditModal({
 
       <section className="flex flex-col gap-[0.8rem]">
         <p className="caption1-sb text-font-black-1">카테고리</p>
-
-        {/* TODO: 실제 Dropdown 컴포넌트로 교체 */}
         <button
           type="button"
           className={cn(
@@ -67,33 +74,12 @@ export default function CardEditModal({
       <section className="flex flex-col gap-[1.2rem]">
         <div className="flex items-center justify-between">
           <p className="caption1-sb text-font-black-1">리마인드</p>
-          <Switch defaultChecked />
+          <Switch checked={remindOn} onCheckedChange={setRemindOn} />
         </div>
 
-        {/* TODO: 날짜/시간 피커로 교체 */}
-        <div className="grid grid-cols-2 gap-[1.2rem]">
-          <div className="flex flex-col gap-[0.6rem]">
-            <label className="body4-r text-font-black-2">날짜</label>
-            <div className="flex h-[4.8rem] items-center rounded-[0.8rem] border border-gray-200 px-[1.2rem]">
-              <input
-                type="text"
-                inputMode="numeric"
-                defaultValue="2025.08.13"
-                className="body4-r text-font-black-1 placeholder:text-font-gray-3 w-full bg-transparent outline-none"
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-[0.6rem]">
-            <label className="body4-r text-font-black-2">시간</label>
-            <div className="flex h-[4.8rem] items-center rounded-[0.8rem] border border-gray-200 px-[1.2rem]">
-              <input
-                type="text"
-                defaultValue="오전 08:00"
-                className="body4-r text-font-black-1 placeholder:text-font-gray-3 w-full bg-transparent outline-none"
-              />
-            </div>
-          </div>
+        <div className="flex justify-between gap-[0.8rem]">
+          <DateTime state={dateTimeState} type="date" />
+          <DateTime state={dateTimeState} type="time" />
         </div>
       </section>
 
