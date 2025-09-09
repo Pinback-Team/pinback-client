@@ -6,14 +6,14 @@ import { getTreeLevel } from '@shared/utils/treeLevel';
 interface MyLevelItemProps {
   acorns: number;
   className?: string;
-  active: boolean;
+  isActive: boolean;
   onClick: () => void;
 }
 
 export default function MyLevelItem({
   acorns,
   onClick,
-  active,
+  isActive: active,
 }: MyLevelItemProps) {
   const info = getTreeLevel(acorns);
 

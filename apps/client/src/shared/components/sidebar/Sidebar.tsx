@@ -114,7 +114,7 @@ export function Sidebar() {
         <footer className="pb-[2.8rem] pt-[1.2rem]">
           <MyLevelItem
             acorns={0}
-            active={activeTab === 'level'}
+            isActive={activeTab === 'level'}
             onClick={() => {
               setSelectedCategoryId(null);
               closeMenu();

@@ -58,7 +58,7 @@ export default function SideItem({
             name="ic_arrow_down_active"
             aria-hidden
             className={cn(
-              'h-[2rem] w-[2rem] transition-transform',
+              'h-[1.6rem] w-[1.6rem] transition-transform',
               open && 'rotate-180'
             )}
           />

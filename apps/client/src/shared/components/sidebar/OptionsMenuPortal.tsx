@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import OptionsMenuButton from '@shared/components/optionsMenuButton/OptionsMenuButton';
 
-interface Props {
+interface OptionsMenuPortalProps {
   open: boolean;
   style?: React.CSSProperties | null;
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -21,7 +21,7 @@ export default function OptionsMenuPortal({
   onEdit,
   onDelete,
   onClose,
-}: Props) {
+}: OptionsMenuPortalProps) {
   if (!open || !style) return null;
 
   const id = categoryId;
