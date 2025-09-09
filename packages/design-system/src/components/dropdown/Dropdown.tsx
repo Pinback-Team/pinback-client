@@ -46,9 +46,8 @@ const Dropdown = ({
           name="ic_arrow_down_disable"
           width={16}
           height={16}
-          // TODO: Icon 컴포넌트 내부에서 animation 관련 처리 고민하기
-          // rotate={isOpen ? 180 : undefined}
-          className={`transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          rotate={isOpen ? 180 : undefined}
+          hasRotateAnimation={true}
         />
       </button>
 
