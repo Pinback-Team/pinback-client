@@ -6,13 +6,11 @@ const MyBookmark = () => {
 
   return (
     <div>
-      {/* 배경 콘텐츠 */}
-      <div aria-hidden={isOpen}>
+      <div>
         <button onClick={() => setIsOpen(true)}>카테고리</button>
         {/* …여기에 리스트/카드 등 배경 콘텐츠 */}
       </div>
 
-      {/* 오버레이 + 중앙 배치 */}
       {isOpen && (
         <div className="fixed inset-0 z-50">
           <div
