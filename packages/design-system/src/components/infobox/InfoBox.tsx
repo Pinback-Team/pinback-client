@@ -9,7 +9,9 @@ const InfoBox = ({ title, source, imgUrl }: InfoBoxProps) => {
       <img className="h-[4.4rem] w-[4.4rem] rounded-[0.4rem]" src={imgUrl} />
       <div className="items-left flex flex-col justify-center gap-[0.2rem] text-left">
         <p className="sub3-sb w-[180px] truncate">{title}</p>
-        <p className="caption2-m text-font-gray-3">{source}</p>
+        <p className="caption2-m text-font-gray-3 w-[180px] truncate">
+          {source}
+        </p>
       </div>
     </div>
   );

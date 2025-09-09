@@ -6,14 +6,15 @@
   "icons": {
     "128": "icon.png"
   },
+  "permissions": ["activeTab", "tabs", "storage", "scripting"],
   "background": {
-    "service_worker": "src/background.ts",
+    "service_worker": "src/background.js",
     "type": "module"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["src/content.ts"]
+      "js": ["src/content.js"]
     }
   ],
   "host_permissions": ["<all_urls>"]
