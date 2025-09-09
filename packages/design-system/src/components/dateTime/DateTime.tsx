@@ -11,6 +11,7 @@ interface DateTimeProps {
   state: 'default' | 'disabled' | 'error';
   type: 'date' | 'time';
   value?: string;
+  onChange?: (value: string) => void;
 }
 
 const dateTimeBoxStyles = cva(
@@ -52,7 +53,12 @@ const dateTimeTxtStyles = cva(
   }
 );
 
-export default function DateTime({ type, value = '', state }: DateTimeProps) {
+export default function DateTime({
+  type,
+  value = '',
+  state,
+  ...props
+}: DateTimeProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const isDisabled = state === 'disabled';
   const nextCaretRef = useRef<number | null>(null);
@@ -121,6 +127,7 @@ export default function DateTime({ type, value = '', state }: DateTimeProps) {
     const only = digitsOnly(raw).slice(0, 8);
     const formatted = formatDate(only);
     setInput(formatted);
+    props.onChange?.(formatted);
     const caret = e.target.selectionStart ?? raw.length;
     const leftDigitsCount = raw.slice(0, caret).replace(/\D/g, '').length;
     nextCaretRef.current = mapCaretByDigitsPos(leftDigitsCount, 'date');

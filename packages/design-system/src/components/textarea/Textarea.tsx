@@ -10,12 +10,14 @@ export function Textarea({
   className,
   maxLength,
   style,
+  value,
   ...props
 }: TextareaProps) {
   return (
     <textarea
       data-slot="textarea"
       maxLength={maxLength}
+      value={value}
       className={cn(
         'h-[12rem] w-full',
         'resize-none overflow-y-auto',
