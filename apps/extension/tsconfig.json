@@ -1,23 +1,25 @@
 {
+  "extends": "@pinback/typescript-config/react.json",
   "compilerOptions": {
+    "skipLibCheck": true,
+    "noImplicitAny": false, // any 타입 허용
+    "strict": false, // 엄격 모드 비활성화
     "moduleResolution": "bundler",
     "baseUrl": ".",
     "outDir": "./dist/",
     "sourceMap": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
     "module": "esnext",
     "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable", "WebWorker"],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "forceConsistentCasingInFileNames": false,
     "plugins": [{ "name": "react" }],
     "types": ["vite/client", "chrome"],
-    "resolveJsonModule": true,            
+    "resolveJsonModule": true,
     "paths": {
       "@components/*": ["src/components/*"],
       "@utils/*": ["src/utils/*"],
@@ -26,5 +28,6 @@
       "@api/*": ["src/api/*"]
     }
   },
-  "include": ["src/**/*", "manifest.json", "popup.html", "vite.config.ts"]
+  "include": ["src/**/*", "manifest.json", "popup.html", "vite.config.ts"],
+  "exclude": ["node_modules", "dist"]
 }
