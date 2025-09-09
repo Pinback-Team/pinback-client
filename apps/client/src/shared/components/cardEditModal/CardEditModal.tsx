@@ -16,13 +16,11 @@ export interface CardEditModalProps {
 }
 
 export default function CardEditModal({ onClose }: CardEditModalProps) {
-  // 위 코드와 동일한 상태들
   const [remindOn, setRemindOn] = useState<boolean>(true);
   const [memo, setMemo] = useState('');
   const [selected, setSelected] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  // 시간/날짜 + 에러 상태 (초기값은 위 코드와 동일하게 예시 값)
   const [date, setDate] = useState('2025.10.10');
   const [time, setTime] = useState('19:00');
   const [dateError, setDateError] = useState('');
@@ -62,7 +60,7 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
           onClick={onClose}
           className="rounded-[0.6rem] p-[0.4rem] hover:bg-gray-100"
         >
-          <Icon name="ic_close" size={20} />
+          <Icon name="ic_close" size={20} onClick={onClose} />
         </button>
       </header>
 
