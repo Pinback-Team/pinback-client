@@ -70,7 +70,7 @@ const App = () => {
         time: isRemindOn ? time : null,
         createdAt: new Date().toISOString(),
       };
-
+      // 내부 스토리지 저장 (유저 북마크 리스트)
       const result = await new Promise<{ bookmarks?: any[] }>((resolve) => {
         chrome.storage.local.get(['bookmarks'], (items) => resolve(items));
       });
@@ -82,7 +82,17 @@ const App = () => {
         chrome.storage.local.set({ bookmarks }, resolve);
       });
 
-      console.log('북마크 저장 완료');
+      chrome.bookmarks.create(
+        {
+          parentId: '1',
+          title: title || url,
+          url: url,
+        },
+        (newBookmark) => {
+          console.log('크롬 북마크바에 저장 완료:', newBookmark);
+        }
+      );
+
       window.close();
     } catch (error) {
       console.error('저장 중 오류:', error);
