@@ -2,7 +2,7 @@
   "extends": "@pinback/typescript-config/react.json",
   "compilerOptions": {
     "typeRoots": ["node_modules/@types"],
-
+    "rootDir": ".",
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
