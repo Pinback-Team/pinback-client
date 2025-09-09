@@ -2,27 +2,35 @@ import { Icon } from '@pinback/design-system/icons';
 import {
   Button,
   DateTime,
+  Dropdown,
   InfoBox,
+  PopupContainer,
   Switch,
   Textarea,
 } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
-import { HTMLAttributes, useState, useMemo } from 'react';
+import { useState } from 'react';
 
-export interface CardEditModalProps extends HTMLAttributes<HTMLDivElement> {
-  onClose?: () => void;
+export interface CardEditModalProps {
+  onClose: () => void;
 }
 
-export default function CardEditModal({
-  className,
-  onClose,
-}: CardEditModalProps) {
+export default function CardEditModal({ onClose }: CardEditModalProps) {
+  // 위 코드와 동일한 상태들
   const [remindOn, setRemindOn] = useState<boolean>(true);
+  const [memo, setMemo] = useState('');
+  const [selected, setSelected] = useState<string | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const dateTimeState = useMemo(
-    () => (remindOn ? 'default' : 'disabled'),
-    [remindOn]
-  );
+  // 시간/날짜 + 에러 상태 (초기값은 위 코드와 동일하게 예시 값)
+  const [date, setDate] = useState('2025.10.10');
+  const [time, setTime] = useState('19:00');
+  const [dateError, setDateError] = useState('');
+  const [timeError, setTimeError] = useState('');
+
+  const handleSwitchChange = (checked: boolean) => {
+    setRemindOn(checked);
+  };
 
   return (
     <div
@@ -30,10 +38,22 @@ export default function CardEditModal({
       aria-modal="true"
       className={cn(
         'w-[31.2rem] rounded-[1.2rem] bg-white px-[3.2rem] py-[2.4rem] shadow-xl',
-        'flex flex-col gap-[1.6rem]',
-        className
+        'flex flex-col gap-[1.6rem]'
       )}
     >
+      {isPopupOpen && (
+        <PopupContainer
+          isOpen={isPopupOpen}
+          onClose={() => setIsPopupOpen(false)}
+          type="input"
+          title="카테고리 추가하기"
+          left="취소"
+          right="확인"
+          placeholder="카테고리 제목을 입력해주세요"
+          onLeftClick={() => setIsPopupOpen(false)}
+          onRightClick={() => setIsPopupOpen(false)}
+        />
+      )}
       <header className="flex items-center justify-between">
         <Icon name="ic_close" size={20} />
         <button
@@ -50,16 +70,14 @@ export default function CardEditModal({
 
       <section className="flex flex-col gap-[0.8rem]">
         <p className="caption1-sb text-font-black-1">카테고리</p>
-        <button
-          type="button"
-          className={cn(
-            'flex h-[4.8rem] w-full items-center justify-between rounded-[0.8rem] border px-[1.2rem]',
-            'hover:border-main500 border-gray-200 transition-colors'
-          )}
-        >
-          <span className="body4-r text-font-black-1">오뚜기</span>
-          <Icon name="ic_arrow_down_disable" width={16} height={16} />
-        </button>
+        <Dropdown
+          options={['옵션1', '옵션2']}
+          selectedValue={selected}
+          onChange={(value: string | null) => setSelected(value)}
+          placeholder="선택해주세요"
+          onAddItem={() => setIsPopupOpen(true)}
+          addItemLabel="추가하기"
+        />
       </section>
 
       <section className="flex flex-col gap-[0.8rem]">
@@ -68,19 +86,33 @@ export default function CardEditModal({
           placeholder="나중에 내가 꺼내줄 수 있게 살짝 적어줘!"
           maxLength={500}
           className="h-[12rem]"
+          value={memo}
+          onChange={(e) => setMemo(e.target.value)}
         />
       </section>
 
       <section className="flex flex-col gap-[1.2rem]">
         <div className="flex items-center justify-between">
           <p className="caption1-sb text-font-black-1">리마인드</p>
-          <Switch checked={remindOn} onCheckedChange={setRemindOn} />
+          <Switch checked={remindOn} onCheckedChange={handleSwitchChange} />
         </div>
 
         <div className="flex justify-between gap-[0.8rem]">
-          <DateTime state={dateTimeState} type="date" />
-          <DateTime state={dateTimeState} type="time" />
+          <DateTime
+            type="date"
+            state={dateError ? 'error' : remindOn ? 'default' : 'disabled'}
+            value={date}
+          />
+          <DateTime
+            type="time"
+            state={timeError ? 'error' : remindOn ? 'default' : 'disabled'}
+            value={time}
+          />
         </div>
+
+        {/* 에러 메시지 출력 */}
+        {dateError && <p className="body3-r text-error">{dateError}</p>}
+        {timeError && <p className="body3-r text-error">{timeError}</p>}
       </section>
 
       <Button>저장하기</Button>

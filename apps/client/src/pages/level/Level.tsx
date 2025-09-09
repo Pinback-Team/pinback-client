@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
-
-const Level = () => {
-  return (
-    <div className="bg-secondary flex h-screen w-full flex-col items-center justify-center gap-[2rem] p-[1rem]">
-      <CardEditModal />
-    </div>
-  );
-};
-=======
 import { Icon } from '@pinback/design-system/icons';
 import { cn } from '@pinback/design-system/utils';
 import LevelScene from '@pages/level/components/LevelScene';
@@ -17,7 +6,6 @@ import TreeStatusCard from '@pages/level/components/TreeStatusCard';
 import { getTreeLevel } from '@pages/level/utils/treeLevel';
 import { TreeLevel } from '@pages/level/types/treeLevelType';
 import { Badge } from '@pinback/design-system/ui';
->>>>>>> c79206027e2d1aaa5f78da3aa0f9cd638cccf696
 
 export default function Level() {
   const acorns = 1; // TODO: API 연결되면 교체
