@@ -24,7 +24,7 @@ export const validateDate = (value: string): string => {
   today.setHours(0, 0, 0, 0);
   if (testDate < today) return '현재 시점 이후 날짜로 작성하세요';
 
-  return ''; // ✅ 에러 없음
+  return '';
 };
 
 // 시간 유효성 검사
@@ -44,5 +44,5 @@ export const validateTime = (value: string | undefined): string => {
     return '유효한 시간을 작성하세요';
   }
 
-  return ''; // ✅ 에러 없음
+  return '';
 };
