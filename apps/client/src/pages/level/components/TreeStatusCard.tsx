@@ -1,6 +1,6 @@
 import { Level, Progress } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
-import { getTreeLevel } from '@shared/utils/treeLevel';
+import { getTreeLevel } from '@pages/level/utils/treeLevel';
 
 export interface TreeStatusCardProps {
   acorns: number;

@@ -1,6 +1,6 @@
-import type { IconName } from '../iconNames';
-import React from 'react';
 import clsx from 'clsx';
+import React from 'react';
+import type { IconName } from '../iconNames';
 
 type IconRotate = 90 | 180 | 270;
 
@@ -63,6 +63,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   color?: IconColor;
   className?: string;
   rotate?: IconRotate;
+  hasRotateAnimation?: boolean;
   ariaHidden?: boolean;
 }
 
@@ -74,6 +75,7 @@ export const Icon = ({
   color,
   className,
   rotate,
+  hasRotateAnimation = false,
   ariaHidden = true,
   ...rest
 }: IconProps) => {
@@ -89,7 +91,12 @@ export const Icon = ({
           ? 'rotate-[270deg]'
           : '';
 
-  const combined = clsx('inline-block', rotateClass, className);
+  const combined = clsx(
+    'inline-block',
+    rotateClass,
+    hasRotateAnimation && 'transform transition-transform duration-200',
+    className
+  );
 
   return (
     <svg
