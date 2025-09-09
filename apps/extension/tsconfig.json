@@ -21,6 +21,7 @@
     "types": ["vite/client", "chrome"],
     "resolveJsonModule": true,
     "paths": {
+      "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@utils/*": ["src/utils/*"],
       "@constants/*": ["src/constants/*"],
