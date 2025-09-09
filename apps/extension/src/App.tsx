@@ -12,7 +12,7 @@ import Logo from '@assets/logo.svg';
 import { useState } from 'react';
 import { usePageMeta } from './hooks/usePageMeta';
 import { useSaveBookmark } from './hooks/useSaveBookmarks';
-import { validateDate, validateTime } from '@utils/validateData';
+import { validateDate, validateTime } from '@utils/ValidateData';
 const App = () => {
   const [isRemindOn, setIsRemindOn] = useState(false);
   const [memo, setMemo] = useState('');
