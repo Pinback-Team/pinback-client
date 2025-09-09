@@ -19,11 +19,12 @@ interface PopupContainerProps extends BasePopupProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
 const PopupContainer = ({
   isOpen,
   onClose,
   ...popupProps
-}: PopupContainerProps) => {
+}: PopupContainerProps): React.ReactNode => {
   // ESC 키로 닫는 것 정도 (외부 클릭은 안되게! : 어차피 x박스나 취소버튼이 있음)
   useEffect(() => {
     if (!isOpen) return;
@@ -44,7 +45,7 @@ const PopupContainer = ({
       </div>
     </div>,
     document.body // body 위에서 렌더링 되게 함!
-  );
+  ) as unknown as React.ReactElement;
 };
 
 export default PopupContainer;

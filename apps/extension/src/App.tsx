@@ -5,11 +5,11 @@ import {
   Textarea,
   DateTime,
   Switch,
+  PopupContainer,
 } from '@pinback/design-system/ui';
 import Logo from '@assets/logo.svg';
 import { useState, useEffect } from 'react';
 import { OgImageFetcher } from '@utils/OGFetch';
-
 const App = () => {
   const [isRemindOn, setIsRemindOn] = useState(false);
   const [date, setDate] = useState('2025.10.10');
@@ -19,6 +19,7 @@ const App = () => {
   const [description, setDescription] = useState('');
   const [url, setUrl] = useState('');
   const [imgUrl, setImgUrl] = useState('');
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [dateError, setDateError] = useState('');
   const [timeError, setTimeError] = useState('');
@@ -176,8 +177,21 @@ const App = () => {
   return (
     <div className="App">
       <div className="relative flex h-[54.4rem] w-[31.2rem] items-center justify-center bg-[#00000000] text-2xl text-white">
+        {isPopupOpen && (
+          <PopupContainer
+            isOpen={isPopupOpen}
+            onClose={() => setIsPopupOpen(false)}
+            type="input"
+            title="카테고리 추가하기"
+            left="취소"
+            right="확인"
+            placeholder="카테고리 제목을 입력해주세요"
+            onLeftClick={() => setIsPopupOpen(false)}
+            onRightClick={() => setIsPopupOpen(false)}
+          />
+        )}
         <div className="absolute top-0 flex h-[54.4rem] w-[31.2rem] flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
-          <div className="mr-auto">
+          <div className="mr-auto" onClick={() => setIsPopupOpen(true)}>
             <img src={Logo} alt="로고" />
           </div>
 
