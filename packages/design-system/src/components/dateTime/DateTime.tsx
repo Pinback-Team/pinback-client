@@ -5,7 +5,7 @@ import {
   formatDate,
   formatTime12,
   mapCaretByDigitsPos,
-} from './utils/DateTimeUtils';
+} from './utils/FormatData';
 
 interface DateTimeProps {
   state: 'default' | 'disabled' | 'error';

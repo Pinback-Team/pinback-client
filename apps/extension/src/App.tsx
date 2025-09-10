@@ -6,12 +6,11 @@ import {
   DateTime,
   Switch,
   PopupContainer,
-  Dropdown,
+  Dropdown,validateDate, validateTime
 } from '@pinback/design-system/ui';
 import { useState } from 'react';
 import { usePageMeta } from './hooks/usePageMeta';
 import { useSaveBookmark } from './hooks/useSaveBookmarks';
-import { validateDate, validateTime } from '@utils/ValidateData';
 import { Icon } from '@pinback/design-system/icons';
 const App = () => {
   const [isRemindOn, setIsRemindOn] = useState(false);
