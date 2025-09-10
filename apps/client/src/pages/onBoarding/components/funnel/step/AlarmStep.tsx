@@ -1,5 +1,5 @@
-import dotori from '../../../../../assets/onBoarding/icons/dotori.svg';
-import AlarmBox from './AlarmBox';
+import dotori from '@assets/onBoarding/icons/dotori.svg';
+import AlarmBox from '../AlarmBox';
 interface AlarmStepProps {
   selected: 1 | 2 | 3;
   setSelected: (n: 1 | 2 | 3) => void;

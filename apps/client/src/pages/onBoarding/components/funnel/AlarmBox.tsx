@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
-import TimePicker from '../../timePicker/TimePicker';
-import { AlarmsType } from '../type/alarms';
+import TimePicker from '../timePicker/TimePicker';
+import { AlarmsType } from '@constants/alarms';
 import { useState } from 'react';
 interface AlarmBoxProps {
   select: 1 | 2 | 3;
