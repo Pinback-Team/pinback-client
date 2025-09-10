@@ -9,6 +9,8 @@ import {
   Switch,
   Textarea,
   Toast,
+  validateDate,
+  validateTime,
 } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
 import { useState } from 'react';
@@ -29,6 +31,16 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
   const [timeError, setTimeError] = useState('');
 
   const [toastIsOpen, setToastIsOpen] = useState(false);
+
+  const handleDateChange = (value: string) => {
+    setDate(value);
+    setDateError(validateDate(value));
+  };
+
+  const handleTimeChange = (value: string) => {
+    setTime(value);
+    setTimeError(validateTime(value));
+  };
 
   const handleSwitchChange = (checked: boolean) => {
     setRemindOn(checked);
@@ -108,26 +120,27 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
               type="date"
               state={dateError ? 'error' : remindOn ? 'default' : 'disabled'}
               value={date}
+              onChange={handleDateChange}
             />
             <DateTime
               type="time"
               state={timeError ? 'error' : remindOn ? 'default' : 'disabled'}
               value={time}
+              onChange={handleTimeChange}
             />
           </div>
 
-          {/* 에러 메시지 출력 */}
           {dateError && <p className="body3-r text-error">{dateError}</p>}
           {timeError && <p className="body3-r text-error">{timeError}</p>}
         </section>
-
+        {/* TODO: onClick 추후  저장 api 연결후 실패/성공 연결 */}
         <Button onClick={() => setToastIsOpen(true)}>저장하기</Button>
       </div>
       {toastIsOpen && (
-        <div className="fixed bottom-20 left-1/2 z-[100] -translate-x-1/2">
+        <div className="flex justify-center pt-[1.6rem]">
           <AutoDismissToast
-            duration={3000}
-            fadeMs={3000}
+            duration={1000}
+            fadeMs={1000}
             onClose={() => setToastIsOpen(false)}
           >
             <Toast text={`저장에 실패했어요.\n다시 시도해주세요`} />

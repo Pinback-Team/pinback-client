@@ -3,13 +3,12 @@ import { Sidebar } from '../shared/components/sidebar/Sidebar';
 
 const Layout = () => {
   return (
-    <>
-      {/* TODO: 필요시 레이아웃 추가 */}
-      {/* TODO: 사이드바 추가 */}
-
+    <div className="flex h-screen">
       <Sidebar />
-      <Outlet />
-    </>
+      <main className="flex-1 overflow-y-auto">
+        <Outlet />
+      </main>
+    </div>
   );
 };
 
