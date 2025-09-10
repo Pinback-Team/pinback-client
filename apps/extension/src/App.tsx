@@ -72,7 +72,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="relative flex h-[56.8rem] w-[31.2rem] items-center justify-center bg-[#00000000] text-2xl text-white">
+      <div className="relative flex h-[56.8rem] w-[31.2rem] items-center justify-center">
         {isPopupOpen && (
           <PopupContainer
             isOpen={isPopupOpen}
@@ -114,7 +114,6 @@ const App = () => {
             <Textarea
               maxLength={100}
               placeholder="나중에 내가 꺼내줄 수 있게 살짝 적어줘!"
-              value={memo}
               onChange={(e) => setMemo(e.target.value)}
             />
           </div>
