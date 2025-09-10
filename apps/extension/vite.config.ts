@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [
     react(),
     tsconfigPaths({
-      projects: [resolve(__dirname, '../../tsconfig.json')],
+      projects: [resolve(__dirname, './tsconfig.json')],
     }),
     tailwindcss(),
     crx({ manifest }),
@@ -28,15 +28,4 @@ export default defineConfig({
     copyPublicDir: true,
   },
   publicDir: 'public',
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src'),
-      '@assets': resolve(__dirname, './src/assets'),
-      '@api': resolve(__dirname, './src/api'),
-      '@utils': resolve(__dirname, './src/utils'),
-      '@constants': resolve(__dirname, './src/constants'),
-      '@shared-types': resolve(__dirname, './src/types'),
-      '@components': resolve(__dirname, './src/components'),
-    },
-  },
 });

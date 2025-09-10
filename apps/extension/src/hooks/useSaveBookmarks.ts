@@ -18,8 +18,6 @@ export const useSaveBookmark = () => {
         createdAt: new Date().toISOString(),
       };
 
-      console.log('저장 데이터:', saveData);
-
       const result = await new Promise<{ bookmarks?: any[] }>((resolve) => {
         chrome.storage.local.get(['bookmarks'], (items) => resolve(items));
       });
