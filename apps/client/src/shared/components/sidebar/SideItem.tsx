@@ -1,7 +1,6 @@
 import { Icon, type IconName } from '@pinback/design-system/icons';
 import { cn } from '@pinback/design-system/utils';
-
-export type IconToken = 'clock' | 'bookmark';
+import { IconToken } from './types/IconTokenType';
 
 const ICON_MAP: Record<IconToken, { on: IconName; off: IconName }> = {
   clock: { on: 'ic_clock_active', off: 'ic_clock_disable' },
