@@ -6,6 +6,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   ref?: Ref<HTMLInputElement>;
   isError?: boolean;
   helperText?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const inputBorderVariants = cva(
@@ -28,6 +30,8 @@ const Input = ({
   isError,
   className,
   helperText,
+  value,
+  onChange,
   ...props
 }: InputProps) => {
   return (
@@ -35,6 +39,8 @@ const Input = ({
       <div className={cn(inputBorderVariants({ isError }), className)}>
         <input
           ref={ref}
+          value={value}
+          onChange={onChange}
           className="placeholder-font-gray-3 w-full focus:outline-none"
           aria-invalid={isError}
           {...props}
