@@ -3,7 +3,7 @@ export interface BadgeProps {
   text: string;
   countNum?: number;
   isActive: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const BadgeTxtStyleVariants = cva('sub3-b', {

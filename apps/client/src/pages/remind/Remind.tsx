@@ -10,7 +10,7 @@ const Remind = () => {
   };
 
   return (
-    <div className="flex flex-col px-[8rem] py-[5.2rem]">
+    <div className="flex flex-col pl-[8rem] py-[5.2rem]">
       <p className="head3">리마인드</p>
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
@@ -27,9 +27,9 @@ const Remind = () => {
         />
       </div>
 
-      <div className="scrollbar-hide mt-[2.6rem] flex flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
+      <div className="scrollbar-hide mt-[2.6rem] flex flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth max-w-[104rem]">
         {/* TODO: API 연결 후 수정 */}
-        {REMIND_MOCK_DATA.map((data, index) => (
+        {REMIND_MOCK_DATA.map((data) => (
           <Card
             key={data.id}
             type="remind"
