@@ -31,7 +31,7 @@ export const usePageMeta = () => {
       //     /^chrome:\/\//.test(currentUrl) ||
       //     /^edge:\/\//.test(currentUrl) ||
       //     /^about:/.test(currentUrl);
-      //   // ❌ chrome-extension:// 은 내부 페이지로 취급하지 않음
+      //   // chrome-extension:// 은 내부 페이지로 취급하지 않음
 
       //   if (isInternalChromePage || !imageUrl?.title) {
       //     window.close();
