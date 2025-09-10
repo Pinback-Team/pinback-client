@@ -71,10 +71,19 @@ const App = () => {
     console.log('저장된 데이터:', saveData);
   };
   const [categoryTitle, setCategoryTitle] = useState('');
+  const [isPopError, setIsPopError] = useState(false);
+  const [errorTxt, setErrorTxt] = useState('');
   const saveCategory = () => {
     console.log('입력한 카테고리 제목:', categoryTitle);
-    setIsPopupOpen(false);
-  };
+   
+    if (categoryTitle.length >20){
+      setIsPopError(true);
+      setErrorTxt('20자 이내로 작성해주세요');
+    } else{
+       setIsPopupOpen(false);
+    }
+  }
+  
 
   return (
     <div className="App">
@@ -88,6 +97,8 @@ const App = () => {
             left="취소"
             right="확인"
             inputValue={categoryTitle}
+            isError={isPopError}
+            errortext={errorTxt}
             onInputChange={setCategoryTitle}
             placeholder="카테고리 제목을 입력해주세요"
             onLeftClick={() => setIsPopupOpen(false)}

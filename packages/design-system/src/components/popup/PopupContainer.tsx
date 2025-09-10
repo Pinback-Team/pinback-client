@@ -11,6 +11,7 @@ interface BasePopupProps {
   subtext?: string;
   placeholder?: string;
   isError?: boolean;
+  errortext?: string;
   helperText?: string;
   onLeftClick?: () => void;
   onRightClick?: () => void;
