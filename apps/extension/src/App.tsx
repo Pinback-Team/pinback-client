@@ -74,8 +74,6 @@ const App = () => {
   const [isPopError, setIsPopError] = useState(false);
   const [errorTxt, setErrorTxt] = useState('');
   const saveCategory = () => {
-    console.log('입력한 카테고리 제목:', categoryTitle);
-   
     if (categoryTitle.length >20){
       setIsPopError(true);
       setErrorTxt('20자 이내로 작성해주세요');
