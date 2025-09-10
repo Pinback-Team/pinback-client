@@ -88,7 +88,7 @@ const App = () => {
           />
         )}
         <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
-          <div className="mr-auto" onClick={() => setIsPopupOpen(true)}>
+          <div className="mr-auto">
             <Icon name="main_logo" width={72} height={20} />
           </div>
 
