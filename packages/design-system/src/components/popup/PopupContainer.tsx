@@ -18,6 +18,8 @@ interface BasePopupProps {
 interface PopupContainerProps extends BasePopupProps {
   isOpen: boolean;
   onClose: () => void;
+  inputValue?: string;
+  onInputChange?: (value: string) => void;
 }
 
 const PopupContainer = ({
@@ -41,7 +43,12 @@ const PopupContainer = ({
     <div className="fixed inset-0 z-10 flex items-center justify-center">
       <div className="absolute inset-0 bg-[#00000099]" />
       <div className="relative">
-        <Popup {...popupProps} onLeftClick={onClose} />
+        <Popup 
+          {...popupProps} 
+          onLeftClick={onClose} 
+          inputValue={popupProps.inputValue}
+          onInputChange={popupProps.onInputChange} 
+          />
       </div>
     </div>,
     document.body // body 위에서 렌더링 되게 함!

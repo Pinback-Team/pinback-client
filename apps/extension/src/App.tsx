@@ -68,7 +68,12 @@ const App = () => {
       time: isRemindOn ? time : null,
       createdAt: new Date().toISOString(),
     };
-    console.log('저장 데이터:', saveData);
+    console.log('저장된 데이터:', saveData);
+  };
+  const [categoryTitle, setCategoryTitle] = useState('');
+  const saveCategory = () => {
+    console.log('입력한 카테고리 제목:', categoryTitle);
+    setIsPopupOpen(false);
   };
 
   return (
@@ -82,9 +87,11 @@ const App = () => {
             title="카테고리 추가하기"
             left="취소"
             right="확인"
+            inputValue={categoryTitle}
+            onInputChange={setCategoryTitle}
             placeholder="카테고리 제목을 입력해주세요"
             onLeftClick={() => setIsPopupOpen(false)}
-            onRightClick={() => setIsPopupOpen(false)}
+            onRightClick={saveCategory}
           />
         )}
         <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">

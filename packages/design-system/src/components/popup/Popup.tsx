@@ -10,7 +10,9 @@ interface BasePopupProps {
   subtext?: string;
   placeholder?: string;
   isError?: boolean;
-  helperText?: string;
+  helperText?: string; 
+  inputValue?: string;
+  onInputChange?: (value: string) => void;
   onLeftClick?: () => void;
   onRightClick?: () => void;
 }
@@ -23,6 +25,8 @@ const Popup = ({
   right,
   helperText,
   isError,
+  inputValue,
+  onInputChange,
   onLeftClick,
   onRightClick,
 }: BasePopupProps) => {
@@ -35,6 +39,8 @@ const Popup = ({
             placeholder={placeholder}
             helperText={helperText}
             isError={isError}
+            value={inputValue}
+            onChange={(e) => onInputChange?.(e.target.value)}
           />
         </div>
       )}
