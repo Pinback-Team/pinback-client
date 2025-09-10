@@ -8,11 +8,11 @@ import {
   PopupContainer,
   Dropdown,
 } from '@pinback/design-system/ui';
-import Logo from '@assets/logo.svg';
 import { useState } from 'react';
 import { usePageMeta } from './hooks/usePageMeta';
 import { useSaveBookmark } from './hooks/useSaveBookmarks';
 import { validateDate, validateTime } from '@utils/ValidateData';
+import { Icon } from '@pinback/design-system/icons';
 const App = () => {
   const [isRemindOn, setIsRemindOn] = useState(false);
   const [memo, setMemo] = useState('');
@@ -88,7 +88,7 @@ const App = () => {
         )}
         <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
           <div className="mr-auto" onClick={() => setIsPopupOpen(true)}>
-            <img src={Logo} alt="로고" />
+            <Icon name="main_logo" width={72} height={20} />
           </div>
 
           <InfoBox
