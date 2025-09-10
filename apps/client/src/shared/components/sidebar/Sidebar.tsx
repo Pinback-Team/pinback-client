@@ -17,6 +17,11 @@ const CATEGORIES = [
   { id: 3, label: '운동' },
   { id: 4, label: '취미' },
   { id: 5, label: '기타' },
+  { id: 6, label: '기타' },
+  { id: 7, label: '기타' },
+  { id: 8, label: '기타' },
+  { id: 9, label: '기타' },
+  { id: 10, label: '기타' },
 ];
 
 export function Sidebar() {
@@ -57,7 +62,7 @@ export function Sidebar() {
 
         <hr className="my-[0.8rem] border-gray-100" />
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="ds-scrollbar flex-1 overflow-y-auto">
           <SideItem
             icon="clock"
             label="리마인드"

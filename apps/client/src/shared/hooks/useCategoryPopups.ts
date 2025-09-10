@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 export type PopupState =
   | { kind: 'create' }
@@ -8,17 +8,11 @@ export type PopupState =
 
 export function useCategoryPopups() {
   const [popup, setPopup] = useState<PopupState>(null);
-
-  const openCreate = useCallback(() => setPopup({ kind: 'create' }), []);
-  const openEdit = useCallback(
-    (id: number, name: string) => setPopup({ kind: 'edit', id, name }),
-    []
-  );
-  const openDelete = useCallback(
-    (id: number, name: string) => setPopup({ kind: 'delete', id, name }),
-    []
-  );
-  const close = useCallback(() => setPopup(null), []);
-
+  const openCreate = () => setPopup({ kind: 'create' });
+  const openEdit = (id: number, name: string) =>
+    setPopup({ kind: 'edit', id, name });
+  const openDelete = (id: number, name: string) =>
+    setPopup({ kind: 'delete', id, name });
+  const close = () => setPopup(null);
   return { popup, openCreate, openEdit, openDelete, close };
 }

@@ -36,7 +36,6 @@ export function useAnchoredMenu(getPos: GetPos) {
     setState({ open: false, categoryId: null, anchorEl: null, pos: null });
   }, []);
 
-  // 위치 갱신 + 바깥 클릭 닫힘
   useEffect(() => {
     if (!state.open) return;
 
@@ -68,7 +67,6 @@ export function useAnchoredMenu(getPos: GetPos) {
     };
   }, [state.open, state.anchorEl, close, getPos]);
 
-  // 포털 컨테이너에 바로 넘길 style
   const style = state.pos
     ? ({
         position: 'fixed',
