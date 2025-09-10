@@ -1,5 +1,6 @@
 // 이 파일은 자동 생성 파일입니다. (직접 수정 금지)
 export const iconNames = [
+  'chippi_profile',
   'ic_arrow_down_active',
   'ic_arrow_down_disable',
   'ic_bookmark_active',
@@ -12,6 +13,7 @@ export const iconNames = [
   'ic_info',
   'ic_plus',
   'main_logo',
+  'logo',
   'tooltip_1',
   'tooltip_2',
   'tooltip_3',
