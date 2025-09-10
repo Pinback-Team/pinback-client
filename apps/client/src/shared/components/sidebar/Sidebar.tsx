@@ -62,7 +62,7 @@ export function Sidebar() {
 
         <hr className="my-[0.8rem] border-gray-100" />
 
-        <div className="ds-scrollbar flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto">
           <SideItem
             icon="clock"
             label="리마인드"
