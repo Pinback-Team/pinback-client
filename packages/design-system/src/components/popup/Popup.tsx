@@ -8,9 +8,12 @@ interface BasePopupProps {
   left: string;
   right: string;
   subtext?: string;
+  errortext?: string;
   placeholder?: string;
   isError?: boolean;
-  helperText?: string;
+  helperText?: string; 
+  inputValue?: string;
+  onInputChange?: (value: string) => void;
   onLeftClick?: () => void;
   onRightClick?: () => void;
 }
@@ -22,7 +25,10 @@ const Popup = ({
   left,
   right,
   helperText,
+  errortext,
   isError,
+  inputValue,
+  onInputChange,
   onLeftClick,
   onRightClick,
 }: BasePopupProps) => {
@@ -35,7 +41,12 @@ const Popup = ({
             placeholder={placeholder}
             helperText={helperText}
             isError={isError}
+            value={inputValue}
+            onChange={(e) => onInputChange?.(e.target.value)}
           />
+          {isError && errortext && (
+            <p className='mt-[0.5rem] text-error body3-r'>{errortext}</p>
+          )}
         </div>
       )}
       {type === 'subtext' && (

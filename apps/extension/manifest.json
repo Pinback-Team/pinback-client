@@ -4,16 +4,17 @@
   "version": "0.1.0",
   "action": { "default_popup": "popup.html" },
   "icons": {
-    "128": "icon128.png"
+    "128": "icon.png"
   },
+  "permissions": ["activeTab", "tabs", "storage", "scripting", "bookmarks"],
   "background": {
-    "service_worker": "src/background.ts",
+    "service_worker": "src/background.js",
     "type": "module"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["src/content.ts"]
+      "js": ["src/content.js"]
     }
   ],
   "host_permissions": ["<all_urls>"]
