@@ -20,13 +20,17 @@ export interface CardEditModalProps {
 }
 
 export default function CardEditModal({ onClose }: CardEditModalProps) {
-  const [remindOn, setRemindOn] = useState<boolean>(true);
-  const [memo, setMemo] = useState('');
+  const [isRemindOn, setIsRemindOn] = useState<boolean>(true);
   const [selected, setSelected] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const [date, setDate] = useState('2025.10.10');
-  const [time, setTime] = useState('19:00');
+  // 입력 필드 상태: 서버에서 받아올 데이터
+  const [title, setTitle] = useState('');
+  const [source, setSource] = useState('');
+  const [memo, setMemo] = useState('');
+  const [categories, setCategories] = useState<string[]>([]);
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [dateError, setDateError] = useState('');
   const [timeError, setTimeError] = useState('');
 
@@ -43,7 +47,7 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
   };
 
   const handleSwitchChange = (checked: boolean) => {
-    setRemindOn(checked);
+    setIsRemindOn(checked);
   };
 
   return (
@@ -70,7 +74,7 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
           />
         )}
         <header className="flex items-center justify-between">
-          <Icon name="ic_close" size={20} />
+          <Icon name="logo" width={72} height={20} />
           <button
             type="button"
             aria-label="닫기"
@@ -81,15 +85,12 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
           </button>
         </header>
 
-        <InfoBox
-          title="집에서 할 수 있는 간단한 요..."
-          source="네이버 블로그"
-        />
+        <InfoBox title={title} source={source} />
 
         <section className="flex flex-col gap-[0.8rem]">
           <p className="caption1-sb text-font-black-1">카테고리</p>
           <Dropdown
-            options={['옵션1', '옵션2']}
+            options={categories}
             selectedValue={selected}
             onChange={(value: string | null) => setSelected(value)}
             placeholder="선택해주세요"
@@ -112,19 +113,19 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
         <section className="flex flex-col gap-[1.2rem]">
           <div className="flex items-center justify-between">
             <p className="caption1-sb text-font-black-1">리마인드</p>
-            <Switch checked={remindOn} onCheckedChange={handleSwitchChange} />
+            <Switch checked={isRemindOn} onCheckedChange={handleSwitchChange} />
           </div>
 
           <div className="flex justify-between gap-[0.8rem]">
             <DateTime
               type="date"
-              state={dateError ? 'error' : remindOn ? 'default' : 'disabled'}
+              state={dateError ? 'error' : isRemindOn ? 'default' : 'disabled'}
               value={date}
               onChange={handleDateChange}
             />
             <DateTime
               type="time"
-              state={timeError ? 'error' : remindOn ? 'default' : 'disabled'}
+              state={timeError ? 'error' : isRemindOn ? 'default' : 'disabled'}
               value={time}
               onChange={handleTimeChange}
             />
