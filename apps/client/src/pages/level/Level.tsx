@@ -3,7 +3,7 @@ import { cn } from '@pinback/design-system/utils';
 import LevelScene from '@pages/level/components/LevelScene';
 import LevelInfoCard from '@pages/level/components/LevelInfoCard';
 import TreeStatusCard from '@pages/level/components/TreeStatusCard';
-import { getTreeLevel } from '@pages/level/utils/treeLevel';
+import { getTreeLevel } from '@shared/utils/treeLevel';
 import { TreeLevel } from '@pages/level/types/treeLevelType';
 import { Badge } from '@pinback/design-system/ui';
 
