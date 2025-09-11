@@ -126,10 +126,24 @@ const MainPop = ({type, savedData}: MainPopProps) => {
     setIsRemindOn(checked);
   };
 
-  const { url, title, description, imgUrl } = usePageMeta();
+  const { url, title, description, imgUrl: initialImgUrl ,loading} = usePageMeta();
   const { save } = useSaveBookmark();
+  const [imgUrl, setImgUrl] = useState(initialImgUrl);
+    useEffect(() => {
+    if (!loading && !title) {
+        alert("이 페이지는 저장할 수 없어요 😢");
+        window.close();
+    }
+    }, [loading, title]);
 
-
+    // 이미지 없으면 기본 이미지로 교체
+    useEffect(() => {
+    if (!initialImgUrl) {
+        setImgUrl("https://thumb.photo-ac.com/31/3137071c02f608edb5220129b10533d6_t.jpeg");
+    } else {
+        setImgUrl(initialImgUrl);
+    }
+    }, [initialImgUrl]);
   // useEffect(()=>{
   //   postSignup({
   //       "email": "test@gmail2.com", 
@@ -240,8 +254,8 @@ const MainPop = ({type, savedData}: MainPopProps) => {
           </div>
 
           <InfoBox
-            title={title || '제목 없음'}
-            source={description || '웹페이지'}
+            title={title || '제목 로딩 중...'}
+            source={description || '불러오는 중입니다'}
             imgUrl={imgUrl}
           />
 
@@ -278,7 +292,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
             <div className="mb-[0.4rem] flex items-center justify-between gap-[0.8rem]">
               <DateTime
                 type="date"
-                key={`date-${date}`} // key 추가로 강제 리렌더링
+                key={`date-${date}`} 
                 state={
                   dateError ? 'error' : isRemindOn ? 'default' : 'disabled'
                 }
@@ -287,7 +301,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
               />
               <DateTime
                 type="time"
-                key={`time-${time}`} // key 추가로 강제 리렌더링
+                key={`time-${time}`} 
                 state={
                   timeError ? 'error' : isRemindOn ? 'default' : 'disabled'
                 }
