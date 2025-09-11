@@ -20,21 +20,33 @@ export interface CardEditModalProps {
 }
 
 export default function CardEditModal({ onClose }: CardEditModalProps) {
-  const [isRemindOn, setIsRemindOn] = useState<boolean>(true);
+  const [isRemindOn, setIsRemindOn] = useState(true);
   const [selected, setSelected] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // 입력 필드 상태: 서버에서 받아올 데이터
-  const [title, setTitle] = useState('');
-  const [source, setSource] = useState('');
+  const [title] = useState('');
+  const [source] = useState('');
   const [memo, setMemo] = useState('');
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories] = useState<string[]>([]);
+  const [categoryTitle, setCategoryTitle] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [dateError, setDateError] = useState('');
   const [timeError, setTimeError] = useState('');
 
   const [toastIsOpen, setToastIsOpen] = useState(false);
+  const [isPopError, setIsPopError] = useState(false);
+  const [errorTxt, setErrorTxt] = useState('');
+
+  const saveCategory = () => {
+    if (categoryTitle.length > 20) {
+      setIsPopError(true);
+      setErrorTxt('20자 이내로 작성해주세요');
+    } else {
+      setIsPopupOpen(false);
+    }
+  };
 
   const handleDateChange = (value: string) => {
     setDate(value);
@@ -68,9 +80,13 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
             title="카테고리 추가하기"
             left="취소"
             right="확인"
+            inputValue={categoryTitle}
+            isError={isPopError}
+            errortext={errorTxt}
+            onInputChange={setCategoryTitle}
             placeholder="카테고리 제목을 입력해주세요"
             onLeftClick={() => setIsPopupOpen(false)}
-            onRightClick={() => setIsPopupOpen(false)}
+            onRightClick={saveCategory}
           />
         )}
         <header className="flex items-center justify-between">
@@ -81,7 +97,7 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
             onClick={onClose}
             className="rounded-[0.6rem] p-[0.4rem] hover:bg-gray-100"
           >
-            <Icon name="ic_close" size={20} onClick={onClose} />
+            <Icon name="ic_close" size={20} />
           </button>
         </header>
 
@@ -92,7 +108,7 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
           <Dropdown
             options={categories}
             selectedValue={selected}
-            onChange={(value: string | null) => setSelected(value)}
+            onChange={(value) => setSelected(value)}
             placeholder="선택해주세요"
             onAddItem={() => setIsPopupOpen(true)}
             addItemLabel="추가하기"
@@ -138,7 +154,7 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
         <Button onClick={() => setToastIsOpen(true)}>저장하기</Button>
       </div>
       {toastIsOpen && (
-        <div className="flex justify-center pt-[1.6rem]">
+        <div className="absolute bottom-[2.4rem] left-1/2 -translate-x-1/2">
           <AutoDismissToast
             duration={1000}
             fadeMs={1000}
