@@ -14,15 +14,17 @@ import {
   useGetDashboardCategories,
   usePostCategory,
   useGetArcons,
+  usePatchCategory,
 } from '@shared/apis/queries';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 export function Sidebar() {
-  const [newCategoryName, setNewCategoryName] = useState('');
+  const [newCategoryName, setNewCategoryName] = useState(''); //인풋값
   const queryClient = useQueryClient();
 
   const { data: categories } = useGetDashboardCategories();
+  const { mutate: patchCategory } = usePatchCategory(); //전체 카테고리 조회를 캐싱중 기본적으로 저희는 대부분 추가돼서
   const { mutate: createCategory } = usePostCategory();
   const { data, isPending, isError } = useGetArcons();
 
@@ -58,7 +60,7 @@ export function Sidebar() {
     createCategory(newCategoryName, {
       onSuccess: () => {
         handleCategoryChange('');
-        queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
+        queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] }); // 기본적으로 캐싱을 해주는데 데이터들을 빠른 메모리~~ 대시보드전체를 캐싱..예
         close();
       },
       onError: (error) => {
@@ -66,7 +68,21 @@ export function Sidebar() {
       },
     });
   };
-
+  const handlePatchCategory = (id: number) => {
+    patchCategory(
+      { id, categoryName: newCategoryName },
+      {
+        onSuccess: () => {
+          setNewCategoryName('');
+          queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
+          close();
+        },
+        onError: (error) => console.error('카테고리 수정 실패:', error),
+      }
+    );
+  };
+  //삭제는 요청만
+  //
   if (isPending) return <div></div>;
   if (isError) return <div></div>;
   const acornCount = data.acornCount;
@@ -156,10 +172,7 @@ export function Sidebar() {
         onClose={close}
         onChange={handleCategoryChange}
         onCreateConfirm={handleCreateCategory}
-        onEditConfirm={() => {
-          // TODO: 수정 API
-          close();
-        }}
+        onEditConfirm={(id) => handlePatchCategory(id)}
         onDeleteConfirm={() => {
           // TODO: 삭제 API
           close();

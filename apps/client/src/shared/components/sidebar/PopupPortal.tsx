@@ -44,7 +44,8 @@ export default function PopupPortal({
             title="카테고리 수정하기"
             left="취소"
             right="확인"
-            placeholder={popup.name}
+            onInputChange={onChange}
+            inputValue={popup.name}
             onLeftClick={onClose}
             onRightClick={() => onEditConfirm?.(popup.id)}
           />
