@@ -42,7 +42,7 @@ export default function Level() {
               </div>
             </div>
 
-            <Badge text="오늘 모은 도토리 개수" countNum={acorns} />
+            <Badge text="오늘 모은 도토리 개수" countNum={acorns} isActive={true} />
             <div className="flex">
               <TreeStatusCard acorns={acorns} />
             </div>
