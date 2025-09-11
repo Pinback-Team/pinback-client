@@ -45,7 +45,7 @@ export default function PopupPortal({
             left="취소"
             right="확인"
             onInputChange={onChange}
-            inputValue={popup.name}
+            defaultValue={popup.name}
             onLeftClick={onClose}
             onRightClick={() => onEditConfirm?.(popup.id)}
           />
