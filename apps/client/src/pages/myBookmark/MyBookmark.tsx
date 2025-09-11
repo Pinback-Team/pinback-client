@@ -1,6 +1,7 @@
-import { REMIND_MOCK_DATA } from "@pages/remind/constants";
-import { Badge, Card } from "@pinback/design-system/ui";
-import { useState } from "react";
+import { REMIND_MOCK_DATA } from '@pages/remind/constants';
+import { Badge, Card } from '@pinback/design-system/ui';
+import OptionsMenuButton from '@shared/components/optionsMenuButton/OptionsMenuButton';
+import { useState } from 'react';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState('all');
@@ -8,9 +9,10 @@ const MyBookmark = () => {
   const handleBadgeClick = (badgeType: string) => {
     setActiveBadge(badgeType);
   };
+  const [popupOpen, setPopupOpen] = useState(false);
 
   return (
-    <div className="flex flex-col pl-[8rem] py-[5.2rem]">
+    <div className="flex flex-col py-[5.2rem] pl-[8rem]">
       <p className="head3">나의 북마크</p>
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
@@ -27,7 +29,7 @@ const MyBookmark = () => {
         />
       </div>
 
-      <div className="scrollbar-hide mt-[2.6rem] flex flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth max-w-[104rem]">
+      <div className="scrollbar-hide mt-[2.6rem] flex max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
         {/* TODO: API 연결 후 수정 */}
         {REMIND_MOCK_DATA.map((data) => (
           <Card
@@ -37,8 +39,19 @@ const MyBookmark = () => {
             content={data.content}
             category={data.category}
             date="2024.08.15"
+            onClick={() => setPopupOpen(true)}
           />
         ))}
+        {popupOpen && (
+          <OptionsMenuButton
+            onEdit={function (): void {
+              throw new Error('Function not implemented.');
+            }}
+            onDelete={function (): void {
+              throw new Error('Function not implemented.');
+            }}
+          />
+        )}
       </div>
     </div>
   );

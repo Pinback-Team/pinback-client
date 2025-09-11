@@ -8,6 +8,7 @@ interface RemindCardProps {
   category?: string;
   imageUrl?: string;
   timeRemaining: string;
+  onClick?: () => void;
 }
 
 const RemindCard = ({
@@ -16,6 +17,7 @@ const RemindCard = ({
   category,
   imageUrl,
   timeRemaining,
+  onClick = () => {},
 }: RemindCardProps) => {
   return (
     <BaseCard>
@@ -46,6 +48,7 @@ const RemindCard = ({
             type="button"
             aria-label="카테고리 상세"
             className="cursor-pointer self-start"
+            onClick={onClick}
           >
             <Icon name="ic_details_category" />
           </button>

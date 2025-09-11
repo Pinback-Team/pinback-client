@@ -6,6 +6,7 @@ type BaseProps = {
   content?: string;
   category?: string;
   imageUrl?: string;
+  onClick?: () => void;
 };
 
 type RemindProps = BaseProps & {
