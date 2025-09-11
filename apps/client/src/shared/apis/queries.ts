@@ -1,10 +1,7 @@
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
-import {
-  getDashboardCategories,
-  postCategory,
-} from '@shared/components/sidebar/apis/axios';
+import { getDashboardCategories, postCategory } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
-import { DashboardCategoriesResponse } from '@shared/components/sidebar/types/api';
+import { DashboardCategoriesResponse } from '@shared/types/api';
 
 export const useGetDashboardCategories = (): UseQueryResult<
   DashboardCategoriesResponse,

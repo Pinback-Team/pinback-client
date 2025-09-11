@@ -6,14 +6,16 @@ import TreeStatusCard from '@pages/level/components/TreeStatusCard';
 import { getTreeLevel } from '@shared/utils/treeLevel';
 import { TreeLevel } from '@pages/level/types/treeLevelType';
 import { Badge } from '@pinback/design-system/ui';
-import { formatLocalDateTime } from '@shared/utils/formatDateTime';
+import { useGetArcons } from './apis/queries';
 
 export default function Level() {
-  const acorns = 1; // TODO: API 연결되면 교체
-  const info = getTreeLevel(acorns);
-  const now = new Date();
-  const remindDateTime = formatLocalDateTime(now);
-  console.log(remindDateTime);
+  const { data, isPending, isError } = useGetArcons();
+
+  if (isPending) return console.log('로딩중...');
+  if (isError) return console.log('에러...');
+
+  const acornCount = data.acornCount;
+  const info = getTreeLevel(acornCount);
 
   return (
     <div className={cn('bg-subcolor mx-auto h-dvh w-full overflow-hidden')}>
@@ -47,11 +49,11 @@ export default function Level() {
 
             <Badge
               text="오늘 모은 도토리 개수"
-              countNum={acorns}
+              countNum={acornCount}
               isActive={true}
             />
             <div className="flex">
-              <TreeStatusCard acorns={acorns} />
+              <TreeStatusCard acorns={acornCount} />
             </div>
           </div>
         </div>

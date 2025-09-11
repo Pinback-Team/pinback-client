@@ -13,7 +13,7 @@ import PopupPortal from './PopupPortal';
 import {
   useGetDashboardCategories,
   usePostCategory,
-} from '@shared/components/sidebar/apis/queries';
+} from '@shared/apis/queries';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 

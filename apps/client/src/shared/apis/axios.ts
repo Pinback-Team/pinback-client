@@ -1,4 +1,4 @@
-import apiRequest from '@shared/apis/axiosInstance';
+import apiRequest from '@shared/apis/setting/axiosInstance';
 
 export const getDashboardCategories = async () => {
   const { data } = await apiRequest.get('/api/v1/categories/dashboard');
