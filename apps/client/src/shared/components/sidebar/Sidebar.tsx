@@ -14,7 +14,7 @@ import {
   useGetDashboardCategories,
   usePostCategory,
   useGetArcons,
-  usePatchCategory,
+  usePutCategory,
 } from '@shared/apis/queries';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -24,7 +24,7 @@ export function Sidebar() {
   const queryClient = useQueryClient();
 
   const { data: categories } = useGetDashboardCategories();
-  const { mutate: patchCategory } = usePatchCategory(); //전체 카테고리 조회를 캐싱중 기본적으로 저희는 대부분 추가돼서
+  const { mutate: patchCategory } = usePutCategory(); //전체 카테고리 조회를 캐싱중 기본적으로 저희는 대부분 추가돼서
   const { mutate: createCategory } = usePostCategory();
   const { data, isPending, isError } = useGetArcons();
 

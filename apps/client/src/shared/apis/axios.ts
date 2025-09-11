@@ -13,7 +13,7 @@ export const postCategory = async (categoryName: string) => {
   return response;
 };
 
-export const patchCategory = async (id: number, categoryName: string) => {
+export const putCategory = async (id: number, categoryName: string) => {
   const response = await apiRequest.put(`/api/v1/categories/${id}`, {
     categoryName,
   });

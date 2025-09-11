@@ -2,7 +2,7 @@ import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import {
   getDashboardCategories,
   postCategory,
-  patchCategory,
+  putCategory,
 } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
 import { DashboardCategoriesResponse, AcornsResponse } from '@shared/types/api';
@@ -23,10 +23,10 @@ export const usePostCategory = () => {
     mutationFn: (categoryName: string) => postCategory(categoryName),
   });
 };
-export const usePatchCategory = () => {
+export const usePutCategory = () => {
   return useMutation({
     mutationFn: ({ id, categoryName }: { id: number; categoryName: string }) =>
-      patchCategory(id, categoryName),
+      putCategory(id, categoryName),
   });
 };
 
