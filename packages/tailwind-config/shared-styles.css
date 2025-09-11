@@ -158,6 +158,16 @@
   box-shadow: 0px 0px 32px 0px rgba(0, 0, 0, 0.1);
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* 기타 브라우저용 (IE, Edge 구버전, Firefox) */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 @theme {
   --color-*: initial;
 
