@@ -16,8 +16,8 @@ export const useGetDashboardCategories = (): UseQueryResult<
   });
 };
 
-export const usePostCategory = (categoryName: string) => {
+export const usePostCategory = () => {
   return useMutation({
-    mutationFn: () => postCategory(categoryName),
+    mutationFn: (categoryName: string) => postCategory(categoryName),
   });
 };

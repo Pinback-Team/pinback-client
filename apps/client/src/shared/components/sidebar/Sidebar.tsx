@@ -10,14 +10,19 @@ import { useSidebarNav } from '@shared/hooks/useSidebarNav';
 import { useCategoryPopups } from '@shared/hooks/useCategoryPopups';
 import OptionsMenuPortal from './OptionsMenuPortal';
 import PopupPortal from './PopupPortal';
-import { useGetDashboardCategories } from '@shared/components/sidebar/apis/queries';
+import {
+  useGetDashboardCategories,
+  usePostCategory,
+} from '@shared/components/sidebar/apis/queries';
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function Sidebar() {
   const [newCategoryName, setNewCategoryName] = useState('');
-  console.log('newCategoryName', newCategoryName);
+  const queryClient = useQueryClient();
 
   const { data: categories } = useGetDashboardCategories();
+  const { mutate: createCategory } = usePostCategory();
 
   const {
     activeTab,
@@ -29,6 +34,9 @@ export function Sidebar() {
     setSelectedCategoryId,
   } = useSidebarNav();
 
+  const { popup, openCreate, openEdit, openDelete, close } =
+    useCategoryPopups();
+
   const {
     state: menu,
     open: openMenu,
@@ -37,14 +45,24 @@ export function Sidebar() {
     style,
   } = useAnchoredMenu((anchor) => rightOf(anchor, 30));
 
-  const { popup, openCreate, openEdit, openDelete, close } =
-    useCategoryPopups();
-
   const getCategoryName = (id: number | null) =>
     categories?.categories.find((category) => category.id === id)?.name ?? '';
 
   const handleCategoryChange = (name: string) => {
     setNewCategoryName(name);
+  };
+
+  const handleCreateCategory = () => {
+    createCategory(newCategoryName, {
+      onSuccess: () => {
+        handleCategoryChange('');
+        queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
+        close();
+      },
+      onError: (error) => {
+        console.error('카테고리 생성 실패:', error);
+      },
+    });
   };
 
   return (
@@ -131,10 +149,7 @@ export function Sidebar() {
         popup={popup}
         onClose={close}
         onChange={handleCategoryChange}
-        onCreateConfirm={() => {
-          // TODO: 생성 API
-          close();
-        }}
+        onCreateConfirm={handleCreateCategory}
         onEditConfirm={() => {
           // TODO: 수정 API
           close();
