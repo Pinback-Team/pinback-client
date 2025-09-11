@@ -57,3 +57,13 @@ export const postCategories = async (data: postCategoriesRequest) => {
   const response = await apiRequest.post("/categories", data);
   return response.data;
 }
+
+export const getRemindTime = async () => {
+  const now = new Date().toISOString().split(".")[0]; 
+
+  const response = await apiRequest.get("/users/remind-time", {
+    params: { now },
+  });
+
+  return response.data;
+};

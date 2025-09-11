@@ -1,5 +1,5 @@
 import { useMutation,useQuery } from "@tanstack/react-query";
-import { postArticle, PostArticleRequest,postSignup, postSignupRequest, getCategoriesExtension, postCategories, postCategoriesRequest } from "../axiosInstance";
+import { postArticle, PostArticleRequest,postSignup, postSignupRequest, getCategoriesExtension, postCategories, postCategoriesRequest, getRemindTime} from "../axiosInstance";
 
 export const usePostArticle = () => {
   return useMutation({
@@ -42,3 +42,10 @@ export const useGetCategoriesExtension = () => {
     queryFn: getCategoriesExtension,
   });
 };
+
+export const useGetRemindTime = () => {
+  return useQuery({
+    queryKey: ["remindTime"],
+    queryFn: getRemindTime,
+  });
+}

@@ -10,33 +10,69 @@ import {
   validateDate, 
   validateTime
 } from '@pinback/design-system/ui';
-import { useState} from 'react';
+import { useState,useEffect } from 'react';
 import { usePageMeta } from './hooks/usePageMeta';
 import { useSaveBookmark } from './hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
-import { usePostArticle,useGetCategoriesExtension, usePostCategories } from '@apis/query/queries';
+import { usePostArticle,useGetCategoriesExtension, usePostCategories, useGetRemindTime} from '@apis/query/queries';
 
 const App = () => {
+  // api 연동 구간
+  const {mutate:postArticle} = usePostArticle();
+  const {mutate:postCategories} = usePostCategories();
+  const { data : categoryData } = useGetCategoriesExtension();
+  const { data : remindData } = useGetRemindTime();
+
+
   const [isRemindOn, setIsRemindOn] = useState(false);
   const [memo, setMemo] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [selected, setSelected] = useState<string | null>(null);
+
+  // YYYY-MM-DD → YYYY.MM.DD
+  const updateDate = (date: string) => {
+    if (!date) return "";
+    return date.replace(/-/g, ".");
+  };
+
+  // HH:mm:ss → HH:mm
+  const updateTime = (time: string) => {
+    if (!time) return "";
+    return time.slice(0, 5);
+  };
+
+  const combineDateTime = (date: string, time: string) => {
+  if (!date || !time) return null;
+
+  const formattedDate = date.replace(/\./g, "-");
+  const formattedTime = time.length === 5 ? `${time}:00` : time;
+
+  return `${formattedDate}T${formattedTime}`;
+};
+
+
   // 시간,날짜 검사 구간!
-  const [date, setDate] = useState('2025.10.10');
-  const [time, setTime] = useState('19:00');
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    if (remindData?.data) {
+        const newDate = updateDate(remindData.data.remindDate);
+        const newTime = updateTime(remindData.data.remindTime);
+        setDate(newDate);
+        setTime(newTime);
+    }
+  }, [remindData]);
   const [dateError, setDateError] = useState('');
   const [timeError, setTimeError] = useState('');
-  // api 연동 구간
-  const {mutate:postArticle} = usePostArticle();
-  const {mutate:postCategories} = usePostCategories();
-  const { data } = useGetCategoriesExtension();
+
+
   interface Category {
     categoryId: number;
     categoryName: string;
     categoryColor:string;
   }
-  const options = data?.data?.categories?.map((c: Category) => c.categoryName) ?? [];
+  const options = categoryData?.data?.categories?.map((c: Category) => c.categoryName) ?? [];
 
   const handleDateChange = (value: string) => {
     setDate(value);
@@ -69,6 +105,7 @@ const App = () => {
     console.log(options);
   }
   const handleSave = async () => {
+
     save({
       url,
       title,
@@ -92,7 +129,7 @@ const App = () => {
       time: isRemindOn ? time : null,
       createdAt: new Date().toISOString(),
     };
-    postArticle({url,categoryId:saveData.selectedCategory? parseInt(saveData.selectedCategory):0,memo:saveData.memo,remindTime:saveData.time});
+    postArticle({url,categoryId:saveData.selectedCategory? parseInt(saveData.selectedCategory):0,memo:saveData.memo,remindTime:combineDateTime(saveData.date??'',saveData.time??'')});
   };
   const [categoryTitle, setCategoryTitle] = useState('');
   const [isPopError, setIsPopError] = useState(false);
@@ -108,7 +145,7 @@ const App = () => {
     }
   }
   const handleSelect = (value: string | null, idx: number) => {
-    const categoryId = data?.data?.categories[idx]?.categoryId.toString() ?? null;
+    const categoryId = categoryData?.data?.categories[idx]?.categoryId.toString() ?? null;
     setSelected(categoryId);
     console.log("선택된 categoryId:", categoryId, "선택된 value:", value);
   };
@@ -178,6 +215,7 @@ const App = () => {
             <div className="mb-[0.4rem] flex items-center justify-between gap-[0.8rem]">
               <DateTime
                 type="date"
+                key={`date-${date}`} // key 추가로 강제 리렌더링
                 state={
                   dateError ? 'error' : isRemindOn ? 'default' : 'disabled'
                 }
@@ -186,6 +224,7 @@ const App = () => {
               />
               <DateTime
                 type="time"
+                key={`time-${time}`} // key 추가로 강제 리렌더링
                 state={
                   timeError ? 'error' : isRemindOn ? 'default' : 'disabled'
                 }
