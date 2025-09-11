@@ -20,7 +20,7 @@ const refreshToken = async (email: string) => {
     const newToken = response.data.data?.token || response.data.token;
 
     if (newToken) {
-      localStorage.setItem('jwtToken', newToken);
+      localStorage.setItem('token', newToken);
       return newToken;
     }
 
@@ -37,7 +37,7 @@ apiRequest.interceptors.request.use(async (config) => {
   const isNoAuth = noAuthNeeded.some((url) => config.url?.includes(url));
 
   if (!isNoAuth) {
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('token');
 
     if (!token || token === 'undefined' || token === 'null' || token === '') {
       console.error('토큰이 없습니다. 온보딩을 먼저 완료해주세요.');
@@ -79,12 +79,12 @@ apiRequest.interceptors.response.use(
           console.error(
             '사용자 이메일이 없습니다. 온보딩을 다시 완료해주세요.'
           );
-          localStorage.removeItem('jwtToken');
+          localStorage.removeItem('token');
           window.location.href = '/onboarding';
         }
       } catch (refreshError) {
         console.error('토큰 재발급 실패:', refreshError);
-        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('token');
         localStorage.removeItem('userEmail');
         window.location.href = '/onboarding';
       }

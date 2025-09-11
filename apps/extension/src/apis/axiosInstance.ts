@@ -15,7 +15,7 @@ const fetchToken = async (email?: string) => {
     }
   );
   const newToken = response.data.data.token;
-  chrome.storage.local.set({ jwtToken: newToken }, () => {
+  chrome.storage.local.set({ token: newToken }, () => {
     console.log('Token re-saved to chrome storage', newToken);
   });
   return newToken;
@@ -34,8 +34,8 @@ apiRequest.interceptors.request.use(async (config) => {
   });
 
   let token = await new Promise<string | undefined>((resolve) => {
-    chrome.storage.local.get('jwtToken', (result) => {
-      resolve(result.jwtToken);
+    chrome.storage.local.get('token', (result) => {
+      resolve(result.token);
     });
   });
 
