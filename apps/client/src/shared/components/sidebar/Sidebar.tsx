@@ -15,9 +15,10 @@ import { useState } from 'react';
 
 export function Sidebar() {
   const [newCategoryName, setNewCategoryName] = useState('');
-  console.log(newCategoryName); // 임시 로그
+  console.log('newCategoryName', newCategoryName);
 
   const { data: categories } = useGetDashboardCategories();
+
   const {
     activeTab,
     selectedCategoryId,
@@ -40,8 +41,7 @@ export function Sidebar() {
     useCategoryPopups();
 
   const getCategoryName = (id: number | null) =>
-    categories?.categories.find((category) => category.categoryId === id)
-      ?.categoryName ?? '';
+    categories?.categories.find((category) => category.id === id)?.name ?? '';
 
   const handleCategoryChange = (name: string) => {
     setNewCategoryName(name);
@@ -86,10 +86,10 @@ export function Sidebar() {
             <ul className="bg-none">
               {categories?.categories?.map((category) => (
                 <CategoryItem
-                  key={category.categoryId}
-                  id={category.categoryId}
-                  label={category.categoryName}
-                  active={selectedCategoryId === category.categoryId}
+                  key={category.id}
+                  id={category.id}
+                  label={category.name}
+                  active={selectedCategoryId === category.id}
                   onClick={(id) => {
                     closeMenu();
                     selectCategory(id);
