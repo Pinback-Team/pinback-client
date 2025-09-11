@@ -42,12 +42,15 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   const [isRemindOn, setIsRemindOn] = useState(false);
   const [memo, setMemo] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isArticleId, setIsArticleId] = useState(0);
 
+  const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
 
     useEffect(() => {
         if (type === "edit" && savedData) {
         setMemo(savedData.memo ?? "");
+        setIsArticleId(savedData.id ?? 0);
         if (savedData.remindAt) {
             const [rawDate, rawTime] = savedData.remindAt.split("T");
             setDate(updateDate(rawDate));
@@ -56,8 +59,10 @@ const MainPop = ({type, savedData}: MainPopProps) => {
         }
         if (savedData.category?.categoryId) {
             setSelected(savedData.category.categoryId.toString());
+            setSelectedCategoryName(savedData.category.categoryName);
         }
-        }
+        
+    }
     }, [type, savedData]);
 
 
@@ -133,22 +138,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   //     })
   // },[])
 
-  const showCategories = () => {
-    console.log(options);
-  }
   const handleSave = async () => {
-
-    save({
-      url,
-      title,
-      description,
-      imgUrl,
-      memo,
-      isRemindOn,
-      selectedCategory: selected,
-      date: isRemindOn ? date : null,
-      time: isRemindOn ? time : null,
-    });
     const saveData = {
       url,
       title,
@@ -163,6 +153,17 @@ const MainPop = ({type, savedData}: MainPopProps) => {
     };
 
    if (type === "add"){
+     save({
+      url,
+      title,
+      description,
+      imgUrl,
+      memo,
+      isRemindOn,
+      selectedCategory: selected,
+      date: isRemindOn ? date : null,
+      time: isRemindOn ? time : null,
+    });
      postArticle(
       {
         url,
@@ -175,13 +176,13 @@ const MainPop = ({type, savedData}: MainPopProps) => {
     );
    } else{
         patchArticle({
-        articleId: 0,
+        articleId: isArticleId,
         data: { 
             categoryId: saveData.selectedCategory
             ? parseInt(saveData.selectedCategory)
             : 0,
             memo: saveData.memo,
-            remindTime: combineDateTime(saveData.date ?? "", saveData.time ?? ""),
+            remindTime: "2025-07-15T12:03:59.371Z",
       }
     });
    }
@@ -204,7 +205,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   const handleSelect = (value: string | null, idx: number) => {
     const categoryId = categoryData?.data?.categories[idx]?.categoryId.toString() ?? null;
     setSelected(categoryId);
-    console.log("선택된 categoryId:", categoryId, "선택된 value:", value);
+    setSelectedCategoryName(value);
   };
 
   return (
@@ -238,11 +239,11 @@ const MainPop = ({type, savedData}: MainPopProps) => {
             imgUrl={imgUrl}
           />
 
-          <div onClick={showCategories}>
+          <div>
             <p className="caption1-sb mb-[0.4rem]">카테고리</p>
             <Dropdown
               options={options}
-              selectedValue={selected}
+              selectedValue={selectedCategoryName}
               onChange={handleSelect}
               placeholder="선택해주세요"
               onAddItem={() => setIsPopupOpen(true)}
