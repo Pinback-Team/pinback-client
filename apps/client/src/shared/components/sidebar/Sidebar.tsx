@@ -11,8 +11,12 @@ import { useCategoryPopups } from '@shared/hooks/useCategoryPopups';
 import OptionsMenuPortal from './OptionsMenuPortal';
 import PopupPortal from './PopupPortal';
 import { useGetDashboardCategories } from '@shared/components/sidebar/apis/queries';
+import { useState } from 'react';
 
 export function Sidebar() {
+  const [newCategoryName, setNewCategoryName] = useState('');
+  console.log(newCategoryName); // 임시 로그
+
   const { data: categories } = useGetDashboardCategories();
   const {
     activeTab,
@@ -38,6 +42,10 @@ export function Sidebar() {
   const getCategoryName = (id: number | null) =>
     categories?.categories.find((category) => category.categoryId === id)
       ?.categoryName ?? '';
+
+  const handleCategoryChange = (name: string) => {
+    setNewCategoryName(name);
+  };
 
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
@@ -122,6 +130,7 @@ export function Sidebar() {
       <PopupPortal
         popup={popup}
         onClose={close}
+        onChange={handleCategoryChange}
         onCreateConfirm={() => {
           // TODO: 생성 API
           close();
