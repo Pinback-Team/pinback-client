@@ -11,7 +11,7 @@ const MyBookmark = () => {
 
   return (
     <div className="flex flex-col pl-[8rem] py-[5.2rem]">
-      <p className="head3">리마인드</p>
+      <p className="head3">나의 북마크</p>
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="전체보기"
