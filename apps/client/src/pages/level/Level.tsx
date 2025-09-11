@@ -6,7 +6,7 @@ import TreeStatusCard from '@pages/level/components/TreeStatusCard';
 import { getTreeLevel } from '@shared/utils/treeLevel';
 import { TreeLevel } from '@pages/level/types/treeLevelType';
 import { Badge } from '@pinback/design-system/ui';
-import { useGetArcons } from './apis/queries';
+import { useGetArcons } from '@shared/apis/queries';
 
 export default function Level() {
   const { data, isPending, isError } = useGetArcons();

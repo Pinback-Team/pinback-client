@@ -13,6 +13,7 @@ import PopupPortal from './PopupPortal';
 import {
   useGetDashboardCategories,
   usePostCategory,
+  useGetArcons,
 } from '@shared/apis/queries';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -23,6 +24,7 @@ export function Sidebar() {
 
   const { data: categories } = useGetDashboardCategories();
   const { mutate: createCategory } = usePostCategory();
+  const { data, isPending, isError } = useGetArcons();
 
   const {
     activeTab,
@@ -64,6 +66,10 @@ export function Sidebar() {
       },
     });
   };
+
+  if (isPending) return console.log('로딩중...');
+  if (isError) return console.log('에러...');
+  const acornCount = data.acornCount;
 
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
@@ -134,7 +140,7 @@ export function Sidebar() {
 
         <footer className="pb-[2.8rem] pt-[1.2rem]">
           <MyLevelItem
-            acorns={0}
+            acorns={acornCount}
             isActive={activeTab === 'level'}
             onClick={() => {
               setSelectedCategoryId(null);
