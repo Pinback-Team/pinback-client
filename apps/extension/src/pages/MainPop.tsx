@@ -1,4 +1,3 @@
-import './App.css';
 import {
   InfoBox,
   Button,
@@ -14,12 +13,29 @@ import { useState,useEffect } from 'react';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useSaveBookmark } from '../hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
-import { usePostArticle,useGetCategoriesExtension, usePostCategories, useGetRemindTime} from '@apis/query/queries';
-const MainPop = () => {
+import { usePostArticle,useGetCategoriesExtension, usePostCategories, useGetRemindTime, usePatchArticle} from '@apis/query/queries';
+
+interface SavedArticle {
+  id: number;
+  url: string;
+  memo: string;
+  remindAt: string | null;
+  category: {
+    categoryId: number;
+    categoryName: string;
+  };
+}
+
+interface MainPopProps {
+    type: "add" | "edit";
+    savedData?: SavedArticle | null;
+}
+const MainPop = ({type, savedData}: MainPopProps) => {
 
   // api 연동 구간
   const {mutate:postArticle} = usePostArticle();
   const {mutate:postCategories} = usePostCategories();
+  const {mutate:patchArticle} = usePatchArticle();
   const { data : categoryData } = useGetCategoriesExtension();
   const { data : remindData } = useGetRemindTime();
 
@@ -28,6 +44,22 @@ const MainPop = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [selected, setSelected] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (type === "edit" && savedData) {
+        setMemo(savedData.memo ?? "");
+        if (savedData.remindAt) {
+            const [rawDate, rawTime] = savedData.remindAt.split("T");
+            setDate(updateDate(rawDate));
+            setTime(updateTime(rawTime));
+            setIsRemindOn(true);
+        }
+        if (savedData.category?.categoryId) {
+            setSelected(savedData.category.categoryId.toString());
+        }
+        }
+    }, [type, savedData]);
+
 
 
   // YYYY-MM-DD → YYYY.MM.DD
@@ -130,7 +162,8 @@ const MainPop = () => {
       createdAt: new Date().toISOString(),
     };
 
-    postArticle(
+   if (type === "add"){
+     postArticle(
       {
         url,
         categoryId: saveData.selectedCategory
@@ -140,6 +173,18 @@ const MainPop = () => {
         remindTime: combineDateTime(saveData.date ?? "", saveData.time ?? ""),
       }
     );
+   } else{
+        patchArticle({
+        articleId: 0,
+        data: { 
+            categoryId: saveData.selectedCategory
+            ? parseInt(saveData.selectedCategory)
+            : 0,
+            memo: saveData.memo,
+            remindTime: combineDateTime(saveData.date ?? "", saveData.time ?? ""),
+      }
+    });
+   }
    
   };
 
