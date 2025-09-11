@@ -16,7 +16,7 @@ const fetchToken = async (email?: string) => {
   );
   const newToken = response.data.data.token;
   chrome.storage.local.set({ token: newToken }, () => {
-    console.log('Token re-saved to chrome storage', newToken);
+    console.log('Token re-saved to chrome storage');
   });
   return newToken;
 };
@@ -58,7 +58,7 @@ apiRequest.interceptors.response.use(
     );
     if (
       error.response &&
-      error.response.status === 403 &&
+      (error.response.status === 401 || error.response.status === 403) &&
       !originalRequest._retry &&
       !isNoAuth
     ) {
