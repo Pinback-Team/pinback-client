@@ -139,6 +139,10 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   // },[])
 
   const handleSave = async () => {
+     if (!selected || parseInt(selected) === 0) {
+        alert("카테고리를 선택해주세요!");
+        return;
+    }
     const saveData = {
       url,
       title,
