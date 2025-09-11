@@ -6,7 +6,9 @@ const Layout = () => {
     <>
       <div className="flex h-screen">
         <Sidebar />
-        <Outlet />
+        <main className="flex-1 overflow-y-auto">
+          <Outlet />
+        </main>
       </div>
     </>
   );

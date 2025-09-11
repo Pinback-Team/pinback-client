@@ -7,3 +7,8 @@ export interface Category {
 export interface DashboardCategoriesResponse {
   categories: Category[];
 }
+
+export type AcornsResponse = {
+  acornCount: number;
+  remindDateTime: string;
+};
