@@ -67,8 +67,8 @@ export function Sidebar() {
     });
   };
 
-  if (isPending) return console.log('로딩중...');
-  if (isError) return console.log('에러...');
+  if (isPending) return <div></div>;
+  if (isError) return <div></div>;
   const acornCount = data.acornCount;
 
   return (
