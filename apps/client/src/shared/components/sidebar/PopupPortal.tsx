@@ -5,6 +5,7 @@ import type { PopupState } from '@shared/hooks/useCategoryPopups';
 interface Props {
   popup: PopupState;
   onClose: () => void;
+  onChange?: (value: string) => void;
   onCreateConfirm?: () => void;
   onEditConfirm?: (id: number, draft?: string) => void;
   onDeleteConfirm?: (id: number) => void;
@@ -13,6 +14,7 @@ interface Props {
 export default function PopupPortal({
   popup,
   onClose,
+  onChange,
   onCreateConfirm,
   onEditConfirm,
   onDeleteConfirm,
@@ -29,6 +31,7 @@ export default function PopupPortal({
             title="카테고리 추가하기"
             left="취소"
             right="추가"
+            onInputChange={onChange}
             placeholder="카테고리 제목을 입력해주세요"
             onLeftClick={onClose}
             onRightClick={() => onCreateConfirm?.()}

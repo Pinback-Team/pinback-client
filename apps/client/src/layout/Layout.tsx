@@ -4,12 +4,12 @@ import { Sidebar } from '../shared/components/sidebar/Sidebar';
 const Layout = () => {
   return (
     <>
-    <div className="flex h-screen">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto">
-        <Outlet />
-      </main>
-    </div>
+      <div className="flex h-screen">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto">
+          <Outlet />
+        </main>
+      </div>
     </>
   );
 };
