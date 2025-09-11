@@ -6,7 +6,7 @@ const apiRequest = axios.create({
     'Content-Type': 'application/json',
   },
 });
-// localStorage.setItem("accessToken", 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwaW5iYWNrIiwiaWQiOiI4NjA1NTBiMS1kZDBhLTQyMjMtYjM4OS0wNTEwYWU3MmNkMzUiLCJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTc1NzYyOTAyMn0.qm-zqkuG2rpLlbUKJd9lUdh-4SStittgzXiwBeUMzA6NuKh_aEJmgoVInhUU-VSFtTlXP8eO9Ivao5K29LCRJA');
+localStorage.setItem("token", 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwaW5iYWNrIiwiaWQiOiI4NjA1NTBiMS1kZDBhLTQyMjMtYjM4OS0wNTEwYWU3MmNkMzUiLCJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTc1NzYyOTAyMn0.qm-zqkuG2rpLlbUKJd9lUdh-4SStittgzXiwBeUMzA6NuKh_aEJmgoVInhUU-VSFtTlXP8eO9Ivao5K29LCRJA');
 // apiRequest.interceptors.request.use((config) => {
 //   // signup은 토큰 필요 없음
 //   if (config.url !== "/auth/signup") {
@@ -91,7 +91,7 @@ export interface PostArticleRequest {
 }
 
 export const postArticle = async (data: PostArticleRequest) => {
-  const response = await apiRequest.post("/articles", data);
+  const response = await apiRequest.post("/api/v1/articles", data);
   return response.data;
 };
 
@@ -103,12 +103,12 @@ export interface postSignupRequest {
 }
 
 export const postSignup = async (data: postSignupRequest) => {
-  const response = await apiRequest.post("/auth/signup", data);
+  const response = await apiRequest.post("/api/v1/auth/signup", data);
   return response.data;
 };
 
 export const getCategoriesExtension = async () => {
-  const response = await apiRequest.get("/categories/extension");
+  const response = await apiRequest.get("/api/v1/categories/extension");
   return response.data;
 };
 
@@ -117,14 +117,14 @@ export interface postCategoriesRequest {
 }
 
 export const postCategories = async (data: postCategoriesRequest) => {
-  const response = await apiRequest.post("/categories", data);
+  const response = await apiRequest.post("/api/v1/categories", data);
   return response.data;
 }
 
 export const getRemindTime = async () => {
   const now = new Date().toISOString().split(".")[0]; 
 
-  const response = await apiRequest.get("/users/remind-time", {
+  const response = await apiRequest.get("/api/v1/users/remind-time", {
     params: { now },
   });
 
@@ -133,7 +133,7 @@ export const getRemindTime = async () => {
 
 
 export const getArticleSaved=async (url:string) => {
-  const response = await apiRequest.get("/articles/saved", {
+  const response = await apiRequest.get("/api/v1/articles/saved", {
     params: { url },
   });
   return response.data;
@@ -147,6 +147,6 @@ export interface PutArticleRequest {
 }
 
 export const putArticle = async (articleId: number, data: PutArticleRequest) => {
-  const response = await apiRequest.put(`/articles/${articleId}`, data);
+  const response = await apiRequest.put(`/api/v1/articles/${articleId}`, data);
   return response.data;
 };
