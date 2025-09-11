@@ -24,6 +24,7 @@
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@utils/*": ["src/utils/*"],
+      "@apis/*": ["src/apis/*"],
       "@constants/*": ["src/constants/*"],
       "@shared-types/*": ["src/types/*"],
       "@api/*": ["src/api/*"]

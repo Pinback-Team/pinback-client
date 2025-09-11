@@ -10,10 +10,12 @@ import {
   validateDate, 
   validateTime
 } from '@pinback/design-system/ui';
-import { useState } from 'react';
+import { useState} from 'react';
 import { usePageMeta } from './hooks/usePageMeta';
 import { useSaveBookmark } from './hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
+import { usePostArticle,useGetCategoriesExtension, usePostCategories } from '@apis/query/queries';
+
 const App = () => {
   const [isRemindOn, setIsRemindOn] = useState(false);
   const [memo, setMemo] = useState('');
@@ -25,6 +27,16 @@ const App = () => {
   const [time, setTime] = useState('19:00');
   const [dateError, setDateError] = useState('');
   const [timeError, setTimeError] = useState('');
+  // api 연동 구간
+  const {mutate:postArticle} = usePostArticle();
+  const {mutate:postCategories} = usePostCategories();
+  const { data } = useGetCategoriesExtension();
+  interface Category {
+    categoryId: number;
+    categoryName: string;
+    categoryColor:string;
+  }
+  const options = data?.data?.categories?.map((c: Category) => c.categoryName) ?? [];
 
   const handleDateChange = (value: string) => {
     setDate(value);
@@ -44,6 +56,18 @@ const App = () => {
   const { url, title, description, imgUrl } = usePageMeta();
   const { save } = useSaveBookmark();
 
+
+  // useEffect(()=>{
+  //   postSignup({
+  //       "email": "test@gmail2.com", 
+  //       "remindDefault": "08:00", 
+  //       "fcmToken": "adlfdjlaj11212lkadfsjlkfdsa"
+  //     })
+  // },[])
+
+  const showCategories = () => {
+    console.log(options);
+  }
   const handleSave = async () => {
     save({
       url,
@@ -68,20 +92,27 @@ const App = () => {
       time: isRemindOn ? time : null,
       createdAt: new Date().toISOString(),
     };
-    console.log('저장된 데이터:', saveData);
+    postArticle({url,categoryId:saveData.selectedCategory? parseInt(saveData.selectedCategory):0,memo:saveData.memo,remindTime:saveData.time});
   };
   const [categoryTitle, setCategoryTitle] = useState('');
   const [isPopError, setIsPopError] = useState(false);
   const [errorTxt, setErrorTxt] = useState('');
   const saveCategory = () => {
+    // 20자 제한
     if (categoryTitle.length >20){
       setIsPopError(true);
       setErrorTxt('20자 이내로 작성해주세요');
     } else{
-       setIsPopupOpen(false);
+      postCategories({categoryName:categoryTitle});
+      setIsPopupOpen(false);
     }
   }
-  
+  const handleSelect = (value: string | null, idx: number) => {
+    const categoryId = data?.data?.categories[idx]?.categoryId.toString() ?? null;
+    setSelected(categoryId);
+    console.log("선택된 categoryId:", categoryId, "선택된 value:", value);
+  };
+
 
   return (
     <div className="App">
@@ -114,12 +145,12 @@ const App = () => {
             imgUrl={imgUrl}
           />
 
-          <div>
+          <div onClick={showCategories}>
             <p className="caption1-sb mb-[0.4rem]">카테고리</p>
             <Dropdown
-              options={['옵션1', '옵션2']}
+              options={options}
               selectedValue={selected}
-              onChange={(value) => setSelected(value)}
+              onChange={handleSelect}
               placeholder="선택해주세요"
               onAddItem={() => setIsPopupOpen(true)}
               addItemLabel="추가하기"

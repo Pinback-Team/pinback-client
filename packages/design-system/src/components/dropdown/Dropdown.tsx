@@ -4,7 +4,7 @@ import { useState } from 'react';
 interface DropdownProps {
   options: string[];
   selectedValue: string | null;
-  onChange: (selected: string | null) => void;
+  onChange: (selected: string | null, index: number) => void;
   placeholder: string;
   onAddItem?: () => void;
   addItemLabel?: string;
@@ -24,8 +24,8 @@ const Dropdown = ({
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSelect = (option: string) => {
-    onChange(option);
+  const handleSelect = (option: string,idx: number) => {
+    onChange(option,idx);
     setIsOpen(false);
   };
 
@@ -57,7 +57,7 @@ const Dropdown = ({
             {options.map((option) => (
               <li
                 key={option}
-                onClick={() => handleSelect(option)}
+                onClick={() => handleSelect(option,options.indexOf(option))}
                 className={`body4-r h-[3.6rem] cursor-pointer p-[0.8rem] ${selectedValue === option ? 'text-main600' : 'text-font-gray-3'}`}
               >
                 {option}
