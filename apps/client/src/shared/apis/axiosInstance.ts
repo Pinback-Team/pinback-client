@@ -69,7 +69,7 @@ apiRequest.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const email = localStorage.getItem('userEmail');
+        const email = localStorage.getItem('email');
 
         if (email) {
           const newToken = await refreshToken(email);
@@ -85,7 +85,7 @@ apiRequest.interceptors.response.use(
       } catch (refreshError) {
         console.error('토큰 재발급 실패:', refreshError);
         localStorage.removeItem('token');
-        localStorage.removeItem('userEmail');
+        localStorage.removeItem('email');
         window.location.href = '/onboarding';
       }
     }
