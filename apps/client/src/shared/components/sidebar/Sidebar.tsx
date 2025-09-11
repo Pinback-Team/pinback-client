@@ -10,7 +10,7 @@ import { useSidebarNav } from '@shared/hooks/useSidebarNav';
 import { useCategoryPopups } from '@shared/hooks/useCategoryPopups';
 import OptionsMenuPortal from './OptionsMenuPortal';
 import PopupPortal from './PopupPortal';
-import { useGetDashboardCategories } from './queries';
+import { useGetDashboardCategories } from '@shared/components/sidebar/apis/queries';
 
 export function Sidebar() {
   const { data: categories } = useGetDashboardCategories();
