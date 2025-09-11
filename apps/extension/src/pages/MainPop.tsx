@@ -15,23 +15,26 @@ import { useSaveBookmark } from '../hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
 import { usePostArticle,useGetCategoriesExtension, usePostCategories, useGetRemindTime, usePutArticle} from '@apis/query/queries';
 
-interface SavedArticle {
+export interface CategoryResponse {
+  categoryId: number;
+  categoryName: string;
+  categoryColor: string;
+}
+
+export interface ArticleResponse {
   id: number;
   url: string;
   memo: string;
-  remindAt: string | null;
-  category: {
-    categoryId: number;
-    categoryName: string;
-  };
+  remindAt: string | null;   // "2025-09-11T23:06:32.036065" 또는 null
+  categoryResponse: CategoryResponse;
+  createdAt: string;         // ISO DateTime string
 }
-
 interface MainPopProps {
     type: "add" | "edit";
-    savedData?: SavedArticle | null;
+    savedData?: ArticleResponse  | null;
 }
 const MainPop = ({type, savedData}: MainPopProps) => {
-
+ console.log(savedData)
   // api 연동 구간
   const {mutate:postArticle} = usePostArticle();
   const {mutate:postCategories} = usePostCategories();
@@ -44,28 +47,41 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isArticleId, setIsArticleId] = useState(0);
 
-  const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(null);
-  const [selected, setSelected] = useState<string | null>(null);
+const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(
+  type === "edit" && savedData?.categoryResponse?.categoryName
+    ? savedData?.categoryResponse?.categoryName
+    : null
+);
 
-    useEffect(() => {
-        if (type === "edit" && savedData) {
-        setMemo(savedData.memo ?? "");
-        setIsArticleId(savedData.id ?? 0);
-        if (savedData.remindAt) {
-            const [rawDate, rawTime] = savedData.remindAt.split("T");
-            setDate(updateDate(rawDate));
-            setTime(updateTime(rawTime));
-            setIsRemindOn(true);
-        }
-        if (savedData.category?.categoryId) {
-            setSelected(savedData.category.categoryId.toString());
-            setSelectedCategoryName(savedData.category.categoryName);
-        }
-        
+const [selected, setSelected] = useState<string | null>(
+  type === "edit" && savedData?.categoryResponse?.categoryId
+    ? savedData?.categoryResponse?.categoryId.toString()
+    : null
+);
+
+interface Category {
+    categoryId: number;
+    categoryName: string;
+    categoryColor:string;
+  }
+     
+useEffect(() => {
+  if (type === "edit" && savedData && categoryData?.data?.categories?.length) {
+    setMemo(savedData.memo ?? "");
+    setIsArticleId(savedData.id ?? 0);
+
+    if (savedData.remindAt) {
+      const [rawDate, rawTime] = savedData.remindAt.split("T");
+      setDate(updateDate(rawDate));
+      setTime(updateTime(rawTime));
+      setIsRemindOn(true);
     }
-    }, [type, savedData]);
-
-
+    if (savedData.categoryResponse) {
+      setSelected(savedData.categoryResponse?.categoryId.toString());
+      setSelectedCategoryName(savedData.categoryResponse?.categoryName);
+    }
+  }
+}, [type, savedData, categoryData?.data?.categories?.length]);
 
   // YYYY-MM-DD → YYYY.MM.DD
   const updateDate = (date: string) => {
@@ -104,12 +120,6 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   const [timeError, setTimeError] = useState('');
 
 
-  interface Category {
-    categoryId: number;
-    categoryName: string;
-    categoryColor:string;
-  }
-  const options = categoryData?.data?.categories?.map((c: Category) => c.categoryName) ?? [];
 
   const handleDateChange = (value: string) => {
     setDate(value);
@@ -131,8 +141,8 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   const [imgUrl, setImgUrl] = useState(initialImgUrl);
     useEffect(() => {
     if (!loading && !title) {
-        alert("이 페이지는 저장할 수 없어요 😢");
-        window.close();
+        // alert("이 페이지는 저장할 수 없어요 😢");
+        // window.close();
     }
     }, [loading, title]);
 
@@ -151,6 +161,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   //       "fcmToken": "adlfdjlaj11212lkadfsjlkfdsa"
   //     })
   // },[])
+const options = categoryData?.data?.categories?.map((c: Category) => c.categoryName) ?? [];
 
   const handleSave = async () => {
      if (!selected || parseInt(selected) === 0) {
@@ -228,6 +239,9 @@ const MainPop = ({type, savedData}: MainPopProps) => {
     setSelectedCategoryName(value);
   };
 
+//   if (!selectedCategoryName){
+//     return <div className="App">카테고리 로딩중...</div>;
+//   }
   return (
     <div className="App">
       <div className="relative flex h-[56.8rem] w-[31.2rem] items-center justify-center">
@@ -276,6 +290,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
             <Textarea
               maxLength={100}
               placeholder="나중에 내가 꺼내줄 수 있게 살짝 적어줘!"
+              value ={memo}
               onChange={(e) => setMemo(e.target.value)}
             />
           </div>

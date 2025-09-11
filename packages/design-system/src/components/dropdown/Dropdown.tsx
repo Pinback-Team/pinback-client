@@ -23,7 +23,6 @@ const Dropdown = ({
   className = '',
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const handleSelect = (option: string,idx: number) => {
     onChange(option,idx);
     setIsOpen(false);
