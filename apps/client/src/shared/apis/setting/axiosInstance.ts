@@ -31,22 +31,6 @@ const refreshToken = async (email: string) => {
   }
 };
 
-// 테스트용 토큰 (나중에 지울 것)
-localStorage.setItem(
-  'token',
-  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwaW5iYWNrIiwiaWQiOiI4NjA1NTBiMS1kZDBhLTQyMjMtYjM4OS0wNTEwYWU3MmNkMzUiLCJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTc1NzYyOTAyMn0.qm-zqkuG2rpLlbUKJd9lUdh-4SStittgzXiwBeUMzA6NuKh_aEJmgoVInhUU-VSFtTlXP8eO9Ivao5K29LCRJA'
-);
-apiRequest.interceptors.request.use((config) => {
-  // signup은 토큰 필요 없음
-  if (config.url !== '/auth/signup') {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-  }
-  return config;
-});
-
 // 요청 인터셉터
 apiRequest.interceptors.request.use(async (config) => {
   const noAuthNeeded = ['/api/v1/auth/token', '/api/v1/auth/signup'];
