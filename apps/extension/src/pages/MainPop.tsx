@@ -13,7 +13,7 @@ import { useState,useEffect } from 'react';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { useSaveBookmark } from '../hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
-import { usePostArticle,useGetCategoriesExtension, usePostCategories, useGetRemindTime, usePatchArticle} from '@apis/query/queries';
+import { usePostArticle,useGetCategoriesExtension, usePostCategories, useGetRemindTime, usePutArticle} from '@apis/query/queries';
 
 interface SavedArticle {
   id: number;
@@ -35,7 +35,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   // api 연동 구간
   const {mutate:postArticle} = usePostArticle();
   const {mutate:postCategories} = usePostCategories();
-  const {mutate:patchArticle} = usePatchArticle();
+  const {mutate:putArticle} = usePutArticle();
   const { data : categoryData } = useGetCategoriesExtension();
   const { data : remindData } = useGetRemindTime();
 
@@ -175,15 +175,17 @@ const MainPop = ({type, savedData}: MainPopProps) => {
       }
     );
    } else{
-        patchArticle({
+        putArticle({
         articleId: isArticleId,
         data: { 
             categoryId: saveData.selectedCategory
             ? parseInt(saveData.selectedCategory)
             : 0,
             memo: saveData.memo,
-            remindTime: "2025-07-15T12:03:59.371Z",
+            now: new Date().toISOString(),
+            remindTime: combineDateTime(saveData.date ?? "", saveData.time ?? ""),
       }
+
     });
    }
    

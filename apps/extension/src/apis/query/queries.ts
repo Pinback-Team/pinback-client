@@ -1,5 +1,5 @@
 import { useMutation,useQuery } from "@tanstack/react-query";
-import { postArticle, PostArticleRequest,postSignup, postSignupRequest, getCategoriesExtension, postCategories, postCategoriesRequest, getRemindTime, getArticleSaved, patchArticle, PatchArticleRequest} from "../axiosInstance";
+import { postArticle, PostArticleRequest,postSignup, postSignupRequest, getCategoriesExtension, postCategories, postCategoriesRequest, getRemindTime, getArticleSaved,putArticle, PutArticleRequest} from "../axiosInstance";
 
 export const usePostArticle = () => {
   return useMutation({
@@ -58,10 +58,10 @@ export const useGetArticleSaved = (url:string) => {
   });
 }
 
-export const usePatchArticle = () => {
+export const usePutArticle = () => {
   return useMutation({
-    mutationFn: ({ articleId, data }: { articleId: number; data: PatchArticleRequest }) =>
-      patchArticle(articleId, data),
+    mutationFn: ({ articleId, data }: { articleId: number; data: PutArticleRequest }) =>
+      putArticle(articleId, data),
     onSuccess: (data) => {
       console.log("아티클 수정 성공:", data);
     },

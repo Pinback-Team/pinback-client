@@ -76,13 +76,14 @@ export const getArticleSaved=async (url:string) => {
   return response.data;
 }
 
-export interface PatchArticleRequest {
+export interface PutArticleRequest {
   categoryId: number;
   memo: string;
+  now: string;
   remindTime: string | null;
 }
 
-export const patchArticle = async (articleId: number, data: PatchArticleRequest) => {
-  const response = await apiRequest.patch(`/articles/${articleId}`, data);
+export const putArticle = async (articleId: number, data: PutArticleRequest) => {
+  const response = await apiRequest.put(`/articles/${articleId}`, data);
   return response.data;
 };
