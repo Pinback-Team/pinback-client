@@ -7,11 +7,11 @@ const apiRequest = axios.create({
   },
 });
 
-localStorage.setItem("accessToken", 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwaW5iYWNrIiwiaWQiOiIzZjgwOTI4Mi0zMWU2LTRlZTQtYTU3OS1lZDQyYTA3YWU1NmUiLCJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTc1NzU5MzUwMX0.N4Di7Lkmnp99BUhRgWNTi4b3oAL2LFHMl0HX-_soLZ6QkDbiysUiirlu47cGa7MeRimSygR2DPzJgCIi3DjA4A');
+localStorage.setItem("accessToken", 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwaW5iYWNrIiwiaWQiOiI4NjA1NTBiMS1kZDBhLTQyMjMtYjM4OS0wNTEwYWU3MmNkMzUiLCJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTc1NzYyOTAyMn0.qm-zqkuG2rpLlbUKJd9lUdh-4SStittgzXiwBeUMzA6NuKh_aEJmgoVInhUU-VSFtTlXP8eO9Ivao5K29LCRJA');
 apiRequest.interceptors.request.use((config) => {
   // signup은 토큰 필요 없음
   if (config.url !== "/auth/signup") {
-    const token = localStorage.getItem("accessToken"); // 저장해둔 토큰 불러오기
+    const token = localStorage.getItem("accessToken"); 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -65,5 +65,24 @@ export const getRemindTime = async () => {
     params: { now },
   });
 
+  return response.data;
+};
+
+
+export const getArticleSaved=async (url:string) => {
+  const response = await apiRequest.get("/articles/saved", {
+    params: { url },
+  });
+  return response.data;
+}
+
+export interface PatchArticleRequest {
+  categoryId: number;
+  memo: string;
+  remindTime: string | null;
+}
+
+export const patchArticle = async (articleId: number, data: PatchArticleRequest) => {
+  const response = await apiRequest.patch(`/articles/${articleId}`, data);
   return response.data;
 };
