@@ -10,21 +10,10 @@ import { useSidebarNav } from '@shared/hooks/useSidebarNav';
 import { useCategoryPopups } from '@shared/hooks/useCategoryPopups';
 import OptionsMenuPortal from './OptionsMenuPortal';
 import PopupPortal from './PopupPortal';
-
-const CATEGORIES = [
-  { id: 1, label: '일정' },
-  { id: 2, label: '공부' },
-  { id: 3, label: '운동' },
-  { id: 4, label: '취미' },
-  { id: 5, label: '기타' },
-  { id: 6, label: '기타' },
-  { id: 7, label: '기타' },
-  { id: 8, label: '기타' },
-  { id: 9, label: '기타' },
-  { id: 10, label: '기타' },
-];
+import { useGetDashboardCategories } from './queries';
 
 export function Sidebar() {
+  const { data: categories } = useGetDashboardCategories();
   const {
     activeTab,
     selectedCategoryId,
@@ -47,7 +36,8 @@ export function Sidebar() {
     useCategoryPopups();
 
   const getCategoryName = (id: number | null) =>
-    CATEGORIES.find((c) => c.id === id)?.label ?? '';
+    categories?.categories.find((category) => category.categoryId === id)
+      ?.categoryName ?? '';
 
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
@@ -86,12 +76,12 @@ export function Sidebar() {
             }}
           >
             <ul className="bg-none">
-              {CATEGORIES.map((c) => (
+              {categories?.categories?.map((category) => (
                 <CategoryItem
-                  key={c.id}
-                  id={c.id}
-                  label={c.label}
-                  active={selectedCategoryId === c.id}
+                  key={category.categoryId}
+                  id={category.categoryId}
+                  label={category.categoryName}
+                  active={selectedCategoryId === category.categoryId}
                   onClick={(id) => {
                     closeMenu();
                     selectCategory(id);
