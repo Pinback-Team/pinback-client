@@ -11,8 +11,8 @@ import { useGetArcons } from '@shared/apis/queries';
 export default function Level() {
   const { data, isPending, isError } = useGetArcons();
 
-  if (isPending) return console.log('로딩중...');
-  if (isError) return console.log('에러...');
+  if (isPending) return <div></div>;
+  if (isError) return <div></div>;
 
   const acornCount = data.acornCount;
   const info = getTreeLevel(acornCount);
