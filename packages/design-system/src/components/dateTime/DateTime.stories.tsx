@@ -41,7 +41,7 @@ export default meta;
 type Story = StoryObj<typeof DateTime>;
 
 /** 📌 컨트롤 가능한 Wrapper */
-const Controlled = (args: any) => {
+const Controlled = (args: React.ComponentProps<typeof DateTime>) => {
   const [val, setVal] = useState(args.value);
   return <DateTime {...args} value={val} onChange={setVal} />;
 };
