@@ -35,12 +35,7 @@ export interface ProgressProps
   value: number;
 }
 
-export function Progress({
-  className,
-  variant,
-  value,
-  ...props
-}: ProgressProps) {
+function Progress({ className, variant, value, ...props }: ProgressProps) {
   const progressPercent = Math.max(0, Math.min(100, value));
 
   return (
@@ -59,3 +54,4 @@ export function Progress({
     </ProgressPrimitive.Root>
   );
 }
+export default Progress;
