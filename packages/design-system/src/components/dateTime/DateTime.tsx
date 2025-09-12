@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type ChangeEvent } from 'react';
 import { cva } from 'class-variance-authority';
 import {
   digitsOnly,
@@ -56,129 +56,50 @@ export default function DateTime({
   type,
   value = '',
   state,
-  ...props
+  onChange,
 }: DateTimeProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const isDisabled = state === 'disabled';
-  // const nextCaretRef = useRef<number | null>(null);
-  // const [timeDigits, setTimeDigits] = useState(() =>
-  //   digitsOnly(value).slice(0, 4)
-  // );
 
-  const [input, setInput] = useState(() =>
-    type === 'date' ? formatDate(digitsOnly(value)) : formatTime12(digitsOnly(value).slice(0, 4))
-  );
+  // rawDigits → 숫자만 관리
+  const [rawDigits, setRawDigits] = useState(() => digitsOnly(value));
 
-  // [시간 타입] 입력 단계에서의 자잘한 이벤트 처리 ! 얘는 중간 중간 계산해줘야해서 beforeInput에서 처리
-  // const handleBeforeInput = (e: React.FormEvent<HTMLInputElement>) => {
-  //   if (type !== 'time') return;
+  // formatted → 보여줄 값
+  const formatted = type === 'date'
+    ? formatDate(rawDigits.slice(0, 8))
+    : formatTime12(rawDigits.slice(0, 4));
 
-  //   const ne = e.nativeEvent as InputEvent;
-  //   const inputType = ne.inputType || '';
-  //   const data = (ne as InputEvent).data;
-  //   // 입력 타입이 insert일때
-  //   if (inputType.startsWith('insert') && data) {
-  //     const add = data.replace(/\D/g, '');
-  //     if (!add) {
-  //       return;
-  //     }
-  //     if (timeDigits.length >= 4) {
-  //       // 타입이 4글자 넘어가면 더이상 받지 않기
-  //       return;
-  //     }
-  //     const next = (timeDigits + add).slice(0, 4);
-  //     setTimeDigits(next);
-  //     setInput(formatTime12(next));
-  //     props.onChange?.(formatTime12(next)); 
-  //     nextCaretRef.current = mapCaretByDigitsPos(next.length, 'time');
-  //     return;
-  //   }
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const onlyDigits = digitsOnly(e.target.value);
+    setRawDigits(onlyDigits);
+    // ❌ 여기서는 부모에 전달 안 함 → 단지 내부 표시만 업데이트
+  };
 
-  //   // 백스페이스 인풋일 때, 포맷팅 조절
-  //   if (inputType === 'deleteContentBackward') {
-  //     if (timeDigits.length === 0) {
-  //       return;
-  //     }
-  //     const next = timeDigits.slice(0, -1);
-  //     setTimeDigits(next);
-  //     setInput(formatTime12(next));
-  //     props.onChange?.(formatTime12(next)); 
-  //     nextCaretRef.current = mapCaretByDigitsPos(next.length, 'time');
-  //     return;
-  //   }
-  //   // paste 이벤트일 때
-  //   const pasted = digitsOnly((ne as InputEvent).data ?? '');
-  //   if (pasted) {
-  //     const next = (timeDigits + pasted).slice(0, 4);
-  //     setTimeDigits(next);
-  //     setInput(formatTime12(next));
-  //     nextCaretRef.current = mapCaretByDigitsPos(next.length, 'time');
-  //     e.preventDefault();
-  //   } else {
-  //     e.preventDefault();
-  //   }
-  // };
-  // // [날짜 타입] input value에 반영된 후에서의 이벤트 처리 : 왜 날짜/시간 타입에 따라 나눴는지 PR 참고!!
-  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const raw = e.target.value;
-  //   const only = digitsOnly(raw).slice(0, 8);
-  //   const formatted = formatDate(only);
-  //   setInput(formatted);
-  //   props.onChange?.(formatted);
-  //   const caret = e.target.selectionStart ?? raw.length;
-  //   const leftDigitsCount = raw.slice(0, caret).replace(/\D/g, '').length;
-  //   nextCaretRef.current = mapCaretByDigitsPos(leftDigitsCount, 'date');
-  // };
-  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (type !== 'time') return;
-  //   if (e.nativeEvent.isComposing) return;
-
-  //   if (['Backspace', 'Delete'].includes(e.key)) {
-  //     if (timeDigits.length > 0) {
-  //       const next = timeDigits.slice(0, -1);
-  //       setTimeDigits(next);
-  //       const formatted = formatTime12(next);
-  //       setInput(formatted);
-  //       props.onChange?.(formatted);
-  //       nextCaretRef.current = mapCaretByDigitsPos(next.length, 'time');
-  //     }
-  //     e.preventDefault();
-  //   }
-  // };
+  const handleBlur = () => {
+    if (type === 'date') {
+      onChange?.(formatDate(rawDigits.slice(0, 8)));
+    } else {
+      onChange?.(formatTime12(rawDigits.slice(0, 4)));
+    }
+  };
 
   return (
     <div className={dateTimeBoxStyles({ state })}>
       <span className={dateTimeLabelStyles({ state })}>
         {type === 'date' ? '날짜' : '시간'}
       </span>
-
       <input
-          ref={inputRef}
-          type="text"
-          className={dateTimeTxtStyles({ state })}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}  // 입력은 그냥 raw로 받음
-          onBlur={() => {
-            if (type === "date") {
-              setInput(formatDate(digitsOnly(input)));
-              props.onChange?.(formatDate(digitsOnly(input)));
-            } else {
-              setInput(formatTime12(digitsOnly(input)));
-              props.onChange?.(formatTime12(digitsOnly(input)));
-            }
-          }}
-          placeholder={type === 'date' ? 'YY.MM.DD' : 'HH:MM'}
-          inputMode="numeric"
-          disabled={isDisabled}
-          maxLength={type === 'date' ? 10 : 8}
-          pattern={
-                  type === 'date'
-                    ? '\\d{4}\\.\\d{2}\\.\\d{2}'
-                    : '(오전|오후)\\s\\d{2}:\\d{2}'
-                }
-          aria-label={type === 'date' ? '날짜 입력' : '시간 입력'}
-        />
-
+        ref={inputRef}
+        type="text"
+        className={dateTimeTxtStyles({ state })}
+        value={formatted}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        placeholder={type === 'date' ? 'YYYY.MM.DD' : 'HH:MM'}
+        inputMode="numeric"
+        disabled={isDisabled}
+        maxLength={type === 'date' ? 10 : 8}
+      />
     </div>
   );
 }

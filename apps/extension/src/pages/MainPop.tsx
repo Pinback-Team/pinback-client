@@ -294,8 +294,12 @@ const MainPop = ({type, savedData}: MainPopProps) => {
             </div>
 
             {/* 에러 메시지 출력 */}
-            {dateError && <p className="body3-r text-error">{dateError}</p>}
-            {timeError && <p className="body3-r text-error">{timeError}</p>}
+            {dateError ? (
+              <p className="body3-r text-error">{dateError}</p>
+            ) : timeError ? (
+              <p className="body3-r text-error">{timeError}</p>
+            ) : null}
+
           </div>
 
           <Button size="medium" onClick={handleSave}>
