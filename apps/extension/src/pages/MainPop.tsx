@@ -229,7 +229,37 @@ const options = categoryData?.data?.categories?.map((c: Category) => c.categoryN
       setIsPopError(true);
       setErrorTxt('20자 이내로 작성해주세요');
     } else{
-      postCategories({categoryName:categoryTitle});
+      postCategories(
+      { categoryName: categoryTitle },
+      {
+        onSuccess: (res) => {
+          const newCategory: Category = {
+            categoryId: res.data.categoryId, // 백엔드에서 내려주는 id
+            categoryName: categoryTitle,
+            categoryColor: res.data.categoryColor ?? '#000000',
+          };
+          categoryData?.data?.categories.push(newCategory);
+          setSelected(newCategory.categoryId.toString());
+          setSelectedCategoryName(newCategory.categoryName);
+        },
+
+       onError: (err: unknown) => {
+          if (typeof err === "object" && err !== null && "response" in err) {
+            const response = (err as any).response; // 여기서 최소화
+            const msg = response?.data?.message;
+            if (msg) {
+              alert(msg);
+              return;
+            }
+          }
+          alert("카테고리 추가 중 오류가 발생했어요 😢");
+        }
+
+      }
+    );
+      setCategoryTitle(''); 
+      setIsPopError(false); 
+      setErrorTxt('');
       setIsPopupOpen(false);
     }
   }
