@@ -73,7 +73,7 @@ export const Time_Typing_1620: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = await canvas.findByLabelText('시간 입력');
+    const input = await canvas.findByPlaceholderText('HH:MM');
     await userEvent.type(input, '1620');
     await userEvent.tab(); // 👉 blur 발생시켜야 onChange 전달됨
   },
@@ -88,7 +88,7 @@ export const Time_Backspace: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = await canvas.findByLabelText('시간 입력');
+    const input = await canvas.findByPlaceholderText('HH:MM');
     await userEvent.click(input);
     await userEvent.keyboard('{Backspace}{Backspace}');
     await userEvent.tab(); // 👉 blur로 최종 전달
