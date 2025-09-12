@@ -1,5 +1,5 @@
 import { useMutation,useQuery } from "@tanstack/react-query";
-import { postArticle, PostArticleRequest,postSignup, postSignupRequest, getCategoriesExtension, postCategories, postCategoriesRequest, getRemindTime, getArticleSaved,putArticle, PutArticleRequest} from "../axiosInstance";
+import { postArticle, PostArticleRequest,postSignup, postSignupRequest, getCategoriesExtension, postCategories, postCategoriesRequest, getRemindTime, getArticleSaved,putArticle, PutArticleRequest} from "@apis/axios";
 
 export const usePostArticle = () => {
   return useMutation({
