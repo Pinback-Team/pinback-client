@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { within, userEvent } from '@storybook/test';
+import { useState } from 'react';
 import DateTime from './DateTime';
 
 const meta: Meta<typeof DateTime> = {
@@ -15,16 +16,14 @@ const meta: Meta<typeof DateTime> = {
     state: {
       control: { type: 'select' },
       options: ['default', 'disabled', 'error'],
-      description: '스타일 상태',
     },
     type: {
       control: { type: 'inline-radio' },
       options: ['date', 'time'],
-      description: '입력 모드',
     },
     value: {
       control: 'text',
-      description: '초기값(숫자만 입력해도 됨)',
+      description: '초기값 (숫자만 가능)',
     },
   },
   parameters: {
@@ -32,7 +31,7 @@ const meta: Meta<typeof DateTime> = {
     docs: {
       description: {
         component:
-          '날짜는 실시간 포맷(YYYY.MM.DD), 시간은 **숫자 버퍼(HHMM)** → 표시(오전/오후 HH:MM)로 렌더. 커서/백스페이스도 커스텀 처리됨.',
+          '입력 중에는 내부 포맷팅된 값(`YYYY.MM.DD`, `오전 HH:MM`)이 보이고, 최종 blur 시 부모에 값 전달.',
       },
     },
   },
@@ -41,23 +40,33 @@ const meta: Meta<typeof DateTime> = {
 export default meta;
 type Story = StoryObj<typeof DateTime>;
 
+/** 📌 컨트롤 가능한 Wrapper */
+const Controlled = (args: any) => {
+  const [val, setVal] = useState(args.value);
+  return <DateTime {...args} value={val} onChange={setVal} />;
+};
+
 /** 기본 날짜 */
 export const Date_Default: Story = {
+  render: (args) => <Controlled {...args} />,
   args: {
     type: 'date',
     value: '20250819',
   },
 };
 
+/** 빈 시간 입력 */
 export const Time_Empty: Story = {
+  render: (args) => <Controlled {...args} />,
   args: {
     type: 'time',
     value: '',
   },
 };
 
-/** 16→20 타이핑: "오후 04:20" 되는지 시연 */
+/** 1620 타이핑 후 blur → 오후 04:20 */
 export const Time_Typing_1620: Story = {
+  render: (args) => <Controlled {...args} />,
   args: {
     type: 'time',
     value: '',
@@ -66,18 +75,13 @@ export const Time_Typing_1620: Story = {
     const canvas = within(canvasElement);
     const input = await canvas.findByLabelText('시간 입력');
     await userEvent.type(input, '1620');
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: '`16` → `오후 04`, `1620` → `오후 04:20` 실시간 포맷팅.',
-      },
-    },
+    await userEvent.tab(); // 👉 blur 발생시켜야 onChange 전달됨
   },
 };
 
-/** 초기값 1620에서 백스페이스 두 번 → "오후 04" 되는지 시연 */
+/** 초기값 1620 → 백스페이스 두 번 → blur */
 export const Time_Backspace: Story = {
+  render: (args) => <Controlled {...args} />,
   args: {
     type: 'time',
     value: '1620',
@@ -87,25 +91,20 @@ export const Time_Backspace: Story = {
     const input = await canvas.findByLabelText('시간 입력');
     await userEvent.click(input);
     await userEvent.keyboard('{Backspace}{Backspace}');
-  },
-  parameters: {
-    docs: {
-      description: { story: '커스텀 삭제 핸들러 동작 확인(Backspace).' },
-    },
+    await userEvent.tab(); // 👉 blur로 최종 전달
   },
 };
 
-/** Disabled/Error 스타일 확인 */
+/** 상태별 스타일 */
 export const States_Showcase: Story = {
-  render: (args) => (
+  render: () => (
     <div style={{ display: 'grid', gap: 12 }}>
-      <DateTime {...args} state="default" type="date" value="20250101" />
-      <DateTime {...args} state="disabled" type="date" value="20250101" />
-      <DateTime {...args} state="error" type="time" value="0930" />
+      <DateTime state="default" type="date" value="20250101" />
+      <DateTime state="disabled" type="date" value="20250101" />
+      <DateTime state="error" type="time" value="0930" />
     </div>
   ),
   parameters: {
     controls: { exclude: ['state', 'type', 'value'] },
-    docs: { description: { story: '상태별 스타일 한눈에 보기.' } },
   },
 };
