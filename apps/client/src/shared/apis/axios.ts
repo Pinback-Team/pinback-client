@@ -28,6 +28,6 @@ export interface postSignUpRequest {
 }
 
 export const postSignUp = async (data: postSignUpRequest) => {
-  const response = await apiRequest.post('/api/v1/auth/signup', {data});
+  const response = await apiRequest.post('/api/v1/auth/signup', data);
   return response.data;
 };

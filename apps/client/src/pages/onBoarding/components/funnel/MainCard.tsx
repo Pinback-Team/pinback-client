@@ -71,14 +71,15 @@ const [remindTime, setRemindTime] = useState('09:00');
     console.log(step)
     if (step === 3) {
       // 이거 이후에 api 붙일 자리 표시임! 
-      const raw = AlarmsType[alarmSelected - 1].time;
-      setRemindTime(normalizeTime(raw))
+      
     }
     if (step < 5) {
-
       setDirection(1);
       setStep((prev) => prev + 1);
     } else if (step === 5) {
+      const raw = AlarmsType[alarmSelected - 1].time;
+      setRemindTime(normalizeTime(raw));
+
       postSignData({
             "email": "tesdfdfsst@gmail.com", 
             "remindDefault": remindTime, 
