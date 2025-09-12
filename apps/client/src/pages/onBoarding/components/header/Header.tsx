@@ -1,4 +1,4 @@
-import HeaderLogo from '@assets/onBoarding/icons/headerLogo.svg';
+import HeaderLogo from '@assets/onBoarding/icons/header_logo.svg';
 const Header = () => {
   return (
     <header

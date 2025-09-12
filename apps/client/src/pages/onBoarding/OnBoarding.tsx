@@ -1,4 +1,4 @@
-import onBoardingBg from '../../assets/onBoarding/background/onBoardingBg.svg';
+import onBoardingBg from '@assets/onBoarding/background/onBoardingBg.svg';
 import Header from './components/header/Header';
 import MainCard from './components/funnel/MainCard';
 const OnBoarding = () => {

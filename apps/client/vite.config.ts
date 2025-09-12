@@ -22,6 +22,7 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, './src'),
       '@api': resolve(__dirname, './src/api'),
+      '@assets':resolve(__dirname,'./src/assets'),
       '@utils': resolve(__dirname, './src/utils'),
       '@constants': resolve(__dirname, './src/constants'),
       '@shared-types': resolve(__dirname, './src/types'),
