@@ -72,7 +72,6 @@ export default function DateTime({
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const onlyDigits = digitsOnly(e.target.value);
     setRawDigits(onlyDigits);
-    // ❌ 여기서는 부모에 전달 안 함 → 단지 내부 표시만 업데이트
   };
 
   const handleBlur = () => {
