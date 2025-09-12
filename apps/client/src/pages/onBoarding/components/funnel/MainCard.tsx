@@ -9,12 +9,12 @@ import { cva } from 'class-variance-authority';
 const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
 
 const variants = {
-  enter: (direction: number) => ({
+  slideIn: (direction: number) => ({
     x: direction > 0 ? 200 : -200,
     opacity: 0,
   }),
-  center: { x: 0, opacity: 1 },
-  exit: (direction: number) => ({
+  slideCenter: { x: 0, opacity: 1 },
+  slideOut: (direction: number) => ({
     x: direction > 0 ? -200 : 200,
     opacity: 0,
   }),
@@ -39,29 +39,29 @@ const MainCard = () => {
 
   useEffect(() => {
     const ua = navigator.userAgent.toLowerCase();
-    // Mac OS (Intel/ARM), iPhone, iPad 까지 포함하고 싶으면 아래처럼 체크 가능
     if (ua.includes('mac os') || ua.includes('iphone') || ua.includes('ipad')) {
       setIsMac(true);
     }
   }, []);
-  const renderStep = () => {
+ const renderStep = () => {
     switch (step) {
       case 0:
       case 1:
       case 2:
         return <StoryStep step={step as 0 | 1 | 2} />;
       case 3:
-        return (
-          <AlarmStep selected={alarmSelected} setSelected={setAlarmSelected} />
-        );
+        return <AlarmStep selected={alarmSelected} setSelected={setAlarmSelected} />;
       case 4:
-        return isMac ? <MacStep /> : <FinalStep />;
-      case 5:
+        if (isMac) return <MacStep />;
         return <FinalStep />;
+      case 5:
+        if (isMac) return <FinalStep />;
+        return null;
       default:
         return <FinalStep />;
     }
   };
+
   const nextStep = () => {
     if (step === 3) {
       // 이거 이후에 api 붙일 자리 표시임! console.log('선택된 알람:', AlarmsType[alarmSelected - 1].time);
@@ -87,7 +87,7 @@ const MainCard = () => {
         <Progress
           value={stepProgress[step].progress}
           variant="profile"
-          className="w-[30%]"
+          className="w-[15.6rem]"
         />
       )}
 
@@ -97,9 +97,9 @@ const MainCard = () => {
             key={step}
             custom={direction}
             variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
+            initial="slideIn"
+            animate="slideCenter"
+            exit="slideOut"
             transition={{ duration: 0.4 }}
             className="flex h-full flex-col items-center"
           >

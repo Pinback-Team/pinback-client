@@ -16,12 +16,12 @@ const AlarmStep = ({ selected, setSelected }: AlarmStepProps) => {
       </p>
 
       <div className="mb-[2rem] flex w-full items-center justify-center gap-[1.4rem]">
-        {[1, 2, 3].map((n) => (
+        {([1, 2, 3] as const).map((n) => (
           <AlarmBox
             key={n}
-            select={n as 1 | 2 | 3}
+            select={n}
             isDisabled={selected === n}
-            onClick={() => setSelected(n as 1 | 2 | 3)}
+            onClick={() => setSelected(n)}
           />
         ))}
       </div>

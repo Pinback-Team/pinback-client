@@ -23,7 +23,12 @@ const boxStyle = cva(
 
 const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
   const [showPicker, setShowPicker] = useState(false);
-
+  const getTimePicker = ({ hour, minute, meridiem }: { hour: string; minute: string; meridiem: string }) => {
+        const formatted = `${meridiem} ${hour}:${minute}`;
+        AlarmsType[2].time = formatted;
+        setShowPicker(false);
+        // 이거 나중에 api 연결때 쓸려고 표시한거.. 그떄 지우겠듬여 console.log('저장된 사용자 알람:', AlarmsType[2].time);
+  }
   return (
     <div
       className={boxStyle({ disabled: isDisabled })}
@@ -57,12 +62,7 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
 
           {showPicker && (
             <TimePicker
-              onSave={({ hour, minute, meridiem }) => {
-                const formatted = `${meridiem} ${hour}:${minute}`;
-                AlarmsType[2].time = formatted;
-                setShowPicker(false);
-                // 이거 나중에 api 연결때 쓸려고 표시한거.. 그떄 지우겠듬여 console.log('저장된 사용자 알람:', AlarmsType[2].time);
-              }}
+              onSave={getTimePicker}
               onCancel={() => {
                 AlarmsType[2].time = '';
               }}
