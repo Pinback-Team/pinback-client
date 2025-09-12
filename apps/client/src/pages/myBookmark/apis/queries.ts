@@ -1,18 +1,18 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { getBookmarkReadArticles, getBookmarkUnreadArticles } from './axios';
+import { getBookmarkArticles, getBookmarkUnreadArticles } from './axios';
 import {
   BookmarkArticleResponse,
   UnreadBookmarkArticleResponse,
 } from '@pages/myBookmark/types/api';
 
-export const useGetBookmarkReadArticles = (
+export const useGetBookmarkArticles = (
   page: number,
   size: number
 ): UseQueryResult<BookmarkArticleResponse, AxiosError> => {
   return useQuery({
     queryKey: ['bookmarkReadArticles', page, size],
-    queryFn: () => getBookmarkReadArticles(page, size),
+    queryFn: () => getBookmarkArticles(page, size),
   });
 };
 
