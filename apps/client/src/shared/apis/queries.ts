@@ -27,15 +27,21 @@ export const useGetArcons = (): UseQueryResult<AcornsResponse, AxiosError> => {
   });
 };
 
-export const usePostSignUp = () =>{
+export const usePostSignUp = () => {
   return useMutation({
     mutationFn: (data: postSignUpRequest) => postSignUp(data),
     onSuccess: (data) => {
+      // postSignUp에서 axios 같은 걸 리턴한다고 가정
+      const newToken = data?.data?.token || data?.token;
+
+      if (newToken) {
+        localStorage.setItem("token", newToken);
+      }
+
       console.log("회원가입 성공:", data);
     },
     onError: (error) => {
       console.error("회원가입 실패:", error);
-
     },
   });
-}
+};
