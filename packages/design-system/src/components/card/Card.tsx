@@ -7,6 +7,7 @@ type BaseProps = {
   category?: string;
   imageUrl?: string;
   onClick?: () => void;
+  onOptionsClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 type RemindProps = BaseProps & {
@@ -23,14 +24,22 @@ type BookmarkProps = BaseProps & {
 
 export type CardProps = RemindProps | BookmarkProps;
 
-const Card = (props: CardProps) => {
-  const { type } = props;
+const Card = (
+  props: CardProps & {
+    onOptionsClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  }
+) => {
+  const { type, onOptionsClick } = props;
 
   return (
     <>
-      {type === 'remind' && <RemindCard {...props} />}
+      {type === 'remind' && (
+        <RemindCard {...props} onOptionsClick={onOptionsClick} />
+      )}
 
-      {type === 'bookmark' && <MyBookmarkCard {...props} />}
+      {type === 'bookmark' && (
+        <MyBookmarkCard {...props} onOptionsClick={onOptionsClick} />
+      )}
     </>
   );
 };
