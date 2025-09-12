@@ -5,11 +5,34 @@ import { useState } from 'react';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState('all');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const openMenu = (id: number) => {
+    setSelectedId(id);
+    setMenuOpen(true);
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setSelectedId(null);
+  };
+
+  const handleEdit = (id: number) => {
+    // TODO: 편집 로직
+    console.log('edit id =', id);
+    closeMenu();
+  };
+
+  const handleDelete = (id: number) => {
+    // TODO: 삭제 로직
+    console.log('delete id =', id);
+    closeMenu();
+  };
 
   const handleBadgeClick = (badgeType: string) => {
     setActiveBadge(badgeType);
   };
-  const [popupOpen, setPopupOpen] = useState(false);
 
   return (
     <div className="flex flex-col py-[5.2rem] pl-[8rem]">
@@ -39,17 +62,14 @@ const MyBookmark = () => {
             content={data.content}
             category={data.category}
             date="2024.08.15"
-            onClick={() => setPopupOpen(true)}
+            onClick={() => openMenu(data.id)}
           />
         ))}
-        {popupOpen && (
+
+        {menuOpen && selectedId !== null && (
           <OptionsMenuButton
-            onEdit={function (): void {
-              throw new Error('Function not implemented.');
-            }}
-            onDelete={function (): void {
-              throw new Error('Function not implemented.');
-            }}
+            onEdit={() => handleEdit(selectedId)}
+            onDelete={() => handleDelete(selectedId)}
           />
         )}
       </div>
