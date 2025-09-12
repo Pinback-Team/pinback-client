@@ -10,21 +10,22 @@ import { useSidebarNav } from '@shared/hooks/useSidebarNav';
 import { useCategoryPopups } from '@shared/hooks/useCategoryPopups';
 import OptionsMenuPortal from './OptionsMenuPortal';
 import PopupPortal from './PopupPortal';
-
-const CATEGORIES = [
-  { id: 1, label: '일정' },
-  { id: 2, label: '공부' },
-  { id: 3, label: '운동' },
-  { id: 4, label: '취미' },
-  { id: 5, label: '기타' },
-  { id: 6, label: '기타' },
-  { id: 7, label: '기타' },
-  { id: 8, label: '기타' },
-  { id: 9, label: '기타' },
-  { id: 10, label: '기타' },
-];
+import {
+  useGetDashboardCategories,
+  usePostCategory,
+  useGetArcons,
+} from '@shared/apis/queries';
+import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function Sidebar() {
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const queryClient = useQueryClient();
+
+  const { data: categories } = useGetDashboardCategories();
+  const { mutate: createCategory } = usePostCategory();
+  const { data, isPending, isError } = useGetArcons();
+
   const {
     activeTab,
     selectedCategoryId,
@@ -35,6 +36,9 @@ export function Sidebar() {
     setSelectedCategoryId,
   } = useSidebarNav();
 
+  const { popup, openCreate, openEdit, openDelete, close } =
+    useCategoryPopups();
+
   const {
     state: menu,
     open: openMenu,
@@ -43,11 +47,29 @@ export function Sidebar() {
     style,
   } = useAnchoredMenu((anchor) => rightOf(anchor, 30));
 
-  const { popup, openCreate, openEdit, openDelete, close } =
-    useCategoryPopups();
-
   const getCategoryName = (id: number | null) =>
-    CATEGORIES.find((c) => c.id === id)?.label ?? '';
+    categories?.categories.find((category) => category.id === id)?.name ?? '';
+
+  const handleCategoryChange = (name: string) => {
+    setNewCategoryName(name);
+  };
+
+  const handleCreateCategory = () => {
+    createCategory(newCategoryName, {
+      onSuccess: () => {
+        handleCategoryChange('');
+        queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
+        close();
+      },
+      onError: (error) => {
+        console.error('카테고리 생성 실패:', error);
+      },
+    });
+  };
+
+  if (isPending) return <div></div>;
+  if (isError) return <div></div>;
+  const acornCount = data.acornCount;
 
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
@@ -86,12 +108,12 @@ export function Sidebar() {
             }}
           >
             <ul className="bg-none">
-              {CATEGORIES.map((c) => (
+              {categories?.categories?.map((category) => (
                 <CategoryItem
-                  key={c.id}
-                  id={c.id}
-                  label={c.label}
-                  active={selectedCategoryId === c.id}
+                  key={category.id}
+                  id={category.id}
+                  label={category.name}
+                  active={selectedCategoryId === category.id}
                   onClick={(id) => {
                     closeMenu();
                     selectCategory(id);
@@ -118,7 +140,7 @@ export function Sidebar() {
 
         <footer className="pb-[2.8rem] pt-[1.2rem]">
           <MyLevelItem
-            acorns={0}
+            acorns={acornCount}
             isActive={activeTab === 'level'}
             onClick={() => {
               setSelectedCategoryId(null);
@@ -132,10 +154,8 @@ export function Sidebar() {
       <PopupPortal
         popup={popup}
         onClose={close}
-        onCreateConfirm={() => {
-          // TODO: 생성 API
-          close();
-        }}
+        onChange={handleCategoryChange}
+        onCreateConfirm={handleCreateCategory}
         onEditConfirm={() => {
           // TODO: 수정 API
           close();

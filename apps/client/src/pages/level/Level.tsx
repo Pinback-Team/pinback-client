@@ -6,16 +6,21 @@ import TreeStatusCard from '@pages/level/components/TreeStatusCard';
 import { getTreeLevel } from '@shared/utils/treeLevel';
 import { TreeLevel } from '@pages/level/types/treeLevelType';
 import { Badge } from '@pinback/design-system/ui';
+import { useGetArcons } from '@shared/apis/queries';
 
 export default function Level() {
-  const acorns = 1; // TODO: API 연결되면 교체
-  const info = getTreeLevel(acorns);
+  const { data, isPending, isError } = useGetArcons();
+
+  if (isPending) return <div></div>;
+  if (isError) return <div></div>;
+
+  const acornCount = data.acornCount;
+  const info = getTreeLevel(acornCount);
 
   return (
     <div className={cn('bg-subcolor mx-auto h-dvh w-full overflow-hidden')}>
       <div className="relative h-full w-full overflow-hidden rounded-[1.2rem]">
         <LevelScene level={info.level as TreeLevel} />
-
         <div className="absolute inset-0">
           <div className="flex flex-col items-start gap-[2rem] px-[8rem] py-[5.2rem]">
             <div className="flex flex-row items-center gap-[0.8rem]">
@@ -42,9 +47,13 @@ export default function Level() {
               </div>
             </div>
 
-            <Badge text="오늘 모은 도토리 개수" countNum={acorns} />
+            <Badge
+              text="오늘 모은 도토리 개수"
+              countNum={acornCount}
+              isActive={true}
+            />
             <div className="flex">
-              <TreeStatusCard acorns={acorns} />
+              <TreeStatusCard acorns={acornCount} />
             </div>
           </div>
         </div>

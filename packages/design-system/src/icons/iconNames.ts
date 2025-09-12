@@ -12,6 +12,7 @@ export const iconNames = [
   'ic_details_disable',
   'ic_info',
   'ic_plus',
+  'main_logo',
   'logo',
   'tooltip_1',
   'tooltip_2',
