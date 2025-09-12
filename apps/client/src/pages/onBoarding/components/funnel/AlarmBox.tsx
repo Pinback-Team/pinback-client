@@ -2,6 +2,7 @@ import { cva } from 'class-variance-authority';
 import TimePicker from '../timePicker/TimePicker';
 import { AlarmsType } from '@constants/alarms';
 import { useState } from 'react';
+import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
 interface AlarmBoxProps {
   select: 1 | 2 | 3;
   isDisabled: boolean;
@@ -57,7 +58,7 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
       {select === 3 && isDisabled && (
         <>
           {AlarmsType[2].time && (
-            <p className="caption2-m text-font-gray-3">{AlarmsType[2].time}</p>
+            <p className="caption2-m text-font-gray-3">{normalizeTime(AlarmsType[2].time)}</p>
           )}
 
           {showPicker && (
