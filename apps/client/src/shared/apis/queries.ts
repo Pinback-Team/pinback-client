@@ -31,7 +31,6 @@ export const usePostSignUp = () => {
   return useMutation({
     mutationFn: (data: postSignUpRequest) => postSignUp(data),
     onSuccess: (data) => {
-      // postSignUp에서 axios 같은 걸 리턴한다고 가정
       const newToken = data?.data?.token || data?.token;
 
       if (newToken) {
