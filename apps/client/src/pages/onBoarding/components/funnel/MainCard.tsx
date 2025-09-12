@@ -6,6 +6,7 @@ import AlarmStep from './step/AlarmStep';
 import MacStep from './step/MacStep';
 import FinalStep from './step/FinalStep';
 import { cva } from 'class-variance-authority';
+import { usePostSignUp } from '@shared/apis/queries';
 const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
 
 const variants = {
@@ -36,6 +37,8 @@ const MainCard = () => {
   const [direction, setDirection] = useState(0);
   const [alarmSelected, setAlarmSelected] = useState<1 | 2 | 3>(1);
   const [isMac, setIsMac] = useState(false);
+  // api 구간
+  const {mutate:postSignData} = usePostSignUp();
 
   useEffect(() => {
     const ua = navigator.userAgent.toLowerCase();
@@ -70,7 +73,19 @@ const MainCard = () => {
       setDirection(1);
       setStep((prev) => prev + 1);
     } else if (step === 5) {
-      window.location.href = '/';
+      postSignData({
+            "email": "tesdfdfsst@gmail.com", 
+            "remindDefault": "08:00", 
+            "fcmToken": "adlfdjlajlkadfsjlkfdsdfsdfsdfsdfsa"
+        },
+        {
+          onSuccess:()=>{
+            window.location.href = '/';
+           }
+        }
+      )
+      
+      
     }
   };
 

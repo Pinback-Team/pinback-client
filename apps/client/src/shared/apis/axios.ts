@@ -20,3 +20,14 @@ export const getAcorns = async () => {
   });
   return data.data;
 };
+
+export interface postSignUpRequest {
+  email: string,
+  remindDefault: string,
+  fcmToken: string
+}
+
+export const postSignUp = async (data: postSignUpRequest) => {
+  const response = await apiRequest.post('/api/v1/auth/signup', {data});
+  return response.data;
+};
