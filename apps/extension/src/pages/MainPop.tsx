@@ -10,106 +10,117 @@ import {
   validateTime
 } from '@pinback/design-system/ui';
 import { useState,useEffect } from 'react';
-import { usePageMeta } from '../hooks/usePageMeta';
-import { useSaveBookmark } from '../hooks/useSaveBookmarks';
+import { usePageMeta } from '@hooks/usePageMeta';
+import { useSaveBookmark } from '@hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
-import { usePostArticle,useGetCategoriesExtension, usePostCategories, useGetRemindTime, usePutArticle} from '@apis/query/queries';
-
-export interface CategoryResponse {
-  categoryId: number;
-  categoryName: string;
-  categoryColor: string;
-}
-
-export interface ArticleResponse {
-  id: number;
-  url: string;
-  memo: string;
-  remindAt: string | null;   // "2025-09-11T23:06:32.036065" 또는 null
-  categoryResponse: CategoryResponse;
-  createdAt: string;         // ISO DateTime string
-}
+import { usePostArticle,useGetCategoriesExtension, useGetRemindTime, usePutArticle} from '@apis/query/queries';
+import { ArticleResponse} from '@shared-types/types'
+import { updateDate, updateTime, combineDateTime } from '@utils/remindTimeFormat';
+import { useCategoryManager } from '@hooks/useCategoryManager';
 interface MainPopProps {
     type: "add" | "edit";
     savedData?: ArticleResponse  | null;
 }
 const MainPop = ({type, savedData}: MainPopProps) => {
- console.log(savedData)
   // api 연동 구간
   const {mutate:postArticle} = usePostArticle();
-  const {mutate:postCategories} = usePostCategories();
   const {mutate:putArticle} = usePutArticle();
   const { data : categoryData } = useGetCategoriesExtension();
-  const { data : remindData } = useGetRemindTime();
+  const remindDataRaw = useGetRemindTime();
+  const remindData = type === "add" ? remindDataRaw : null;
 
+
+  // 저장 도메인 메타 데이터 갖고 오는 구간!
+  const { url, title, description, imgUrl: initialImgUrl ,loading} = usePageMeta();
+  const { save } = useSaveBookmark();
+  const [imgUrl, setImgUrl] = useState(initialImgUrl);
+
+  
+    useEffect(() => {
+    if (!loading && !title) {
+        // 개발 중에는 주석처리 (최종엔 주석 제거할거임)
+        // alert("이 페이지는 저장할 수 없어요 🐿️");
+        // window.close(); 
+    }
+    }, [loading, title]);
+
+    // 이미지 없으면 기본 이미지로 교체
+    useEffect(() => {
+    if (!initialImgUrl) {
+        setImgUrl("https://thumb.photo-ac.com/31/3137071c02f608edb5220129b10533d6_t.jpeg");
+    } else {
+        setImgUrl(initialImgUrl);
+    }
+    }, [initialImgUrl]);
+
+
+  // 아티클 팝업 정보들 상태
   const [isRemindOn, setIsRemindOn] = useState(false);
   const [memo, setMemo] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isArticleId, setIsArticleId] = useState(0);
-
-const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(
+  const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(
   type === "edit" && savedData?.categoryResponse?.categoryName
     ? savedData?.categoryResponse?.categoryName
     : null
-);
+  );
+  const [selected, setSelected] = useState<string | null>(
+    type === "edit" && savedData?.categoryResponse?.categoryId
+      ? savedData?.categoryResponse?.categoryId.toString()
+      : null
+  );
 
-const [selected, setSelected] = useState<string | null>(
-  type === "edit" && savedData?.categoryResponse?.categoryId
-    ? savedData?.categoryResponse?.categoryId.toString()
-    : null
-);
+  // 타입 (수정상태인지 초기 저장인지! 에 따라서 ui 화면 데이터 보여줄 지 분기!)
+  useEffect(() => {
+    if (type === "edit" && savedData && categoryData?.data?.categories?.length) {
+      setMemo(savedData.memo ?? "");
+      setIsArticleId(savedData.id ?? 0);
 
-interface Category {
-    categoryId: number;
-    categoryName: string;
-    categoryColor:string;
-  }
-     
-useEffect(() => {
-  if (type === "edit" && savedData && categoryData?.data?.categories?.length) {
-    setMemo(savedData.memo ?? "");
-    setIsArticleId(savedData.id ?? 0);
-
-    if (savedData.remindAt) {
-      const [rawDate, rawTime] = savedData.remindAt.split("T");
-      setDate(updateDate(rawDate));
-      setTime(updateTime(rawTime));
-      setIsRemindOn(true);
+      if (savedData.remindAt) {
+        const [rawDate, rawTime] = savedData.remindAt.split("T");
+        setDate(updateDate(rawDate));
+        setTime(updateTime(rawTime));
+        setIsRemindOn(true);
+      }
+      if (savedData.categoryResponse) {
+        setSelected(savedData.categoryResponse?.categoryId.toString());
+        setSelectedCategoryName(savedData.categoryResponse?.categoryName);
+      }
     }
-    if (savedData.categoryResponse) {
-      setSelected(savedData.categoryResponse?.categoryId.toString());
-      setSelectedCategoryName(savedData.categoryResponse?.categoryName);
-    }
-  }
-}, [type, savedData, categoryData?.data?.categories?.length]);
+  }, [type, savedData, categoryData?.data?.categories?.length]);
 
-  // YYYY-MM-DD → YYYY.MM.DD
-  const updateDate = (date: string) => {
-    if (!date) return "";
-    return date.replace(/-/g, ".");
+  // [카테고리 설정 구간] 이거는 훅으로 빼긴 했는데, 카테고리 추가나 드롭다운 수정하는 구간임!!
+  const {
+    options,
+    categoryTitle,
+    setCategoryTitle,
+    isPopError,
+    errorTxt,
+    saveCategory,
+    resetPopup,
+  } = useCategoryManager();
+
+  const saveHandleCategory = () => {
+    saveCategory((newCategory) => {
+          // 새로운 카테고리 자동 선택
+          setSelected(newCategory.categoryId.toString());
+          setSelectedCategoryName(newCategory.categoryName);
+          setIsPopupOpen(false);
+    });
+  }
+
+  const handleSelect = (value: string | null, idx: number) => {
+    const categoryId = categoryData?.data?.categories[idx]?.categoryId.toString() ?? null;
+    setSelected(categoryId);
+    setSelectedCategoryName(value);
   };
 
-  // HH:mm:ss → HH:mm
-  const updateTime = (time: string) => {
-    if (!time) return "";
-    return time.slice(0, 5);
-  };
 
-  const combineDateTime = (date: string, time: string) => {
-  if (!date || !time) return null;
-
-  const formattedDate = date.replace(/\./g, "-");
-  const formattedTime = time.length === 5 ? `${time}:00` : time;
-
-  return `${formattedDate}T${formattedTime}`;
-};
-
-
-  // 시간,날짜 검사 구간!
+  // 리마인드 시간,날짜 검사 구간! (포맷팅은 utils로 뻄!)
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   useEffect(() => {
-    if (remindData?.data) {
+    if (remindData?.data && type=='add') {
         const newDate = updateDate(remindData.data.remindDate);
         const newTime = updateTime(remindData.data.remindTime);
         setDate(newDate);
@@ -118,7 +129,6 @@ useEffect(() => {
   }, [remindData]);
   const [dateError, setDateError] = useState('');
   const [timeError, setTimeError] = useState('');
-
 
 
   const handleDateChange = (value: string) => {
@@ -131,39 +141,14 @@ useEffect(() => {
     setTimeError(validateTime(value));
   };
 
-  // 스위치
   const handleSwitchChange = (checked: boolean) => {
     setIsRemindOn(checked);
   };
 
-  const { url, title, description, imgUrl: initialImgUrl ,loading} = usePageMeta();
-  const { save } = useSaveBookmark();
-  const [imgUrl, setImgUrl] = useState(initialImgUrl);
-    useEffect(() => {
-    if (!loading && !title) {
-        // alert("이 페이지는 저장할 수 없어요 😢");
-        // window.close();
-    }
-    }, [loading, title]);
-
-    // 이미지 없으면 기본 이미지로 교체
-    useEffect(() => {
-    if (!initialImgUrl) {
-        setImgUrl("https://thumb.photo-ac.com/31/3137071c02f608edb5220129b10533d6_t.jpeg");
-    } else {
-        setImgUrl(initialImgUrl);
-    }
-    }, [initialImgUrl]);
-  // useEffect(()=>{
-  //   postSignup({
-  //       "email": "test@gmail2.com", 
-  //       "remindDefault": "08:00", 
-  //       "fcmToken": "adlfdjlaj11212lkadfsjlkfdsa"
-  //     })
-  // },[])
-const options = categoryData?.data?.categories?.map((c: Category) => c.categoryName) ?? [];
-
+  // 마지막! 저장하기 버튼 분기 (api 다르게 탐)
   const handleSave = async () => {
+    const currentDate = date;
+    const currentTime = time;
      if (!selected || parseInt(selected) === 0) {
         alert("카테고리를 선택해주세요!");
         return;
@@ -176,8 +161,8 @@ const options = categoryData?.data?.categories?.map((c: Category) => c.categoryN
       memo,
       isRemindOn,
       selectedCategory: selected,
-      date: isRemindOn ? date : null,
-      time: isRemindOn ? time : null,
+      date: isRemindOn ? currentDate  : date,
+      time: isRemindOn ? currentTime : time,
       createdAt: new Date().toISOString(),
     };
 
@@ -190,8 +175,8 @@ const options = categoryData?.data?.categories?.map((c: Category) => c.categoryN
       memo,
       isRemindOn,
       selectedCategory: selected,
-      date: isRemindOn ? date : null,
-      time: isRemindOn ? time : null,
+      date: isRemindOn ? currentDate  : date,
+      time: isRemindOn ? currentTime : time,
     });
      postArticle(
       {
@@ -203,75 +188,25 @@ const options = categoryData?.data?.categories?.map((c: Category) => c.categoryN
         remindTime: combineDateTime(saveData.date ?? "", saveData.time ?? ""),
       }
     );
-   } else{
-        putArticle({
-        articleId: isArticleId,
-        data: { 
-            categoryId: saveData.selectedCategory
-            ? parseInt(saveData.selectedCategory)
-            : 0,
-            memo: saveData.memo,
-            now: new Date().toISOString(),
-            remindTime: combineDateTime(saveData.date ?? "", saveData.time ?? ""),
-      }
+    } else{
+          putArticle({
+          articleId: isArticleId,
+          data: { 
+              categoryId: saveData.selectedCategory
+              ? parseInt(saveData.selectedCategory)
+              : 0,
+              memo: saveData.memo,
+              now: new Date().toISOString(),
+              remindTime: combineDateTime(saveData.date ?? "", saveData.time ?? ""),
+        }
 
-    });
-   }
+      });
+    }
    
   };
 
-  const [categoryTitle, setCategoryTitle] = useState('');
-  const [isPopError, setIsPopError] = useState(false);
-  const [errorTxt, setErrorTxt] = useState('');
-  const saveCategory = () => {
-    // 20자 제한
-    if (categoryTitle.length >20){
-      setIsPopError(true);
-      setErrorTxt('20자 이내로 작성해주세요');
-    } else{
-      postCategories(
-      { categoryName: categoryTitle },
-      {
-        onSuccess: (res) => {
-          const newCategory: Category = {
-            categoryId: res.data.categoryId, // 백엔드에서 내려주는 id
-            categoryName: categoryTitle,
-            categoryColor: res.data.categoryColor ?? '#000000',
-          };
-          categoryData?.data?.categories.push(newCategory);
-          setSelected(newCategory.categoryId.toString());
-          setSelectedCategoryName(newCategory.categoryName);
-        },
 
-       onError: (err: unknown) => {
-          if (typeof err === "object" && err !== null && "response" in err) {
-            const response = (err as any).response; // 여기서 최소화
-            const msg = response?.data?.message;
-            if (msg) {
-              alert(msg);
-              return;
-            }
-          }
-          alert("카테고리 추가 중 오류가 발생했어요 😢");
-        }
-
-      }
-    );
-      setCategoryTitle(''); 
-      setIsPopError(false); 
-      setErrorTxt('');
-      setIsPopupOpen(false);
-    }
-  }
-  const handleSelect = (value: string | null, idx: number) => {
-    const categoryId = categoryData?.data?.categories[idx]?.categoryId.toString() ?? null;
-    setSelected(categoryId);
-    setSelectedCategoryName(value);
-  };
-
-//   if (!selectedCategoryName){
-//     return <div className="App">카테고리 로딩중...</div>;
-//   }
+  
   return (
     <div className="App">
       <div className="relative flex h-[56.8rem] w-[31.2rem] items-center justify-center">
@@ -288,8 +223,11 @@ const options = categoryData?.data?.categories?.map((c: Category) => c.categoryN
             errortext={errorTxt}
             onInputChange={setCategoryTitle}
             placeholder="카테고리 제목을 입력해주세요"
-            onLeftClick={() => setIsPopupOpen(false)}
-            onRightClick={saveCategory}
+            onLeftClick={() => {
+              setIsPopupOpen(false);
+              resetPopup()
+            }}
+            onRightClick={saveHandleCategory}
           />
         )}
         <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
