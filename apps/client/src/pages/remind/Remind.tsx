@@ -1,9 +1,26 @@
-import { Badge, Card } from '@pinback/design-system/ui';
 import { useState } from 'react';
+import { Badge, Card } from '@pinback/design-system/ui';
+import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
+import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
+import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
+import { belowOf } from '@shared/utils/anchorPosition';
+import { REMIND_MOCK_DATA } from './constants';
 import { useGetRemindArticles } from './apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 
 const Remind = () => {
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const {
+    state: menu,
+    open: openMenu,
+    close: closeMenu,
+    style,
+    containerRef,
+  } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
+
+  const getItemTitle = (id: number | null) =>
+    id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
   const [activeBadge, setActiveBadge] = useState('notRead');
   const formattedDate = formatLocalDateTime();
 
@@ -46,9 +63,41 @@ const Remind = () => {
             content={article.memo}
             timeRemaining={article.remindAt}
             category={article.category.categoryName}
+            onOptionsClick={(e) =>
+              openMenu(article.category.categoryId, e.currentTarget)
+            }
           />
         ))}
+
+        <OptionsMenuPortal
+          open={menu.open}
+          style={style ?? undefined}
+          containerRef={containerRef}
+          categoryId={menu.categoryId}
+          getCategoryName={getItemTitle}
+          onEdit={() => {
+            setIsEditOpen(true);
+            closeMenu();
+          }}
+          onDelete={(id) => {
+            console.log('delete', id);
+            closeMenu();
+          }}
+          onClose={closeMenu}
+        />
       </div>
+
+      {isEditOpen && (
+        <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            onClick={() => setIsEditOpen(false)}
+          />
+          <div className="absolute inset-0 flex items-center justify-center p-4">
+            <CardEditModal onClose={() => setIsEditOpen(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
