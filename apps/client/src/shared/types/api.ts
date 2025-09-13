@@ -17,3 +17,25 @@ export interface ArticleReadStatusResponse {
   acornCount: number;
   acornCollected: boolean;
 }
+
+export interface EditArticleRequest {
+  categoryId: number;
+  memo: string;
+  now: string;
+  remindTime: string | null;
+}
+
+interface CategoryResponse {
+  categoryId: number;
+  categoryName: string;
+  categoryColor: string;
+}
+
+export interface ArticleDetailResponse {
+  id: number;
+  url: string;
+  memo: string;
+  remindAt: string;
+  createdAt: string;
+  categoryResponse: CategoryResponse;
+}

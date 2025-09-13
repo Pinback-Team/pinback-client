@@ -2,6 +2,7 @@
   "extends": "@pinback/typescript-config/react.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "plugins": [{ "name": "react" }],
     "paths": {
       "@shared/*": ["src/shared/*"],

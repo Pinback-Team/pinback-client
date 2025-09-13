@@ -13,22 +13,38 @@ import {
   validateTime,
 } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
-import { useState } from 'react';
+import {
+  useGetDashboardCategories,
+  usePutEditArticle,
+} from '@shared/apis/queries';
+import { usePageMeta } from '@shared/hooks/usePageMeta';
+import { ArticleDetailResponse, EditArticleRequest } from '@shared/types/api';
+import { updateDate, updateTime } from '@shared/utils/formatDateTime';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
 export interface CardEditModalProps {
   onClose: () => void;
+  prevData: ArticleDetailResponse | undefined;
 }
 
-export default function CardEditModal({ onClose }: CardEditModalProps) {
-  const [isRemindOn, setIsRemindOn] = useState(true);
-  const [selected, setSelected] = useState<string | null>(null);
+export default function CardEditModal({
+  onClose,
+  prevData,
+}: CardEditModalProps) {
+  const { meta } = usePageMeta(
+    'https://www.notion.so/PinBack-23927450eb1c8080a5a1f84a9d483aa9'
+  );
+  const { data: category } = useGetDashboardCategories();
+  const { mutate: editArticle } = usePutEditArticle();
+  const queryClient = useQueryClient();
+
+  const [isRemindOn, setIsRemindOn] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // 입력 필드 상태: 서버에서 받아올 데이터
-  const [title] = useState('');
-  const [source] = useState('');
   const [memo, setMemo] = useState('');
-  const [categories] = useState<string[]>([]);
   const [categoryTitle, setCategoryTitle] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
@@ -61,6 +77,64 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
   const handleSwitchChange = (checked: boolean) => {
     setIsRemindOn(checked);
   };
+
+  const saveData = () => {
+    if (!prevData?.id) {
+      console.error('Article ID is missing, cannot save.');
+      setToastIsOpen(true);
+      return;
+    }
+
+    const editArticleData: EditArticleRequest = {
+      memo,
+      categoryId:
+        category?.categories.find((cat) => cat.name === selectedCategory)?.id ||
+        -1,
+      now: new Date().toISOString(),
+      remindTime: isRemindOn ? `${date}T${time}` : null,
+    };
+
+    editArticle(
+      {
+        articleId: prevData?.id,
+        editArticleData,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ['remindArticles'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['bookmarkReadArticles'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['bookmarkUnreadArticles'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['categoryBookmarkArticles'],
+          });
+          onClose();
+        },
+        onError: () => {
+          setToastIsOpen(true);
+        },
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (prevData) {
+      setMemo(prevData.memo || '');
+      setSelectedCategory(prevData.categoryResponse.categoryName || null);
+
+      if (prevData.remindAt) {
+        const [rawDate, rawTime] = prevData.remindAt.split('T');
+        setDate(updateDate(rawDate));
+        setTime(updateTime(rawTime));
+        setIsRemindOn(true);
+      }
+    }
+  }, [prevData]);
 
   return (
     <div className="flex flex-col">
@@ -101,16 +175,21 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
           </button>
         </header>
 
-        <InfoBox title={title} source={source} />
+        <InfoBox
+          title={meta.title}
+          source={meta.description}
+          imgUrl={meta.imgUrl}
+        />
 
         <section className="flex flex-col gap-[0.8rem]">
           <p className="caption1-sb text-font-black-1">카테고리</p>
           <Dropdown
-            options={categories}
-            selectedValue={selected}
-            onChange={(value) => setSelected(value)}
+            options={
+              category?.categories.map((category) => category.name) || []
+            }
+            selectedValue={selectedCategory}
+            onChange={(value) => setSelectedCategory(value)}
             placeholder="선택해주세요"
-            onAddItem={() => setIsPopupOpen(true)}
             addItemLabel="추가하기"
           />
         </section>
@@ -151,7 +230,7 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
           {timeError && <p className="body3-r text-error">{timeError}</p>}
         </section>
         {/* TODO: onClick 추후  저장 api 연결후 실패/성공 연결 */}
-        <Button onClick={() => setToastIsOpen(true)}>저장하기</Button>
+        <Button onClick={saveData}>저장하기</Button>
       </div>
       {toastIsOpen && (
         <div className="absolute bottom-[2.4rem] left-1/2 -translate-x-1/2">
