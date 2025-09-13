@@ -52,10 +52,10 @@ const MyBookmark = () => {
         />
       </div>
 
-      <div className="scrollbar-hide mt-[2.6rem] flex h-screen max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
-        {activeBadge === 'all' &&
-          (articles?.articles && articles.articles.length > 0 ? (
-            articles.articles.map((article) => (
+      {activeBadge === 'all' &&
+        (articles?.articles && articles.articles.length > 0 ? (
+          <div className="scrollbar-hide mt-[2.6rem] flex h-screen max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
+            {articles.articles.map((article) => (
               <Card
                 key={article.articleId}
                 type="bookmark"
@@ -68,14 +68,32 @@ const MyBookmark = () => {
                   openMenu(article.articleId, e.currentTarget)
                 }
               />
-            ))
-          ) : (
-            <NoArticles />
-          ))}
+            ))}
+            <OptionsMenuPortal
+              open={menu.open}
+              style={style ?? undefined}
+              containerRef={containerRef}
+              categoryId={menu.categoryId}
+              getCategoryName={getBookmarkTitle}
+              onEdit={() => {
+                setIsEditOpen(true);
+                closeMenu();
+              }}
+              onDelete={(id) => {
+                console.log('delete', id);
+                closeMenu();
+              }}
+              onClose={closeMenu}
+            />
+          </div>
+        ) : (
+          <NoArticles />
+        ))}
 
-        {activeBadge === 'notRead' &&
-          (unreadArticles?.articles && unreadArticles.articles.length > 0 ? (
-            unreadArticles.articles.map((article) => (
+      {activeBadge === 'notRead' &&
+        (unreadArticles?.articles && unreadArticles.articles.length > 0 ? (
+          <div className="scrollbar-hide mt-[2.6rem] flex h-screen max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
+            {unreadArticles.articles.map((article) => (
               <Card
                 key={article.articleId}
                 type="bookmark"
@@ -88,27 +106,27 @@ const MyBookmark = () => {
                   openMenu(article.articleId, e.currentTarget)
                 }
               />
-            ))
-          ) : (
-            <NoArticles />
-          ))}
-        <OptionsMenuPortal
-          open={menu.open}
-          style={style ?? undefined}
-          containerRef={containerRef}
-          categoryId={menu.categoryId}
-          getCategoryName={getBookmarkTitle}
-          onEdit={() => {
-            setIsEditOpen(true);
-            closeMenu();
-          }}
-          onDelete={(id) => {
-            console.log('delete', id);
-            closeMenu();
-          }}
-          onClose={closeMenu}
-        />
-      </div>
+            ))}
+            <OptionsMenuPortal
+              open={menu.open}
+              style={style ?? undefined}
+              containerRef={containerRef}
+              categoryId={menu.categoryId}
+              getCategoryName={getBookmarkTitle}
+              onEdit={() => {
+                setIsEditOpen(true);
+                closeMenu();
+              }}
+              onDelete={(id) => {
+                console.log('delete', id);
+                closeMenu();
+              }}
+              onClose={closeMenu}
+            />
+          </div>
+        ) : (
+          <NoArticles />
+        ))}
 
       {isEditOpen && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">

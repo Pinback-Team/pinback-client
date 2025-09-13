@@ -55,10 +55,10 @@ const Remind = () => {
         />
       </div>
 
-      <div className="scrollbar-hide mt-[2.6rem] flex max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
-        {activeBadge === 'read' &&
-          (data?.articles && data.articles.length > 0 ? (
-            data.articles.map((article) => (
+      {activeBadge === 'read' &&
+        (data?.articles && data.articles.length > 0 ? (
+          <div className="scrollbar-hide mt-[2.6rem] flex max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
+            {data.articles.map((article) => (
               <Card
                 key={article.articleId}
                 type="remind"
@@ -67,14 +67,32 @@ const Remind = () => {
                 timeRemaining={article.remindAt}
                 category={article.category.categoryName}
               />
-            ))
-          ) : (
-            <NoReadArticles />
-          ))}
+            ))}
+            <OptionsMenuPortal
+              open={menu.open}
+              style={style ?? undefined}
+              containerRef={containerRef}
+              categoryId={menu.categoryId}
+              getCategoryName={getItemTitle}
+              onEdit={() => {
+                setIsEditOpen(true);
+                closeMenu();
+              }}
+              onDelete={(id) => {
+                console.log('delete', id);
+                closeMenu();
+              }}
+              onClose={closeMenu}
+            />
+          </div>
+        ) : (
+          <NoReadArticles />
+        ))}
 
-        {activeBadge === 'notRead' &&
-          (data?.articles && data.articles.length > 0 ? (
-            data.articles.map((article) => (
+      {activeBadge === 'notRead' &&
+        (data?.articles && data.articles.length > 0 ? (
+          <div className="scrollbar-hide mt-[2.6rem] flex max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
+            {data.articles.map((article) => (
               <Card
                 key={article.articleId}
                 type="remind"
@@ -86,28 +104,27 @@ const Remind = () => {
                   openMenu(article.category.categoryId, e.currentTarget)
                 }
               />
-            ))
-          ) : (
-            <NoUnreadArticles />
-          ))}
-
-        <OptionsMenuPortal
-          open={menu.open}
-          style={style ?? undefined}
-          containerRef={containerRef}
-          categoryId={menu.categoryId}
-          getCategoryName={getItemTitle}
-          onEdit={() => {
-            setIsEditOpen(true);
-            closeMenu();
-          }}
-          onDelete={(id) => {
-            console.log('delete', id);
-            closeMenu();
-          }}
-          onClose={closeMenu}
-        />
-      </div>
+            ))}
+            <OptionsMenuPortal
+              open={menu.open}
+              style={style ?? undefined}
+              containerRef={containerRef}
+              categoryId={menu.categoryId}
+              getCategoryName={getItemTitle}
+              onEdit={() => {
+                setIsEditOpen(true);
+                closeMenu();
+              }}
+              onDelete={(id) => {
+                console.log('delete', id);
+                closeMenu();
+              }}
+              onClose={closeMenu}
+            />
+          </div>
+        ) : (
+          <NoUnreadArticles />
+        ))}
 
       {isEditOpen && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
