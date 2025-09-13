@@ -131,7 +131,7 @@ export function Sidebar() {
                   active={selectedCategoryId === category.id}
                   onClick={(id) => {
                     closeMenu();
-                    selectCategory(id);
+                    selectCategory(id, category.name);
                   }}
                   onOptionsClick={(id, el) => openMenu(id, el)}
                 />

@@ -23,10 +23,10 @@ export function useSidebarNav() {
   }, [navigate]);
 
   const selectCategory = useCallback(
-    (id: number) => {
+    (id: number, name: string) => {
       setActiveTab('mybookmark');
       setSelectedCategoryId(id);
-      navigate(`/my-bookmarks?categoryId=${id}`);
+      navigate(`/my-bookmarks?id=${id}&category=${name}`);
     },
     [navigate]
   );

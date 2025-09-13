@@ -5,8 +5,10 @@ import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
 import { REMIND_MOCK_DATA } from './constants';
-import { useGetRemindArticles } from './apis/queries';
+import { useGetRemindArticles } from '@pages/remind/apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
+import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
+import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -21,7 +23,7 @@ const Remind = () => {
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
-  const [activeBadge, setActiveBadge] = useState('notRead');
+  const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
   const formattedDate = formatLocalDateTime();
 
   const { data } = useGetRemindArticles(
@@ -31,9 +33,12 @@ const Remind = () => {
     10
   );
 
-  const handleBadgeClick = (badgeType: string) => {
+  const handleBadgeClick = (badgeType: 'read' | 'notRead') => {
     setActiveBadge(badgeType);
   };
+
+  const EmptyStateComponent =
+    activeBadge === 'read' ? <NoReadArticles /> : <NoUnreadArticles />;
 
   return (
     <div className="flex flex-col py-[5.2rem] pl-[8rem]">
@@ -53,39 +58,43 @@ const Remind = () => {
         />
       </div>
 
-      <div className="scrollbar-hide mt-[2.6rem] flex max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
-        {/* TODO: API 연결 후 수정 */}
-        {data?.articles?.map((article) => (
-          <Card
-            key={article.articleId}
-            type="remind"
-            title={article.url}
-            content={article.memo}
-            timeRemaining={article.remindAt}
-            category={article.category.categoryName}
-            onOptionsClick={(e) =>
-              openMenu(article.category.categoryId, e.currentTarget)
-            }
-          />
-        ))}
+      {data?.articles && data.articles.length > 0 ? (
+        <div className="scrollbar-hide mt-[2.6rem] flex max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
+          {data.articles.map((article) => (
+            <Card
+              key={article.articleId}
+              type="remind"
+              title={article.url}
+              content={article.memo}
+              timeRemaining={article.remindAt}
+              category={article.category.categoryName}
+              {...(activeBadge === 'notRead' && {
+                onOptionsClick: (e) =>
+                  openMenu(article.category.categoryId, e.currentTarget),
+              })}
+            />
+          ))}
+        </div>
+      ) : (
+        EmptyStateComponent
+      )}
 
-        <OptionsMenuPortal
-          open={menu.open}
-          style={style ?? undefined}
-          containerRef={containerRef}
-          categoryId={menu.categoryId}
-          getCategoryName={getItemTitle}
-          onEdit={() => {
-            setIsEditOpen(true);
-            closeMenu();
-          }}
-          onDelete={(id) => {
-            console.log('delete', id);
-            closeMenu();
-          }}
-          onClose={closeMenu}
-        />
-      </div>
+      <OptionsMenuPortal
+        open={menu.open}
+        style={style ?? undefined}
+        containerRef={containerRef}
+        categoryId={menu.categoryId}
+        getCategoryName={getItemTitle}
+        onEdit={() => {
+          setIsEditOpen(true);
+          closeMenu();
+        }}
+        onDelete={(id) => {
+          console.log('delete', id);
+          closeMenu();
+        }}
+        onClose={closeMenu}
+      />
 
       {isEditOpen && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
