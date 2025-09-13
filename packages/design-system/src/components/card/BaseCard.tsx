@@ -4,7 +4,7 @@ interface BaseCardProps {
 
 const BaseCard = ({ children }: BaseCardProps) => {
   return (
-    <div className="outline-gray200 w-[24.8rem] overflow-hidden rounded-[1.2rem] bg-white outline">
+    <div className="border-gray200 w-[24.8rem] overflow-hidden rounded-[1.2rem] border bg-white">
       {children}
     </div>
   );
