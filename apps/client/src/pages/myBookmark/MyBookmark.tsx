@@ -15,6 +15,7 @@ import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import { Icon } from '@pinback/design-system/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePutArticleReadStatus } from '@shared/apis/queries';
+import { useGetArticleDetail } from '@shared/apis/queries';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
@@ -32,6 +33,9 @@ const MyBookmark = () => {
     1,
     10
   );
+  const { mutate: getArticleDetail, data: articleDetail } =
+    useGetArticleDetail();
+
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
 
   const {
@@ -49,7 +53,7 @@ const MyBookmark = () => {
     activeBadge === 'all' ? articles?.articles : unreadArticles?.articles;
 
   // 임시 콘솔
-  console.log('categoryArticles', categoryArticles);
+  // console.log('categoryArticles', categoryArticles);
 
   const handleBadgeClick = (badgeType: 'all' | 'notRead') => {
     setActiveBadge(badgeType);
@@ -135,7 +139,8 @@ const MyBookmark = () => {
         containerRef={containerRef}
         categoryId={menu.categoryId}
         getCategoryName={getBookmarkTitle}
-        onEdit={() => {
+        onEdit={(id) => {
+          getArticleDetail(id);
           setIsEditOpen(true);
           closeMenu();
         }}
@@ -153,7 +158,10 @@ const MyBookmark = () => {
             onClick={() => setIsEditOpen(false)}
           />
           <div className="absolute inset-0 flex items-center justify-center p-4">
-            <CardEditModal onClose={() => setIsEditOpen(false)} />
+            <CardEditModal
+              onClose={() => setIsEditOpen(false)}
+              // data={articleDetail}
+            />
           </div>
         </div>
       )}

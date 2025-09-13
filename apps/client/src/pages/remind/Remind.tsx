@@ -11,6 +11,7 @@ import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticl
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
 import { usePutArticleReadStatus } from '@shared/apis/queries';
 import { useQueryClient } from '@tanstack/react-query';
+import { useGetArticleDetail } from '@shared/apis/queries';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -37,6 +38,7 @@ const Remind = () => {
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
+  const { mutate: getArticleDetail } = useGetArticleDetail();
 
   const handleBadgeClick = (badgeType: 'read' | 'notRead') => {
     setActiveBadge(badgeType);
@@ -104,7 +106,8 @@ const Remind = () => {
         containerRef={containerRef}
         categoryId={menu.categoryId}
         getCategoryName={getItemTitle}
-        onEdit={() => {
+        onEdit={(id) => {
+          getArticleDetail(id);
           setIsEditOpen(true);
           closeMenu();
         }}

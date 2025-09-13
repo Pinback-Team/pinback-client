@@ -88,13 +88,13 @@ export const usePutArticleReadStatus = (): UseMutationResult<
   });
 };
 
-export const useGetArticleDetail = (
-  articleId: number
-): UseQueryResult<ArticleDetailResponse, AxiosError> => {
-  return useQuery({
-    queryKey: ['articleDetail', articleId],
-    queryFn: () => getArticleDetail(articleId),
-    enabled: !!articleId,
+export const useGetArticleDetail = (): UseMutationResult<
+  ArticleDetailResponse,
+  AxiosError,
+  number
+> => {
+  return useMutation({
+    mutationFn: (articleId: number) => getArticleDetail(articleId),
   });
 };
 
