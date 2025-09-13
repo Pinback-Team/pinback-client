@@ -9,6 +9,7 @@ import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
+import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
@@ -25,7 +26,7 @@ const MyBookmark = () => {
   const getBookmarkTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
 
-  const { data: readArticles } = useGetBookmarkArticles(1, 10);
+  const { data: articles } = useGetBookmarkArticles(1, 10);
   const { data: unreadArticles } = useGetBookmarkUnreadArticles(1, 10);
 
   const handleBadgeClick = (badgeType: 'all' | 'notRead') => {
@@ -39,52 +40,58 @@ const MyBookmark = () => {
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="전체보기"
-          countNum={readArticles?.totalArticle || 0}
+          countNum={articles?.totalArticle || 0}
           onClick={() => handleBadgeClick('all')}
           isActive={activeBadge === 'all'}
         />
         <Badge
           text="안 읽음"
-          countNum={readArticles?.totalUnreadArticle || 0}
+          countNum={articles?.totalUnreadArticle || 0}
           onClick={() => handleBadgeClick('notRead')}
           isActive={activeBadge === 'notRead'}
         />
       </div>
 
-      <div className="scrollbar-hide mt-[2.6rem] flex max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
-        {/* TODO: API 연결 후 수정 */}
+      <div className="scrollbar-hide mt-[2.6rem] flex h-screen max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
         {activeBadge === 'all' &&
-          readArticles?.articles.map((article) => (
-            <Card
-              key={article.articleId}
-              type="bookmark"
-              title={article.url}
-              content={article.memo}
-              category={article.category.categoryName}
-              date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
-              onClick={() => {}}
-              onOptionsClick={(e) =>
-                openMenu(article.articleId, e.currentTarget)
-              }
-            />
+          (articles?.articles && articles.articles.length > 0 ? (
+            articles.articles.map((article) => (
+              <Card
+                key={article.articleId}
+                type="bookmark"
+                title={article.url}
+                content={article.memo}
+                category={article.category.categoryName}
+                date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
+                onClick={() => {}}
+                onOptionsClick={(e) =>
+                  openMenu(article.articleId, e.currentTarget)
+                }
+              />
+            ))
+          ) : (
+            <NoArticles />
           ))}
 
         {activeBadge === 'notRead' &&
-          unreadArticles?.articles.map((article) => (
-            <Card
-              key={article.articleId}
-              type="bookmark"
-              title={article.url}
-              content={article.memo}
-              category={article.category.categoryName}
-              date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
-              onClick={() => {}}
-              onOptionsClick={(e) =>
-                openMenu(article.articleId, e.currentTarget)
-              }
-            />
+          (unreadArticles?.articles && unreadArticles.articles.length > 0 ? (
+            unreadArticles.articles.map((article) => (
+              <Card
+                key={article.articleId}
+                type="bookmark"
+                title={article.url}
+                content={article.memo}
+                category={article.category.categoryName}
+                date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
+                onClick={() => {}}
+                onOptionsClick={(e) =>
+                  openMenu(article.articleId, e.currentTarget)
+                }
+              />
+            ))
+          ) : (
+            <NoArticles />
           ))}
-
         <OptionsMenuPortal
           open={menu.open}
           style={style ?? undefined}
