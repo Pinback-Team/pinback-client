@@ -45,9 +45,11 @@ const MainPop = ({type, savedData}: MainPopProps) => {
     }, [loading, title]);
 
     // 이미지 없으면 기본 이미지로 교체
+    const defaultImageUrl = "https://thumb.photo-ac.com/31/3137071c02f608edb5220129b10533d6_t.jpeg";
+
     useEffect(() => {
     if (!initialImgUrl) {
-        setImgUrl("https://thumb.photo-ac.com/31/3137071c02f608edb5220129b10533d6_t.jpeg");
+        setImgUrl(defaultImageUrl);
     } else {
         setImgUrl(initialImgUrl);
     }
@@ -238,7 +240,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
           <InfoBox
             title={title || '제목 로딩 중...'}
             source={description || '불러오는 중입니다'}
-            imgUrl={imgUrl}
+            imgUrl={initialImgUrl || defaultImageUrl}
           />
 
           <div>
