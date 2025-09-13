@@ -60,7 +60,7 @@ const MyBookmark = () => {
               type="bookmark"
               title={article.url}
               content={article.memo}
-              // category={article.category.categoryName}
+              category={article.category.categoryName}
               date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
               onClick={() => {}}
               onOptionsClick={(e) =>
@@ -76,7 +76,7 @@ const MyBookmark = () => {
               type="bookmark"
               title={article.url}
               content={article.memo}
-              // category={article.}
+              category={article.category.categoryName}
               date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
               onClick={() => {}}
               onOptionsClick={(e) =>
