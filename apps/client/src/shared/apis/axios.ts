@@ -29,12 +29,17 @@ export const getAcorns = async () => {
 };
 
 export interface postSignUpRequest {
-  email: string,
-  remindDefault: string,
-  fcmToken: string
+  email: string;
+  remindDefault: string;
+  fcmToken: string;
 }
 
 export const postSignUp = async (responsedata: postSignUpRequest) => {
-  const {data} = await apiRequest.post('/api/v1/auth/signup', responsedata);
+  const { data } = await apiRequest.post('/api/v1/auth/signup', responsedata);
   return data;
+};
+
+export const deleteCategory = async (id: number) => {
+  const response = await apiRequest.delete(`/api/v1/categories/${id}`);
+  return response;
 };
