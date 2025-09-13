@@ -39,6 +39,13 @@ export const postSignUp = async (responsedata: postSignUpRequest) => {
   return data;
 };
 
+export const putArticleReadStatus = async (articleId: number) => {
+  const { data } = await apiRequest.put(
+    `/api/v1/articles/${articleId}/readStatus`
+  );
+  return data;
+};
+
 export const deleteCategory = async (id: number) => {
   const response = await apiRequest.delete(`/api/v1/categories/${id}`);
   return response;
