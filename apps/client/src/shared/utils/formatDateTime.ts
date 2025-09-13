@@ -7,3 +7,14 @@ export const formatLocalDateTime = (date: Date = new Date()) => {
   const ss = String(date.getSeconds()).padStart(2, '0');
   return `${yyyy}-${mm}-${dd}T${hh}:${mi}:${ss}`;
 };
+
+export const updateDate = (date: string) => {
+  if (!date) return '';
+  return date.replace(/-/g, '.');
+};
+
+// HH:mm:ss → HH:mm
+export const updateTime = (time: string) => {
+  if (!time) return '';
+  return time.slice(0, 5);
+};
