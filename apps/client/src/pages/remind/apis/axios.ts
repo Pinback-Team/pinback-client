@@ -11,3 +11,8 @@ export const getRemindArticles = async (
   );
   return data.data;
 };
+
+export const deleteRemindArticle = async (id: number) => {
+  const response = await apiRequest.post(`/api/v1/articles/${id}`);
+  return response;
+};

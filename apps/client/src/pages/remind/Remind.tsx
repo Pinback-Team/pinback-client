@@ -5,7 +5,7 @@ import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
 import { REMIND_MOCK_DATA } from './constants';
-import { useGetRemindArticles } from './apis/queries';
+import { useDeleteRemindArticle, useGetRemindArticles } from './apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 
 const Remind = () => {
@@ -30,6 +30,7 @@ const Remind = () => {
     1,
     10
   );
+  const { mutate: deleteArticle } = useDeleteRemindArticle();
 
   const handleBadgeClick = (badgeType: string) => {
     setActiveBadge(badgeType);
@@ -63,9 +64,7 @@ const Remind = () => {
             content={article.memo}
             timeRemaining={article.remindAt}
             category={article.category.categoryName}
-            onOptionsClick={(e) =>
-              openMenu(article.category.categoryId, e.currentTarget)
-            }
+            onOptionsClick={(e) => openMenu(article.articleId, e.currentTarget)}
           />
         ))}
 
