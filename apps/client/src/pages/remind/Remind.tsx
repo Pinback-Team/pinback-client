@@ -41,7 +41,7 @@ const Remind = () => {
         close();
       },
       onError: (error) => {
-        console.error('카테고리 삭제 실패:', error);
+        console.error('아티클 삭제 실패:', error);
       },
     });
   };

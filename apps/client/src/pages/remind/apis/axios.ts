@@ -13,6 +13,6 @@ export const getRemindArticles = async (
 };
 
 export const deleteRemindArticle = async (id: number) => {
-  const response = await apiRequest.post(`/api/v1/articles/${id}`);
+  const response = await apiRequest.delete(`/api/v1/articles/${id}`);
   return response;
 };

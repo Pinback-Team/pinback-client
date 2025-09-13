@@ -13,13 +13,29 @@ import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
 import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import { Icon } from '@pinback/design-system/icons';
+import { useDeleteRemindArticle } from '@pages/remind/apis/queries';
+import { useQueryClient } from '@tanstack/react-query';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
   const [searchParams] = useSearchParams();
+  const queryClient = useQueryClient();
   const category = searchParams.get('category');
   const categoryId = searchParams.get('id');
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const { mutate: deleteArticle } = useDeleteRemindArticle();
+
+  const handleDeleteArticle = (id: number) => {
+    deleteArticle(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['remindArticles'] });
+        close();
+      },
+      onError: (error) => {
+        console.error('아티클 삭제 실패:', error);
+      },
+    });
+  };
 
   const {
     state: menu,
@@ -114,9 +130,8 @@ const MyBookmark = () => {
           setIsEditOpen(true);
           closeMenu();
         }}
-        onDelete={(id) => {
-          console.log('delete', id);
-          closeMenu();
+        onDelete={(articleId) => {
+          handleDeleteArticle(articleId);
         }}
         onClose={closeMenu}
       />
