@@ -57,7 +57,7 @@ export const putEditArticle = async (
   editArticleData: EditArticleRequest
 ) => {
   const response = await apiRequest.put(`/api/v1/articles/${articleId}`, {
-    editArticleData,
+    ...editArticleData,
   });
   return response;
 };

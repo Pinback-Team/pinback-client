@@ -13,9 +13,12 @@ import {
   validateTime,
 } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
-import { useGetDashboardCategories } from '@shared/apis/queries';
+import {
+  useGetDashboardCategories,
+  usePutEditArticle,
+} from '@shared/apis/queries';
 import { usePageMeta } from '@shared/hooks/usePageMeta';
-import { ArticleDetailResponse } from '@shared/types/api';
+import { ArticleDetailResponse, EditArticleRequest } from '@shared/types/api';
 import { updateDate, updateTime } from '@shared/utils/formatDateTime';
 import { useEffect, useState } from 'react';
 
@@ -28,13 +31,15 @@ export default function CardEditModal({
   onClose,
   prevData,
 }: CardEditModalProps) {
-  const { meta, loading, error } = usePageMeta(
+  console.log('prevData in CardEditModal:', prevData); // prevData 확인용 로그
+  const { meta } = usePageMeta(
     'https://www.notion.so/PinBack-23927450eb1c8080a5a1f84a9d483aa9'
   );
   const { data: category } = useGetDashboardCategories();
+  const { mutate: editArticle } = usePutEditArticle();
 
   const [isRemindOn, setIsRemindOn] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // 입력 필드 상태: 서버에서 받아올 데이터
@@ -70,6 +75,38 @@ export default function CardEditModal({
 
   const handleSwitchChange = (checked: boolean) => {
     setIsRemindOn(checked);
+  };
+
+  const saveData = () => {
+    if (!prevData?.id) {
+      console.error('Article ID is missing, cannot save.');
+      setToastIsOpen(true);
+      return;
+    }
+
+    const editArticleData: EditArticleRequest = {
+      memo,
+      categoryId:
+        category?.categories.find((cat) => cat.name === selectedCategory)?.id ||
+        -1,
+      now: new Date().toISOString(),
+      remindTime: isRemindOn ? `${date}T${time}` : null,
+    };
+
+    editArticle(
+      {
+        articleId: prevData?.id,
+        editArticleData,
+      },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+        onError: () => {
+          setToastIsOpen(true);
+        },
+      }
+    );
   };
 
   useEffect(() => {
@@ -136,8 +173,8 @@ export default function CardEditModal({
             options={
               category?.categories.map((category) => category.name) || []
             }
-            selectedValue={selected}
-            onChange={(value) => setSelected(value)}
+            selectedValue={selectedCategory}
+            onChange={(value) => setSelectedCategory(value)}
             placeholder="선택해주세요"
             addItemLabel="추가하기"
           />
@@ -179,7 +216,7 @@ export default function CardEditModal({
           {timeError && <p className="body3-r text-error">{timeError}</p>}
         </section>
         {/* TODO: onClick 추후  저장 api 연결후 실패/성공 연결 */}
-        <Button onClick={() => setToastIsOpen(true)}>저장하기</Button>
+        <Button onClick={saveData}>저장하기</Button>
       </div>
       {toastIsOpen && (
         <div className="absolute bottom-[2.4rem] left-1/2 -translate-x-1/2">

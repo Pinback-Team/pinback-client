@@ -22,7 +22,7 @@ export interface EditArticleRequest {
   categoryId: number;
   memo: string;
   now: string;
-  remindTime: string;
+  remindTime: string | null;
 }
 
 interface CategoryResponse {

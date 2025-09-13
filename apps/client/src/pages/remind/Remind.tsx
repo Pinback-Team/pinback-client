@@ -9,9 +9,11 @@ import { useGetRemindArticles } from '@pages/remind/apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
-import { usePutArticleReadStatus } from '@shared/apis/queries';
+import {
+  usePutArticleReadStatus,
+  useGetArticleDetail,
+} from '@shared/apis/queries';
 import { useQueryClient } from '@tanstack/react-query';
-import { useGetArticleDetail } from '@shared/apis/queries';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -38,7 +40,8 @@ const Remind = () => {
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
-  const { mutate: getArticleDetail } = useGetArticleDetail();
+  const { mutate: getArticleDetail, data: articleDetail } =
+    useGetArticleDetail();
 
   const handleBadgeClick = (badgeType: 'read' | 'notRead') => {
     setActiveBadge(badgeType);
@@ -125,7 +128,10 @@ const Remind = () => {
             onClick={() => setIsEditOpen(false)}
           />
           <div className="absolute inset-0 flex items-center justify-center p-4">
-            <CardEditModal onClose={() => setIsEditOpen(false)} />
+            <CardEditModal
+              onClose={() => setIsEditOpen(false)}
+              prevData={articleDetail}
+            />
           </div>
         </div>
       )}
