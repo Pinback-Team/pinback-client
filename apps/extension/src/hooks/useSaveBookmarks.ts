@@ -36,7 +36,7 @@ export const useSaveBookmark = () => {
           url: params.url,
         },
         (newBookmark) => {
-          console.log('크롬 북마크바에 저장 완료');
+          console.log('크롬 북마크바에 저장 완료: ', newBookmark);
         }
       );
 
