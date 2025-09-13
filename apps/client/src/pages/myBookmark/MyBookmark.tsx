@@ -32,13 +32,16 @@ const MyBookmark = () => {
   const getBookmarkTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
 
-  const { data: articles } = useGetBookmarkArticles(1, 10);
-  const { data: unreadArticles } = useGetBookmarkUnreadArticles(1, 10);
+  const { data: articles } = useGetBookmarkArticles(0, 20);
+  const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
   const { data: categoryArticles } = useGetCategoryBookmarkArticles(
     categoryId,
     1,
     10
   );
+
+  const articlesToDisplay =
+    activeBadge === 'all' ? articles?.articles : unreadArticles?.articles;
 
   // 임시 콘솔
   console.log('categoryArticles', categoryArticles);
@@ -80,81 +83,43 @@ const MyBookmark = () => {
         />
       </div>
 
-      {activeBadge === 'all' &&
-        (articles?.articles && articles.articles.length > 0 ? (
-          <div className="scrollbar-hide mt-[2.6rem] flex h-screen max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
-            {articles.articles.map((article) => (
-              <Card
-                key={article.articleId}
-                type="bookmark"
-                title={article.url}
-                content={article.memo}
-                category={article.category.categoryName}
-                date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
-                onClick={() => {}}
-                onOptionsClick={(e) =>
-                  openMenu(article.articleId, e.currentTarget)
-                }
-              />
-            ))}
-            <OptionsMenuPortal
-              open={menu.open}
-              style={style ?? undefined}
-              containerRef={containerRef}
-              categoryId={menu.categoryId}
-              getCategoryName={getBookmarkTitle}
-              onEdit={() => {
-                setIsEditOpen(true);
-                closeMenu();
-              }}
-              onDelete={(id) => {
-                console.log('delete', id);
-                closeMenu();
-              }}
-              onClose={closeMenu}
+      {articlesToDisplay && articlesToDisplay.length > 0 ? (
+        <div className="scrollbar-hide mt-[2.6rem] flex h-screen max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
+          {articlesToDisplay.map((article) => (
+            <Card
+              key={article.articleId}
+              type="bookmark"
+              title={article.url}
+              content={article.memo}
+              category={article.category.categoryName}
+              date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
+              onClick={() => {}}
+              onOptionsClick={(e) =>
+                openMenu(article.articleId, e.currentTarget)
+              }
             />
-          </div>
-        ) : (
-          <NoArticles />
-        ))}
+          ))}
+        </div>
+      ) : (
+        <NoArticles />
+      )}
 
-      {activeBadge === 'notRead' &&
-        (unreadArticles?.articles && unreadArticles.articles.length > 0 ? (
-          <div className="scrollbar-hide mt-[2.6rem] flex h-screen max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
-            {unreadArticles.articles.map((article) => (
-              <Card
-                key={article.articleId}
-                type="bookmark"
-                title={article.url}
-                content={article.memo}
-                category={article.category.categoryName}
-                date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
-                onClick={() => {}}
-                onOptionsClick={(e) =>
-                  openMenu(article.articleId, e.currentTarget)
-                }
-              />
-            ))}
-            <OptionsMenuPortal
-              open={menu.open}
-              style={style ?? undefined}
-              containerRef={containerRef}
-              categoryId={menu.categoryId}
-              getCategoryName={getBookmarkTitle}
-              onEdit={() => {
-                setIsEditOpen(true);
-                closeMenu();
-              }}
-              onDelete={(id) => {
-                console.log('delete', id);
-                closeMenu();
-              }}
-              onClose={closeMenu}
-            />
-          </div>
-        ) : (
-          <NoArticles />
-        ))}
+      <OptionsMenuPortal
+        open={menu.open}
+        style={style ?? undefined}
+        containerRef={containerRef}
+        categoryId={menu.categoryId}
+        getCategoryName={getBookmarkTitle}
+        onEdit={() => {
+          setIsEditOpen(true);
+          closeMenu();
+        }}
+        onDelete={(id) => {
+          console.log('delete', id);
+          closeMenu();
+        }}
+        onClose={closeMenu}
+      />
 
       {isEditOpen && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
@@ -163,7 +128,6 @@ const MyBookmark = () => {
             onClick={() => setIsEditOpen(false)}
           />
           <div className="absolute inset-0 flex items-center justify-center p-4">
-            {/* 필요하면 menu.categoryId를 모달에 전달 */}
             <CardEditModal onClose={() => setIsEditOpen(false)} />
           </div>
         </div>
