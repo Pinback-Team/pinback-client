@@ -61,9 +61,18 @@ export const usePostSignUp = () => {
     mutationFn: (data: postSignUpRequest) => postSignUp(data),
     onSuccess: (data) => {
       const newToken = data?.data?.token || data?.token;
-
+      const sendTokenToExtension = (token: string) => {
+          window.postMessage(
+            {
+              type: 'SET_TOKEN',
+              token,
+            },
+            window.location.origin
+          );
+        };
       if (newToken) {
         localStorage.setItem('token', newToken);
+        sendTokenToExtension(newToken);
       }
 
       console.log('회원가입 성공:', data);
