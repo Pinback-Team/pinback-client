@@ -1,6 +1,6 @@
-import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { getRemindArticles, deleteRemindArticle } from './axios';
+import { getRemindArticles } from './axios';
 import { ArticleListResponse } from '@pages/remind/types/api';
 
 export const useGetRemindArticles = (
@@ -12,11 +12,5 @@ export const useGetRemindArticles = (
   return useQuery({
     queryKey: ['remindArticles', nowDate, readStatus, page, size],
     queryFn: () => getRemindArticles(nowDate, readStatus, page, size),
-  });
-};
-
-export const useDeleteRemindArticle = () => {
-  return useMutation({
-    mutationFn: (id: number) => deleteRemindArticle(id),
   });
 };

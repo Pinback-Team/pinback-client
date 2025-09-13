@@ -13,9 +13,11 @@ import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
 import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import { Icon } from '@pinback/design-system/icons';
-import { useDeleteRemindArticle } from '@pages/remind/apis/queries';
 import { useQueryClient } from '@tanstack/react-query';
-import { usePutArticleReadStatus } from '@shared/apis/queries';
+import {
+  usePutArticleReadStatus,
+  useDeleteRemindArticle,
+} from '@shared/apis/queries';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
@@ -26,6 +28,8 @@ const MyBookmark = () => {
   const category = searchParams.get('category');
   const categoryId = searchParams.get('id');
 
+  const { mutate: updateToReadStatus } = usePutArticleReadStatus();
+  const { mutate: deleteArticle } = useDeleteRemindArticle();
   const { data: articles } = useGetBookmarkArticles(0, 20);
   const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
   const { data: categoryArticles } = useGetCategoryBookmarkArticles(
@@ -33,20 +37,9 @@ const MyBookmark = () => {
     1,
     10
   );
-  const { mutate: updateToReadStatus } = usePutArticleReadStatus();
-  const { mutate: deleteArticle } = useDeleteRemindArticle();
 
-  const handleDeleteArticle = (id: number) => {
-    deleteArticle(id, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['remindArticles'] });
-        close();
-      },
-      onError: (error) => {
-        console.error('아티클 삭제 실패:', error);
-      },
-    });
-  };
+  // 임시 콘솔
+  console.log('categoryArticles', categoryArticles);
 
   const {
     state: menu,
@@ -56,14 +49,31 @@ const MyBookmark = () => {
     containerRef,
   } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
 
-  const getBookmarkTitle = (id: number | null) =>
-    id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
-
   const articlesToDisplay =
     activeBadge === 'all' ? articles?.articles : unreadArticles?.articles;
 
-  // 임시 콘솔
-  console.log('categoryArticles', categoryArticles);
+  const handleDeleteArticle = (id: number) => {
+    deleteArticle(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['bookmarkReadArticles'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['bookmarkUnreadArticles'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['categoryBookmarkArticles'],
+        });
+        close();
+      },
+      onError: (error) => {
+        console.error('아티클 삭제 실패:', error);
+      },
+    });
+  };
+
+  const getBookmarkTitle = (id: number | null) =>
+    id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
 
   const handleBadgeClick = (badgeType: 'all' | 'notRead') => {
     setActiveBadge(badgeType);
