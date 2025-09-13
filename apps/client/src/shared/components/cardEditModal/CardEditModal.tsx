@@ -13,20 +13,29 @@ import {
   validateTime,
 } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
-import { useState } from 'react';
+import { usePageMeta } from '@shared/hooks/usePageMeta';
+import { ArticleDetailResponse } from '@shared/types/api';
+import { updateDate, updateTime } from '@shared/utils/formatDateTime';
+import { useEffect, useState } from 'react';
 
 export interface CardEditModalProps {
   onClose: () => void;
+  prevData: ArticleDetailResponse | undefined;
 }
 
-export default function CardEditModal({ onClose }: CardEditModalProps) {
-  const [isRemindOn, setIsRemindOn] = useState(true);
+export default function CardEditModal({
+  onClose,
+  prevData,
+}: CardEditModalProps) {
+  const { meta, loading, error } = usePageMeta(
+    'https://www.notion.so/PinBack-23927450eb1c8080a5a1f84a9d483aa9'
+  );
+
+  const [isRemindOn, setIsRemindOn] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // 입력 필드 상태: 서버에서 받아올 데이터
-  const [title] = useState('');
-  const [source] = useState('');
   const [memo, setMemo] = useState('');
   const [categories] = useState<string[]>([]);
   const [categoryTitle, setCategoryTitle] = useState('');
@@ -61,6 +70,19 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
   const handleSwitchChange = (checked: boolean) => {
     setIsRemindOn(checked);
   };
+
+  useEffect(() => {
+    if (prevData) {
+      setMemo(prevData.memo || '');
+
+      if (prevData.remindAt) {
+        const [rawDate, rawTime] = prevData.remindAt.split('T');
+        setDate(updateDate(rawDate));
+        setTime(updateTime(rawTime));
+        setIsRemindOn(true);
+      }
+    }
+  }, [prevData]);
 
   return (
     <div className="flex flex-col">
@@ -101,7 +123,11 @@ export default function CardEditModal({ onClose }: CardEditModalProps) {
           </button>
         </header>
 
-        <InfoBox title={title} source={source} />
+        <InfoBox
+          title={meta.title}
+          source={meta.description}
+          imgUrl={meta.imgUrl}
+        />
 
         <section className="flex flex-col gap-[0.8rem]">
           <p className="caption1-sb text-font-black-1">카테고리</p>

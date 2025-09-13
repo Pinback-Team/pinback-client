@@ -14,8 +14,10 @@ import { belowOf } from '@shared/utils/anchorPosition';
 import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import { Icon } from '@pinback/design-system/icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { usePutArticleReadStatus } from '@shared/apis/queries';
-import { useGetArticleDetail } from '@shared/apis/queries';
+import {
+  useGetArticleDetail,
+  usePutArticleReadStatus,
+} from '@shared/apis/queries';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
@@ -30,6 +32,7 @@ const MyBookmark = () => {
   const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
   const { data: categoryArticles } = useGetCategoryBookmarkArticles(
     categoryId,
+    activeBadge === 'all',
     1,
     10
   );
@@ -53,7 +56,7 @@ const MyBookmark = () => {
     activeBadge === 'all' ? articles?.articles : unreadArticles?.articles;
 
   // 임시 콘솔
-  // console.log('categoryArticles', categoryArticles);
+  console.log('categoryArticles', categoryArticles);
 
   const handleBadgeClick = (badgeType: 'all' | 'notRead') => {
     setActiveBadge(badgeType);
@@ -123,9 +126,10 @@ const MyBookmark = () => {
                   },
                 });
               }}
-              onOptionsClick={(e) =>
-                openMenu(article.articleId, e.currentTarget)
-              }
+              onOptionsClick={(e) => {
+                e.stopPropagation();
+                openMenu(article.articleId, e.currentTarget);
+              }}
             />
           ))}
         </div>
@@ -160,7 +164,7 @@ const MyBookmark = () => {
           <div className="absolute inset-0 flex items-center justify-center p-4">
             <CardEditModal
               onClose={() => setIsEditOpen(false)}
-              // data={articleDetail}
+              prevData={articleDetail}
             />
           </div>
         </div>
