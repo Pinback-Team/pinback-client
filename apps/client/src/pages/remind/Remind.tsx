@@ -5,12 +5,13 @@ import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
 import { REMIND_MOCK_DATA } from './constants';
-import { useGetRemindArticles } from '@pages/remind/apis/queries';
+import { useGetRemindArticles } from './apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
 import {
   usePutArticleReadStatus,
+  useDeleteRemindArticle,
   useGetArticleDetail,
 } from '@shared/apis/queries';
 import { useQueryClient } from '@tanstack/react-query';
@@ -23,6 +24,7 @@ const Remind = () => {
   const queryClient = useQueryClient();
 
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
+  const { mutate: deleteArticle } = useDeleteRemindArticle();
   const { data } = useGetRemindArticles(
     formattedDate,
     activeBadge === 'read',
@@ -42,6 +44,18 @@ const Remind = () => {
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
   const { mutate: getArticleDetail, data: articleDetail } =
     useGetArticleDetail();
+
+  const handleDeleteArticle = (id: number) => {
+    deleteArticle(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['remindArticles'] });
+        close();
+      },
+      onError: (error) => {
+        console.error('아티클 삭제 실패:', error);
+      },
+    });
+  };
 
   const handleBadgeClick = (badgeType: 'read' | 'notRead') => {
     setActiveBadge(badgeType);
@@ -114,9 +128,8 @@ const Remind = () => {
           setIsEditOpen(true);
           closeMenu();
         }}
-        onDelete={(id) => {
-          console.log('delete', id);
-          closeMenu();
+        onDelete={(articleId) => {
+          handleDeleteArticle(articleId);
         }}
         onClose={closeMenu}
       />

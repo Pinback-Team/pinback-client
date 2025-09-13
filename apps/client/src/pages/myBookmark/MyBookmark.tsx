@@ -16,6 +16,7 @@ import { Icon } from '@pinback/design-system/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   useGetArticleDetail,
+  useDeleteRemindArticle,
   usePutArticleReadStatus,
 } from '@shared/apis/queries';
 
@@ -24,10 +25,12 @@ const MyBookmark = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   const [searchParams] = useSearchParams();
+  const queryClient = useQueryClient();
   const category = searchParams.get('category');
   const categoryId = searchParams.get('id');
 
-  const queryClient = useQueryClient();
+  const { mutate: updateToReadStatus } = usePutArticleReadStatus();
+  const { mutate: deleteArticle } = useDeleteRemindArticle();
   const { data: articles } = useGetBookmarkArticles(0, 20);
   const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
   const { data: categoryArticles } = useGetCategoryBookmarkArticles(
@@ -36,10 +39,10 @@ const MyBookmark = () => {
     1,
     10
   );
+  console.log('categoryArticles', categoryArticles);
+
   const { mutate: getArticleDetail, data: articleDetail } =
     useGetArticleDetail();
-
-  const { mutate: updateToReadStatus } = usePutArticleReadStatus();
 
   const {
     state: menu,
@@ -49,14 +52,31 @@ const MyBookmark = () => {
     containerRef,
   } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
 
-  const getBookmarkTitle = (id: number | null) =>
-    id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
-
   const articlesToDisplay =
     activeBadge === 'all' ? articles?.articles : unreadArticles?.articles;
 
-  // 임시 콘솔
-  console.log('categoryArticles', categoryArticles);
+  const handleDeleteArticle = (id: number) => {
+    deleteArticle(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['bookmarkReadArticles'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['bookmarkUnreadArticles'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['categoryBookmarkArticles'],
+        });
+        close();
+      },
+      onError: (error) => {
+        console.error('아티클 삭제 실패:', error);
+      },
+    });
+  };
+
+  const getBookmarkTitle = (id: number | null) =>
+    id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
 
   const handleBadgeClick = (badgeType: 'all' | 'notRead') => {
     setActiveBadge(badgeType);
@@ -148,9 +168,8 @@ const MyBookmark = () => {
           setIsEditOpen(true);
           closeMenu();
         }}
-        onDelete={(id) => {
-          console.log('delete', id);
-          closeMenu();
+        onDelete={(articleId) => {
+          handleDeleteArticle(articleId);
         }}
         onClose={closeMenu}
       />

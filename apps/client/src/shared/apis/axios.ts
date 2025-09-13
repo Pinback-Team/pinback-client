@@ -30,9 +30,9 @@ export const getAcorns = async () => {
 };
 
 export interface postSignUpRequest {
-  email: string,
-  remindDefault: string,
-  fcmToken: string | null
+  email: string;
+  remindDefault: string;
+  fcmToken: string | null;
 }
 
 export const postSignUp = async (responsedata: postSignUpRequest) => {
@@ -64,5 +64,10 @@ export const putEditArticle = async (
 
 export const deleteCategory = async (id: number) => {
   const response = await apiRequest.delete(`/api/v1/categories/${id}`);
+  return response;
+};
+
+export const deleteRemindArticle = async (id: number) => {
+  const response = await apiRequest.delete(`/api/v1/articles/${id}`);
   return response;
 };

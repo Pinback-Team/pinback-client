@@ -15,6 +15,7 @@ import {
   putArticleReadStatus,
   getArticleDetail,
   getAcorns,
+  deleteRemindArticle,
 } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
 import {
@@ -85,6 +86,12 @@ export const usePutArticleReadStatus = (): UseMutationResult<
 > => {
   return useMutation({
     mutationFn: (articleId: number) => putArticleReadStatus(articleId),
+  });
+};
+
+export const useDeleteRemindArticle = () => {
+  return useMutation({
+    mutationFn: (id: number) => deleteRemindArticle(id),
   });
 };
 
