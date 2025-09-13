@@ -8,6 +8,8 @@ interface MyBookmarkCardProps {
   category?: string;
   imageUrl?: string;
   date: string;
+  onClick?: () => void;
+  onOptionsClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const MyBookmarkCard = ({
@@ -16,6 +18,7 @@ const MyBookmarkCard = ({
   category,
   imageUrl,
   date,
+  onOptionsClick,
 }: MyBookmarkCardProps) => {
   return (
     <BaseCard>
@@ -38,6 +41,7 @@ const MyBookmarkCard = ({
             type="button"
             aria-label="카테고리 상세"
             className="cursor-pointer self-start"
+            onClick={(e) => onOptionsClick?.(e)}
           >
             <Icon name="ic_details_category" />
           </button>

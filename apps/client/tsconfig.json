@@ -5,6 +5,8 @@
     "plugins": [{ "name": "react" }],
     "paths": {
       "@shared/*": ["src/shared/*"],
+      "@constants/*": ["src/constants/*"],
+      "@assets/*": ["src/assets/*"],
       "@pages/*": ["src/pages/*"],
       "@routes/*": ["src/routes/*"]
     }
