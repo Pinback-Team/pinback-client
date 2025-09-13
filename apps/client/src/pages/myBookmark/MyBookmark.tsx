@@ -18,7 +18,7 @@ const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
-  const categoryId = searchParams.get('category');
+  const categoryId = searchParams.get('id');
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   const {
