@@ -49,7 +49,7 @@ export const putArticleReadStatus = async (articleId: number) => {
 
 export const getArticleDetail = async (articleId: number) => {
   const { data } = await apiRequest.get(`/api/v1/articles/${articleId}`);
-  return data;
+  return data.data;
 };
 
 export const putEditArticle = async (
