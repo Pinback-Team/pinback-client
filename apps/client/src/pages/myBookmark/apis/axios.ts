@@ -13,3 +13,14 @@ export const getBookmarkUnreadArticles = async (page: number, size: number) => {
   );
   return data.data;
 };
+
+export const getCategoryBookmarkArticles = async (
+  categoryId: string | null,
+  page: number,
+  size: number
+) => {
+  const { data } = await apiRequest.get(
+    `/api/v1/articles/category?categoryId=${categoryId}&page=${page}&size=${size}`
+  );
+  return data.data;
+};

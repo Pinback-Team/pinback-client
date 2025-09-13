@@ -27,3 +27,5 @@ export interface UnreadBookmarkArticleResponse {
   totalUnreadArticle: number;
   articles: BookmarkArticle[];
 }
+
+export type CategoryBookmarkArticleResponse = UnreadBookmarkArticleResponse;

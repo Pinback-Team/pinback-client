@@ -3,16 +3,20 @@ import { useState } from 'react';
 import {
   useGetBookmarkArticles,
   useGetBookmarkUnreadArticles,
-} from './apis/queries';
+  useGetCategoryBookmarkArticles,
+} from '@pages/myBookmark/apis/queries';
+import { useSearchParams } from 'react-router-dom';
 import { REMIND_MOCK_DATA } from '@pages/remind/constants';
 import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
-import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
+import NoArticles from '@pages/myBookmark/components/noArticles/NoArticles';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
+  const [searchParams] = useSearchParams();
+  const categoryId = searchParams.get('categoryId'); // '123'이라는 문자열을 가져옴
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   const {
@@ -28,6 +32,11 @@ const MyBookmark = () => {
 
   const { data: articles } = useGetBookmarkArticles(1, 10);
   const { data: unreadArticles } = useGetBookmarkUnreadArticles(1, 10);
+  const { data: categoryArticles } = useGetCategoryBookmarkArticles(
+    categoryId,
+    1,
+    10
+  );
 
   const handleBadgeClick = (badgeType: 'all' | 'notRead') => {
     setActiveBadge(badgeType);
