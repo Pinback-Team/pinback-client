@@ -39,10 +39,10 @@ const MyBookmark = () => {
     1,
     10
   );
+  console.log('categoryArticles', categoryArticles);
+
   const { mutate: getArticleDetail, data: articleDetail } =
     useGetArticleDetail();
-
-  const { mutate: updateToReadStatus } = usePutArticleReadStatus();
 
   const {
     state: menu,

@@ -57,18 +57,6 @@ const Remind = () => {
     });
   };
 
-  const handleDeleteArticle = (id: number) => {
-    deleteArticle(id, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['remindArticles'] });
-        close();
-      },
-      onError: (error) => {
-        console.error('아티클 삭제 실패:', error);
-      },
-    });
-  };
-
   const handleBadgeClick = (badgeType: 'read' | 'notRead') => {
     setActiveBadge(badgeType);
   };
