@@ -29,13 +29,20 @@ export const getAcorns = async () => {
 };
 
 export interface postSignUpRequest {
-  email: string;
-  remindDefault: string;
-  fcmToken: string;
+  email: string,
+  remindDefault: string,
+  fcmToken: string | null
 }
 
 export const postSignUp = async (responsedata: postSignUpRequest) => {
   const { data } = await apiRequest.post('/api/v1/auth/signup', responsedata);
+  return data;
+};
+
+export const putArticleReadStatus = async (articleId: number) => {
+  const { data } = await apiRequest.put(
+    `/api/v1/articles/${articleId}/readStatus`
+  );
   return data;
 };
 

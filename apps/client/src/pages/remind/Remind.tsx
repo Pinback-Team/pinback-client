@@ -9,11 +9,25 @@ import { useDeleteRemindArticle, useGetRemindArticles } from './apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
+import { usePutArticleReadStatus } from '@shared/apis/queries';
 import { useQueryClient } from '@tanstack/react-query';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
+  const formattedDate = formatLocalDateTime();
+
   const queryClient = useQueryClient();
+
+  const { mutate: updateToReadStatus } = usePutArticleReadStatus();
+  const { mutate: deleteArticle } = useDeleteRemindArticle();
+  const { data } = useGetRemindArticles(
+    formattedDate,
+    activeBadge === 'read',
+    1,
+    10
+  );
+
   const {
     state: menu,
     open: openMenu,
@@ -24,16 +38,7 @@ const Remind = () => {
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
-  const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
-  const formattedDate = formatLocalDateTime();
 
-  const { data } = useGetRemindArticles(
-    formattedDate,
-    activeBadge === 'read',
-    1,
-    10
-  );
-  const { mutate: deleteArticle } = useDeleteRemindArticle();
   const handleDeleteArticle = (id: number) => {
     deleteArticle(id, {
       onSuccess: () => {
@@ -83,8 +88,22 @@ const Remind = () => {
               category={article.category.categoryName}
               {...(activeBadge === 'notRead' && {
                 onOptionsClick: (e) =>
-                  openMenu(article.articleId, e.currentTarget),
+                  openMenu(article.category.categoryId, e.currentTarget),
               })}
+              onClick={() => {
+                window.open(article.url, '_blank');
+
+                updateToReadStatus(article.articleId, {
+                  onSuccess: () => {
+                    queryClient.invalidateQueries({
+                      queryKey: ['remindArticles'],
+                    });
+                  },
+                  onError: (error) => {
+                    console.error(error);
+                  },
+                });
+              }}
             />
           ))}
         </div>

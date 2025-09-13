@@ -18,10 +18,11 @@ const MyBookmarkCard = ({
   category,
   imageUrl,
   date,
+  onClick,
   onOptionsClick,
 }: MyBookmarkCardProps) => {
   return (
-    <BaseCard>
+    <BaseCard onClick={onClick}>
       <div className="flex h-[12rem] w-full items-center justify-center overflow-hidden bg-[#F8F8FA]">
         {imageUrl ? (
           <img src={imageUrl} className="h-full w-full object-cover" />

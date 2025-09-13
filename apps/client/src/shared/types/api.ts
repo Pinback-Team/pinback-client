@@ -12,3 +12,8 @@ export type AcornsResponse = {
   acornCount: number;
   remindDateTime: string;
 };
+
+export interface ArticleReadStatusResponse {
+  acornCount: number;
+  acornCollected: boolean;
+}

@@ -1,4 +1,9 @@
-import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  UseQueryResult,
+} from '@tanstack/react-query';
 import {
   deleteCategory,
   getDashboardCategories,
@@ -6,10 +11,15 @@ import {
   postSignUp,
   postSignUpRequest,
   putCategory,
+  getAcorns,
+  putArticleReadStatus,
 } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
-import { DashboardCategoriesResponse, AcornsResponse } from '@shared/types/api';
-import { getAcorns } from './axios';
+import {
+  DashboardCategoriesResponse,
+  AcornsResponse,
+  ArticleReadStatusResponse,
+} from '@shared/types/api';
 
 export const useGetDashboardCategories = (): UseQueryResult<
   DashboardCategoriesResponse,
@@ -61,5 +71,15 @@ export const usePostSignUp = () => {
     onError: (error) => {
       console.error('회원가입 실패:', error);
     },
+  });
+};
+
+export const usePutArticleReadStatus = (): UseMutationResult<
+  ArticleReadStatusResponse,
+  AxiosError,
+  number
+> => {
+  return useMutation({
+    mutationFn: (articleId: number) => putArticleReadStatus(articleId),
   });
 };
