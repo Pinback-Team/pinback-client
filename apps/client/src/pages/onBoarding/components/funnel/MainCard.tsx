@@ -46,6 +46,18 @@ const MainCard = () => {
   // api 구간
   const {mutate:postSignData} = usePostSignUp();
 
+  // 익스텐션에서부터 이메일 받아오는 구간!
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const emailParam = params.get("email"); 
+    if (emailParam) {
+      setUserEmail(emailParam);
+    }
+  }, [location.search]);
+
+
   // FCM 구간
   const [fcmToken, setFcmToken] = useState<string | null>(null); 
   const app = initializeApp(firebaseConfig);
@@ -126,7 +138,7 @@ const [remindTime, setRemindTime] = useState('09:00');
       setRemindTime(normalizeTime(raw));
 
       postSignData({
-            "email": "tesdfdfsst@gmail.com",  // TODO : 익스텐션에게서 메일 받기
+            "email": userEmail, 
             "remindDefault": remindTime, 
             "fcmToken": fcmToken,
         },

@@ -6,7 +6,7 @@
   "icons": {
     "128": "icon.png"
   },
-  "permissions": ["activeTab", "tabs", "storage", "scripting", "bookmarks"],
+  "permissions": ["activeTab", "tabs", "storage", "bookmarks", "identity","identity.email"],
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
