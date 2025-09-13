@@ -27,7 +27,7 @@ export interface postSignUpRequest {
   fcmToken: string
 }
 
-export const postSignUp = async (data: postSignUpRequest) => {
-  const response = await apiRequest.post('/api/v1/auth/signup', data);
-  return response.data;
+export const postSignUp = async (responsedata: postSignUpRequest) => {
+  const {data} = await apiRequest.post('/api/v1/auth/signup', responsedata);
+  return data;
 };
