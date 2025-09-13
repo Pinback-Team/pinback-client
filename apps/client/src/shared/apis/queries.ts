@@ -1,8 +1,25 @@
-import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getDashboardCategories, postCategory, postSignUp, postSignUpRequest } from '@shared/apis/axios';
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  UseQueryResult,
+} from '@tanstack/react-query';
+import {
+  deleteCategory,
+  getDashboardCategories,
+  postCategory,
+  postSignUp,
+  postSignUpRequest,
+  putCategory,
+  getAcorns,
+  putArticleReadStatus,
+} from '@shared/apis/axios';
 import { AxiosError } from 'axios';
-import { DashboardCategoriesResponse, AcornsResponse } from '@shared/types/api';
-import { getAcorns } from './axios';
+import {
+  DashboardCategoriesResponse,
+  AcornsResponse,
+  ArticleReadStatusResponse,
+} from '@shared/types/api';
 
 export const useGetDashboardCategories = (): UseQueryResult<
   DashboardCategoriesResponse,
@@ -17,6 +34,18 @@ export const useGetDashboardCategories = (): UseQueryResult<
 export const usePostCategory = () => {
   return useMutation({
     mutationFn: (categoryName: string) => postCategory(categoryName),
+  });
+};
+export const usePutCategory = () => {
+  return useMutation({
+    mutationFn: ({ id, categoryName }: { id: number; categoryName: string }) =>
+      putCategory(id, categoryName),
+  });
+};
+
+export const useDeleteCategory = () => {
+  return useMutation({
+    mutationFn: (id: number) => deleteCategory(id),
   });
 };
 
@@ -34,13 +63,23 @@ export const usePostSignUp = () => {
       const newToken = data?.data?.token || data?.token;
 
       if (newToken) {
-        localStorage.setItem("token", newToken);
+        localStorage.setItem('token', newToken);
       }
 
-      console.log("회원가입 성공:", data);
+      console.log('회원가입 성공:', data);
     },
     onError: (error) => {
-      console.error("회원가입 실패:", error);
+      console.error('회원가입 실패:', error);
     },
+  });
+};
+
+export const usePutArticleReadStatus = (): UseMutationResult<
+  ArticleReadStatusResponse,
+  AxiosError,
+  number
+> => {
+  return useMutation({
+    mutationFn: (articleId: number) => putArticleReadStatus(articleId),
   });
 };
