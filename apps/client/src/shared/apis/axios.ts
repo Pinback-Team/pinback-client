@@ -13,6 +13,13 @@ export const postCategory = async (categoryName: string) => {
   return response;
 };
 
+export const putCategory = async (id: number, categoryName: string) => {
+  const response = await apiRequest.put(`/api/v1/categories/${id}`, {
+    categoryName,
+  });
+  return response;
+};
+
 export const getAcorns = async () => {
   const now = formatLocalDateTime(new Date());
   const { data } = await apiRequest.get('/api/v1/users/acorns?now=', {

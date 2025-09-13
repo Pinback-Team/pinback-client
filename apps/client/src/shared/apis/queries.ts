@@ -1,5 +1,11 @@
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
-import { getDashboardCategories, postCategory, postSignUp, postSignUpRequest } from '@shared/apis/axios';
+import {
+  getDashboardCategories,
+  postCategory,
+  postSignUp,
+  postSignUpRequest,
+  putCategory,
+} from '@shared/apis/axios';
 import { AxiosError } from 'axios';
 import { DashboardCategoriesResponse, AcornsResponse } from '@shared/types/api';
 import { getAcorns } from './axios';
@@ -19,6 +25,12 @@ export const usePostCategory = () => {
     mutationFn: (categoryName: string) => postCategory(categoryName),
   });
 };
+export const usePutCategory = () => {
+  return useMutation({
+    mutationFn: ({ id, categoryName }: { id: number; categoryName: string }) =>
+      putCategory(id, categoryName),
+  });
+};
 
 export const useGetArcons = (): UseQueryResult<AcornsResponse, AxiosError> => {
   return useQuery({
@@ -34,13 +46,13 @@ export const usePostSignUp = () => {
       const newToken = data?.data?.token || data?.token;
 
       if (newToken) {
-        localStorage.setItem("token", newToken);
+        localStorage.setItem('token', newToken);
       }
 
-      console.log("회원가입 성공:", data);
+      console.log('회원가입 성공:', data);
     },
     onError: (error) => {
-      console.error("회원가입 실패:", error);
+      console.error('회원가입 실패:', error);
     },
   });
 };
