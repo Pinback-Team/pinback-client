@@ -9,10 +9,11 @@ import { useDeleteRemindArticle, useGetRemindArticles } from './apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
-
+  const queryClient = useQueryClient();
   const {
     state: menu,
     open: openMenu,
@@ -33,6 +34,17 @@ const Remind = () => {
     10
   );
   const { mutate: deleteArticle } = useDeleteRemindArticle();
+  const handleDeleteArticle = (id: number) => {
+    deleteArticle(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['remindArticles'] });
+        close();
+      },
+      onError: (error) => {
+        console.error('카테고리 삭제 실패:', error);
+      },
+    });
+  };
 
   const handleBadgeClick = (badgeType: 'read' | 'notRead') => {
     setActiveBadge(badgeType);
@@ -90,9 +102,8 @@ const Remind = () => {
           setIsEditOpen(true);
           closeMenu();
         }}
-        onDelete={(id) => {
-          console.log('delete', id);
-          closeMenu();
+        onDelete={(articleId) => {
+          handleDeleteArticle(articleId);
         }}
         onClose={closeMenu}
       />
