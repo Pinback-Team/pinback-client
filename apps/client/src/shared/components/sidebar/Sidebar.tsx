@@ -15,6 +15,7 @@ import {
   usePostCategory,
   useGetArcons,
   usePutCategory,
+  useDeleteCategory,
 } from '@shared/apis/queries';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -27,6 +28,7 @@ export function Sidebar() {
   const { mutate: patchCategory } = usePutCategory();
   const { mutate: createCategory } = usePostCategory();
   const { data, isPending, isError } = useGetArcons();
+  const { mutate: deleteCategory } = useDeleteCategory();
 
   const {
     activeTab,
@@ -80,6 +82,18 @@ export function Sidebar() {
         onError: (error) => console.error('카테고리 수정 실패:', error),
       }
     );
+  };
+
+  const handleDeleteCategory = (id: number) => {
+    deleteCategory(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
+        close();
+      },
+      onError: (error) => {
+        console.error('카테고리 삭제 실패:', error);
+      },
+    });
   };
 
   if (isPending) return <div></div>;
@@ -172,10 +186,7 @@ export function Sidebar() {
         onChange={handleCategoryChange}
         onCreateConfirm={handleCreateCategory}
         onEditConfirm={(id) => handlePatchCategory(id)}
-        onDeleteConfirm={() => {
-          // TODO: 삭제 API
-          close();
-        }}
+        onDeleteConfirm={(id) => handleDeleteCategory(id)}
       />
     </aside>
   );

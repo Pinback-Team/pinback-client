@@ -1,5 +1,6 @@
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import {
+  deleteCategory,
   getDashboardCategories,
   postCategory,
   postSignUp,
@@ -29,6 +30,12 @@ export const usePutCategory = () => {
   return useMutation({
     mutationFn: ({ id, categoryName }: { id: number; categoryName: string }) =>
       putCategory(id, categoryName),
+  });
+};
+
+export const useDeleteCategory = () => {
+  return useMutation({
+    mutationFn: (id: number) => deleteCategory(id),
   });
 };
 
