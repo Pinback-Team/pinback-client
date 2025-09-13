@@ -12,8 +12,9 @@ import {
   postSignUpRequest,
   putEditArticle,
   putCategory,
-  getAcorns,
   putArticleReadStatus,
+  getArticleDetail,
+  getAcorns,
 } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
 import {
@@ -21,6 +22,7 @@ import {
   AcornsResponse,
   EditArticleRequest,
   ArticleReadStatusResponse,
+  ArticleDetailResponse,
 } from '@shared/types/api';
 
 export const useGetDashboardCategories = (): UseQueryResult<
@@ -83,6 +85,16 @@ export const usePutArticleReadStatus = (): UseMutationResult<
 > => {
   return useMutation({
     mutationFn: (articleId: number) => putArticleReadStatus(articleId),
+  });
+};
+
+export const useGetArticleDetail = (
+  articleId: number
+): UseQueryResult<ArticleDetailResponse, AxiosError> => {
+  return useQuery({
+    queryKey: ['articleDetail', articleId],
+    queryFn: () => getArticleDetail(articleId),
+    enabled: !!articleId,
   });
 };
 

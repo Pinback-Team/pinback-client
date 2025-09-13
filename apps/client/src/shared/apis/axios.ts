@@ -47,6 +47,11 @@ export const putArticleReadStatus = async (articleId: number) => {
   return data;
 };
 
+export const getArticleDetail = async (articleId: number) => {
+  const { data } = await apiRequest.get(`/api/v1/articles/${articleId}`);
+  return data;
+};
+
 export const putEditArticle = async (
   articleId: number,
   editArticleData: EditArticleRequest

@@ -24,3 +24,18 @@ export interface EditArticleRequest {
   now: string;
   remindTime: string;
 }
+
+interface CategoryResponse {
+  categoryId: number;
+  categoryName: string;
+  categoryColor: string;
+}
+
+export interface ArticleDetailResponse {
+  id: number;
+  url: string;
+  memo: string;
+  remindAt: string;
+  createdAt: string;
+  categoryResponse: CategoryResponse;
+}
