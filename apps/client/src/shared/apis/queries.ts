@@ -10,6 +10,7 @@ import {
   postCategory,
   postSignUp,
   postSignUpRequest,
+  putEditArticle,
   putCategory,
   getAcorns,
   putArticleReadStatus,
@@ -18,6 +19,7 @@ import { AxiosError } from 'axios';
 import {
   DashboardCategoriesResponse,
   AcornsResponse,
+  EditArticleRequest,
   ArticleReadStatusResponse,
 } from '@shared/types/api';
 
@@ -81,5 +83,17 @@ export const usePutArticleReadStatus = (): UseMutationResult<
 > => {
   return useMutation({
     mutationFn: (articleId: number) => putArticleReadStatus(articleId),
+  });
+};
+
+export const usePutEditArticle = () => {
+  return useMutation({
+    mutationFn: ({
+      articleId,
+      editArticleData,
+    }: {
+      articleId: number;
+      editArticleData: EditArticleRequest;
+    }) => putEditArticle(articleId, editArticleData),
   });
 };

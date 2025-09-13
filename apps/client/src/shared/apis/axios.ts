@@ -1,4 +1,5 @@
 import apiRequest from '@shared/apis/setting/axiosInstance';
+import { EditArticleRequest } from '@shared/types/api';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 
 export const getDashboardCategories = async () => {
@@ -44,6 +45,16 @@ export const putArticleReadStatus = async (articleId: number) => {
     `/api/v1/articles/${articleId}/readStatus`
   );
   return data;
+};
+
+export const putEditArticle = async (
+  articleId: number,
+  editArticleData: EditArticleRequest
+) => {
+  const response = await apiRequest.put(`/api/v1/articles/${articleId}`, {
+    editArticleData,
+  });
+  return response;
 };
 
 export const deleteCategory = async (id: number) => {
