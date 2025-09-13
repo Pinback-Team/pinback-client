@@ -16,7 +16,7 @@ import NoArticles from '@pages/myBookmark/components/noArticles/NoArticles';
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
   const [searchParams] = useSearchParams();
-  const categoryId = searchParams.get('categoryId'); // '123'이라는 문자열을 가져옴
+  const categoryId = searchParams.get('categoryId');
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   const {
@@ -37,6 +37,9 @@ const MyBookmark = () => {
     1,
     10
   );
+
+  // 임시 콘솔
+  console.log('categoryArticles', categoryArticles);
 
   const handleBadgeClick = (badgeType: 'all' | 'notRead') => {
     setActiveBadge(badgeType);
