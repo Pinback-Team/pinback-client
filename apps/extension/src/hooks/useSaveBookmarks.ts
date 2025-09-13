@@ -40,7 +40,7 @@ export const useSaveBookmark = () => {
         }
       );
 
-    //  window.close();
+    //  TODO: window.close();
     } catch (error) {
       console.error('저장 중 오류:', error);
     }

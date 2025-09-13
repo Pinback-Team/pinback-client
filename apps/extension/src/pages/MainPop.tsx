@@ -38,7 +38,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   
     useEffect(() => {
     if (!loading && !title) {
-        // 개발 중에는 주석처리 (최종엔 주석 제거할거임)
+        // TODO 개발 중에는 주석처리 (최종엔 주석 제거할거임)
         // alert("이 페이지는 저장할 수 없어요 🐿️");
         // window.close(); 
     }
