@@ -10,8 +10,9 @@ import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
 import {
-  useDeleteRemindArticle,
   usePutArticleReadStatus,
+  useDeleteRemindArticle,
+  useGetArticleDetail,
 } from '@shared/apis/queries';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -41,6 +42,20 @@ const Remind = () => {
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
+  const { mutate: getArticleDetail, data: articleDetail } =
+    useGetArticleDetail();
+
+  const handleDeleteArticle = (id: number) => {
+    deleteArticle(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['remindArticles'] });
+        close();
+      },
+      onError: (error) => {
+        console.error('아티클 삭제 실패:', error);
+      },
+    });
+  };
 
   const handleDeleteArticle = (id: number) => {
     deleteArticle(id, {
@@ -120,7 +135,8 @@ const Remind = () => {
         containerRef={containerRef}
         categoryId={menu.categoryId}
         getCategoryName={getItemTitle}
-        onEdit={() => {
+        onEdit={(id) => {
+          getArticleDetail(id);
           setIsEditOpen(true);
           closeMenu();
         }}
@@ -137,7 +153,10 @@ const Remind = () => {
             onClick={() => setIsEditOpen(false)}
           />
           <div className="absolute inset-0 flex items-center justify-center p-4">
-            <CardEditModal onClose={() => setIsEditOpen(false)} />
+            <CardEditModal
+              onClose={() => setIsEditOpen(false)}
+              prevData={articleDetail}
+            />
           </div>
         </div>
       )}

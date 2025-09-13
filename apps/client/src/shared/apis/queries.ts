@@ -10,16 +10,20 @@ import {
   postCategory,
   postSignUp,
   postSignUpRequest,
+  putEditArticle,
   putCategory,
-  getAcorns,
   putArticleReadStatus,
+  getArticleDetail,
+  getAcorns,
   deleteRemindArticle,
 } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
 import {
   DashboardCategoriesResponse,
   AcornsResponse,
+  EditArticleRequest,
   ArticleReadStatusResponse,
+  ArticleDetailResponse,
 } from '@shared/types/api';
 
 export const useGetDashboardCategories = (): UseQueryResult<
@@ -88,5 +92,27 @@ export const usePutArticleReadStatus = (): UseMutationResult<
 export const useDeleteRemindArticle = () => {
   return useMutation({
     mutationFn: (id: number) => deleteRemindArticle(id),
+  });
+};
+
+export const useGetArticleDetail = (): UseMutationResult<
+  ArticleDetailResponse,
+  AxiosError,
+  number
+> => {
+  return useMutation({
+    mutationFn: (articleId: number) => getArticleDetail(articleId),
+  });
+};
+
+export const usePutEditArticle = () => {
+  return useMutation({
+    mutationFn: ({
+      articleId,
+      editArticleData,
+    }: {
+      articleId: number;
+      editArticleData: EditArticleRequest;
+    }) => putEditArticle(articleId, editArticleData),
   });
 };

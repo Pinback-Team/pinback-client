@@ -15,8 +15,9 @@ import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import { Icon } from '@pinback/design-system/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import {
-  usePutArticleReadStatus,
+  useGetArticleDetail,
   useDeleteRemindArticle,
+  usePutArticleReadStatus,
 } from '@shared/apis/queries';
 
 const MyBookmark = () => {
@@ -34,12 +35,14 @@ const MyBookmark = () => {
   const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
   const { data: categoryArticles } = useGetCategoryBookmarkArticles(
     categoryId,
+    activeBadge === 'all',
     1,
     10
   );
+  const { mutate: getArticleDetail, data: articleDetail } =
+    useGetArticleDetail();
 
-  // 임시 콘솔
-  console.log('categoryArticles', categoryArticles);
+  const { mutate: updateToReadStatus } = usePutArticleReadStatus();
 
   const {
     state: menu,
@@ -143,9 +146,10 @@ const MyBookmark = () => {
                   },
                 });
               }}
-              onOptionsClick={(e) =>
-                openMenu(article.articleId, e.currentTarget)
-              }
+              onOptionsClick={(e) => {
+                e.stopPropagation();
+                openMenu(article.articleId, e.currentTarget);
+              }}
             />
           ))}
         </div>
@@ -159,7 +163,8 @@ const MyBookmark = () => {
         containerRef={containerRef}
         categoryId={menu.categoryId}
         getCategoryName={getBookmarkTitle}
-        onEdit={() => {
+        onEdit={(id) => {
+          getArticleDetail(id);
           setIsEditOpen(true);
           closeMenu();
         }}
@@ -176,7 +181,10 @@ const MyBookmark = () => {
             onClick={() => setIsEditOpen(false)}
           />
           <div className="absolute inset-0 flex items-center justify-center p-4">
-            <CardEditModal onClose={() => setIsEditOpen(false)} />
+            <CardEditModal
+              onClose={() => setIsEditOpen(false)}
+              prevData={articleDetail}
+            />
           </div>
         </div>
       )}
