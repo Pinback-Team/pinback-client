@@ -1,39 +1,16 @@
 console.log('백그라운드 기능');
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (message.type === 'FETCH_OG_META') {
-    fetch(message.url)
-      .then((res) => res.text())
-      .then((html) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    chrome.identity.getProfileUserInfo(function (info) {
+      console.log('google email:', info.email);
 
-        const getMeta = (prop) =>
-          doc
-            .querySelector(`meta[property="${prop}"]`)
-            ?.getAttribute('content') || '';
-
-        const makeAbsoluteUrl = (base, img) => {
-          try {
-            return img ? new URL(img, base).href : '';
-          } catch {
-            return img;
-          }
-        };
-
-        const image = getMeta('og:image');
-
-        sendResponse({
-          title: getMeta('og:title'),
-          description: getMeta('og:description'),
-          siteName: getMeta('og:site_name'),
-          image: makeAbsoluteUrl(message.url, image),
-          url: getMeta('og:url') || message.url,
+      setTimeout(() => {
+        chrome.tabs.create({
+          url: `http://localhost:5173/onboarding?email=${info.email}`,
         });
-      })
-      .catch((err) => {
-        console.error('OG fetch 실패:', err);
-        sendResponse(null);
-      });
-    return true; // async 응답
+      }, 1000);
+    });
   }
 });
+
+
