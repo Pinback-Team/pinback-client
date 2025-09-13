@@ -27,6 +27,7 @@ type IconColor =
   | 'gray900'
   | 'white-bg'
   | 'gray-bg'
+  | 'black'
   | 'font-black-1'
   | 'font-gray-2'
   | 'font-gray-3'

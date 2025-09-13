@@ -11,9 +11,11 @@ export const iconNames = [
   'ic_close',
   'ic_details_category',
   'ic_details_disable',
+  'ic_extension',
   'ic_info',
   'ic_plus',
   'logo',
+  'main_header_logo',
   'main_logo',
   'saved',
   'tooltip_1',
@@ -21,6 +23,5 @@ export const iconNames = [
   'tooltip_3',
   'tooltip_4',
   'tooltip_5',
-  'main_header_logo',
 ] as const;
 export type IconName = (typeof iconNames)[number];

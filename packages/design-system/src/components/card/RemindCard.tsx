@@ -8,6 +8,8 @@ interface RemindCardProps {
   category?: string;
   imageUrl?: string;
   timeRemaining: string;
+  onClick?: () => void;
+  onOptionsClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const RemindCard = ({
@@ -16,9 +18,11 @@ const RemindCard = ({
   category,
   imageUrl,
   timeRemaining,
+  onClick,
+  onOptionsClick,
 }: RemindCardProps) => {
   return (
-    <BaseCard>
+    <BaseCard onClick={onClick}>
       <div className="bg-gray900 flex items-center gap-[0.4rem] py-[1.2rem] pl-[1.6rem] text-sm text-white">
         <Icon name="ic_clock_active" />
         <span className="body2-m text-main400 mr-[0.2rem]">
@@ -46,6 +50,7 @@ const RemindCard = ({
             type="button"
             aria-label="카테고리 상세"
             className="cursor-pointer self-start"
+            onClick={(e) => onOptionsClick?.(e)}
           >
             <Icon name="ic_details_category" />
           </button>
@@ -54,7 +59,6 @@ const RemindCard = ({
           {content}
         </p>
 
-        {/* TODO: 카테고리 컴포넌트로 교체 */}
         <span className="bg-category-red-bg caption2-sb text-category-red-text h-[2.2rem] w-[6.2rem] rounded-[0.4rem] px-[0.8rem] py-[0.2rem]">
           {category}
         </span>

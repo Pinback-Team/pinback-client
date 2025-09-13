@@ -14,6 +14,8 @@ import {
   useGetDashboardCategories,
   usePostCategory,
   useGetArcons,
+  usePutCategory,
+  useDeleteCategory,
 } from '@shared/apis/queries';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -23,8 +25,10 @@ export function Sidebar() {
   const queryClient = useQueryClient();
 
   const { data: categories } = useGetDashboardCategories();
+  const { mutate: patchCategory } = usePutCategory();
   const { mutate: createCategory } = usePostCategory();
   const { data, isPending, isError } = useGetArcons();
+  const { mutate: deleteCategory } = useDeleteCategory();
 
   const {
     activeTab,
@@ -63,6 +67,31 @@ export function Sidebar() {
       },
       onError: (error) => {
         console.error('카테고리 생성 실패:', error);
+      },
+    });
+  };
+  const handlePatchCategory = (id: number) => {
+    patchCategory(
+      { id, categoryName: newCategoryName },
+      {
+        onSuccess: () => {
+          setNewCategoryName('');
+          queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
+          close();
+        },
+        onError: (error) => console.error('카테고리 수정 실패:', error),
+      }
+    );
+  };
+
+  const handleDeleteCategory = (id: number) => {
+    deleteCategory(id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
+        close();
+      },
+      onError: (error) => {
+        console.error('카테고리 삭제 실패:', error);
       },
     });
   };
@@ -116,7 +145,7 @@ export function Sidebar() {
                   active={selectedCategoryId === category.id}
                   onClick={(id) => {
                     closeMenu();
-                    selectCategory(id);
+                    selectCategory(id, category.name);
                   }}
                   onOptionsClick={(id, el) => openMenu(id, el)}
                 />
@@ -156,14 +185,8 @@ export function Sidebar() {
         onClose={close}
         onChange={handleCategoryChange}
         onCreateConfirm={handleCreateCategory}
-        onEditConfirm={() => {
-          // TODO: 수정 API
-          close();
-        }}
-        onDeleteConfirm={() => {
-          // TODO: 삭제 API
-          close();
-        }}
+        onEditConfirm={(id) => handlePatchCategory(id)}
+        onDeleteConfirm={(id) => handleDeleteCategory(id)}
       />
     </aside>
   );
