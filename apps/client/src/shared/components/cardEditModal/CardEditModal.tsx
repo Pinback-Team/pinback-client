@@ -13,6 +13,7 @@ import {
   validateTime,
 } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
+import { useGetDashboardCategories } from '@shared/apis/queries';
 import { usePageMeta } from '@shared/hooks/usePageMeta';
 import { ArticleDetailResponse } from '@shared/types/api';
 import { updateDate, updateTime } from '@shared/utils/formatDateTime';
@@ -30,6 +31,7 @@ export default function CardEditModal({
   const { meta, loading, error } = usePageMeta(
     'https://www.notion.so/PinBack-23927450eb1c8080a5a1f84a9d483aa9'
   );
+  const { data: category } = useGetDashboardCategories();
 
   const [isRemindOn, setIsRemindOn] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
@@ -37,7 +39,6 @@ export default function CardEditModal({
 
   // 입력 필드 상태: 서버에서 받아올 데이터
   const [memo, setMemo] = useState('');
-  const [categories] = useState<string[]>([]);
   const [categoryTitle, setCategoryTitle] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
@@ -132,11 +133,12 @@ export default function CardEditModal({
         <section className="flex flex-col gap-[0.8rem]">
           <p className="caption1-sb text-font-black-1">카테고리</p>
           <Dropdown
-            options={categories}
+            options={
+              category?.categories.map((category) => category.name) || []
+            }
             selectedValue={selected}
             onChange={(value) => setSelected(value)}
             placeholder="선택해주세요"
-            onAddItem={() => setIsPopupOpen(true)}
             addItemLabel="추가하기"
           />
         </section>
