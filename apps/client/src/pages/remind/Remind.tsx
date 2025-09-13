@@ -9,9 +9,23 @@ import { useGetRemindArticles } from '@pages/remind/apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
+import { usePutArticleReadStatus } from '@shared/apis/queries';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
+  const formattedDate = formatLocalDateTime();
+
+  const queryClient = useQueryClient();
+
+  const { mutate: updateToReadStatus } = usePutArticleReadStatus();
+  const { data } = useGetRemindArticles(
+    formattedDate,
+    activeBadge === 'read',
+    1,
+    10
+  );
 
   const {
     state: menu,
@@ -23,15 +37,6 @@ const Remind = () => {
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
-  const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
-  const formattedDate = formatLocalDateTime();
-
-  const { data } = useGetRemindArticles(
-    formattedDate,
-    activeBadge === 'read',
-    1,
-    10
-  );
 
   const handleBadgeClick = (badgeType: 'read' | 'notRead') => {
     setActiveBadge(badgeType);
@@ -72,6 +77,20 @@ const Remind = () => {
                 onOptionsClick: (e) =>
                   openMenu(article.category.categoryId, e.currentTarget),
               })}
+              onClick={() => {
+                window.open(article.url, '_blank');
+
+                updateToReadStatus(article.articleId, {
+                  onSuccess: () => {
+                    queryClient.invalidateQueries({
+                      queryKey: ['remindArticles'],
+                    });
+                  },
+                  onError: (error) => {
+                    console.error(error);
+                  },
+                });
+              }}
             />
           ))}
         </div>

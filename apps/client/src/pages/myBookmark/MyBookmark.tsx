@@ -13,13 +13,26 @@ import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
 import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import { Icon } from '@pinback/design-system/icons';
+import { useQueryClient } from '@tanstack/react-query';
+import { usePutArticleReadStatus } from '@shared/apis/queries';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
   const categoryId = searchParams.get('id');
-  const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const queryClient = useQueryClient();
+  const { data: articles } = useGetBookmarkArticles(0, 20);
+  const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
+  const { data: categoryArticles } = useGetCategoryBookmarkArticles(
+    categoryId,
+    1,
+    10
+  );
+  const { mutate: updateToReadStatus } = usePutArticleReadStatus();
 
   const {
     state: menu,
@@ -31,14 +44,6 @@ const MyBookmark = () => {
 
   const getBookmarkTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
-
-  const { data: articles } = useGetBookmarkArticles(0, 20);
-  const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
-  const { data: categoryArticles } = useGetCategoryBookmarkArticles(
-    categoryId,
-    1,
-    10
-  );
 
   const articlesToDisplay =
     activeBadge === 'all' ? articles?.articles : unreadArticles?.articles;
@@ -93,7 +98,27 @@ const MyBookmark = () => {
               content={article.memo}
               category={article.category.categoryName}
               date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
-              onClick={() => {}}
+              onClick={() => {
+                window.open(article.url, '_blank');
+
+                updateToReadStatus(article.articleId, {
+                  onSuccess: () => {
+                    // TODO: 쿼리키 팩토리 패턴 적용
+                    queryClient.invalidateQueries({
+                      queryKey: ['bookmarkReadArticles'],
+                    });
+                    queryClient.invalidateQueries({
+                      queryKey: ['bookmarkUnreadArticles'],
+                    });
+                    queryClient.invalidateQueries({
+                      queryKey: ['categoryBookmarkArticles'],
+                    });
+                  },
+                  onError: (error) => {
+                    console.error(error);
+                  },
+                });
+              }}
               onOptionsClick={(e) =>
                 openMenu(article.articleId, e.currentTarget)
               }
