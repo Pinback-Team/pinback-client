@@ -46,7 +46,7 @@ const PopupContainer = ({
       <div className="relative">
         <Popup 
           {...popupProps} 
-          onLeftClick={onClose} 
+          onLeftClick={popupProps.onLeftClick ?? onClose} 
           inputValue={popupProps.inputValue}
           onInputChange={popupProps.onInputChange} 
           />
