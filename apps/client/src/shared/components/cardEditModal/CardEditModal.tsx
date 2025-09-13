@@ -20,6 +20,7 @@ import {
 import { usePageMeta } from '@shared/hooks/usePageMeta';
 import { ArticleDetailResponse, EditArticleRequest } from '@shared/types/api';
 import { updateDate, updateTime } from '@shared/utils/formatDateTime';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 export interface CardEditModalProps {
@@ -31,12 +32,12 @@ export default function CardEditModal({
   onClose,
   prevData,
 }: CardEditModalProps) {
-  console.log('prevData in CardEditModal:', prevData); // prevData 확인용 로그
   const { meta } = usePageMeta(
     'https://www.notion.so/PinBack-23927450eb1c8080a5a1f84a9d483aa9'
   );
   const { data: category } = useGetDashboardCategories();
   const { mutate: editArticle } = usePutEditArticle();
+  const queryClient = useQueryClient();
 
   const [isRemindOn, setIsRemindOn] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -100,6 +101,18 @@ export default function CardEditModal({
       },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ['remindArticles'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['bookmarkReadArticles'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['bookmarkUnreadArticles'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['categoryBookmarkArticles'],
+          });
           onClose();
         },
         onError: () => {
@@ -112,6 +125,7 @@ export default function CardEditModal({
   useEffect(() => {
     if (prevData) {
       setMemo(prevData.memo || '');
+      setSelectedCategory(prevData.categoryResponse.categoryName || null);
 
       if (prevData.remindAt) {
         const [rawDate, rawTime] = prevData.remindAt.split('T');
