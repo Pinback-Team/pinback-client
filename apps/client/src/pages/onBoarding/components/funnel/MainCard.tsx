@@ -6,8 +6,10 @@ import AlarmStep from './step/AlarmStep';
 import MacStep from './step/MacStep';
 import FinalStep from './step/FinalStep';
 import { cva } from 'class-variance-authority';
+import { usePostSignUp } from '@shared/apis/queries';
 const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
-
+import { AlarmsType } from '@constants/alarms';
+import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
 const variants = {
   slideIn: (direction: number) => ({
     x: direction > 0 ? 200 : -200,
@@ -36,6 +38,8 @@ const MainCard = () => {
   const [direction, setDirection] = useState(0);
   const [alarmSelected, setAlarmSelected] = useState<1 | 2 | 3>(1);
   const [isMac, setIsMac] = useState(false);
+  // api 구간
+  const {mutate:postSignData} = usePostSignUp();
 
   useEffect(() => {
     const ua = navigator.userAgent.toLowerCase();
@@ -62,15 +66,33 @@ const MainCard = () => {
     }
   };
 
+const [remindTime, setRemindTime] = useState('09:00');
   const nextStep = () => {
+    console.log(step)
     if (step === 3) {
-      // 이거 이후에 api 붙일 자리 표시임! console.log('선택된 알람:', AlarmsType[alarmSelected - 1].time);
+      // 이거 이후에 api 붙일 자리 표시임! 
+      
     }
     if (step < 5) {
       setDirection(1);
       setStep((prev) => prev + 1);
     } else if (step === 5) {
-      window.location.href = '/';
+      const raw = AlarmsType[alarmSelected - 1].time;
+      setRemindTime(normalizeTime(raw));
+
+      postSignData({
+            "email": "tesdfdfsst@gmail.com", 
+            "remindDefault": remindTime, 
+            "fcmToken": "adlfdjlajlkadfsjlkfdsdfsdfsdfsdfsa"
+        },
+        {
+          onSuccess:()=>{
+            window.location.href = '/';
+           }
+        }
+      )
+      
+      
     }
   };
 
