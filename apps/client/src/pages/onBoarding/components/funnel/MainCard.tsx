@@ -10,6 +10,11 @@ import { usePostSignUp } from '@shared/apis/queries';
 const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
 import { AlarmsType } from '@constants/alarms';
 import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
+import { firebaseConfig } from '../../../../firebase-config'; 
+import { initializeApp } from 'firebase/app';
+import { getMessaging, getToken } from 'firebase/messaging';
+
+
 const variants = {
   slideIn: (direction: number) => ({
     x: direction > 0 ? 200 : -200,
@@ -41,6 +46,39 @@ const MainCard = () => {
   // api 구간
   const {mutate:postSignData} = usePostSignUp();
 
+  // FCM 구간
+  const [fcmToken, setFcmToken] = useState<string | null>(null); 
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
+  
+  const requestFCMToken = async (): Promise<string | null> => {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        alert('알림 권한 허용이 필요합니다!');
+        return null;
+      }
+
+      const forFcmtoken = await getToken(messaging, {
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+      });
+
+      if (forFcmtoken) {
+        console.log('FCM 토큰 발급 성공:', forFcmtoken);
+        return forFcmtoken;
+      } else {
+        alert('토큰 생성 실패. 다시 시도해주세요.');
+        return null;
+      }
+    } catch (error) {
+      console.error('FCM 토큰 받는 도중 오류:', error);
+      alert('알림 설정 중 오류가 발생했습니다. 다시 시도해주세요.');
+      return null;
+    }
+  };
+
+
+
   useEffect(() => {
     const ua = navigator.userAgent.toLowerCase();
     if (ua.includes('mac os') || ua.includes('iphone') || ua.includes('ipad')) {
@@ -67,11 +105,18 @@ const MainCard = () => {
   };
 
 const [remindTime, setRemindTime] = useState('09:00');
-  const nextStep = () => {
-    console.log(step)
+  const nextStep = async() => {
     if (step === 3) {
-      // 이거 이후에 api 붙일 자리 표시임! 
-      
+       const token = await requestFCMToken();
+      if (token) {
+        setFcmToken(token);
+        setDirection(1);
+        setStep((prev) => prev + 1);
+      }
+      else{
+        alert('푸시 알람 설정 에러')
+      }
+      return;
     }
     if (step < 5) {
       setDirection(1);
@@ -81,9 +126,9 @@ const [remindTime, setRemindTime] = useState('09:00');
       setRemindTime(normalizeTime(raw));
 
       postSignData({
-            "email": "tesdfdfsst@gmail.com", 
+            "email": "tesdfdfsst@gmail.com",  // TODO : 익스텐션에게서 메일 받기
             "remindDefault": remindTime, 
-            "fcmToken": "adlfdjlajlkadfsjlkfdsdfsdfsdfsdfsa"
+            "fcmToken": fcmToken,
         },
         {
           onSuccess:()=>{
