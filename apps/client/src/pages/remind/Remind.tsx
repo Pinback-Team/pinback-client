@@ -5,9 +5,10 @@ import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
 import { REMIND_MOCK_DATA } from './constants';
+import { useGetRemindArticles } from './apis/queries';
+import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 
 const Remind = () => {
-  const [activeBadge, setActiveBadge] = useState<'notRead' | 'read'>('notRead');
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   const {
@@ -20,6 +21,19 @@ const Remind = () => {
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
+  const [activeBadge, setActiveBadge] = useState('notRead');
+  const formattedDate = formatLocalDateTime();
+
+  const { data } = useGetRemindArticles(
+    formattedDate,
+    activeBadge === 'read',
+    1,
+    10
+  );
+
+  const handleBadgeClick = (badgeType: string) => {
+    setActiveBadge(badgeType);
+  };
 
   return (
     <div className="flex flex-col py-[5.2rem] pl-[8rem]">
@@ -27,28 +41,31 @@ const Remind = () => {
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="안 읽음"
-          countNum={5}
-          onClick={() => setActiveBadge('notRead')}
+          countNum={data?.unreadArticleCount || 0}
+          onClick={() => handleBadgeClick('notRead')}
           isActive={activeBadge === 'notRead'}
         />
         <Badge
           text="읽음"
-          countNum={10}
-          onClick={() => setActiveBadge('read')}
+          countNum={data?.readArticleCount || 0}
+          onClick={() => handleBadgeClick('read')}
           isActive={activeBadge === 'read'}
         />
       </div>
 
       <div className="scrollbar-hide mt-[2.6rem] flex max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
-        {REMIND_MOCK_DATA.map((data) => (
+        {/* TODO: API 연결 후 수정 */}
+        {data?.articles?.map((article) => (
           <Card
-            key={data.id}
+            key={article.articleId}
             type="remind"
-            title={data.title}
-            content={data.content}
-            timeRemaining={data.timeRemaining}
-            category={data.category}
-            onOptionsClick={(e) => openMenu(data.id, e.currentTarget)}
+            title={article.url}
+            content={article.memo}
+            timeRemaining={article.remindAt}
+            category={article.category.categoryName}
+            onOptionsClick={(e) =>
+              openMenu(article.category.categoryId, e.currentTarget)
+            }
           />
         ))}
 

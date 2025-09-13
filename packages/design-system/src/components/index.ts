@@ -6,7 +6,7 @@ export { default as Dropdown } from './dropdown/Dropdown';
 export { default as Input } from './input/Input';
 export { default as DateTime } from './dateTime/DateTime';
 export { default as Level } from './level/Level';
-export { Progress } from './progress/Progress';
+export { default as Progress } from './progress/Progress';
 export { Switch } from './switch/Switch';
 export { Textarea } from './textarea/Textarea';
 export { default as AutoDismissToast } from './toast/hooks/uesFadeOut';

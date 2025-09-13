@@ -1,6 +1,10 @@
-import { useState } from 'react';
-import { REMIND_MOCK_DATA } from '@pages/remind/constants';
 import { Badge, Card } from '@pinback/design-system/ui';
+import { useState } from 'react';
+import {
+  useGetBookmarkArticles,
+  useGetBookmarkUnreadArticles,
+} from './apis/queries';
+import { REMIND_MOCK_DATA } from '@pages/remind/constants';
 import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
@@ -21,6 +25,13 @@ const MyBookmark = () => {
   const getBookmarkTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
 
+  const { data: readArticles } = useGetBookmarkArticles(1, 10);
+  const { data: unreadArticles } = useGetBookmarkUnreadArticles(1, 10);
+
+  const handleBadgeClick = (badgeType: 'all' | 'notRead') => {
+    setActiveBadge(badgeType);
+  };
+
   return (
     <div className="flex flex-col py-[5.2rem] pl-[8rem]">
       <p className="head3">나의 북마크</p>
@@ -28,31 +39,51 @@ const MyBookmark = () => {
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="전체보기"
-          countNum={5}
-          onClick={() => setActiveBadge('all')}
+          countNum={readArticles?.totalArticle || 0}
+          onClick={() => handleBadgeClick('all')}
           isActive={activeBadge === 'all'}
         />
         <Badge
           text="안 읽음"
-          countNum={10}
-          onClick={() => setActiveBadge('notRead')}
+          countNum={readArticles?.totalUnreadArticle || 0}
+          onClick={() => handleBadgeClick('notRead')}
           isActive={activeBadge === 'notRead'}
         />
       </div>
 
       <div className="scrollbar-hide mt-[2.6rem] flex max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
-        {REMIND_MOCK_DATA.map((data) => (
-          <Card
-            key={data.id}
-            type="bookmark"
-            title={data.title}
-            content={data.content}
-            category={data.category}
-            date="2024.08.15"
-            onClick={() => {}}
-            onOptionsClick={(e) => openMenu(data.id, e.currentTarget)}
-          />
-        ))}
+        {/* TODO: API 연결 후 수정 */}
+        {activeBadge === 'all' &&
+          readArticles?.articles.map((article) => (
+            <Card
+              key={article.articleId}
+              type="bookmark"
+              title={article.url}
+              content={article.memo}
+              // category={article.category.categoryName}
+              date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
+              onClick={() => {}}
+              onOptionsClick={(e) =>
+                openMenu(article.articleId, e.currentTarget)
+              }
+            />
+          ))}
+
+        {activeBadge === 'notRead' &&
+          unreadArticles?.articles.map((article) => (
+            <Card
+              key={article.articleId}
+              type="bookmark"
+              title={article.url}
+              content={article.memo}
+              // category={article.}
+              date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
+              onClick={() => {}}
+              onOptionsClick={(e) =>
+                openMenu(article.articleId, e.currentTarget)
+              }
+            />
+          ))}
 
         <OptionsMenuPortal
           open={menu.open}
