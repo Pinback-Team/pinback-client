@@ -29,9 +29,9 @@ export const getAcorns = async () => {
 };
 
 export interface postSignUpRequest {
-  email: string;
-  remindDefault: string;
-  fcmToken: string;
+  email: string,
+  remindDefault: string,
+  fcmToken: string | null
 }
 
 export const postSignUp = async (responsedata: postSignUpRequest) => {
