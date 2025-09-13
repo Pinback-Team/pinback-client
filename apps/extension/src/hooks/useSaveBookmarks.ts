@@ -36,11 +36,11 @@ export const useSaveBookmark = () => {
           url: params.url,
         },
         (newBookmark) => {
-          console.log('크롬 북마크바에 저장 완료:', newBookmark);
+          console.log('크롬 북마크바에 저장 완료: ', newBookmark);
         }
       );
 
-    //  window.close();
+    //  TODO: window.close();
     } catch (error) {
       console.error('저장 중 오류:', error);
     }

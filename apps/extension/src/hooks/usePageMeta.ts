@@ -7,6 +7,7 @@ export interface PageMeta {
   description: string;
   imgUrl: string;
 }
+
 const getOgMeta = async (url: string) => {
   const imageUrl = await OgImageFetcher({ url });
   return {
@@ -16,6 +17,7 @@ const getOgMeta = async (url: string) => {
     imgUrl: imageUrl?.image ?? '',
   };
 };
+
 export const usePageMeta = () => {
   const [meta, setMeta] = useState<PageMeta>({
     url: '',
@@ -23,17 +25,21 @@ export const usePageMeta = () => {
     description: '',
     imgUrl: '',
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const activeTab = tabs[0];
-      if (!activeTab?.url) return;
+      if (!activeTab?.url) {
+        setLoading(false);
+        return;
+      }
 
       const currentUrl = activeTab.url;
 
       chrome.storage.local.set({ bookmarkedUrl: currentUrl });
-      const newMeta = await getOgMeta(activeTab.url);
-      // 개발중에는 잠시 주석처리
+      const newMeta = await getOgMeta(currentUrl);
+ // 개발중에는 잠시 주석처리
       //   const isInternalChromePage =
       //     /^chrome:\/\//.test(currentUrl) ||
       //     /^edge:\/\//.test(currentUrl) ||
@@ -44,14 +50,12 @@ export const usePageMeta = () => {
       //     window.close();
       //     return;
       //   }
-
-     
-
       setMeta(newMeta);
+      setLoading(false);
 
       chrome.storage.local.set({ titleSave: newMeta.title });
     });
   }, []);
 
-  return meta;
+  return { ...meta, loading };
 };
