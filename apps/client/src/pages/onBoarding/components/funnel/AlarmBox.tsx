@@ -35,7 +35,7 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
       className={boxStyle({ disabled: isDisabled })}
       onClick={() => {
         if (select === 3 && isDisabled) {
-          setShowPicker(true);
+          setShowPicker((prev) => !prev);
         }
         onClick?.();
       }}
