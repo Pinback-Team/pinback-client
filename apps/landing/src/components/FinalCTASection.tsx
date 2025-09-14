@@ -19,7 +19,12 @@ const FinalCTASection = () => {
           도토리를 모아볼까요?
         </p>
         <div>
-          <Button variant="primary" onClick={() => {}}>
+          <Button
+            variant="primary"
+            onClick={() => {
+              window.location.href = 'https://pinback.today';
+            }}
+          >
             지금 시작하기
           </Button>
         </div>
