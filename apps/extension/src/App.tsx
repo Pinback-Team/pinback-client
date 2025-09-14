@@ -24,7 +24,7 @@ const App = () => {
   };
 
   const handleDuplicateRightClick = () => {
-    window.location.href = "https://www.pinback.today/";
+    window.location.href = "https://pinback.today/";
   };
 
   return (
