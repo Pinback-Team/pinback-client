@@ -39,7 +39,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
     useEffect(() => {
     if (!loading && !title) {
         alert("이 페이지는 저장할 수 없어요 🐿️");
-        //window.close(); 
+        window.close(); 
     }
     }, [loading, title]);
 
