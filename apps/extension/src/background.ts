@@ -7,7 +7,7 @@ chrome.runtime.onInstalled.addListener((details) => {
         });
       setTimeout(() => {
         chrome.tabs.create({
-          url: `http://localhost:5173/onboarding?email=${info.email}`,
+          url: `https://www.pinback.today/?email=${info.email}`,
         });
       }, 1000);
     });
