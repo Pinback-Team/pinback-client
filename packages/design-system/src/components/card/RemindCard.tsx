@@ -22,7 +22,7 @@ const RemindCard = ({
   onOptionsClick,
 }: RemindCardProps) => {
   return (
-    <BaseCard onClick={onClick}>
+    <BaseCard onClick={onClick} className="h-[35.6rem]">
       <div className="bg-gray900 flex items-center gap-[0.4rem] py-[1.2rem] pl-[1.6rem] text-sm text-white">
         <Icon name="ic_clock_active" />
         <span className="body2-m text-main400 mr-[0.2rem]">
