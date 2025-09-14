@@ -77,8 +77,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
       setMemo(savedData.memo ?? "");
       setIsArticleId(savedData.id ?? 0);
 
-      if (savedData.remindAt) {
-        console.log(savedData.remindAt);
+      if (savedData.remindAt) { 
         const [rawDate, rawTime] = savedData.remindAt.split("T");
         setDate(updateDate(rawDate));
         setTime(updateTime(rawTime));
