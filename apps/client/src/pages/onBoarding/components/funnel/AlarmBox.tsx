@@ -34,8 +34,10 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
     <div
       className={boxStyle({ disabled: isDisabled })}
       onClick={() => {
-        if (select === 3 && isDisabled) {
-          setShowPicker((prev) => !prev);
+        if (select === 3) {
+          setShowPicker(true); 
+        } else {
+          setShowPicker(false);
         }
         onClick?.();
       }}
@@ -61,15 +63,15 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
             <p className="caption2-m text-font-gray-3">{normalizeTime(AlarmsType[2].time)}</p>
           )}
 
-          {showPicker && (
-            <TimePicker
+         {showPicker && ( <TimePicker
               onSave={getTimePicker}
               onCancel={() => {
                 AlarmsType[2].time = '';
               }}
               onClick={(e) => e.stopPropagation()}
-            />
-          )}
+            />)}
+           
+         
         </>
       )}
     </div>
