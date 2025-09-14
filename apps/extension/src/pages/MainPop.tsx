@@ -28,7 +28,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   const { data : categoryData } = useGetCategoriesExtension();
   const remindDataRaw = useGetRemindTime();
   const remindData = type === "add" ? remindDataRaw : null;
-
+  
 
   // 저장 도메인 메타 데이터 갖고 오는 구간!
   const { url, title, description, imgUrl: initialImgUrl ,loading} = usePageMeta();
@@ -39,7 +39,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
     useEffect(() => {
     if (!loading && !title) {
         alert("이 페이지는 저장할 수 없어요 🐿️");
-        window.close(); 
+        //window.close(); 
     }
     }, [loading, title]);
 
@@ -78,6 +78,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
       setIsArticleId(savedData.id ?? 0);
 
       if (savedData.remindAt) {
+        console.log(savedData.remindAt);
         const [rawDate, rawTime] = savedData.remindAt.split("T");
         setDate(updateDate(rawDate));
         setTime(updateTime(rawTime));
