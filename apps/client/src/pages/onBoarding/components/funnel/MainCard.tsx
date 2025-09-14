@@ -146,6 +146,12 @@ const MainCard = () => {
           onSuccess: () => {
             window.location.href = '/';
           },
+          onError: () => {
+            const savedEmail = localStorage.getItem('email');
+            if (savedEmail) {
+              window.location.href = '/';
+            }
+          }
         }
       );
     }
