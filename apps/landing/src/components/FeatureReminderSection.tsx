@@ -1,13 +1,13 @@
 import Lottie from 'lottie-react';
-import lightbulb_chippi_final from '../assets/3_bell.json';
+import Bell from '../assets/3_bell.json';
 
 const FeatureReminderSection = () => {
   return (
     <section className="flex h-dvh items-center justify-center bg-white">
-      <div className="flex items-center gap-[8rem]">
+      <div className="flex items-start gap-[8rem]">
         {/* 이미지 영역 (로띠) */}
         <div className="flex items-center justify-center">
-          <Lottie animationData={lightbulb_chippi_final} loop autoplay />
+          <Lottie animationData={Bell} loop autoplay />
         </div>
         {/* 텍스트 영역 */}
         <div className="flex flex-col items-end gap-[2.4rem] text-right">
