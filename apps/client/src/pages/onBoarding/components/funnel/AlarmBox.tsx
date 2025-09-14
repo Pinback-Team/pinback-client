@@ -14,7 +14,7 @@ const boxStyle = cva(
   {
     variants: {
       disabled: {
-        true: 'border-main400 bg-main100 border',
+        true: 'border-main400 bg-main0 border',
         false: 'bg-white border border-transparent hover:border-main300',
       },
     },
