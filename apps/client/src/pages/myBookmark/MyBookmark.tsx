@@ -83,7 +83,7 @@ const MyBookmark = () => {
   };
 
   return (
-    <div className="flex h-screen flex-col py-[5.2rem] pl-[8rem]">
+    <div className="flex h-screen flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
       <div className="flex items-center gap-[0.4rem]">
         <div className="flex items-center gap-[0.4rem]">
           <p className="head3">나의 북마크</p>
@@ -116,7 +116,7 @@ const MyBookmark = () => {
       </div>
 
       {articlesToDisplay && articlesToDisplay.length > 0 ? (
-        <div className="scrollbar-hide mt-[2.6rem] flex h-screen max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
+        <div className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
           {articlesToDisplay.map((article) => (
             <Card
               key={article.articleId}

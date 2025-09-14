@@ -65,7 +65,7 @@ const Remind = () => {
     activeBadge === 'read' ? <NoReadArticles /> : <NoUnreadArticles />;
 
   return (
-    <div className="flex flex-col py-[5.2rem] pl-[8rem]">
+    <div className="flex flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
       <p className="head3">리마인드</p>
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
@@ -83,7 +83,7 @@ const Remind = () => {
       </div>
 
       {data?.articles && data.articles.length > 0 ? (
-        <div className="scrollbar-hide mt-[2.6rem] flex max-w-[104rem] flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
+        <div className="scrollbar-hide mt-[2.6rem] flex flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
           {data.articles.map((article) => (
             <Card
               key={article.articleId}
