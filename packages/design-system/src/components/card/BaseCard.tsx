@@ -7,7 +7,7 @@ const BaseCard = ({ children, onClick }: BaseCardProps) => {
   return (
     <div
       onClick={onClick}
-      className="border-gray200 w-[24.8rem] overflow-hidden rounded-[1.2rem] border bg-white"
+      className="border-gray200 w-[24.8rem] overflow-hidden rounded-[1.2rem] border bg-white h-[12rem]"
     >
       {children}
     </div>

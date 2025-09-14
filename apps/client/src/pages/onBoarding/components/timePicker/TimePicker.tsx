@@ -38,7 +38,7 @@ const TimePicker = ({ onSave, onCancel, onClick }: TimePickerProps) => {
   return (
     <div
       onClick={onClick}
-      className="common-shadow absolute -bottom-[180px] -right-[100px] z-10 flex w-[26rem] flex-col items-center rounded-[1.2rem] bg-white px-[1.6rem]"
+      className="common-shadow absolute -bottom-[215px] -right-[50px] z-10 flex w-[26rem] flex-col items-center rounded-[1.2rem] bg-white px-[1.6rem]"
     >
       <WheelPickerWrapper className="flex h-[16.8rem] !items-center py-[0.8rem]">
         <WheelPicker

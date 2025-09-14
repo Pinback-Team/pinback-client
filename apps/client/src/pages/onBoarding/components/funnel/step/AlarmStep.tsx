@@ -11,7 +11,7 @@ const AlarmStep = ({ selected, setSelected }: AlarmStepProps) => {
       <p className="head2 text-font-black-1">
         도토리 찾으러 갈 시간을 정해볼까요?
       </p>
-      <p className="body2-m text-font-gray-3 mb-[4.3rem] mt-[0.8rem] text-center">
+      <p className="body2-m text-font-gray-3 mb-[3.2rem] mt-[0.8rem] text-center">
         매일 지정한 시간에 저장한 북마크를 리마인드해드려요
       </p>
 

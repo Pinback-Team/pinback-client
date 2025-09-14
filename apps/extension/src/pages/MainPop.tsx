@@ -28,7 +28,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   const { data : categoryData } = useGetCategoriesExtension();
   const remindDataRaw = useGetRemindTime();
   const remindData = type === "add" ? remindDataRaw : null;
-
+  
 
   // 저장 도메인 메타 데이터 갖고 오는 구간!
   const { url, title, description, imgUrl: initialImgUrl ,loading} = usePageMeta();
@@ -77,7 +77,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
       setMemo(savedData.memo ?? "");
       setIsArticleId(savedData.id ?? 0);
 
-      if (savedData.remindAt) {
+      if (savedData.remindAt) { 
         const [rawDate, rawTime] = savedData.remindAt.split("T");
         setDate(updateDate(rawDate));
         setTime(updateTime(rawTime));
@@ -233,7 +233,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
         )}
         <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
           <div className="mr-auto">
-            <Icon name="main_logo" width={72} height={20} />
+            <Icon name="main_logo" width={72} height={20} onClick={()=>{window.location.href = 'https://pinback.today'}}/>
           </div>
 
           <InfoBox

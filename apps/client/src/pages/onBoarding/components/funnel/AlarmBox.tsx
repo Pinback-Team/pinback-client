@@ -14,7 +14,7 @@ const boxStyle = cva(
   {
     variants: {
       disabled: {
-        true: 'border-main400 bg-main100 border',
+        true: 'border-main400 bg-main0 border',
         false: 'bg-white border border-transparent hover:border-main300',
       },
     },
@@ -34,8 +34,10 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
     <div
       className={boxStyle({ disabled: isDisabled })}
       onClick={() => {
-        if (select === 3 && isDisabled) {
-          setShowPicker(true);
+        if (select === 3) {
+          setShowPicker(true); 
+        } else {
+          setShowPicker(false);
         }
         onClick?.();
       }}
@@ -61,15 +63,16 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
             <p className="caption2-m text-font-gray-3">{normalizeTime(AlarmsType[2].time)}</p>
           )}
 
-          {showPicker && (
-            <TimePicker
+         {showPicker && ( <TimePicker
               onSave={getTimePicker}
               onCancel={() => {
                 AlarmsType[2].time = '';
+                setShowPicker(false);
               }}
               onClick={(e) => e.stopPropagation()}
-            />
-          )}
+            />)}
+           
+         
         </>
       )}
     </div>

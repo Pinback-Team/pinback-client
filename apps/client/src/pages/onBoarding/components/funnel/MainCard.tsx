@@ -188,13 +188,13 @@ const MainCard = () => {
       <div className="mb-[4.8rem] mt-[1.2rem] flex w-full justify-between px-[3.2rem]">
         {step < 4 && (
           <Button
-            variant="primary"
+            variant="secondary"
             size="medium"
             isDisabled={step === 0}
             className="w-[4.8rem]"
             onClick={prevStep}
           >
-            이전
+            뒤로
           </Button>
         )}
         <Button
