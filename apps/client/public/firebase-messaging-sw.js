@@ -1,4 +1,3 @@
-// 서비스 워커 파일
 self.addEventListener('install', function () {
   self.skipWaiting();
 });
