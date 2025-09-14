@@ -10,10 +10,10 @@ import { usePostSignUp } from '@shared/apis/queries';
 const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
 import { AlarmsType } from '@constants/alarms';
 import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
-import { firebaseConfig } from '../../../../firebase-config'; 
+import { firebaseConfig } from '../../../../firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
-
+import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
 
 const variants = {
   slideIn: (direction: number) => ({
@@ -44,28 +44,28 @@ const MainCard = () => {
   const [alarmSelected, setAlarmSelected] = useState<1 | 2 | 3>(1);
   const [isMac, setIsMac] = useState(false);
   // api 구간
-  const {mutate:postSignData} = usePostSignUp();
+  const { mutate: postSignData } = usePostSignUp();
 
   // 익스텐션에서부터 이메일 받아오는 구간!
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const emailParam = params.get("email"); 
+    const emailParam = params.get('email');
     if (emailParam) {
       setUserEmail(emailParam);
     }
   }, [location.search]);
 
-
   // FCM 구간
-  const [fcmToken, setFcmToken] = useState<string | null>(null); 
+  const [fcmToken, setFcmToken] = useState<string | null>(null);
   const app = initializeApp(firebaseConfig);
   const messaging = getMessaging(app);
-  
+
   const requestFCMToken = async (): Promise<string | null> => {
     try {
       const permission = await Notification.requestPermission();
+      registerServiceWorker();
       if (permission !== 'granted') {
         alert('알림 권한 허용이 필요합니다!');
         return null;
@@ -89,22 +89,22 @@ const MainCard = () => {
     }
   };
 
-
-
   useEffect(() => {
     const ua = navigator.userAgent.toLowerCase();
     if (ua.includes('mac os') || ua.includes('iphone') || ua.includes('ipad')) {
       setIsMac(true);
     }
   }, []);
- const renderStep = () => {
+  const renderStep = () => {
     switch (step) {
       case 0:
       case 1:
       case 2:
         return <StoryStep step={step as 0 | 1 | 2} />;
       case 3:
-        return <AlarmStep selected={alarmSelected} setSelected={setAlarmSelected} />;
+        return (
+          <AlarmStep selected={alarmSelected} setSelected={setAlarmSelected} />
+        );
       case 4:
         if (isMac) return <MacStep />;
         return <FinalStep />;
@@ -116,17 +116,16 @@ const MainCard = () => {
     }
   };
 
-const [remindTime, setRemindTime] = useState('09:00');
-  const nextStep = async() => {
+  const [remindTime, setRemindTime] = useState('09:00');
+  const nextStep = async () => {
     if (step === 3) {
-       const token = await requestFCMToken();
+      const token = await requestFCMToken();
       if (token) {
         setFcmToken(token);
         setDirection(1);
         setStep((prev) => prev + 1);
-      }
-      else{
-        alert('푸시 알람 설정 에러')
+      } else {
+        alert('푸시 알람 설정 에러');
       }
       return;
     }
@@ -137,19 +136,18 @@ const [remindTime, setRemindTime] = useState('09:00');
       const raw = AlarmsType[alarmSelected - 1].time;
       setRemindTime(normalizeTime(raw));
 
-      postSignData({
-            "email": userEmail, 
-            "remindDefault": remindTime, 
-            "fcmToken": fcmToken,
+      postSignData(
+        {
+          email: userEmail,
+          remindDefault: remindTime,
+          fcmToken: fcmToken,
         },
         {
-          onSuccess:()=>{
+          onSuccess: () => {
             window.location.href = '/';
-           }
+          },
         }
-      )
-      
-      
+      );
     }
   };
 
