@@ -104,6 +104,9 @@ const Remind = () => {
                     queryClient.invalidateQueries({
                       queryKey: ['remindArticles'],
                     });
+                    queryClient.invalidateQueries({
+                      queryKey: ['arcons'],
+                    });
                   },
                   onError: (error) => {
                     console.error(error);
