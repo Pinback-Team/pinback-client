@@ -10,8 +10,7 @@ import { useGetArcons } from '@shared/apis/queries';
 
 export default function Level() {
   const { data, isPending, isError } = useGetArcons();
-  //TODO: 새로고침 없이 반영
-  //TODO :인포 도토리..
+
   if (isPending) return <div></div>;
   if (isError) return <div></div>;
 
