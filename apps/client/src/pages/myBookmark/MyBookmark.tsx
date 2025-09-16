@@ -19,6 +19,7 @@ import {
   useDeleteRemindArticle,
   usePutArticleReadStatus,
 } from '@shared/apis/queries';
+import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
@@ -80,6 +81,13 @@ const MyBookmark = () => {
 
   const handleBadgeClick = (badgeType: 'all' | 'notRead') => {
     setActiveBadge(badgeType);
+  };
+
+  const EmptyStateComponent = () => {
+    if (articles?.totalArticle === 0) {
+      return <NoArticles />;
+    }
+    return <NoUnreadArticles />;
   };
 
   return (
@@ -154,7 +162,7 @@ const MyBookmark = () => {
           ))}
         </div>
       ) : (
-        <NoArticles />
+        <EmptyStateComponent />
       )}
 
       <OptionsMenuPortal
