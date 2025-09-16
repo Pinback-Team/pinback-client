@@ -15,6 +15,7 @@ import {
   useGetArticleDetail,
 } from '@shared/apis/queries';
 import { useQueryClient } from '@tanstack/react-query';
+import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -25,7 +26,7 @@ const Remind = () => {
 
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
   const { mutate: deleteArticle } = useDeleteRemindArticle();
-  const { data } = useGetRemindArticles(
+  const { data, isPending } = useGetRemindArticles(
     formattedDate,
     activeBadge === 'read',
     1,
@@ -61,8 +62,18 @@ const Remind = () => {
     setActiveBadge(badgeType);
   };
 
-  const EmptyStateComponent =
-    activeBadge === 'read' ? <NoReadArticles /> : <NoUnreadArticles />;
+  const EmptyStateComponent = () => {
+    if (data?.readArticleCount === 0 && data?.unreadArticleCount === 0) {
+      return <NoRemindArticles />;
+    }
+
+    return activeBadge === 'read' ? <NoReadArticles /> : <NoUnreadArticles />;
+  };
+
+  // TODO: 로딩 상태 디자인 필요
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
@@ -114,7 +125,7 @@ const Remind = () => {
           ))}
         </div>
       ) : (
-        EmptyStateComponent
+        <EmptyStateComponent />
       )}
 
       <OptionsMenuPortal
