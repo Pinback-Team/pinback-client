@@ -8,6 +8,7 @@ import { TreeLevel } from '@pages/level/types/treeLevelType';
 import { Badge } from '@pinback/design-system/ui';
 import { useGetArcons } from '@shared/apis/queries';
 import NextAcornTime from './components/NextAcornTime';
+import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 
 export default function Level() {
   const { data, isPending, isError } = useGetArcons();
@@ -16,8 +17,14 @@ export default function Level() {
   if (isError) return <div></div>;
 
   const acornCount = data.acornCount;
+  const nextAcornTime = data.nextRemind;
+  const now = formatLocalDateTime(new Date());
+
   const info = getTreeLevel(acornCount);
   const isLevel5 = info.level === 5 || acornCount >= 7;
+
+  console.log(data.acornCount, data.nextRemind);
+  console.log('현재시간:', now);
 
   return (
     <div className={cn('bg-subcolor mx-auto h-dvh w-full overflow-hidden')}>
@@ -61,7 +68,7 @@ export default function Level() {
           {isLevel5 && (
             <NextAcornTime
               className="absolute bottom-[5.2rem] left-1/2 z-[10] -translate-x-1/2"
-              nextAcornTime={'22:22:22'}
+              nextAcornTime={nextAcornTime}
             />
           )}
         </div>

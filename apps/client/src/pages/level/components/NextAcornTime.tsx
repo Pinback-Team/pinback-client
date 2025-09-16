@@ -1,5 +1,6 @@
 import { Icon } from '@pinback/design-system/icons';
 import { cn } from '@pinback/design-system/utils';
+import { useCountdown } from '@pages/level/hooks/useCountdown';
 
 type NextAcornTimeProps = {
   className?: string;
@@ -10,6 +11,8 @@ export default function NextAcornTime({
   className,
   nextAcornTime,
 }: NextAcornTimeProps) {
+  const timeLeft = useCountdown(nextAcornTime);
+
   return (
     <div
       className={cn(
@@ -22,7 +25,7 @@ export default function NextAcornTime({
         도토리 다시 모을 수 있는 시간까지
       </span>
       <span className="body2-m text-main400 tabular-nums" aria-live="polite">
-        {nextAcornTime}✨
+        {timeLeft} ✨
       </span>
     </div>
   );
