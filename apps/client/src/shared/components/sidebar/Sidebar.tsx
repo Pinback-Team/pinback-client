@@ -119,7 +119,6 @@ export function Sidebar() {
             label="리마인드"
             active={activeTab === 'remind'}
             onClick={() => {
-              setSelectedCategoryId(null);
               closeMenu();
               goRemind();
             }}
@@ -131,7 +130,6 @@ export function Sidebar() {
             active={activeTab === 'mybookmark'}
             defaultOpen
             onClick={() => {
-              setSelectedCategoryId(null);
               closeMenu();
               goBookmarks();
             }}
