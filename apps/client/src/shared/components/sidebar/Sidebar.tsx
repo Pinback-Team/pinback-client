@@ -103,11 +103,11 @@ export function Sidebar() {
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
       <div className="flex h-full flex-col px-[0.8rem]">
-        <header className="py-[2.8rem]">
+        <header className="px-[0.8rem] py-[2.8rem]">
           <Icon
             name="logo"
             aria-label="Pinback 로고"
-            className="h-[2.4rem] w-[8.7rem]"
+            className="h-[2.4rem] w-[8.7rem] cursor-pointer"
           />
         </header>
 
