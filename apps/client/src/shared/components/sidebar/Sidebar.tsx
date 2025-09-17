@@ -187,6 +187,7 @@ export function Sidebar() {
         onCreateConfirm={handleCreateCategory}
         onEditConfirm={(id) => handlePatchCategory(id)}
         onDeleteConfirm={(id) => handleDeleteCategory(id)}
+        categories={categories?.categories ?? []} // ✅ 추가
       />
     </aside>
   );
