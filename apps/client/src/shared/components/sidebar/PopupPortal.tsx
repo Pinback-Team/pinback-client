@@ -13,6 +13,8 @@ interface Props {
   categoryList?: { id: number; name: string }[];
   isToastOpen?: boolean;
   onToastClose?: () => void;
+  toastKey?: number;
+  toastAction?: 'create' | 'edit' | 'delete';
 }
 
 const MAX_LEN = 10;
@@ -27,14 +29,14 @@ export default function PopupPortal({
   categoryList,
   isToastOpen,
   onToastClose,
+  toastKey,
+  toastAction,
 }: Props) {
   const [draft, setDraft] = useState('');
 
   useEffect(() => {
     if (!popup) return;
-    const initial =
-      popup.kind === 'edit' && 'name' in popup ? (popup.name ?? '') : '';
-    setDraft(initial);
+    setDraft(popup.kind === 'edit' ? (popup.name ?? '') : '');
   }, [popup]);
 
   if (!popup) return null;
@@ -49,7 +51,6 @@ export default function PopupPortal({
       (c) => c.name === value && (popup.kind === 'create' || c.id !== popup.id)
     );
 
-  // ─ UI 헬퍼/에러 표시 ─
   let helperText = '';
   let isErrorUI = false;
 
@@ -89,8 +90,9 @@ export default function PopupPortal({
     onDeleteConfirm?.(popup.id);
   };
 
+  const action = toastAction ?? (popup.kind as 'create' | 'edit' | 'delete');
   const actionLabel =
-    popup.kind === 'create' ? '추가' : popup.kind === 'edit' ? '수정' : '삭제';
+    action === 'create' ? '추가' : action === 'edit' ? '수정' : '삭제';
 
   return createPortal(
     <div className="fixed inset-0 z-[11000]">
@@ -104,11 +106,11 @@ export default function PopupPortal({
             right="추가"
             isError={isErrorUI}
             helperText={helperText}
+            inputValue={draft}
             onInputChange={handleInputChange}
             placeholder="카테고리 제목을 입력해주세요"
             onLeftClick={onClose}
             onRightClick={handleCreate}
-            // ⬅️ maxLength 제거
           />
         )}
 
@@ -120,8 +122,8 @@ export default function PopupPortal({
             right="확인"
             isError={isErrorUI}
             helperText={helperText}
+            inputValue={draft}
             onInputChange={handleInputChange}
-            defaultValue={popup.name}
             onLeftClick={onClose}
             onRightClick={handleEdit}
           />
@@ -142,8 +144,9 @@ export default function PopupPortal({
         {isToastOpen && (
           <div className="absolute bottom-[23.4rem] left-1/2 -translate-x-1/2">
             <AutoDismissToast
+              key={toastKey}
               duration={1000}
-              fadeMs={1000}
+              fadeMs={500}
               onClose={onToastClose}
             >
               <Toast text={`${actionLabel}에 실패했어요.\n다시 시도해주세요`} />

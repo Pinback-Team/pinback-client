@@ -17,11 +17,13 @@ import {
   usePutCategory,
   useDeleteCategory,
 } from '@shared/apis/queries';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 export function Sidebar() {
   const [newCategoryName, setNewCategoryName] = useState('');
+  const [toastIsOpen, setToastIsOpen] = useState(false);
+
   const queryClient = useQueryClient();
 
   const { data: categories } = useGetDashboardCategories();
@@ -58,7 +60,10 @@ export function Sidebar() {
     setNewCategoryName(name);
   };
 
-  const [toastIsOpen, setToastIsOpen] = useState(false);
+  // 팝업이 변할 때마다 이전 에러 토스트는 닫기
+  useEffect(() => {
+    setToastIsOpen(false);
+  }, [popup]);
 
   const handleCreateCategory = () => {
     createCategory(newCategoryName, {
@@ -73,6 +78,7 @@ export function Sidebar() {
       },
     });
   };
+
   const handlePatchCategory = (id: number) => {
     patchCategory(
       { id, categoryName: newCategoryName },
@@ -101,6 +107,12 @@ export function Sidebar() {
         setToastIsOpen(true);
       },
     });
+  };
+
+  // 팝업 닫을 때 토스트도 함께 닫기 (오버레이 클릭 등)
+  const handlePopupClose = () => {
+    setToastIsOpen(false);
+    close();
   };
 
   if (isPending) return <div></div>;
@@ -156,7 +168,12 @@ export function Sidebar() {
                 />
               ))}
 
-              <CreateItem onClick={openCreate} />
+              <CreateItem
+                onClick={() => {
+                  setToastIsOpen(false);
+                  openCreate();
+                }}
+              />
             </ul>
           </AccordionItem>
 
@@ -165,8 +182,14 @@ export function Sidebar() {
             style={style ?? undefined}
             categoryId={menu.categoryId}
             getCategoryName={getCategoryName}
-            onEdit={(id, name) => openEdit(id, name)}
-            onDelete={(id, name) => openDelete(id, name)}
+            onEdit={(id, name) => {
+              setToastIsOpen(false);
+              openEdit(id, name);
+            }}
+            onDelete={(id, name) => {
+              setToastIsOpen(false);
+              openDelete(id, name);
+            }}
             onClose={closeMenu}
             containerRef={containerRef}
           />
@@ -187,13 +210,14 @@ export function Sidebar() {
 
       <PopupPortal
         popup={popup}
-        onClose={close}
+        onClose={handlePopupClose}
         onChange={handleCategoryChange}
         onCreateConfirm={handleCreateCategory}
         onEditConfirm={(id) => handlePatchCategory(id)}
         onDeleteConfirm={(id) => handleDeleteCategory(id)}
         categoryList={categories?.categories ?? []}
         isToastOpen={toastIsOpen}
+        onToastClose={() => setToastIsOpen(false)}
       />
     </aside>
   );
