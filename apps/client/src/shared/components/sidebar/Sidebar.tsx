@@ -58,6 +58,8 @@ export function Sidebar() {
     setNewCategoryName(name);
   };
 
+  const [toastIsOpen, setToastIsOpen] = useState(false);
+
   const handleCreateCategory = () => {
     createCategory(newCategoryName, {
       onSuccess: () => {
@@ -67,6 +69,7 @@ export function Sidebar() {
       },
       onError: (error) => {
         console.error('카테고리 생성 실패:', error);
+        setToastIsOpen(true);
       },
     });
   };
@@ -79,7 +82,10 @@ export function Sidebar() {
           queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
           close();
         },
-        onError: (error) => console.error('카테고리 수정 실패:', error),
+        onError: (error) => {
+          console.error('카테고리 수정 실패:', error);
+          setToastIsOpen(true);
+        },
       }
     );
   };
@@ -92,6 +98,7 @@ export function Sidebar() {
       },
       onError: (error) => {
         console.error('카테고리 삭제 실패:', error);
+        setToastIsOpen(true);
       },
     });
   };
@@ -186,6 +193,7 @@ export function Sidebar() {
         onEditConfirm={(id) => handlePatchCategory(id)}
         onDeleteConfirm={(id) => handleDeleteCategory(id)}
         categoryList={categories?.categories ?? []}
+        ToastIsOpen={toastIsOpen}
       />
     </aside>
   );

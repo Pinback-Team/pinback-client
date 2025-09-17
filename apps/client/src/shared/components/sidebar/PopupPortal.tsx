@@ -1,7 +1,8 @@
 import { createPortal } from 'react-dom';
 import { useState } from 'react';
-import { Popup } from '@pinback/design-system/ui';
+import { AutoDismissToast, Popup, Toast } from '@pinback/design-system/ui';
 import type { PopupState } from '@shared/hooks/useCategoryPopups';
+import { tr } from 'framer-motion/client';
 
 interface Props {
   popup: PopupState;
@@ -11,6 +12,8 @@ interface Props {
   onEditConfirm?: (id: number, draft?: string) => void;
   onDeleteConfirm?: (id: number) => void;
   categoryList?: { id: number; name: string }[];
+  ToastIsOpen?: boolean;
+  onToastClose?: () => void;
 }
 
 export default function PopupPortal({
@@ -21,13 +24,18 @@ export default function PopupPortal({
   onEditConfirm,
   onDeleteConfirm,
   categoryList,
+  ToastIsOpen,
+  onToastClose,
 }: Props) {
   const [draft, setDraft] = useState('');
+  //테스트 ToastIsOpen=true
+
+  ToastIsOpen = true;
 
   if (!popup) return null;
 
   const error = (() => {
-    if (!popup || popup.kind === 'delete') return null;
+    if (popup.kind === 'delete') return null;
 
     const value = draft.trim();
     if (!value) return null;
@@ -41,6 +49,7 @@ export default function PopupPortal({
     );
     return isDuplicate ? '이미 존재하는 카테고리 이름입니다.' : null;
   })();
+
   const handleInputChange = (value: string) => {
     setDraft(value);
     onChange?.(value);
@@ -52,9 +61,13 @@ export default function PopupPortal({
   };
 
   const handleEdit = () => {
-    if (error) return;
-    if (popup.kind === 'edit') {
-      onEditConfirm?.(popup.id, draft.trim());
+    if (error || popup.kind !== 'edit') return;
+    onEditConfirm?.(popup.id, draft.trim());
+  };
+
+  const handleDelete = () => {
+    if (popup.kind === 'delete') {
+      onDeleteConfirm?.(popup.id);
     }
   };
 
@@ -100,8 +113,20 @@ export default function PopupPortal({
             left="취소"
             right="삭제"
             onLeftClick={onClose}
-            onRightClick={() => onDeleteConfirm?.(popup.id)}
+            onRightClick={handleDelete}
           />
+        )}
+
+        {ToastIsOpen && (
+          <div className="absolute bottom-[23.4rem] left-1/2 -translate-x-1/2">
+            <AutoDismissToast
+              duration={1000}
+              fadeMs={1000}
+              onClose={onToastClose}
+            >
+              <Toast text={`수정/삭제/저장에 실패했어요.\n다시 시도해주세요`} />
+            </AutoDismissToast>
+          </div>
         )}
       </div>
     </div>,
