@@ -34,7 +34,7 @@ export default function SideItem({
     <div
       className={cn(
         'flex h-[4.4rem] items-center gap-[0.8rem] rounded-[0.4rem] px-[0.8rem] py-[1.2rem]',
-        'transition-colors',
+        'cursor-pointer transition-colors',
         active ? 'bg-main0 text-main600' : 'bg-white-bg text-font-gray-2',
         className
       )}
