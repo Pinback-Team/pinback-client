@@ -60,7 +60,6 @@ export function Sidebar() {
     setNewCategoryName(name);
   };
 
-  // 팝업이 변할 때마다 이전 에러 토스트는 닫기
   useEffect(() => {
     setToastIsOpen(false);
   }, [popup]);
@@ -72,8 +71,7 @@ export function Sidebar() {
         queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
         close();
       },
-      onError: (error) => {
-        console.error('카테고리 생성 실패:', error);
+      onError: () => {
         setToastIsOpen(true);
       },
     });
@@ -88,8 +86,7 @@ export function Sidebar() {
           queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
           close();
         },
-        onError: (error) => {
-          console.error('카테고리 수정 실패:', error);
+        onError: () => {
           setToastIsOpen(true);
         },
       }
@@ -102,14 +99,12 @@ export function Sidebar() {
         queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
         close();
       },
-      onError: (error) => {
-        console.error('카테고리 삭제 실패:', error);
+      onError: () => {
         setToastIsOpen(true);
       },
     });
   };
 
-  // 팝업 닫을 때 토스트도 함께 닫기 (오버레이 클릭 등)
   const handlePopupClose = () => {
     setToastIsOpen(false);
     close();
