@@ -53,6 +53,7 @@ const MainCard = () => {
     const params = new URLSearchParams(location.search);
     const emailParam = params.get('email');
     if (emailParam) {
+      localStorage.setItem('email', userEmail);
       setUserEmail(emailParam);
     }
   }, [location.search]);
