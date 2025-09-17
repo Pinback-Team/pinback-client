@@ -27,12 +27,21 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   const {mutate:postArticle} = usePostArticle();
   const {mutate:putArticle} = usePutArticle();
   const { data : categoryData } = useGetCategoriesExtension();
-  const remindDataRaw = useGetRemindTime();
-  const remindData = type === "add" ? remindDataRaw : null;
+  const remindData= useGetRemindTime();
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [dateError, setDateError] = useState('');
   const [timeError, setTimeError] = useState('');
+
+  useEffect(() => {
+
+  if (type === 'add' && remindData?.data) {
+    const newDate = updateDate(remindData.data.data.remindDate);
+    const newTime = updateTime(remindData.data.data.remindTime);
+    setDate(newDate);
+    setTime(newTime);
+  }
+}, [remindData?.data, type]);
 
   // 저장 도메인 메타 데이터 갖고 오는 구간!
   const { url, title, description, imgUrl: initialImgUrl ,loading} = usePageMeta();
@@ -121,17 +130,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   };
 
 
-  // 리마인드 시간,날짜 검사 구간! (포맷팅은 utils로 뻄!)
-  useEffect(() => {
-    if (remindData?.data && type=='add') {
-        console.log(remindData?.data);
-        const newDate = updateDate(remindData.data.remindDate);
-        const newTime = updateTime(remindData.data.remindTime);
-        setDate(newDate);
-        setTime(newTime);
-    }
-  }, [remindData]);
-  
+ 
 
   const handleDateChange = (value: string) => {
     setDate(value);

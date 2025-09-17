@@ -1,4 +1,4 @@
-import {  useState} from 'react';
+import {  useState, useEffect } from 'react';
 import { cva } from 'class-variance-authority';
 import {
   digitsOnly,
@@ -58,6 +58,10 @@ const dateTimeTxtStyles = cva(
 }: DateTimeProps) {
   const isDisabled = state === 'disabled';
   const [rawDigits, setRawDigits] = useState(() => digitsOnly(value ?? ''));
+
+  useEffect(() => {
+  setRawDigits(digitsOnly(value ?? ''));
+}, [value]);
 
   const formatted =
     type === 'date'
