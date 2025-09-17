@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { usePostCategories, useGetCategoriesExtension } from "@apis/query/queries";
 import type { Category } from "@shared-types/types";
 import { AxiosError } from "axios";
@@ -11,8 +11,15 @@ export const useCategoryManager = () => {
   const [isPopError, setIsPopError] = useState(false);
   const [errorTxt, setErrorTxt] = useState("");
 
-  const options =
-    categoryData?.data?.categories?.map((c: Category) => c.categoryName) ?? [];
+  const [options, setOptions] = useState<string[]>(
+  categoryData?.data?.categories?.map((c: Category) => c.categoryName) ?? []
+);
+
+  useEffect(() => {
+    if (categoryData?.data?.categories) {
+      setOptions(categoryData.data.categories.map((c) => c.categoryName));
+    }
+  }, [categoryData]);
 
   const saveCategory = (onSuccess?: (category: Category) => void) => {
     if (categoryTitle.length > 20) {
@@ -30,7 +37,9 @@ export const useCategoryManager = () => {
             categoryName: categoryTitle,
             categoryColor: res.data.categoryColor ?? "#000000",
           };
-          onSuccess?.(newCategory); 
+          setOptions((prev) => [...prev, newCategory.categoryName]);
+
+          onSuccess?.(newCategory);
           resetPopup();
         },
         onError: (err: AxiosError<{ code: string; message: string }>) => {
