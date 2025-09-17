@@ -2,7 +2,6 @@ import { createPortal } from 'react-dom';
 import { useState } from 'react';
 import { AutoDismissToast, Popup, Toast } from '@pinback/design-system/ui';
 import type { PopupState } from '@shared/hooks/useCategoryPopups';
-import { tr } from 'framer-motion/client';
 
 interface Props {
   popup: PopupState;
@@ -12,7 +11,7 @@ interface Props {
   onEditConfirm?: (id: number, draft?: string) => void;
   onDeleteConfirm?: (id: number) => void;
   categoryList?: { id: number; name: string }[];
-  ToastIsOpen?: boolean;
+  isToastOpen?: boolean;
   onToastClose?: () => void;
 }
 
@@ -24,13 +23,10 @@ export default function PopupPortal({
   onEditConfirm,
   onDeleteConfirm,
   categoryList,
-  ToastIsOpen,
+  isToastOpen,
   onToastClose,
 }: Props) {
   const [draft, setDraft] = useState('');
-  //테스트 ToastIsOpen=true
-
-  ToastIsOpen = true;
 
   if (!popup) return null;
 
@@ -70,6 +66,9 @@ export default function PopupPortal({
       onDeleteConfirm?.(popup.id);
     }
   };
+
+  const actionLabel =
+    popup.kind === 'create' ? '추가' : popup.kind === 'edit' ? '수정' : '삭제';
 
   return createPortal(
     <div className="fixed inset-0 z-[11000]">
@@ -117,14 +116,14 @@ export default function PopupPortal({
           />
         )}
 
-        {ToastIsOpen && (
+        {isToastOpen && (
           <div className="absolute bottom-[23.4rem] left-1/2 -translate-x-1/2">
             <AutoDismissToast
               duration={1000}
               fadeMs={1000}
               onClose={onToastClose}
             >
-              <Toast text={`수정/삭제/저장에 실패했어요.\n다시 시도해주세요`} />
+              <Toast text={`${actionLabel}에 실패했어요.\n다시 시도해주세요`} />
             </AutoDismissToast>
           </div>
         )}

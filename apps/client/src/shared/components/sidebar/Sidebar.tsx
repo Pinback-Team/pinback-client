@@ -193,7 +193,7 @@ export function Sidebar() {
         onEditConfirm={(id) => handlePatchCategory(id)}
         onDeleteConfirm={(id) => handleDeleteCategory(id)}
         categoryList={categories?.categories ?? []}
-        ToastIsOpen={toastIsOpen}
+        isToastOpen={toastIsOpen}
       />
     </aside>
   );
