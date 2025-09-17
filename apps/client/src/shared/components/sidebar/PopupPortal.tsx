@@ -1,10 +1,10 @@
 import { createPortal } from 'react-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AutoDismissToast, Popup, Toast } from '@pinback/design-system/ui';
 import type { PopupState } from '@shared/hooks/useCategoryPopups';
 
 interface Props {
-  popup: PopupState;
+  popup: PopupState | null;
   onClose: () => void;
   onChange?: (value: string) => void;
   onCreateConfirm?: () => void;
@@ -14,6 +14,8 @@ interface Props {
   isToastOpen?: boolean;
   onToastClose?: () => void;
 }
+
+const MAX_LEN = 10;
 
 export default function PopupPortal({
   popup,
@@ -28,43 +30,63 @@ export default function PopupPortal({
 }: Props) {
   const [draft, setDraft] = useState('');
 
+  useEffect(() => {
+    if (!popup) return;
+    const initial =
+      popup.kind === 'edit' && 'name' in popup ? (popup.name ?? '') : '';
+    setDraft(initial);
+  }, [popup]);
+
   if (!popup) return null;
 
-  const error = (() => {
-    if (popup.kind === 'delete') return null;
+  const value = draft.trim();
+  const len = value.length;
 
-    const value = draft.trim();
-    if (!value) return null;
-
-    if (value.length > 10) return '카테고리 이름은 10자 이내로 입력해주세요.';
-
-    const isDuplicate = !!categoryList?.some(
-      (category) =>
-        category.name === value &&
-        (popup.kind === 'create' || category.id !== popup.id)
+  const isEmpty = popup.kind !== 'delete' && len === 0;
+  const isDuplicate =
+    popup.kind !== 'delete' &&
+    !!categoryList?.some(
+      (c) => c.name === value && (popup.kind === 'create' || c.id !== popup.id)
     );
-    return isDuplicate ? '이미 존재하는 카테고리 이름입니다.' : null;
-  })();
 
-  const handleInputChange = (value: string) => {
-    setDraft(value);
-    onChange?.(value);
+  // ─ UI 헬퍼/에러 표시 ─
+  let helperText = '';
+  let isErrorUI = false;
+
+  if (!isEmpty && popup.kind !== 'delete') {
+    if (isDuplicate) {
+      helperText = '이미 존재하는 카테고리 이름입니다.';
+      isErrorUI = true;
+    } else if (len > MAX_LEN) {
+      helperText = `카테고리 이름은 ${MAX_LEN}자 이내로 입력해주세요.`;
+      isErrorUI = true;
+    } else if (len === MAX_LEN) {
+      helperText = `최대 ${MAX_LEN}자까지 입력할 수 있어요.`;
+      isErrorUI = false;
+    }
+  }
+
+  const handleInputChange = (next: string) => {
+    setDraft(next);
+    onChange?.(next);
   };
 
+  const blocked =
+    popup.kind !== 'delete' && (isEmpty || isDuplicate || len > MAX_LEN);
+
   const handleCreate = () => {
-    if (error) return;
+    if (blocked) return;
     onCreateConfirm?.();
   };
 
   const handleEdit = () => {
-    if (error || popup.kind !== 'edit') return;
-    onEditConfirm?.(popup.id, draft.trim());
+    if (blocked || popup.kind !== 'edit') return;
+    onEditConfirm?.(popup.id, value);
   };
 
   const handleDelete = () => {
-    if (popup.kind === 'delete') {
-      onDeleteConfirm?.(popup.id);
-    }
+    if (popup.kind !== 'delete') return;
+    onDeleteConfirm?.(popup.id);
   };
 
   const actionLabel =
@@ -80,12 +102,13 @@ export default function PopupPortal({
             title="카테고리 추가하기"
             left="취소"
             right="추가"
-            isError={Boolean(error)}
-            helperText={error ?? ''}
+            isError={isErrorUI}
+            helperText={helperText}
             onInputChange={handleInputChange}
             placeholder="카테고리 제목을 입력해주세요"
             onLeftClick={onClose}
             onRightClick={handleCreate}
+            // ⬅️ maxLength 제거
           />
         )}
 
@@ -95,8 +118,8 @@ export default function PopupPortal({
             title="카테고리 수정하기"
             left="취소"
             right="확인"
-            isError={Boolean(error)}
-            helperText={error ?? ''}
+            isError={isErrorUI}
+            helperText={helperText}
             onInputChange={handleInputChange}
             defaultValue={popup.name}
             onLeftClick={onClose}
