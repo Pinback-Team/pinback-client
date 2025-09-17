@@ -10,7 +10,7 @@ export interface DashboardCategoriesResponse {
 
 export type AcornsResponse = {
   acornCount: number;
-  remindDateTime: string;
+  nextRemind: string;
 };
 
 export interface ArticleReadStatusResponse {

@@ -68,6 +68,7 @@ const MyBookmark = () => {
         queryClient.invalidateQueries({
           queryKey: ['categoryBookmarkArticles'],
         });
+
         close();
       },
       onError: (error) => {
@@ -147,6 +148,9 @@ const MyBookmark = () => {
                     });
                     queryClient.invalidateQueries({
                       queryKey: ['categoryBookmarkArticles'],
+                    });
+                    queryClient.invalidateQueries({
+                      queryKey: ['arcons'],
                     });
                   },
                   onError: (error) => {
