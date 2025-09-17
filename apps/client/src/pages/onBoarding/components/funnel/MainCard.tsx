@@ -14,7 +14,7 @@ import { firebaseConfig } from '../../../../firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
 import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
-
+import { useLocation } from 'react-router-dom';
 const variants = {
   slideIn: (direction: number) => ({
     x: direction > 0 ? 200 : -200,
@@ -48,15 +48,18 @@ const MainCard = () => {
 
   // 익스텐션에서부터 이메일 받아오는 구간!
   const [userEmail, setUserEmail] = useState('');
+  const location = useLocation();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const emailParam = params.get('email');
     if (emailParam) {
-      localStorage.setItem('email', userEmail);
       setUserEmail(emailParam);
+      localStorage.setItem('email', emailParam);
     }
   }, [location.search]);
+
+  
 
   // FCM 구간
   const [fcmToken, setFcmToken] = useState<string | null>(null);
@@ -193,7 +196,7 @@ const MainCard = () => {
       </div>
 
       <div className="mb-[4.8rem] mt-[1.2rem] flex w-full justify-between px-[3.2rem]">
-        {step < 4 && (
+        {step < 4 &&  step > 0 && (
           <Button
             variant="secondary"
             size="medium"
