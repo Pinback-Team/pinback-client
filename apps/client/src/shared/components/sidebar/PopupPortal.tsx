@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom';
+import { useEffect, useMemo, useState } from 'react';
 import { Popup } from '@pinback/design-system/ui';
 import type { PopupState } from '@shared/hooks/useCategoryPopups';
 
@@ -9,6 +10,7 @@ interface Props {
   onCreateConfirm?: () => void;
   onEditConfirm?: (id: number, draft?: string) => void;
   onDeleteConfirm?: (id: number) => void;
+  categoryList?: { id: number; name: string }[];
 }
 
 export default function PopupPortal({
@@ -18,8 +20,52 @@ export default function PopupPortal({
   onCreateConfirm,
   onEditConfirm,
   onDeleteConfirm,
+  categoryList,
 }: Props) {
   if (!popup) return null;
+  const [draft, setDraft] = useState<string>(
+    popup.kind === 'edit' ? (popup.name ?? '') : ''
+  );
+
+  const error = useMemo(() => {
+    if (!popup || popup.kind === 'delete') return null;
+
+    const value = draft.trim();
+    if (!value) return null;
+
+    if (value.length > 10) {
+      return '카테고리 이름은 10자 이내로 입력해주세요.';
+    }
+
+    const isDuplicate = !!categoryList?.some(
+      (category) =>
+        category.name === value &&
+        (popup.kind === 'create' || category.id !== popup.id)
+    );
+
+    if (isDuplicate) {
+      return '이미 존재하는 카테고리 이름입니다.';
+    }
+
+    return null;
+  }, [draft, popup, categoryList]);
+
+  const handleInputChange = (value: string) => {
+    setDraft(value);
+    onChange?.(value);
+  };
+
+  const handleCreate = () => {
+    if (error) return;
+    onCreateConfirm?.();
+  };
+
+  const handleEdit = () => {
+    if (error) return;
+    if (popup.kind === 'edit') {
+      onEditConfirm?.(popup.id, draft.trim());
+    }
+  };
 
   return createPortal(
     <div className="fixed inset-0 z-[11000]">
@@ -31,10 +77,12 @@ export default function PopupPortal({
             title="카테고리 추가하기"
             left="취소"
             right="추가"
-            onInputChange={onChange}
+            isError={Boolean(error)}
+            helperText={error ?? ''}
+            onInputChange={handleInputChange}
             placeholder="카테고리 제목을 입력해주세요"
             onLeftClick={onClose}
-            onRightClick={() => onCreateConfirm?.()}
+            onRightClick={handleCreate}
           />
         )}
 
@@ -44,10 +92,12 @@ export default function PopupPortal({
             title="카테고리 수정하기"
             left="취소"
             right="확인"
-            onInputChange={onChange}
+            isError={Boolean(error)}
+            helperText={error ?? ''}
+            onInputChange={handleInputChange}
             defaultValue={popup.name}
             onLeftClick={onClose}
-            onRightClick={() => onEditConfirm?.(popup.id)}
+            onRightClick={handleEdit}
           />
         )}
 
