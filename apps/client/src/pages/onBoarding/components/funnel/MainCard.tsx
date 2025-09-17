@@ -123,6 +123,15 @@ const MainCard = () => {
   const [remindTime, setRemindTime] = useState('09:00');
   const nextStep = async () => {
     if (step === 3) {
+      if (alarmSelected==1){
+        setRemindTime('09:00');
+      } else if (alarmSelected==2){
+        setRemindTime('20:00');
+      } else{
+        const raw = AlarmsType[alarmSelected - 1].time;
+        setRemindTime(normalizeTime(raw))
+      }
+
       const token = await requestFCMToken();
       if (token) {
         setFcmToken(token);
@@ -137,9 +146,6 @@ const MainCard = () => {
       setDirection(1);
       setStep((prev) => prev + 1);
     } else if (step === 5) {
-      const raw = AlarmsType[alarmSelected - 1].time;
-      setRemindTime(normalizeTime(raw));
-
       postSignData(
         {
           email: userEmail,

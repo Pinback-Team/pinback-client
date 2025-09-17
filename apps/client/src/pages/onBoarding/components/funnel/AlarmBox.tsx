@@ -28,6 +28,7 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
         const formatted = `${meridiem} ${hour}:${minute}`;
         AlarmsType[2].time = formatted;
         setShowPicker(false);
+        console.log(AlarmsType[2].time );
         // 이거 나중에 api 연결때 쓸려고 표시한거.. 그떄 지우겠듬여 console.log('저장된 사용자 알람:', AlarmsType[2].time);
   }
   return (
