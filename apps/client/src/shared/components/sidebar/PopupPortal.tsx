@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Popup } from '@pinback/design-system/ui';
 import type { PopupState } from '@shared/hooks/useCategoryPopups';
 
@@ -22,34 +22,25 @@ export default function PopupPortal({
   onDeleteConfirm,
   categoryList,
 }: Props) {
-  if (!popup) return null;
-  const [draft, setDraft] = useState<string>(
-    popup.kind === 'edit' ? (popup.name ?? '') : ''
-  );
+  const [draft, setDraft] = useState('');
 
-  const error = useMemo(() => {
+  if (!popup) return null;
+
+  const error = (() => {
     if (!popup || popup.kind === 'delete') return null;
 
     const value = draft.trim();
     if (!value) return null;
 
-    if (value.length > 10) {
-      return '카테고리 이름은 10자 이내로 입력해주세요.';
-    }
+    if (value.length > 10) return '카테고리 이름은 10자 이내로 입력해주세요.';
 
     const isDuplicate = !!categoryList?.some(
       (category) =>
         category.name === value &&
         (popup.kind === 'create' || category.id !== popup.id)
     );
-
-    if (isDuplicate) {
-      return '이미 존재하는 카테고리 이름입니다.';
-    }
-
-    return null;
-  }, [draft, popup, categoryList]);
-
+    return isDuplicate ? '이미 존재하는 카테고리 이름입니다.' : null;
+  })();
   const handleInputChange = (value: string) => {
     setDraft(value);
     onChange?.(value);
