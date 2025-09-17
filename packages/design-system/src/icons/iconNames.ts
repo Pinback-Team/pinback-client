@@ -2,6 +2,8 @@
 export const iconNames = [
   'chippi_profile',
   'dotori',
+  'extension_pop',
+  'extension_thumb',
   'ic_arrow_down_active',
   'ic_arrow_down_disable',
   'ic_bookmark_active',

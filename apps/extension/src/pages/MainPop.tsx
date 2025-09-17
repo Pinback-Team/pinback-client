@@ -6,7 +6,7 @@ import {
   Switch,
   PopupContainer,
   Dropdown,
-  validateDate, 
+  validateDate,
   validateTime
 } from '@pinback/design-system/ui';
 import { useState,useEffect } from 'react';
@@ -17,6 +17,7 @@ import { usePostArticle,useGetCategoriesExtension, useGetRemindTime, usePutArtic
 import { ArticleResponse} from '@shared-types/types'
 import { updateDate, updateTime, combineDateTime } from '@utils/remindTimeFormat';
 import { useCategoryManager } from '@hooks/useCategoryManager';
+import thumbImg from '@assets/extension_thumb.svg'
 interface MainPopProps {
     type: "add" | "edit";
     savedData?: ArticleResponse  | null;
@@ -28,7 +29,10 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   const { data : categoryData } = useGetCategoriesExtension();
   const remindDataRaw = useGetRemindTime();
   const remindData = type === "add" ? remindDataRaw : null;
-  
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [dateError, setDateError] = useState('');
+  const [timeError, setTimeError] = useState('');
 
   // 저장 도메인 메타 데이터 갖고 오는 구간!
   const { url, title, description, imgUrl: initialImgUrl ,loading} = usePageMeta();
@@ -39,12 +43,12 @@ const MainPop = ({type, savedData}: MainPopProps) => {
     useEffect(() => {
     if (!loading && !title) {
         alert("이 페이지는 저장할 수 없어요 🐿️");
-        window.close(); 
+       // window.close(); 
     }
     }, [loading, title]);
 
     // 이미지 없으면 기본 이미지로 교체
-    const defaultImageUrl = "https://thumb.photo-ac.com/31/3137071c02f608edb5220129b10533d6_t.jpeg";
+    const defaultImageUrl = thumbImg;
 
     useEffect(() => {
     if (!initialImgUrl) {
@@ -118,27 +122,26 @@ const MainPop = ({type, savedData}: MainPopProps) => {
 
 
   // 리마인드 시간,날짜 검사 구간! (포맷팅은 utils로 뻄!)
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
   useEffect(() => {
     if (remindData?.data && type=='add') {
+        console.log(remindData?.data);
         const newDate = updateDate(remindData.data.remindDate);
         const newTime = updateTime(remindData.data.remindTime);
         setDate(newDate);
         setTime(newTime);
     }
   }, [remindData]);
-  const [dateError, setDateError] = useState('');
-  const [timeError, setTimeError] = useState('');
-
+  
 
   const handleDateChange = (value: string) => {
     setDate(value);
+    console.log(date,'d',value);
     setDateError(validateDate(value));
   };
 
   const handleTimeChange = (value: string) => {
     setTime(value);
+    console.log(time,'d',value);
     setTimeError(validateTime(value));
   };
 
@@ -276,7 +279,6 @@ const MainPop = ({type, savedData}: MainPopProps) => {
             <div className="mb-[0.4rem] flex items-center justify-between gap-[0.8rem]">
               <DateTime
                 type="date"
-                key={`date-${date}`} 
                 state={
                   dateError ? 'error' : isRemindOn ? 'default' : 'disabled'
                 }
@@ -285,7 +287,6 @@ const MainPop = ({type, savedData}: MainPopProps) => {
               />
               <DateTime
                 type="time"
-                key={`time-${time}`} 
                 state={
                   timeError ? 'error' : isRemindOn ? 'default' : 'disabled'
                 }

@@ -15,32 +15,32 @@ export function formatDate(d: string) {
   return out;
 }
 
-// 시간 포맷팅: 오전/오후 HH:MM (12시간 기준)
-export function formatTime12(digits: string) {
-  const value = digits.slice(0, 4);
-  if (value.length === 0) return '';
+ export function formatTime12(digits: string) {
+  // 최대 4자리까지만 허용 (HHMM)
+  const clean = digits.slice(0, 4);
 
-  const hhDigits = value.slice(0, 2);
-  const mmDigits = value.slice(2, 4);
-  if (value.length === 1) {
-    return value;
+  const hhDigits = clean.slice(0, 2); // 시
+  const mmDigits = clean.slice(2, 4); // 분
+
+  // 아직 시 입력이 다 안 끝났을 경우
+  if (hhDigits.length === 0) return '';
+  if (hhDigits.length === 1 && !mmDigits) {
+    // 한 자리만 있을 때는 그대로 보여줌 (ex: "2")
+    return hhDigits;
   }
 
-  const hour24 = parseInt(hhDigits || '0', 10);
+  let hour24 = parseInt(hhDigits, 10);
+  if (isNaN(hour24)) hour24 = 0;
+  if (hour24 > 23) hour24 = 23; // clamp
+
   const ampm = hour24 >= 12 ? '오후' : '오전';
 
-  let h12: number;
-  if (hhDigits.length < 2) {
-    h12 = parseInt(hhDigits || '0', 10) % 12;
-    if (h12 === 0) h12 = 12;
-  } else {
-    h12 = hour24 % 12;
-    if (h12 === 0) h12 = 12;
-  }
+  let h12 = hour24 % 12;
+  if (h12 === 0) h12 = 12;
   const displayHour = String(h12).padStart(2, '0');
 
   let out = `${ampm} ${displayHour}`;
-  if (mmDigits.length > 0) out += `:${mmDigits}`;
+  if (mmDigits.length > 0) out += `:${mmDigits.padEnd(2, '')}`;
   return out;
 }
 
