@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Badge, Card } from '@pinback/design-system/ui';
 import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
@@ -20,7 +20,9 @@ import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
-  const formattedDate = formatLocalDateTime();
+  const formattedDate = useMemo(() => {
+    return formatLocalDateTime();
+  }, [activeBadge]);
 
   const queryClient = useQueryClient();
 
@@ -29,7 +31,7 @@ const Remind = () => {
   const { data, isPending } = useGetRemindArticles(
     formattedDate,
     activeBadge === 'read',
-    1,
+    0,
     10
   );
 
@@ -103,10 +105,6 @@ const Remind = () => {
               content={article.memo}
               timeRemaining={article.remindAt}
               category={article.category.categoryName}
-              {...(activeBadge === 'notRead' && {
-                onOptionsClick: (e) =>
-                  openMenu(article.category.categoryId, e.currentTarget),
-              })}
               onClick={() => {
                 window.open(article.url, '_blank');
 
@@ -120,6 +118,10 @@ const Remind = () => {
                     console.error(error);
                   },
                 });
+              }}
+              onOptionsClick={(e) => {
+                e.stopPropagation();
+                openMenu(article.category.categoryId, e.currentTarget);
               }}
             />
           ))}
