@@ -146,10 +146,10 @@ const MainCard = () => {
       setStep((prev) => prev + 1);
       return;
     }
-    if (step < 5) {
+    if ((isMac && step <5) || (!isMac && step <4)) {
       setDirection(1);
       setStep((prev) => prev + 1);
-    } else if (step === 5) {
+    } else if ( (isMac && step === 5) || (!isMac && step==4)) {
       postSignData(
         {
           email: userEmail,
