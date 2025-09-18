@@ -1,4 +1,5 @@
 import { Icon } from "@pinback/design-system/icons";
+import extesionPop from '@assets/extension_pop.svg'
 interface DuplicatePopProps {
   onLeftClick: () => void;
   onRightClick: () => void;
@@ -7,7 +8,7 @@ interface DuplicatePopProps {
 const DuplicatePop = ({onLeftClick,onRightClick} : DuplicatePopProps) => {
   return (
         <div className="bg-white-bg flex w-[26rem] cursor-pointer flex-col items-center justify-center rounded-[1.2rem] px-[1.6rem] py-[2.4rem] common-shadow">
-            <Icon name="extension_pop" width={72} height={72} className="m-auto text-center"/>
+            <img src={extesionPop} className="w-[7.2rem] h-[7.2rem] m-auto text-center"/>
             <div className="sub2-sb text-font-black-1 pb-[0.8rem]">치삐가 이미 챙겨뒀어요! <Icon name="dotori" /> </div>  
             <div className="flex flex-row items-center justify-center gap-[1.2rem] pt-[0.8rem]">
                 <button
