@@ -1,13 +1,11 @@
-// 날짜 유효성 검사
-export const validateDate = (value: string): string => {
-  const regex = /^(\d{4})\.(\d{2})\.(\d{2})$/;
-  const match = value.match(regex);
+export const validateDate = (digits: string): string => {
+  if (!digits || digits.length !== 8) {
+    return '날짜 8자리를 입력하세요 (예: 20250112)';
+  }
 
-  if (!match) return '유효한 날짜를 작성하세요';
-
-  const year = parseInt(match[1], 10);
-  const month = parseInt(match[2], 10);
-  const day = parseInt(match[3], 10);
+  const year = parseInt(digits.slice(0, 4), 10);
+  const month = parseInt(digits.slice(4, 6), 10);
+  const day = parseInt(digits.slice(6, 8), 10);
 
   if (month < 1 || month > 12) return '유효한 날짜를 작성하세요';
 
@@ -17,28 +15,25 @@ export const validateDate = (value: string): string => {
     testDate.getMonth() !== month - 1 ||
     testDate.getDate() !== day
   ) {
-    return 'YYYY.MM.DD 유효한 날짜로 작성하세요';
+    return '유효한 날짜를 작성하세요';
   }
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  if (testDate < today) return '현재 시점 이후 날짜로 작성하세요';
+  if (testDate < today) {
+    return '현재 시점 이후 날짜로 작성하세요';
+  }
 
   return '';
 };
 
-// 시간 유효성 검사
-export const validateTime = (value: string | undefined): string => {
-  if (!value) return '시간을 입력하세요';
+export const validateTime = (digits: string): string => {
+  if (!digits || digits.length !== 4) {
+    return 'HH:MM 형식으로 입력하세요 (예: 2312)';
+  }
 
-  const clean = value.replace(/[^0-9:]/g, '');
-  const regex = /^(\d{1,2}):(\d{1,2})$/;
-  const match = clean.match(regex);
-
-  if (!match) return 'HH:MM 유효한 시간을 작성하세요';
-
-  const hour = parseInt(match[1], 10);
-  const minute = parseInt(match[2], 10);
+  const hour = parseInt(digits.slice(0, 2), 10);
+  const minute = parseInt(digits.slice(2, 4), 10);
 
   if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
     return '유효한 시간을 작성하세요';
