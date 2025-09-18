@@ -32,15 +32,14 @@ const MyBookmark = () => {
 
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
   const { mutate: deleteArticle } = useDeleteRemindArticle();
-  const { data: articles } = useGetBookmarkArticles(0, 20);
+  const { data: articles, isPending } = useGetBookmarkArticles(0, 20);
   const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
   const { data: categoryArticles } = useGetCategoryBookmarkArticles(
     categoryId,
     activeBadge === 'all',
-    1,
+    0,
     10
   );
-  console.log('categoryArticles', categoryArticles);
 
   const { mutate: getArticleDetail, data: articleDetail } =
     useGetArticleDetail();
@@ -53,8 +52,11 @@ const MyBookmark = () => {
     containerRef,
   } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
 
-  const articlesToDisplay =
-    activeBadge === 'all' ? articles?.articles : unreadArticles?.articles;
+  const articlesToDisplay = category
+    ? categoryArticles?.articles
+    : activeBadge === 'all'
+      ? articles?.articles
+      : unreadArticles?.articles;
 
   const handleDeleteArticle = (id: number) => {
     deleteArticle(id, {
@@ -90,6 +92,11 @@ const MyBookmark = () => {
     return <NoUnreadArticles />;
   };
 
+  // TODO: 로딩 상태 디자인 필요
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="flex h-screen flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
       <div className="flex items-center gap-[0.4rem]">
@@ -111,13 +118,21 @@ const MyBookmark = () => {
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="전체보기"
-          countNum={articles?.totalArticle || 0}
+          countNum={
+            category
+              ? categoryArticles?.totalArticle
+              : articles?.totalArticle || 0
+          }
           onClick={() => handleBadgeClick('all')}
           isActive={activeBadge === 'all'}
         />
         <Badge
           text="안 읽음"
-          countNum={articles?.totalUnreadArticle || 0}
+          countNum={
+            category
+              ? categoryArticles?.totalArticle
+              : articles?.totalUnreadArticle || 0
+          }
           onClick={() => handleBadgeClick('notRead')}
           isActive={activeBadge === 'notRead'}
         />
