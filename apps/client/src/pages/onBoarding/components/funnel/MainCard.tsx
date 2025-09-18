@@ -80,7 +80,6 @@ const MainCard = () => {
       });
 
       if (forFcmtoken) {
-        console.log('FCM 토큰 발급 성공:', forFcmtoken);
         return forFcmtoken;
       } else {
         alert('토큰 생성 실패. 다시 시도해주세요.');
