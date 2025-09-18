@@ -98,6 +98,15 @@ const MainCard = () => {
     if (ua.includes('mac os') || ua.includes('iphone') || ua.includes('ipad')) {
       setIsMac(true);
     }
+
+    (async () => {
+      const token = await requestFCMToken();
+      if (token) {
+        setFcmToken(token);
+      } else {
+        alert('푸시 알람 설정 에러');
+      }
+    })();
   }, []);
   const renderStep = () => {
     switch (step) {
@@ -132,14 +141,9 @@ const MainCard = () => {
         setRemindTime(normalizeTime(raw))
       }
 
-      const token = await requestFCMToken();
-      if (token) {
-        setFcmToken(token);
-        setDirection(1);
-        setStep((prev) => prev + 1);
-      } else {
-        alert('푸시 알람 설정 에러');
-      }
+      
+      setDirection(1);
+      setStep((prev) => prev + 1);
       return;
     }
     if (step < 5) {

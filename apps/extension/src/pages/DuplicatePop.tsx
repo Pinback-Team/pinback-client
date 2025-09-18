@@ -7,8 +7,8 @@ interface DuplicatePopProps {
 const DuplicatePop = ({onLeftClick,onRightClick} : DuplicatePopProps) => {
   return (
         <div className="bg-white-bg flex w-[26rem] cursor-pointer flex-col items-center justify-center rounded-[1.2rem] px-[1.6rem] py-[2.4rem] common-shadow">
-            <Icon name="saved" width={72} height={72} className="m-auto text-center"/>
-            <div className="sub2-sb text-font-black-1 pb-[0.8rem]">치삐가 이미 챙겨뒀어요! <Icon name="extension_pop" /> </div>  
+            <Icon name="extension_pop" width={72} height={72} className="m-auto text-center"/>
+            <div className="sub2-sb text-font-black-1 pb-[0.8rem]">치삐가 이미 챙겨뒀어요! <Icon name="dotori" /> </div>  
             <div className="flex flex-row items-center justify-center gap-[1.2rem] pt-[0.8rem]">
                 <button
                     className="border-gray200 sub5-sb bg-white-bg text-font-black-1 w-[10.8rem] rounded-[0.4rem] border py-[0.85rem]"
