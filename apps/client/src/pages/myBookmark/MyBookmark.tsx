@@ -1,4 +1,4 @@
-import { Badge, Card } from '@pinback/design-system/ui';
+import { Badge, Card, PopupContainer } from '@pinback/design-system/ui';
 import { useState } from 'react';
 import {
   useGetBookmarkArticles,
@@ -24,6 +24,9 @@ import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUn
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
   const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
   const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
@@ -59,17 +62,16 @@ const MyBookmark = () => {
   const handleDeleteArticle = (id: number) => {
     deleteArticle(id, {
       onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ['bookmarkReadArticles'],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['bookmarkUnreadArticles'],
-        });
+        // TODO: 쿼리키 팩토리 패턴 적용
+        queryClient.invalidateQueries({ queryKey: ['bookmarkReadArticles'] });
+        queryClient.invalidateQueries({ queryKey: ['bookmarkUnreadArticles'] });
         queryClient.invalidateQueries({
           queryKey: ['categoryBookmarkArticles'],
         });
-
-        close();
+        queryClient.invalidateQueries({ queryKey: ['arcons'] });
+        setIsDeleteOpen(false);
+        setDeleteTargetId(null);
+        closeMenu();
       },
       onError: (error) => {
         console.error('아티클 삭제 실패:', error);
@@ -181,15 +183,47 @@ const MyBookmark = () => {
           closeMenu();
         }}
         onDelete={(articleId) => {
-          handleDeleteArticle(articleId);
+          setDeleteTargetId(articleId);
+          setIsDeleteOpen(true);
+          closeMenu();
         }}
         onClose={closeMenu}
       />
 
+      {/* 삭제 확인 모달 */}
+      {isDeleteOpen && (
+        <div className="fixed inset-0" aria-modal="true" role="dialog">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setIsDeleteOpen(false)}
+          />
+          <div className="absolute inset-0 z-[100] flex items-center justify-center p-4">
+            <PopupContainer
+              isOpen
+              type="subtext"
+              title="정말 삭제하시겠어요?"
+              subtext="저장된 내용이 모두 삭제됩니다."
+              left="취소"
+              right="삭제"
+              onLeftClick={() => setIsDeleteOpen(false)}
+              onRightClick={() => {
+                if (deleteTargetId != null) {
+                  handleDeleteArticle(deleteTargetId);
+                } else {
+                  setIsDeleteOpen(false);
+                }
+              }}
+              onClose={() => setIsDeleteOpen(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* 편집 모달 */}
       {isEditOpen && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-black/60"
             onClick={() => setIsEditOpen(false)}
           />
           <div className="absolute inset-0 flex items-center justify-center p-4">
