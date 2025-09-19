@@ -1,23 +1,7 @@
+import { ArticleWithCategory } from '@pages/remind/types/api';
 import { Card } from '@pinback/design-system/ui';
 import { useGetPageMeta } from '@shared/apis/queries';
 import React from 'react';
-
-// 리마인드 전체 조회
-interface Category {
-  categoryId: number;
-  categoryName: string;
-  categoryColor: string;
-}
-
-interface ArticleWithCategory {
-  articleId: number;
-  url: string;
-  memo: string;
-  createdAt: string;
-  isRead: boolean;
-  remindAt: string;
-  category: Category;
-}
 
 interface FetchCardProps {
   article: ArticleWithCategory;
@@ -30,7 +14,7 @@ const FetchCard = ({ article, onClick, onOptionsClick }: FetchCardProps) => {
 
   if (isPending) {
     return (
-      <div className="h-[33.8rem] w-[28rem] animate-pulse rounded-[1.2rem] bg-gray-200" />
+      <div className="bg-gray200 h-[35.6rem] w-[24.8rem] rounded-[1.2rem]"></div>
     );
   }
 

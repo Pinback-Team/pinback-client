@@ -1,21 +1,7 @@
+import { BookmarkArticle } from '@pages/myBookmark/types/api';
 import { Card } from '@pinback/design-system/ui';
 import { useGetPageMeta } from '@shared/apis/queries';
 import React from 'react';
-
-interface Category {
-  categoryId: number;
-  categoryName: string;
-  categoryColor: string;
-}
-
-interface BookmarkArticle {
-  articleId: number;
-  url: string;
-  memo: string;
-  createdAt: string;
-  isRead: boolean;
-  category: Category;
-}
 
 interface FetchCardProps {
   article: BookmarkArticle;
@@ -28,7 +14,7 @@ const FetchCard = ({ article, onClick, onOptionsClick }: FetchCardProps) => {
 
   if (isPending) {
     return (
-      <div className="h-[33.8rem] w-[28rem] animate-pulse rounded-[1.2rem] bg-gray-200" />
+      <div className="bg-gray200 h-[33.8rem] w-[24.8rem] rounded-[1.2rem]"></div>
     );
   }
 
