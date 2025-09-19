@@ -5,11 +5,12 @@ import FeatureBookmarkSection from './components/FeatureBookmarkSection';
 import FeatureReminderSection from './components/FeatureReminderSection';
 import FeatureRewardSection from './components/FeatureRewardSection';
 import FinalCTASection from './components/FinalCTASection';
+import Header from './components/Header';
 
 function App() {
   return (
     <div className="h-dvh snap-y snap-mandatory overflow-y-scroll scroll-smooth">
-      {/* <Header /> */}
+      <Header />
 
       {/* 각 섹션들 */}
       <section className="h-dvh snap-start">
