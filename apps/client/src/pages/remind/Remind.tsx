@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, Card } from '@pinback/design-system/ui';
+import { Badge, Card, PopupContainer } from '@pinback/design-system/ui';
 import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
@@ -20,6 +20,9 @@ import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+
   const formattedDate = formatLocalDateTime();
 
   const queryClient = useQueryClient();
@@ -50,6 +53,10 @@ const Remind = () => {
     deleteArticle(id, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['remindArticles'] });
+        queryClient.invalidateQueries({ queryKey: ['arcons'] });
+        setIsDeleteOpen(false);
+        setDeleteTargetId(null);
+        closeMenu();
         close();
       },
       onError: (error) => {
@@ -143,10 +150,40 @@ const Remind = () => {
           closeMenu();
         }}
         onDelete={(articleId) => {
-          handleDeleteArticle(articleId);
+          setDeleteTargetId(articleId);
+          setIsDeleteOpen(true);
+          closeMenu();
         }}
         onClose={closeMenu}
       />
+
+      {isDeleteOpen && (
+        <div className="fixed inset-0" aria-modal="true" role="dialog">
+          <div
+            className="absolute inset-0"
+            onClick={() => setIsDeleteOpen(false)}
+          />
+          <div className="absolute inset-0 z-[100] flex items-center justify-center p-4">
+            <PopupContainer
+              isOpen
+              type="subtext"
+              title="정말 삭제하시겠어요?"
+              subtext="저장된 내용이 모두 사라지게 돼요."
+              left="취소"
+              right="삭제"
+              onLeftClick={() => setIsDeleteOpen(false)}
+              onRightClick={() => {
+                if (deleteTargetId != null) {
+                  handleDeleteArticle(deleteTargetId);
+                } else {
+                  setIsDeleteOpen(false);
+                }
+              }}
+              onClose={() => setIsDeleteOpen(false)}
+            />
+          </div>
+        </div>
+      )}
 
       {isEditOpen && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
