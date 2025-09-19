@@ -113,6 +113,9 @@ export function Sidebar() {
   if (isPending) return <div></div>;
   if (isError) return <div></div>;
   const acornCount = data.acornCount;
+  const MAX_CATEGORIES = 10;
+  const categoryCount = categories?.categories?.length ?? 0;
+  const canCreateMore = categoryCount < MAX_CATEGORIES;
 
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
@@ -163,12 +166,14 @@ export function Sidebar() {
                 />
               ))}
 
-              <CreateItem
-                onClick={() => {
-                  setToastIsOpen(false);
-                  openCreate();
-                }}
-              />
+              {canCreateMore && (
+                <CreateItem
+                  onClick={() => {
+                    setToastIsOpen(false);
+                    openCreate();
+                  }}
+                />
+              )}
             </ul>
           </AccordionItem>
 
