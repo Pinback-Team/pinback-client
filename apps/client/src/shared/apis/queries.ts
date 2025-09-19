@@ -133,6 +133,6 @@ export const useGetPageMeta = (url: string) => {
     queryFn: () => fetchOGData(url),
     enabled: !!url,
     staleTime: Infinity,
-    retry: 1,
+    retry: false,
   });
 };
