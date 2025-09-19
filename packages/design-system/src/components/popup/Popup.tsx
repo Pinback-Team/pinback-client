@@ -44,7 +44,10 @@ const Popup = ({
             helperText={helperText}
             isError={isError}
             value={inputValue}
-            onChange={(e) => onInputChange?.(e.target.value)}
+            onChange={(e) => onInputChange?.(e.target.value.replace(/\s/g, ''))}
+            onKeyDown={(e) => {
+              if (e.key === ' ') e.preventDefault();
+            }}
             defaultValue={defaultValue}
           />
           {isError && errortext && (
