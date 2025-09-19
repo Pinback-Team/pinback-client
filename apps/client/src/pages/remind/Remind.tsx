@@ -168,7 +168,7 @@ const Remind = () => {
               isOpen
               type="subtext"
               title="정말 삭제하시겠어요?"
-              subtext="저장된 내용이 모두 삭제됩니다."
+              subtext="저장된 내용이 모두 사라지게 돼요."
               left="취소"
               right="삭제"
               onLeftClick={() => setIsDeleteOpen(false)}
