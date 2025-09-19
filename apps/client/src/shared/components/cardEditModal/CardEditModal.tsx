@@ -19,6 +19,7 @@ import {
 } from '@shared/apis/queries';
 import { usePageMeta } from '@shared/hooks/usePageMeta';
 import { ArticleDetailResponse, EditArticleRequest } from '@shared/types/api';
+import { buildUtcIso } from '@shared/utils/datetime';
 import { updateDate, updateTime } from '@shared/utils/formatDateTime';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -85,13 +86,16 @@ export default function CardEditModal({
       return;
     }
 
+    const remindTime =
+      isRemindOn && date && time ? buildUtcIso(date, time) : null;
+
     const editArticleData: EditArticleRequest = {
       memo,
       categoryId:
-        category?.categories.find((cat) => cat.name === selectedCategory)?.id ||
+        category?.categories.find((cat) => cat.name === selectedCategory)?.id ??
         -1,
       now: new Date().toISOString(),
-      remindTime: isRemindOn ? `${date}T${time}` : null,
+      remindTime,
     };
 
     editArticle(
