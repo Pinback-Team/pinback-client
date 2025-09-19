@@ -28,7 +28,7 @@ const Remind = () => {
 
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
   const { mutate: deleteArticle } = useDeleteRemindArticle();
-  const { data, isPending } = useGetRemindArticles(
+  const { data } = useGetRemindArticles(
     formattedDate,
     activeBadge === 'read',
     0,
