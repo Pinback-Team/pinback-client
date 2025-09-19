@@ -194,7 +194,7 @@ const MyBookmark = () => {
       {isDeleteOpen && (
         <div className="fixed inset-0" aria-modal="true" role="dialog">
           <div
-            className="absolute inset-0 bg-black/60"
+            className="absolute inset-0"
             onClick={() => setIsDeleteOpen(false)}
           />
           <div className="absolute inset-0 z-[100] flex items-center justify-center p-4">
