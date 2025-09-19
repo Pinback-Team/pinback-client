@@ -2,23 +2,25 @@ import { Card } from '@pinback/design-system/ui';
 import { useGetPageMeta } from '@shared/apis/queries';
 import React from 'react';
 
+// 리마인드 전체 조회
 interface Category {
   categoryId: number;
   categoryName: string;
   categoryColor: string;
 }
 
-interface BookmarkArticle {
+interface ArticleWithCategory {
   articleId: number;
   url: string;
   memo: string;
   createdAt: string;
   isRead: boolean;
+  remindAt: string;
   category: Category;
 }
 
 interface FetchCardProps {
-  article: BookmarkArticle;
+  article: ArticleWithCategory;
   onClick: () => void;
   onOptionsClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -37,12 +39,12 @@ const FetchCard = ({ article, onClick, onOptionsClick }: FetchCardProps) => {
 
   return (
     <Card
-      type="bookmark"
+      type="remind"
       title={displayTitle}
       imageUrl={displayImageUrl}
       content={article.memo}
+      timeRemaining={article.remindAt}
       category={article.category.categoryName}
-      date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
       onClick={onClick}
       onOptionsClick={onOptionsClick}
     />
