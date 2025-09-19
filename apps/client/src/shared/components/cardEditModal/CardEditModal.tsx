@@ -25,16 +25,14 @@ import { useEffect, useState } from 'react';
 
 export interface CardEditModalProps {
   onClose: () => void;
-  prevData: ArticleDetailResponse | undefined;
+  prevData: ArticleDetailResponse;
 }
 
 export default function CardEditModal({
   onClose,
   prevData,
 }: CardEditModalProps) {
-  const { meta } = usePageMeta(
-    'https://www.notion.so/PinBack-23927450eb1c8080a5a1f84a9d483aa9'
-  );
+  const { meta } = usePageMeta(prevData.url);
   const { data: category } = useGetDashboardCategories();
   const { mutate: editArticle } = usePutEditArticle();
   const queryClient = useQueryClient();

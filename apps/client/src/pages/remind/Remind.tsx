@@ -73,9 +73,9 @@ const Remind = () => {
   };
 
   // TODO: 로딩 상태 디자인 필요
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
+  // if (isPending) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className="flex flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
@@ -147,7 +147,7 @@ const Remind = () => {
         onClose={closeMenu}
       />
 
-      {isEditOpen && (
+      {isEditOpen && articleDetail && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"

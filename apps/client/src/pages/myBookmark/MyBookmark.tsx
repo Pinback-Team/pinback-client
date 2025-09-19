@@ -130,7 +130,7 @@ const MyBookmark = () => {
           text="안 읽음"
           countNum={
             category
-              ? categoryArticles?.totalArticle
+              ? categoryArticles?.totalUnreadArticle
               : articles?.totalUnreadArticle || 0
           }
           onClick={() => handleBadgeClick('notRead')}
@@ -197,7 +197,7 @@ const MyBookmark = () => {
         onClose={closeMenu}
       />
 
-      {isEditOpen && (
+      {isEditOpen && articleDetail && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
