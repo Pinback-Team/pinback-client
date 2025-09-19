@@ -27,7 +27,6 @@ const HeroSection = () => {
 
   return (
     <section className="bg-white-bg flex h-dvh w-full flex-col items-center justify-center px-[17.2rem] text-center">
-      {/* 텍스트 오버레이 */}
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-row flex-nowrap items-end justify-center gap-[3rem]">
           <img src={landing_icon} alt="Landing Icon" />
@@ -56,7 +55,7 @@ const HeroSection = () => {
                 ?.scrollIntoView({ behavior: 'smooth' });
             }}
           >
-            스트롤하기
+            스크롤하기
           </Button>
         </div>
       </div>
