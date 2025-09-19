@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Badge, Card, PopupContainer } from '@pinback/design-system/ui';
+import { Badge, PopupContainer } from '@pinback/design-system/ui';
 import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
