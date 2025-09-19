@@ -7,6 +7,7 @@ import { getTreeLevel } from '@shared/utils/treeLevel';
 import { TreeLevel } from '@pages/level/types/treeLevelType';
 import { Badge } from '@pinback/design-system/ui';
 import { useGetArcons } from '@shared/apis/queries';
+import NextAcornTime from './components/NextAcornTime';
 
 export default function Level() {
   const { data, isPending, isError } = useGetArcons();
@@ -15,7 +16,10 @@ export default function Level() {
   if (isError) return <div></div>;
 
   const acornCount = data.acornCount;
+  const nextAcornTime = data.nextRemind;
+
   const info = getTreeLevel(acornCount);
+  const isLevel5 = info.level === 5 || acornCount >= 7;
 
   return (
     <div className={cn('bg-subcolor mx-auto h-dvh w-full overflow-hidden')}>
@@ -56,6 +60,12 @@ export default function Level() {
               <TreeStatusCard acorns={acornCount} />
             </div>
           </div>
+          {isLevel5 && (
+            <NextAcornTime
+              className="absolute bottom-[5.2rem] left-1/2 z-[10] -translate-x-1/2"
+              nextAcornTime={nextAcornTime}
+            />
+          )}
         </div>
       </div>
     </div>

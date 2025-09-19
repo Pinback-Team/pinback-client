@@ -14,7 +14,7 @@ import { firebaseConfig } from '../../../../firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
 import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
-
+import { useLocation } from 'react-router-dom';
 const variants = {
   slideIn: (direction: number) => ({
     x: direction > 0 ? 200 : -200,
@@ -48,14 +48,18 @@ const MainCard = () => {
 
   // 익스텐션에서부터 이메일 받아오는 구간!
   const [userEmail, setUserEmail] = useState('');
+  const location = useLocation();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const emailParam = params.get('email');
     if (emailParam) {
       setUserEmail(emailParam);
+      localStorage.setItem('email', emailParam);
     }
   }, [location.search]);
+
+  
 
   // FCM 구간
   const [fcmToken, setFcmToken] = useState<string | null>(null);
@@ -76,7 +80,6 @@ const MainCard = () => {
       });
 
       if (forFcmtoken) {
-        console.log('FCM 토큰 발급 성공:', forFcmtoken);
         return forFcmtoken;
       } else {
         alert('토큰 생성 실패. 다시 시도해주세요.');
@@ -94,6 +97,15 @@ const MainCard = () => {
     if (ua.includes('mac os') || ua.includes('iphone') || ua.includes('ipad')) {
       setIsMac(true);
     }
+
+    (async () => {
+      const token = await requestFCMToken();
+      if (token) {
+        setFcmToken(token);
+      } else {
+        alert('푸시 알람 설정 에러');
+      }
+    })();
   }, []);
   const renderStep = () => {
     switch (step) {
@@ -119,23 +131,24 @@ const MainCard = () => {
   const [remindTime, setRemindTime] = useState('09:00');
   const nextStep = async () => {
     if (step === 3) {
-      const token = await requestFCMToken();
-      if (token) {
-        setFcmToken(token);
-        setDirection(1);
-        setStep((prev) => prev + 1);
-      } else {
-        alert('푸시 알람 설정 에러');
+      if (alarmSelected==1){
+        setRemindTime('09:00');
+      } else if (alarmSelected==2){
+        setRemindTime('20:00');
+      } else{
+        const raw = AlarmsType[alarmSelected - 1].time;
+        setRemindTime(normalizeTime(raw))
       }
-      return;
-    }
-    if (step < 5) {
+
+      
       setDirection(1);
       setStep((prev) => prev + 1);
-    } else if (step === 5) {
-      const raw = AlarmsType[alarmSelected - 1].time;
-      setRemindTime(normalizeTime(raw));
-
+      return;
+    }
+    if ((isMac && step <5) || (!isMac && step <4)) {
+      setDirection(1);
+      setStep((prev) => prev + 1);
+    } else if ( (isMac && step === 5) || (!isMac && step==4)) {
       postSignData(
         {
           email: userEmail,
@@ -146,6 +159,12 @@ const MainCard = () => {
           onSuccess: () => {
             window.location.href = '/';
           },
+          onError: () => {
+            const savedEmail = localStorage.getItem('email');
+            if (savedEmail) {
+              window.location.href = '/';
+            }
+          }
         }
       );
     }
@@ -186,7 +205,7 @@ const MainCard = () => {
       </div>
 
       <div className="mb-[4.8rem] mt-[1.2rem] flex w-full justify-between px-[3.2rem]">
-        {step < 4 && (
+        {step < 4 &&  step > 0 && (
           <Button
             variant="secondary"
             size="medium"

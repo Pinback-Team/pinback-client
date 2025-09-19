@@ -2,7 +2,7 @@ console.log('백그라운드 기능');
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
     chrome.identity.getProfileUserInfo(function (info) {
-       chrome.storage.local.set({ 'userEmail': info.email }, () => {
+       chrome.storage.local.set({ 'email': info.email }, () => {
           console.log(info.email);
         });
       setTimeout(() => {

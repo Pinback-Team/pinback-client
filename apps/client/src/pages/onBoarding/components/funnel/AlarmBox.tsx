@@ -66,7 +66,6 @@ const AlarmBox = ({ select, isDisabled, onClick }: AlarmBoxProps) => {
          {showPicker && ( <TimePicker
               onSave={getTimePicker}
               onCancel={() => {
-                AlarmsType[2].time = '';
                 setShowPicker(false);
               }}
               onClick={(e) => e.stopPropagation()}

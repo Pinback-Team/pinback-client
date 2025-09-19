@@ -1,4 +1,4 @@
-import { useRef, useState, type ChangeEvent } from 'react';
+import {  useState, useEffect } from 'react';
 import { cva } from 'class-variance-authority';
 import {
   digitsOnly,
@@ -50,35 +50,47 @@ const dateTimeTxtStyles = cva(
     },
     defaultVariants: { state: 'default' },
   }
-);
-
-export default function DateTime({
+);export default function DateTime({
   type,
-  value = '',
+  value,
   state,
   onChange,
 }: DateTimeProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
   const isDisabled = state === 'disabled';
+  const [rawDigits, setRawDigits] = useState(() => digitsOnly(value ?? ''));
 
-  // rawDigits → 숫자만 관리
-  const [rawDigits, setRawDigits] = useState(() => digitsOnly(value));
+  useEffect(() => {
+  setRawDigits(digitsOnly(value ?? ''));
+}, [value]);
 
-  // formatted → 보여줄 값
-  const formatted = type === 'date'
-    ? formatDate(rawDigits.slice(0, 8))
-    : formatTime12(rawDigits.slice(0, 4));
+  const formatted =
+    type === 'date'
+      ? formatDate(rawDigits.slice(0, 8))
+      : formatTime12(rawDigits.slice(0, 4));
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const onlyDigits = digitsOnly(e.target.value);
-    setRawDigits(onlyDigits);
+  const handleBeforeInput = (e: React.FormEvent<HTMLInputElement>) => {
+    const input = e as unknown as InputEvent;
+
+    if (!/[0-9]/.test(input.data ?? '')) {
+      e.preventDefault();
+      return;
+    }
+
+    setRawDigits((prev) => {
+      const next = (prev + input.data!).slice(0, type === 'date' ? 8 : 4);
+      onChange?.(next); 
+      return next;
+    });
   };
 
-  const handleBlur = () => {
-    if (type === 'date') {
-      onChange?.(formatDate(rawDigits.slice(0, 8)));
-    } else {
-      onChange?.(formatTime12(rawDigits.slice(0, 4)));
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace') {
+      e.preventDefault();
+      setRawDigits((prev) => {
+        const next = prev.slice(0, -1);
+        onChange?.(next);
+        return next;
+      });
     }
   };
 
@@ -88,16 +100,14 @@ export default function DateTime({
         {type === 'date' ? '날짜' : '시간'}
       </span>
       <input
-        ref={inputRef}
         type="text"
         className={dateTimeTxtStyles({ state })}
         value={formatted}
-        onChange={handleChange}
-        onBlur={handleBlur}
+        onBeforeInput={handleBeforeInput}
+        onKeyDown={handleKeyDown}
         placeholder={type === 'date' ? 'YYYY.MM.DD' : 'HH:MM'}
         inputMode="numeric"
         disabled={isDisabled}
-        maxLength={type === 'date' ? 10 : 8}
       />
     </div>
   );

@@ -28,7 +28,7 @@ apiRequest.interceptors.request.use(async (config) => {
   if (isNoAuth) return config;
 
   const email = await new Promise<string | undefined>((resolve) => {
-    chrome.storage.local.get('userEmail', (result) => resolve(result.userEmail));
+    chrome.storage.local.get('email', (result) => resolve(result.email));
   });
 
   let token = await new Promise<string | undefined>((resolve) => {

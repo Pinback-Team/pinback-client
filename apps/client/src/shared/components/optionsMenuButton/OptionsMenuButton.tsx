@@ -9,7 +9,7 @@ export interface OptionsMenuButtonProps {
 
 const ITEM_STYLE =
   'body4-r text-font-black-1 h-[3.6rem] w-full ' +
-  'flex items-center pl-[0.8rem] ' +
+  'flex items-center justify-center ' +
   'hover:bg-gray100 focus-visible:bg-gray100 active:bg-gray200 ' +
   'outline-none transition-colors';
 
