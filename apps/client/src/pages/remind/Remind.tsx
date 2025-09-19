@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Badge, Card, PopupContainer } from '@pinback/design-system/ui';
 import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
@@ -23,16 +23,18 @@ const Remind = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
-  const formattedDate = formatLocalDateTime();
+  const formattedDate = useMemo(() => {
+    return formatLocalDateTime();
+  }, [activeBadge]);
 
   const queryClient = useQueryClient();
 
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
   const { mutate: deleteArticle } = useDeleteRemindArticle();
-  const { data, isPending } = useGetRemindArticles(
+  const { data } = useGetRemindArticles(
     formattedDate,
     activeBadge === 'read',
-    1,
+    0,
     10
   );
 
@@ -78,9 +80,9 @@ const Remind = () => {
   };
 
   // TODO: 로딩 상태 디자인 필요
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
+  // if (isPending) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className="flex flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
@@ -110,10 +112,6 @@ const Remind = () => {
               content={article.memo}
               timeRemaining={article.remindAt}
               category={article.category.categoryName}
-              {...(activeBadge === 'notRead' && {
-                onOptionsClick: (e) =>
-                  openMenu(article.category.categoryId, e.currentTarget),
-              })}
               onClick={() => {
                 window.open(article.url, '_blank');
 
@@ -130,6 +128,10 @@ const Remind = () => {
                     console.error(error);
                   },
                 });
+              }}
+              onOptionsClick={(e) => {
+                e.stopPropagation();
+                openMenu(article.category.categoryId, e.currentTarget);
               }}
             />
           ))}
@@ -185,7 +187,7 @@ const Remind = () => {
         </div>
       )}
 
-      {isEditOpen && (
+      {isEditOpen && articleDetail && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
