@@ -36,7 +36,6 @@ const Dropdown = ({
     onChange(option, idx);
     setIsOpen(false);
     onToggle?.(false);
-    console.log('닫음');
   };
 
   const showAddItemButton =

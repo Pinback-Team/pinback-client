@@ -152,13 +152,11 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
 
   const handleDateChange = (value: string) => {
     setDate(value);
-    console.log(date, 'd', value);
     setDateError(validateDate(value));
   };
 
   const handleTimeChange = (value: string) => {
     setTime(value);
-    console.log(time, 'd', value);
     setTimeError(validateTime(value));
   };
 
@@ -274,7 +272,6 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
               addItemLabel="추가하기"
               onToggle={(open) => {
                 if (open) {
-                  console.log('엶');
                   refetch();
                 }
               }}
