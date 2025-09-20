@@ -115,6 +115,8 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
         setDate(updateDate(rawDate));
         setTime(updateTime(rawTime));
         setIsRemindOn(true);
+      } else {
+        setIsRemindOn(false);
       }
       if (savedData.categoryResponse) {
         setSelected(savedData.categoryResponse?.categoryId.toString());
@@ -184,7 +186,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
       time: isRemindOn ? currentTime : time,
       createdAt: new Date().toISOString(),
     };
-
+    console.log(combineDateTime(saveData.date ?? '', saveData.time ?? ''));
     if (type === 'add') {
       save({
         url,
@@ -203,7 +205,9 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
           ? parseInt(saveData.selectedCategory)
           : 0,
         memo: saveData.memo,
-        remindTime: combineDateTime(saveData.date ?? '', saveData.time ?? ''),
+        remindTime: isRemindOn
+          ? combineDateTime(saveData.date ?? '', saveData.time ?? '')
+          : null,
       });
     } else {
       putArticle({
@@ -214,7 +218,9 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
             : 0,
           memo: saveData.memo,
           now: new Date().toISOString(),
-          remindTime: combineDateTime(saveData.date ?? '', saveData.time ?? ''),
+          remindTime: isRemindOn
+            ? combineDateTime(saveData.date ?? '', saveData.time ?? '')
+            : null,
         },
       });
     }
