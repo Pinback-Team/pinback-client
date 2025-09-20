@@ -131,7 +131,7 @@ const Remind = () => {
               }}
               onOptionsClick={(e) => {
                 e.stopPropagation();
-                openMenu(article.articleId, e.currentTarget); // ✅ 아티클 ID로
+                openMenu(article.articleId, e.currentTarget);
               }}
             />
           ))}
