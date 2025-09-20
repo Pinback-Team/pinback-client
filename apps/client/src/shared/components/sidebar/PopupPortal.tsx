@@ -2,6 +2,7 @@ import { createPortal } from 'react-dom';
 import { useEffect, useState } from 'react';
 import { AutoDismissToast, Popup, Toast } from '@pinback/design-system/ui';
 import type { PopupState } from '@shared/hooks/useCategoryPopups';
+import { graphemeLength } from '@shared/utils/grapheme';
 
 interface Props {
   popup: PopupState | null;
@@ -42,9 +43,9 @@ export default function PopupPortal({
   if (!popup) return null;
 
   const value = draft.trim();
-  const len = value.length;
+  const glen = graphemeLength(value);
 
-  const isEmpty = popup.kind !== 'delete' && len === 0;
+  const isEmpty = popup.kind !== 'delete' && glen === 0;
   const isDuplicate =
     popup.kind !== 'delete' &&
     !!categoryList?.some(
@@ -58,10 +59,10 @@ export default function PopupPortal({
     if (isDuplicate) {
       helperText = '이미 존재하는 카테고리 이름입니다.';
       isErrorUI = true;
-    } else if (len > MAX_LEN) {
+    } else if (glen > MAX_LEN) {
       helperText = `카테고리 이름은 ${MAX_LEN}자 이내로 입력해주세요.`;
       isErrorUI = true;
-    } else if (len === MAX_LEN) {
+    } else if (glen === MAX_LEN) {
       helperText = `최대 ${MAX_LEN}자까지 입력할 수 있어요.`;
       isErrorUI = false;
     }
@@ -73,7 +74,7 @@ export default function PopupPortal({
   };
 
   const blocked =
-    popup.kind !== 'delete' && (isEmpty || isDuplicate || len > MAX_LEN);
+    popup.kind !== 'delete' && (isEmpty || isDuplicate || glen > MAX_LEN);
 
   const handleCreate = () => {
     if (blocked) return;
