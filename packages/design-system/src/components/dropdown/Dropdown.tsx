@@ -10,6 +10,7 @@ interface DropdownProps {
   addItemLabel?: string;
   limit?: number;
   className?: string;
+  onToggle?: (isOpen: boolean) => void;
 }
 
 const Dropdown = ({
@@ -21,11 +22,20 @@ const Dropdown = ({
   addItemLabel,
   limit,
   className = '',
+  onToggle,
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const handleSelect = (option: string,idx: number) => {
-    onChange(option,idx);
+
+  const handleToggle = () => {
+    const next = !isOpen;
+    setIsOpen(next);
+    onToggle?.(next);
+  };
+
+  const handleSelect = (option: string, idx: number) => {
+    onChange(option, idx);
     setIsOpen(false);
+    onToggle?.(false);
   };
 
   const showAddItemButton =
@@ -35,7 +45,7 @@ const Dropdown = ({
     <div className={`relative w-[24.8rem] ${className}`}>
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className={`body4-r flex h-[4.4rem] w-full items-center justify-between rounded-[4px] border px-[0.8rem] py-[1.2rem] transition-colors duration-200 ${isOpen ? 'border-main500' : 'border-gray200'}`}
       >
         <span className={selectedValue ? 'text-black' : 'text-font-gray-3'}>
@@ -56,7 +66,7 @@ const Dropdown = ({
             {options.map((option) => (
               <li
                 key={option}
-                onClick={() => handleSelect(option,options.indexOf(option))}
+                onClick={() => handleSelect(option, options.indexOf(option))}
                 className={`body4-r h-[3.6rem] cursor-pointer p-[0.8rem] ${selectedValue === option ? 'text-main600' : 'text-font-gray-3'}`}
               >
                 {option}
@@ -69,6 +79,7 @@ const Dropdown = ({
                 onClick={() => {
                   onAddItem?.();
                   setIsOpen(false);
+                  onToggle?.(false);
                 }}
                 className="text-main500 body4-r flex w-full cursor-pointer items-center gap-[0.8rem] p-[0.8rem]"
               >
