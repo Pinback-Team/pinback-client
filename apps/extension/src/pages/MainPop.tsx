@@ -7,91 +7,111 @@ import {
   PopupContainer,
   Dropdown,
   validateDate,
-  validateTime
+  validateTime,
 } from '@pinback/design-system/ui';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
-import { usePostArticle,useGetCategoriesExtension, useGetRemindTime, usePutArticle} from '@apis/query/queries';
-import { ArticleResponse} from '@shared-types/types'
-import { updateDate, updateTime, combineDateTime } from '@utils/remindTimeFormat';
+import {
+  usePostArticle,
+  useGetCategoriesExtension,
+  useGetRemindTime,
+  usePutArticle,
+} from '@apis/query/queries';
+import { ArticleResponse } from '@shared-types/types';
+import {
+  updateDate,
+  updateTime,
+  combineDateTime,
+} from '@utils/remindTimeFormat';
 import { useCategoryManager } from '@hooks/useCategoryManager';
-import thumbImg from '@assets/extension_thumb.svg'
+import thumbImg from '@assets/extension_thumb.svg';
 interface MainPopProps {
-    type: "add" | "edit";
-    savedData?: ArticleResponse  | null;
+  type: 'add' | 'edit';
+  savedData?: ArticleResponse | null;
 }
-const MainPop = ({type, savedData}: MainPopProps) => {
+const MainPop = ({ type, savedData }: MainPopProps) => {
   // api 연동 구간
-  const {mutate:postArticle} = usePostArticle();
-  const {mutate:putArticle} = usePutArticle();
-  const { data : categoryData } = useGetCategoriesExtension();
-  const remindData= useGetRemindTime();
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const { mutate: postArticle } = usePostArticle();
+  const { mutate: putArticle } = usePutArticle();
+  const remindData = useGetRemindTime();
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [dateError, setDateError] = useState('');
   const [timeError, setTimeError] = useState('');
 
+  const { data: categoryData, refetch } = useGetCategoriesExtension({
+    enabled: false,
+  });
   useEffect(() => {
-
-  if (type === 'add' && remindData?.data) {
-    const newDate = updateDate(remindData.data.data.remindDate);
-    const newTime = updateTime(remindData.data.data.remindTime);
-    setDate(newDate);
-    setTime(newTime);
-  }
-}, [remindData?.data, type]);
+    if (type === 'add' && remindData?.data) {
+      const newDate = updateDate(remindData.data.data.remindDate);
+      const newTime = updateTime(remindData.data.data.remindTime);
+      setDate(newDate);
+      setTime(newTime);
+    }
+  }, [remindData?.data, type]);
 
   // 저장 도메인 메타 데이터 갖고 오는 구간!
-  const { url, title, description, imgUrl: initialImgUrl ,loading} = usePageMeta();
+  const {
+    url,
+    title,
+    description,
+    imgUrl: initialImgUrl,
+    loading,
+  } = usePageMeta();
   const { save } = useSaveBookmark();
   const [imgUrl, setImgUrl] = useState(initialImgUrl);
 
-  
-    useEffect(() => {
+  useEffect(() => {
     if (!loading && !title) {
-        alert("이 페이지는 저장할 수 없어요 🐿️");
-        window.close(); 
+      alert('이 페이지는 저장할 수 없어요 🐿️');
+      //window.close();
     }
-    }, [loading, title]);
+  }, [loading, title]);
 
-    // 이미지 없으면 기본 이미지로 교체
-    const defaultImageUrl = thumbImg;
+  // 이미지 없으면 기본 이미지로 교체
+  const defaultImageUrl = thumbImg;
 
-    useEffect(() => {
+  useEffect(() => {
     if (!initialImgUrl) {
-        setImgUrl(defaultImageUrl);
+      setImgUrl(defaultImageUrl);
     } else {
-        setImgUrl(initialImgUrl);
+      setImgUrl(initialImgUrl);
     }
-    }, [initialImgUrl]);
-
+  }, [initialImgUrl]);
 
   // 아티클 팝업 정보들 상태
   const [isRemindOn, setIsRemindOn] = useState(false);
   const [memo, setMemo] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isArticleId, setIsArticleId] = useState(0);
-  const [selectedCategoryName, setSelectedCategoryName] = useState<string | null>(
-  type === "edit" && savedData?.categoryResponse?.categoryName
-    ? savedData?.categoryResponse?.categoryName
-    : null
+  const [selectedCategoryName, setSelectedCategoryName] = useState<
+    string | null
+  >(
+    type === 'edit' && savedData?.categoryResponse?.categoryName
+      ? savedData?.categoryResponse?.categoryName
+      : null
   );
   const [selected, setSelected] = useState<string | null>(
-    type === "edit" && savedData?.categoryResponse?.categoryId
+    type === 'edit' && savedData?.categoryResponse?.categoryId
       ? savedData?.categoryResponse?.categoryId.toString()
       : null
   );
 
   // 타입 (수정상태인지 초기 저장인지! 에 따라서 ui 화면 데이터 보여줄 지 분기!)
   useEffect(() => {
-    if (type === "edit" && savedData && categoryData?.data?.categories?.length) {
-      setMemo(savedData.memo ?? "");
+    if (
+      type === 'edit' &&
+      savedData &&
+      categoryData?.data?.categories?.length
+    ) {
+      setMemo(savedData.memo ?? '');
       setIsArticleId(savedData.id ?? 0);
 
-      if (savedData.remindAt) { 
-        const [rawDate, rawTime] = savedData.remindAt.split("T");
+      if (savedData.remindAt) {
+        const [rawDate, rawTime] = savedData.remindAt.split('T');
         setDate(updateDate(rawDate));
         setTime(updateTime(rawTime));
         setIsRemindOn(true);
@@ -116,31 +136,29 @@ const MainPop = ({type, savedData}: MainPopProps) => {
 
   const saveHandleCategory = () => {
     saveCategory((newCategory) => {
-          // 새로운 카테고리 자동 선택
-          setSelected(newCategory.categoryId.toString());
-          setSelectedCategoryName(newCategory.categoryName);
-          setIsPopupOpen(false);
+      // 새로운 카테고리 자동 선택
+      setSelected(newCategory.categoryId.toString());
+      setSelectedCategoryName(newCategory.categoryName);
+      setIsPopupOpen(false);
     });
-  }
+  };
 
   const handleSelect = (value: string | null, idx: number) => {
-    const categoryId = categoryData?.data?.categories[idx]?.categoryId.toString() ?? null;
+    const categoryId =
+      categoryData?.data?.categories[idx]?.categoryId.toString() ?? null;
     setSelected(categoryId);
     setSelectedCategoryName(value);
   };
 
-
- 
-
   const handleDateChange = (value: string) => {
     setDate(value);
-    console.log(date,'d',value);
+    console.log(date, 'd', value);
     setDateError(validateDate(value));
   };
 
   const handleTimeChange = (value: string) => {
     setTime(value);
-    console.log(time,'d',value);
+    console.log(time, 'd', value);
     setTimeError(validateTime(value));
   };
 
@@ -152,9 +170,9 @@ const MainPop = ({type, savedData}: MainPopProps) => {
   const handleSave = async () => {
     const currentDate = date;
     const currentTime = time;
-     if (!selected || parseInt(selected) === 0) {
-        alert("카테고리를 선택해주세요!");
-        return;
+    if (!selected || parseInt(selected) === 0) {
+      alert('카테고리를 선택해주세요!');
+      return;
     }
     const saveData = {
       url,
@@ -164,52 +182,46 @@ const MainPop = ({type, savedData}: MainPopProps) => {
       memo,
       isRemindOn,
       selectedCategory: selected,
-      date: isRemindOn ? currentDate  : date,
+      date: isRemindOn ? currentDate : date,
       time: isRemindOn ? currentTime : time,
       createdAt: new Date().toISOString(),
     };
 
-   if (type === "add"){
-     save({
-      url,
-      title,
-      description,
-      imgUrl,
-      memo,
-      isRemindOn,
-      selectedCategory: selected,
-      date: isRemindOn ? currentDate  : date,
-      time: isRemindOn ? currentTime : time,
-    });
-     postArticle(
-      {
+    if (type === 'add') {
+      save({
+        url,
+        title,
+        description,
+        imgUrl,
+        memo,
+        isRemindOn,
+        selectedCategory: selected,
+        date: isRemindOn ? currentDate : date,
+        time: isRemindOn ? currentTime : time,
+      });
+      postArticle({
         url,
         categoryId: saveData.selectedCategory
           ? parseInt(saveData.selectedCategory)
           : 0,
         memo: saveData.memo,
-        remindTime: combineDateTime(saveData.date ?? "", saveData.time ?? ""),
-      }
-    );
-    } else{
-          putArticle({
-          articleId: isArticleId,
-          data: { 
-              categoryId: saveData.selectedCategory
-              ? parseInt(saveData.selectedCategory)
-              : 0,
-              memo: saveData.memo,
-              now: new Date().toISOString(),
-              remindTime: combineDateTime(saveData.date ?? "", saveData.time ?? ""),
-        }
-
+        remindTime: combineDateTime(saveData.date ?? '', saveData.time ?? ''),
+      });
+    } else {
+      putArticle({
+        articleId: isArticleId,
+        data: {
+          categoryId: saveData.selectedCategory
+            ? parseInt(saveData.selectedCategory)
+            : 0,
+          memo: saveData.memo,
+          now: new Date().toISOString(),
+          remindTime: combineDateTime(saveData.date ?? '', saveData.time ?? ''),
+        },
       });
     }
-   
   };
 
-
-  
   return (
     <div className="App">
       <div className="relative flex h-[56.8rem] w-[31.2rem] items-center justify-center">
@@ -228,14 +240,21 @@ const MainPop = ({type, savedData}: MainPopProps) => {
             placeholder="카테고리 제목을 입력해주세요"
             onLeftClick={() => {
               setIsPopupOpen(false);
-              resetPopup()
+              resetPopup();
             }}
             onRightClick={saveHandleCategory}
           />
         )}
         <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
           <div className="mr-auto">
-            <Icon name="main_logo" width={72} height={20} onClick={()=>{window.location.href = 'https://pinback.today'}}/>
+            <Icon
+              name="main_logo"
+              width={72}
+              height={20}
+              onClick={() => {
+                window.location.href = 'https://pinback.today';
+              }}
+            />
           </div>
 
           <InfoBox
@@ -253,6 +272,12 @@ const MainPop = ({type, savedData}: MainPopProps) => {
               placeholder="선택해주세요"
               onAddItem={() => setIsPopupOpen(true)}
               addItemLabel="추가하기"
+              onToggle={(open) => {
+                if (open) {
+                  console.log('엶');
+                  refetch();
+                }
+              }}
             />
           </div>
 
@@ -261,7 +286,7 @@ const MainPop = ({type, savedData}: MainPopProps) => {
             <Textarea
               maxLength={100}
               placeholder="나중에 내가 꺼내줄 수 있게 살짝 적어줘!"
-              value ={memo}
+              value={memo}
               onChange={(e) => setMemo(e.target.value)}
             />
           </div>
@@ -300,7 +325,6 @@ const MainPop = ({type, savedData}: MainPopProps) => {
             ) : timeError ? (
               <p className="body3-r text-error">{timeError}</p>
             ) : null}
-
           </div>
 
           <Button size="medium" onClick={handleSave}>
