@@ -10,7 +10,7 @@ const App = () => {
   const { data: isSaved } = useGetArticleSaved(url);
 
   const [isDuplicatePop, setIsDuplicatePop] = useState(false);
-  const [mainPopType, setMainPopType] = useState<"add" | "edit">("add");
+  const [mainPopType, setMainPopType] = useState<'add' | 'edit'>('add');
 
   useEffect(() => {
     if (isSaved?.data) {
@@ -20,11 +20,11 @@ const App = () => {
 
   const handleDuplicateLeftClick = () => {
     setIsDuplicatePop(false);
-    setMainPopType("edit");
+    setMainPopType('edit');
   };
 
   const handleDuplicateRightClick = () => {
-    window.location.href = "https://pinback.today/";
+    chrome.tabs.create({ url: 'https://pinback.today' });
   };
 
   return (
@@ -35,7 +35,7 @@ const App = () => {
           onRightClick={handleDuplicateRightClick}
         />
       ) : (
-        <MainPop type={mainPopType} savedData={isSaved?.data}/>
+        <MainPop type={mainPopType} savedData={isSaved?.data} />
       )}
     </>
   );

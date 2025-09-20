@@ -250,7 +250,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
               width={72}
               height={20}
               onClick={() => {
-                window.location.href = 'https://pinback.today';
+                chrome.tabs.create({ url: 'https://pinback.today' });
               }}
             />
           </div>
