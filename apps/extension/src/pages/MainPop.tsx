@@ -269,6 +269,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
               onChange={handleSelect}
               placeholder="선택해주세요"
               onAddItem={() => setIsPopupOpen(true)}
+              limit={10}
               addItemLabel="추가하기"
               onToggle={(open) => {
                 if (open) {
