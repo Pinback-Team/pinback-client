@@ -39,7 +39,7 @@ export const usePageMeta = () => {
 
       chrome.storage.local.set({ bookmarkedUrl: currentUrl });
       const newMeta = await getOgMeta(currentUrl);
- // 개발중에는 잠시 주석처리
+      // 개발중에는 잠시 주석처리
       //   const isInternalChromePage =
       //     /^chrome:\/\//.test(currentUrl) ||
       //     /^edge:\/\//.test(currentUrl) ||
