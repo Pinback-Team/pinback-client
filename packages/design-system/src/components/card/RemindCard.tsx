@@ -17,7 +17,7 @@ const RemindCard = ({
   content,
   category,
   imageUrl,
-  timeRemaining,
+  // timeRemaining,
   onClick,
   onOptionsClick,
 }: RemindCardProps) => {
@@ -26,7 +26,7 @@ const RemindCard = ({
       <div className="bg-gray900 flex items-center gap-[0.4rem] py-[1.2rem] pl-[1.6rem] text-sm text-white">
         <Icon name="ic_clock_active" />
         <span className="body2-m text-main400 mr-[0.2rem]">
-          {timeRemaining || '-'}
+          {/* {timeRemaining || '-'} */}-
         </span>
         <span className="body2-m text-white-bg">이후에 사라져요</span>
       </div>
@@ -50,7 +50,10 @@ const RemindCard = ({
             type="button"
             aria-label="카테고리 상세"
             className="cursor-pointer self-start"
-            onClick={(e) => onOptionsClick?.(e)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onOptionsClick?.(e);
+            }}
           >
             <Icon name="ic_details_category" />
           </button>

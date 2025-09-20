@@ -4,7 +4,6 @@ import { cn } from '@pinback/design-system/utils';
 interface CreateItemProps {
   onClick: () => void;
 }
-//TODO: onClick 이벤트 추가
 
 export default function CreateItem({ onClick }: CreateItemProps) {
   return (

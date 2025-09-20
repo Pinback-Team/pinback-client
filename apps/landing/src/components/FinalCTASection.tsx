@@ -22,7 +22,7 @@ const FinalCTASection = () => {
           <Button
             variant="primary"
             onClick={() => {
-              window.location.href = 'https://pinback.today';
+              window.location.href = 'https://pinback.today/onboarding';
             }}
           >
             지금 시작하기

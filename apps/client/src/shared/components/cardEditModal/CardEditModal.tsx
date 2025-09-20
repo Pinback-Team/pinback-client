@@ -19,22 +19,21 @@ import {
 } from '@shared/apis/queries';
 import { usePageMeta } from '@shared/hooks/usePageMeta';
 import { ArticleDetailResponse, EditArticleRequest } from '@shared/types/api';
+import { buildUtcIso } from '@shared/utils/datetime';
 import { updateDate, updateTime } from '@shared/utils/formatDateTime';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 export interface CardEditModalProps {
   onClose: () => void;
-  prevData: ArticleDetailResponse | undefined;
+  prevData: ArticleDetailResponse;
 }
 
 export default function CardEditModal({
   onClose,
   prevData,
 }: CardEditModalProps) {
-  const { meta } = usePageMeta(
-    'https://www.notion.so/PinBack-23927450eb1c8080a5a1f84a9d483aa9'
-  );
+  const { meta } = usePageMeta(prevData.url);
   const { data: category } = useGetDashboardCategories();
   const { mutate: editArticle } = usePutEditArticle();
   const queryClient = useQueryClient();
@@ -85,13 +84,16 @@ export default function CardEditModal({
       return;
     }
 
+    const remindTime =
+      isRemindOn && date && time ? buildUtcIso(date, time) : null;
+
     const editArticleData: EditArticleRequest = {
       memo,
       categoryId:
-        category?.categories.find((cat) => cat.name === selectedCategory)?.id ||
+        category?.categories.find((cat) => cat.name === selectedCategory)?.id ??
         -1,
       now: new Date().toISOString(),
-      remindTime: isRemindOn ? `${date}T${time}` : null,
+      remindTime,
     };
 
     editArticle(

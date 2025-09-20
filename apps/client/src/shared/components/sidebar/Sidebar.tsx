@@ -17,11 +17,13 @@ import {
   usePutCategory,
   useDeleteCategory,
 } from '@shared/apis/queries';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 export function Sidebar() {
   const [newCategoryName, setNewCategoryName] = useState('');
+  const [toastIsOpen, setToastIsOpen] = useState(false);
+
   const queryClient = useQueryClient();
 
   const { data: categories } = useGetDashboardCategories();
@@ -58,6 +60,10 @@ export function Sidebar() {
     setNewCategoryName(name);
   };
 
+  useEffect(() => {
+    setToastIsOpen(false);
+  }, [popup]);
+
   const handleCreateCategory = () => {
     createCategory(newCategoryName, {
       onSuccess: () => {
@@ -65,11 +71,12 @@ export function Sidebar() {
         queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
         close();
       },
-      onError: (error) => {
-        console.error('카테고리 생성 실패:', error);
+      onError: () => {
+        setToastIsOpen(true);
       },
     });
   };
+
   const handlePatchCategory = (id: number) => {
     patchCategory(
       { id, categoryName: newCategoryName },
@@ -79,7 +86,9 @@ export function Sidebar() {
           queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
           close();
         },
-        onError: (error) => console.error('카테고리 수정 실패:', error),
+        onError: () => {
+          setToastIsOpen(true);
+        },
       }
     );
   };
@@ -90,15 +99,23 @@ export function Sidebar() {
         queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
         close();
       },
-      onError: (error) => {
-        console.error('카테고리 삭제 실패:', error);
+      onError: () => {
+        setToastIsOpen(true);
       },
     });
+  };
+
+  const handlePopupClose = () => {
+    setToastIsOpen(false);
+    close();
   };
 
   if (isPending) return <div></div>;
   if (isError) return <div></div>;
   const acornCount = data.acornCount;
+  const MAX_CATEGORIES = 10;
+  const categoryCount = categories?.categories?.length ?? 0;
+  const canCreateMore = categoryCount < MAX_CATEGORIES;
 
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
@@ -149,7 +166,14 @@ export function Sidebar() {
                 />
               ))}
 
-              <CreateItem onClick={openCreate} />
+              {canCreateMore && (
+                <CreateItem
+                  onClick={() => {
+                    setToastIsOpen(false);
+                    openCreate();
+                  }}
+                />
+              )}
             </ul>
           </AccordionItem>
 
@@ -158,8 +182,14 @@ export function Sidebar() {
             style={style ?? undefined}
             categoryId={menu.categoryId}
             getCategoryName={getCategoryName}
-            onEdit={(id, name) => openEdit(id, name)}
-            onDelete={(id, name) => openDelete(id, name)}
+            onEdit={(id, name) => {
+              setToastIsOpen(false);
+              openEdit(id, name);
+            }}
+            onDelete={(id, name) => {
+              setToastIsOpen(false);
+              openDelete(id, name);
+            }}
             onClose={closeMenu}
             containerRef={containerRef}
           />
@@ -180,11 +210,14 @@ export function Sidebar() {
 
       <PopupPortal
         popup={popup}
-        onClose={close}
+        onClose={handlePopupClose}
         onChange={handleCategoryChange}
         onCreateConfirm={handleCreateCategory}
         onEditConfirm={(id) => handlePatchCategory(id)}
         onDeleteConfirm={(id) => handleDeleteCategory(id)}
+        categoryList={categories?.categories ?? []}
+        isToastOpen={toastIsOpen}
+        onToastClose={() => setToastIsOpen(false)}
       />
     </aside>
   );

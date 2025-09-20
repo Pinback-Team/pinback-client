@@ -1,4 +1,4 @@
-import { Badge, Card } from '@pinback/design-system/ui';
+import { Badge, Card, PopupContainer } from '@pinback/design-system/ui';
 import { useState } from 'react';
 import {
   useGetBookmarkArticles,
@@ -25,6 +25,9 @@ const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
   const [isEditOpen, setIsEditOpen] = useState(false);
 
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+
   const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const category = searchParams.get('category');
@@ -32,15 +35,14 @@ const MyBookmark = () => {
 
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
   const { mutate: deleteArticle } = useDeleteRemindArticle();
-  const { data: articles } = useGetBookmarkArticles(0, 20);
+  const { data: articles, isPending } = useGetBookmarkArticles(0, 20);
   const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
   const { data: categoryArticles } = useGetCategoryBookmarkArticles(
     categoryId,
     activeBadge === 'all',
-    1,
+    0,
     10
   );
-  console.log('categoryArticles', categoryArticles);
 
   const { mutate: getArticleDetail, data: articleDetail } =
     useGetArticleDetail();
@@ -53,23 +55,25 @@ const MyBookmark = () => {
     containerRef,
   } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
 
-  const articlesToDisplay =
-    activeBadge === 'all' ? articles?.articles : unreadArticles?.articles;
+  const articlesToDisplay = category
+    ? categoryArticles?.articles
+    : activeBadge === 'all'
+      ? articles?.articles
+      : unreadArticles?.articles;
 
   const handleDeleteArticle = (id: number) => {
     deleteArticle(id, {
       onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ['bookmarkReadArticles'],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['bookmarkUnreadArticles'],
-        });
+        // TODO: 쿼리키 팩토리 패턴 적용
+        queryClient.invalidateQueries({ queryKey: ['bookmarkReadArticles'] });
+        queryClient.invalidateQueries({ queryKey: ['bookmarkUnreadArticles'] });
         queryClient.invalidateQueries({
           queryKey: ['categoryBookmarkArticles'],
         });
-
-        close();
+        queryClient.invalidateQueries({ queryKey: ['arcons'] });
+        setIsDeleteOpen(false);
+        setDeleteTargetId(null);
+        closeMenu();
       },
       onError: (error) => {
         console.error('아티클 삭제 실패:', error);
@@ -90,6 +94,11 @@ const MyBookmark = () => {
     }
     return <NoUnreadArticles />;
   };
+
+  // TODO: 로딩 상태 디자인 필요
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex h-screen flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
@@ -112,13 +121,21 @@ const MyBookmark = () => {
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="전체보기"
-          countNum={articles?.totalArticle || 0}
+          countNum={
+            category
+              ? categoryArticles?.totalArticle
+              : articles?.totalArticle || 0
+          }
           onClick={() => handleBadgeClick('all')}
           isActive={activeBadge === 'all'}
         />
         <Badge
           text="안 읽음"
-          countNum={articles?.totalUnreadArticle || 0}
+          countNum={
+            category
+              ? categoryArticles?.totalUnreadArticle
+              : articles?.totalUnreadArticle || 0
+          }
           onClick={() => handleBadgeClick('notRead')}
           isActive={activeBadge === 'notRead'}
         />
@@ -181,15 +198,47 @@ const MyBookmark = () => {
           closeMenu();
         }}
         onDelete={(articleId) => {
-          handleDeleteArticle(articleId);
+          setDeleteTargetId(articleId);
+          setIsDeleteOpen(true);
+          closeMenu();
         }}
         onClose={closeMenu}
       />
 
-      {isEditOpen && (
+      {/* 삭제 확인 모달 */}
+      {isDeleteOpen && (
+        <div className="fixed inset-0" aria-modal="true" role="dialog">
+          <div
+            className="absolute inset-0"
+            onClick={() => setIsDeleteOpen(false)}
+          />
+          <div className="absolute inset-0 z-[100] flex items-center justify-center p-4">
+            <PopupContainer
+              isOpen
+              type="subtext"
+              title="정말 삭제하시겠어요?"
+              subtext="저장된 내용이 모두 사라지게 돼요."
+              left="취소"
+              right="삭제"
+              onLeftClick={() => setIsDeleteOpen(false)}
+              onRightClick={() => {
+                if (deleteTargetId != null) {
+                  handleDeleteArticle(deleteTargetId);
+                } else {
+                  setIsDeleteOpen(false);
+                }
+              }}
+              onClose={() => setIsDeleteOpen(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* 편집 모달 */}
+      {isEditOpen && articleDetail && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            className="absolute inset-0 bg-black/60"
             onClick={() => setIsEditOpen(false)}
           />
           <div className="absolute inset-0 flex items-center justify-center p-4">

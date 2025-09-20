@@ -42,7 +42,10 @@ const MyBookmarkCard = ({
             type="button"
             aria-label="카테고리 상세"
             className="cursor-pointer self-start"
-            onClick={(e) => onOptionsClick?.(e)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onOptionsClick?.(e);
+            }}
           >
             <Icon name="ic_details_category" />
           </button>
