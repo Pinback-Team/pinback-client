@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Badge, Card, PopupContainer } from '@pinback/design-system/ui';
+import { Badge, PopupContainer } from '@pinback/design-system/ui';
 import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
@@ -16,6 +16,7 @@ import {
 } from '@shared/apis/queries';
 import { useQueryClient } from '@tanstack/react-query';
 import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
+import FetchCard from './components/fetchCard/FetchCard';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -25,13 +26,15 @@ const Remind = () => {
 
   const formattedDate = useMemo(() => {
     return formatLocalDateTime();
-  }, [activeBadge]);
+  }, []);
 
   const queryClient = useQueryClient();
 
+  const { mutate: getArticleDetail, data: articleDetail } =
+    useGetArticleDetail();
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
   const { mutate: deleteArticle } = useDeleteRemindArticle();
-  const { data } = useGetRemindArticles(
+  const { data, isPending } = useGetRemindArticles(
     formattedDate,
     activeBadge === 'read',
     0,
@@ -48,8 +51,6 @@ const Remind = () => {
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
-  const { mutate: getArticleDetail, data: articleDetail } =
-    useGetArticleDetail();
 
   const handleDeleteArticle = (id: number) => {
     deleteArticle(id, {
@@ -80,9 +81,9 @@ const Remind = () => {
   };
 
   // TODO: 로딩 상태 디자인 필요
-  // if (isPending) {
-  //   return <div>Loading...</div>;
-  // }
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
@@ -105,13 +106,9 @@ const Remind = () => {
       {data?.articles && data.articles.length > 0 ? (
         <div className="scrollbar-hide mt-[2.6rem] flex flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
           {data.articles.map((article) => (
-            <Card
+            <FetchCard
               key={article.articleId}
-              type="remind"
-              title={article.url}
-              content={article.memo}
-              timeRemaining={article.remindAt}
-              category={article.category.categoryName}
+              article={article}
               onClick={() => {
                 window.open(article.url, '_blank');
 

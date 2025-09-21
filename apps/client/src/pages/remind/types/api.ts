@@ -5,7 +5,7 @@ interface Category {
   categoryColor: string;
 }
 
-interface ArticleWithCategory {
+export interface ArticleWithCategory {
   articleId: number;
   url: string;
   memo: string;

@@ -1,4 +1,4 @@
-import { Badge, Card, PopupContainer } from '@pinback/design-system/ui';
+import { Badge, PopupContainer } from '@pinback/design-system/ui';
 import { useState } from 'react';
 import {
   useGetBookmarkArticles,
@@ -20,6 +20,7 @@ import {
   usePutArticleReadStatus,
 } from '@shared/apis/queries';
 import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
+import FetchCard from './components/fetchCard/FetchCard';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
@@ -144,16 +145,11 @@ const MyBookmark = () => {
       {articlesToDisplay && articlesToDisplay.length > 0 ? (
         <div className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
           {articlesToDisplay.map((article) => (
-            <Card
+            <FetchCard
               key={article.articleId}
-              type="bookmark"
-              title={article.url}
-              content={article.memo}
-              category={article.category.categoryName}
-              date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
+              article={article} // article 객체를 통째로 넘겨줍니다.
               onClick={() => {
                 window.open(article.url, '_blank');
-
                 updateToReadStatus(article.articleId, {
                   onSuccess: () => {
                     // TODO: 쿼리키 팩토리 패턴 적용

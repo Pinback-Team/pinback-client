@@ -25,6 +25,7 @@ import {
   ArticleReadStatusResponse,
   ArticleDetailResponse,
 } from '@shared/types/api';
+import { fetchOGData } from '@shared/utils/fetchOgData';
 
 export const useGetDashboardCategories = (): UseQueryResult<
   DashboardCategoriesResponse,
@@ -123,5 +124,15 @@ export const usePutEditArticle = () => {
       articleId: number;
       editArticleData: EditArticleRequest;
     }) => putEditArticle(articleId, editArticleData),
+  });
+};
+
+export const useGetPageMeta = (url: string) => {
+  return useQuery({
+    queryKey: ['ogMeta', url],
+    queryFn: () => fetchOGData(url),
+    enabled: !!url,
+    staleTime: Infinity,
+    retry: false,
   });
 };
