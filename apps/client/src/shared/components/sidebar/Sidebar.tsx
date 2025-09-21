@@ -19,12 +19,14 @@ import {
 } from '@shared/apis/queries';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 export function Sidebar() {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [toastIsOpen, setToastIsOpen] = useState(false);
 
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { data: categories } = useGetDashboardCategories();
   const { mutate: patchCategory } = usePutCategory();
@@ -40,6 +42,7 @@ export function Sidebar() {
     selectCategory,
     goLevel,
     setSelectedCategoryId,
+    setActiveTab,
   } = useSidebarNav();
 
   const { popup, openCreate, openEdit, openDelete, close } =
@@ -60,9 +63,11 @@ export function Sidebar() {
     setNewCategoryName(name);
   };
 
-  useEffect(() => {
-    setToastIsOpen(false);
-  }, [popup]);
+  const moveNewCategory = (id: number) => {
+    navigate(`/my-bookmarks?id=${id}&category=${newCategoryName}`);
+    setActiveTab('mybookmark');
+    setSelectedCategoryId(id);
+  };
 
   const handleCreateCategory = () => {
     createCategory(newCategoryName, {
@@ -82,9 +87,10 @@ export function Sidebar() {
       { id, categoryName: newCategoryName },
       {
         onSuccess: () => {
-          setNewCategoryName('');
           queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
+          setNewCategoryName('');
           close();
+          moveNewCategory(id);
         },
         onError: () => {
           setToastIsOpen(true);
@@ -109,6 +115,10 @@ export function Sidebar() {
     setToastIsOpen(false);
     close();
   };
+
+  useEffect(() => {
+    setToastIsOpen(false);
+  }, [popup]);
 
   if (isPending) return <div></div>;
   if (isError) return <div></div>;
