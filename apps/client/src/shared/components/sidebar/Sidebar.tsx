@@ -31,7 +31,7 @@ export function Sidebar() {
   const { data: categories } = useGetDashboardCategories();
   const { mutate: patchCategory } = usePutCategory();
   const { mutate: createCategory } = usePostCategory();
-  const { data, isPending, isError } = useGetArcons();
+  const { data, isPending } = useGetArcons();
   const { mutate: deleteCategory } = useDeleteCategory();
 
   const {
@@ -120,9 +120,7 @@ export function Sidebar() {
     setToastIsOpen(false);
   }, [popup]);
 
-  if (isPending) return <div></div>;
-  if (isError) return <div></div>;
-  const acornCount = data.acornCount;
+  const acornCount = data?.acornCount ?? 0;
   const MAX_CATEGORIES = 10;
   const categoryCount = categories?.categories?.length ?? 0;
   const canCreateMore = categoryCount < MAX_CATEGORIES;
@@ -206,15 +204,19 @@ export function Sidebar() {
         </div>
 
         <footer className="pb-[2.8rem] pt-[1.2rem]">
-          <MyLevelItem
-            acorns={acornCount}
-            isActive={activeTab === 'level'}
-            onClick={() => {
-              setSelectedCategoryId(null);
-              closeMenu();
-              goLevel();
-            }}
-          />
+          {isPending ? (
+            <div className="h-[6.2rem] w-full animate-pulse rounded-[0.4rem] border bg-gray-100 p-[0.8rem]" />
+          ) : (
+            <MyLevelItem
+              acorns={acornCount}
+              isActive={activeTab === 'level'}
+              onClick={() => {
+                setSelectedCategoryId(null);
+                closeMenu();
+                goLevel();
+              }}
+            />
+          )}
         </footer>
       </div>
 
