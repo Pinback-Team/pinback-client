@@ -1,19 +1,22 @@
-import { useState,useEffect } from "react";
-import { usePostCategories, useGetCategoriesExtension } from "@apis/query/queries";
-import type { Category } from "@shared-types/types";
-import { AxiosError } from "axios";
+import { useState, useEffect } from 'react';
+import {
+  usePostCategories,
+  useGetCategoriesExtension,
+} from '@apis/query/queries';
+import type { Category } from '@shared-types/types';
+import { AxiosError } from 'axios';
 
 export const useCategoryManager = () => {
   const { data: categoryData } = useGetCategoriesExtension();
   const { mutate: postCategories } = usePostCategories();
 
-  const [categoryTitle, setCategoryTitle] = useState("");
+  const [categoryTitle, setCategoryTitle] = useState('');
   const [isPopError, setIsPopError] = useState(false);
-  const [errorTxt, setErrorTxt] = useState("");
+  const [errorTxt, setErrorTxt] = useState('');
 
   const [options, setOptions] = useState<string[]>(
-  categoryData?.data?.categories?.map((c: Category) => c.categoryName) ?? []
-);
+    categoryData?.data?.categories?.map((c: Category) => c.categoryName) ?? []
+  );
 
   useEffect(() => {
     if (categoryData?.data?.categories) {
@@ -22,9 +25,9 @@ export const useCategoryManager = () => {
   }, [categoryData]);
 
   const saveCategory = (onSuccess?: (category: Category) => void) => {
-    if (categoryTitle.length > 20) {
+    if (categoryTitle.length > 10) {
       setIsPopError(true);
-      setErrorTxt("20자 이내로 작성해주세요");
+      setErrorTxt('10자 이내로 작성해주세요');
       return;
     }
 
@@ -35,7 +38,7 @@ export const useCategoryManager = () => {
           const newCategory: Category = {
             categoryId: res.data.categoryId,
             categoryName: categoryTitle,
-            categoryColor: res.data.categoryColor ?? "#000000",
+            categoryColor: res.data.categoryColor ?? '#000000',
           };
           setOptions((prev) => [...prev, newCategory.categoryName]);
 
@@ -43,16 +46,19 @@ export const useCategoryManager = () => {
           resetPopup();
         },
         onError: (err: AxiosError<{ code: string; message: string }>) => {
-          alert(err.response?.data?.message ?? "카테고리 추가 중 오류가 발생했어요 😢");
+          alert(
+            err.response?.data?.message ??
+              '카테고리 추가 중 오류가 발생했어요 😢'
+          );
         },
       }
     );
   };
 
   const resetPopup = () => {
-    setCategoryTitle("");
+    setCategoryTitle('');
     setIsPopError(false);
-    setErrorTxt("");
+    setErrorTxt('');
   };
 
   return {
