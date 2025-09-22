@@ -8,11 +8,14 @@ import {
   Dropdown,
   validateDate,
   validateTime,
+  Toast,
+  AutoDismissToast,
 } from '@pinback/design-system/ui';
 import { useState, useEffect } from 'react';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
+
 import {
   usePostArticle,
   useGetCategoriesExtension,
@@ -83,6 +86,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
   }, [initialImgUrl]);
 
   // 아티클 팝업 정보들 상태
+  const [toastIsOpen, setToastIsOpen] = useState(false);
   const [isRemindOn, setIsRemindOn] = useState(true);
   const [memo, setMemo] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -186,7 +190,6 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
       time: isRemindOn ? currentTime : time,
       createdAt: new Date().toISOString(),
     };
-    console.log(combineDateTime(saveData.date ?? '', saveData.time ?? ''));
     if (type === 'add') {
       save({
         url,
@@ -210,6 +213,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
           : null,
       });
     } else {
+      setToastIsOpen(true);
       putArticle({
         articleId: isArticleId,
         data: {
@@ -223,12 +227,26 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
             : null,
         },
       });
+      setTimeout(() => {
+        window.close();
+      }, 1000);
     }
   };
 
   return (
     <div className="App">
       <div className="relative flex h-[56.8rem] w-[31.2rem] items-center justify-center">
+        {toastIsOpen && (
+          <div className="absolute bottom-[5rem] left-1/2 -translate-x-1/2">
+            <AutoDismissToast
+              duration={1000}
+              fadeMs={1000}
+              onClose={() => setToastIsOpen(false)}
+            >
+              <Toast text={`수정내용을 저장했어요`} />
+            </AutoDismissToast>
+          </div>
+        )}
         {isPopupOpen && (
           <PopupContainer
             isOpen={isPopupOpen}
