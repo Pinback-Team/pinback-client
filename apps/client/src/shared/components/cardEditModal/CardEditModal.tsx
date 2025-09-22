@@ -23,6 +23,7 @@ import { buildUtcIso } from '@shared/utils/datetime';
 import { updateDate, updateTime } from '@shared/utils/formatDateTime';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import noImage from '@assets/client_thumb.svg';
 
 export interface CardEditModalProps {
   onClose: () => void;
@@ -183,7 +184,7 @@ export default function CardEditModal({
           <InfoBox
             title={meta.title}
             source={meta.description}
-            imgUrl={meta.imgUrl}
+            imgUrl={meta.imgUrl || noImage}
           />
         )}
 
