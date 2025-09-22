@@ -1,39 +1,41 @@
 import { cva } from 'class-variance-authority';
-type ChipColor =
-  | 'red'
-  | 'purple'
-  | 'navyblue'
-  | 'skyblue'
-  | 'emerald'
-  | 'navygreen'
-  | 'khaki'
-  | 'orange'
-  | 'amber'
-  | 'maroon';
+
+export type ChipColor =
+  | 'COLOR1'
+  | 'COLOR2'
+  | 'COLOR3'
+  | 'COLOR4'
+  | 'COLOR5'
+  | 'COLOR6'
+  | 'COLOR7'
+  | 'COLOR8'
+  | 'COLOR9'
+  | 'COLOR10';
 
 interface ChipProps {
   color: ChipColor;
   category: string;
 }
+
 const ChipColorVariants = cva(
   'caption2-sb rounded-[0.4rem] px-[0.8rem] py-[0.39rem]',
   {
     variants: {
       color: {
-        red: 'bg-category-red-bg text-category-red-text',
-        purple: 'bg-category-purple-bg text-category-purple-text',
-        navyblue: 'bg-category-navyblue-bg text-category-navyblue-text',
-        skyblue: 'bg-category-skyblue-bg text-category-skyblue-text',
-        emerald: 'bg-category-emerald-bg text-category-emerald-text',
-        navygreen: 'bg-category-navygreen-bg text-category-navygreen-text',
-        khaki: 'bg-category-khaki-bg text-category-khaki-text',
-        orange: 'bg-category-orange-bg text-category-orange-text',
-        amber: 'bg-category-amber-bg text-category-amber-text',
-        maroon: 'bg-category-maroon-bg text-category-maroon-text',
+        COLOR1: 'bg-category-red-bg text-category-red-text',
+        COLOR2: 'bg-category-purple-bg text-category-purple-text',
+        COLOR3: 'bg-category-navyblue-bg text-category-navyblue-text',
+        COLOR4: 'bg-category-skyblue-bg text-category-skyblue-text',
+        COLOR5: 'bg-category-emerald-bg text-category-emerald-text',
+        COLOR6: 'bg-category-navygreen-bg text-category-navygreen-text',
+        COLOR7: 'bg-category-khaki-bg text-category-khaki-text',
+        COLOR8: 'bg-category-orange-bg text-category-orange-text',
+        COLOR9: 'bg-category-amber-bg text-category-amber-text',
+        COLOR10: 'bg-category-maroon-bg text-category-maroon-text',
       },
     },
     defaultVariants: {
-      color: 'red',
+      color: 'COLOR1',
     },
   }
 );
