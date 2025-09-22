@@ -1,11 +1,13 @@
 import chippiNoImage from '../../assets/chippi_no_image.svg';
 import { Icon } from '../../icons';
+import Chip, { ChipColor } from '../chip/Chip';
 import BaseCard from './BaseCard';
 
 interface MyBookmarkCardProps {
   title: string;
   content?: string;
   category?: string;
+  categoryColor?: string;
   imageUrl?: string;
   date: string;
   onClick?: () => void;
@@ -16,6 +18,7 @@ const MyBookmarkCard = ({
   title,
   content,
   category,
+  categoryColor,
   imageUrl,
   date,
   onClick,
@@ -55,11 +58,8 @@ const MyBookmarkCard = ({
           {content}
         </p>
 
-        {/* TODO: 카테고리 컴포넌트로 교체 */}
-        {category && (
-          <span className="bg-category-red-bg caption2-sb text-category-red-text h-[2.2rem] w-[6.2rem] rounded-[0.4rem] px-[0.8rem] py-[0.2rem]">
-            {category}
-          </span>
+        {category && categoryColor && (
+          <Chip category={category} color={categoryColor as ChipColor} />
         )}
 
         <p className="caption2-m text-font-ltgray-4 mt-[1.2rem]">{date}</p>

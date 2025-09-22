@@ -23,6 +23,7 @@ import { buildUtcIso } from '@shared/utils/datetime';
 import { updateDate, updateTime } from '@shared/utils/formatDateTime';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import noImage from '@assets/client_thumb.svg';
 
 export interface CardEditModalProps {
   onClose: () => void;
@@ -33,7 +34,7 @@ export default function CardEditModal({
   onClose,
   prevData,
 }: CardEditModalProps) {
-  const { meta } = usePageMeta(prevData.url);
+  const { meta, loading } = usePageMeta(prevData.url);
   const { data: category } = useGetDashboardCategories();
   const { mutate: editArticle } = usePutEditArticle();
   const queryClient = useQueryClient();
@@ -55,9 +56,9 @@ export default function CardEditModal({
   const [errorTxt, setErrorTxt] = useState('');
 
   const saveCategory = () => {
-    if (categoryTitle.length > 20) {
+    if (categoryTitle.length > 10) {
       setIsPopError(true);
-      setErrorTxt('20자 이내로 작성해주세요');
+      setErrorTxt('10자 이내로 작성해주세요');
     } else {
       setIsPopupOpen(false);
     }
@@ -177,11 +178,15 @@ export default function CardEditModal({
           </button>
         </header>
 
-        <InfoBox
-          title={meta.title}
-          source={meta.description}
-          imgUrl={meta.imgUrl}
-        />
+        {loading ? (
+          <div className="bg-gray100 h-[6.8rem] w-[full] animate-pulse rounded-[4px]" />
+        ) : (
+          <InfoBox
+            title={meta.title}
+            source={meta.description}
+            imgUrl={meta.imgUrl || noImage}
+          />
+        )}
 
         <section className="flex flex-col gap-[0.8rem]">
           <p className="caption1-sb text-font-black-1">카테고리</p>

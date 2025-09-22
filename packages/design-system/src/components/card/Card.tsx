@@ -5,6 +5,7 @@ type BaseProps = {
   title: string;
   content?: string;
   category?: string;
+  categoryColor?: string;
   imageUrl?: string;
   onClick?: () => void;
   onOptionsClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;

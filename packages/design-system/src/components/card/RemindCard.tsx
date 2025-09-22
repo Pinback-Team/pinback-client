@@ -1,11 +1,13 @@
 import chippiNoImage from '../../assets/chippi_no_image.svg';
 import { Icon } from '../../icons';
+import Chip, { ChipColor } from '../chip/Chip';
 import BaseCard from './BaseCard';
 
 interface RemindCardProps {
   title: string;
   content?: string;
   category?: string;
+  categoryColor?: string;
   imageUrl?: string;
   timeRemaining: string;
   onClick?: () => void;
@@ -16,6 +18,7 @@ const RemindCard = ({
   title,
   content,
   category,
+  categoryColor,
   imageUrl,
   // timeRemaining,
   onClick,
@@ -62,9 +65,9 @@ const RemindCard = ({
           {content}
         </p>
 
-        <span className="bg-category-red-bg caption2-sb text-category-red-text h-[2.2rem] w-[6.2rem] rounded-[0.4rem] px-[0.8rem] py-[0.2rem]">
-          {category}
-        </span>
+        {category && categoryColor && (
+          <Chip category={category} color={categoryColor as ChipColor} />
+        )}
       </div>
     </BaseCard>
   );

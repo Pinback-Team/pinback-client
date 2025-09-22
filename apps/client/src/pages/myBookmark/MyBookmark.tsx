@@ -40,7 +40,7 @@ const MyBookmark = () => {
   const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
   const { data: categoryArticles } = useGetCategoryBookmarkArticles(
     categoryId,
-    activeBadge === 'all',
+    activeBadge === 'notRead' ? false : null,
     0,
     10
   );
@@ -126,7 +126,7 @@ const MyBookmark = () => {
           text="전체보기"
           countNum={
             category
-              ? categoryArticles?.totalArticle
+              ? categoryArticles?.totalArticle || 0
               : articles?.totalArticle || 0
           }
           onClick={() => handleBadgeClick('all')}
@@ -136,7 +136,7 @@ const MyBookmark = () => {
           text="안 읽음"
           countNum={
             category
-              ? categoryArticles?.totalUnreadArticle
+              ? categoryArticles?.totalUnreadArticle || 0
               : articles?.totalUnreadArticle || 0
           }
           onClick={() => handleBadgeClick('notRead')}

@@ -8,11 +8,14 @@ import {
   Dropdown,
   validateDate,
   validateTime,
+  Toast,
+  AutoDismissToast,
 } from '@pinback/design-system/ui';
 import { useState, useEffect } from 'react';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
+
 import {
   usePostArticle,
   useGetCategoriesExtension,
@@ -83,7 +86,8 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
   }, [initialImgUrl]);
 
   // 아티클 팝업 정보들 상태
-  const [isRemindOn, setIsRemindOn] = useState(false);
+  const [toastIsOpen, setToastIsOpen] = useState(false);
+  const [isRemindOn, setIsRemindOn] = useState(true);
   const [memo, setMemo] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isArticleId, setIsArticleId] = useState(0);
@@ -186,7 +190,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
       time: isRemindOn ? currentTime : time,
       createdAt: new Date().toISOString(),
     };
-    console.log(combineDateTime(saveData.date ?? '', saveData.time ?? ''));
+
     if (type === 'add') {
       save({
         url,
@@ -210,6 +214,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
           : null,
       });
     } else {
+      setToastIsOpen(true);
       putArticle({
         articleId: isArticleId,
         data: {
@@ -223,12 +228,26 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
             : null,
         },
       });
+      setTimeout(() => {
+        window.close();
+      }, 1000);
     }
   };
 
   return (
     <div className="App">
       <div className="relative flex h-[56.8rem] w-[31.2rem] items-center justify-center">
+        {toastIsOpen && (
+          <div className="absolute bottom-[5rem] left-1/2 -translate-x-1/2">
+            <AutoDismissToast
+              duration={1000}
+              fadeMs={1000}
+              onClose={() => setToastIsOpen(false)}
+            >
+              <Toast text={`수정내용을 저장했어요`} />
+            </AutoDismissToast>
+          </div>
+        )}
         {isPopupOpen && (
           <PopupContainer
             isOpen={isPopupOpen}
@@ -256,16 +275,20 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
               width={72}
               height={20}
               onClick={() => {
-                chrome.tabs.create({ url: 'https://pinback.today' });
+                chrome.tabs.create({ url: 'https://www.pinback.today/' });
               }}
             />
           </div>
 
-          <InfoBox
-            title={title || '제목 로딩 중...'}
-            source={description || '불러오는 중입니다'}
-            imgUrl={initialImgUrl || defaultImageUrl}
-          />
+          {loading ? (
+            <div className="bg-gray100 h-[6.8rem] w-[full] animate-pulse rounded-[4px]" />
+          ) : (
+            <InfoBox
+              title={title}
+              source={description}
+              imgUrl={initialImgUrl || defaultImageUrl}
+            />
+          )}
 
           <div>
             <p className="caption1-sb mb-[0.4rem]">카테고리</p>
@@ -288,7 +311,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
           <div>
             <p className="caption1-sb mb-[0.4rem]">메모</p>
             <Textarea
-              maxLength={100}
+              maxLength={500}
               placeholder="나중에 내가 꺼내줄 수 있게 살짝 적어줘!"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
