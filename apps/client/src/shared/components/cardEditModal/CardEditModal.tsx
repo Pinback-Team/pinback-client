@@ -55,9 +55,9 @@ export default function CardEditModal({
   const [errorTxt, setErrorTxt] = useState('');
 
   const saveCategory = () => {
-    if (categoryTitle.length > 20) {
+    if (categoryTitle.length > 10) {
       setIsPopError(true);
-      setErrorTxt('20자 이내로 작성해주세요');
+      setErrorTxt('10자 이내로 작성해주세요');
     } else {
       setIsPopupOpen(false);
     }

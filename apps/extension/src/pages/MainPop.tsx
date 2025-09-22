@@ -83,7 +83,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
   }, [initialImgUrl]);
 
   // 아티클 팝업 정보들 상태
-  const [isRemindOn, setIsRemindOn] = useState(false);
+  const [isRemindOn, setIsRemindOn] = useState(true);
   const [memo, setMemo] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isArticleId, setIsArticleId] = useState(0);
@@ -288,7 +288,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
           <div>
             <p className="caption1-sb mb-[0.4rem]">메모</p>
             <Textarea
-              maxLength={100}
+              maxLength={500}
               placeholder="나중에 내가 꺼내줄 수 있게 살짝 적어줘!"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
