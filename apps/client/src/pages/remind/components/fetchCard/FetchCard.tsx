@@ -29,6 +29,7 @@ const FetchCard = ({ article, onClick, onOptionsClick }: FetchCardProps) => {
       content={article.memo}
       timeRemaining={article.remindAt}
       category={article.category.categoryName}
+      categoryColor={article.category.categoryColor}
       onClick={onClick}
       onOptionsClick={onOptionsClick}
     />

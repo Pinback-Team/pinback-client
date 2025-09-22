@@ -28,6 +28,7 @@ const FetchCard = ({ article, onClick, onOptionsClick }: FetchCardProps) => {
       imageUrl={displayImageUrl}
       content={article.memo}
       category={article.category.categoryName}
+      categoryColor={article.category.categoryColor}
       date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
       onClick={onClick}
       onOptionsClick={onOptionsClick}
