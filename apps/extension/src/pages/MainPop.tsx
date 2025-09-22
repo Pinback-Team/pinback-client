@@ -186,7 +186,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
       time: isRemindOn ? currentTime : time,
       createdAt: new Date().toISOString(),
     };
-    console.log(combineDateTime(saveData.date ?? '', saveData.time ?? ''));
+
     if (type === 'add') {
       save({
         url,
@@ -261,11 +261,15 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
             />
           </div>
 
-          <InfoBox
-            title={title || '제목 로딩 중...'}
-            source={description || '불러오는 중입니다'}
-            imgUrl={initialImgUrl || defaultImageUrl}
-          />
+          {loading ? (
+            <div className="bg-gray100 h-[6.8rem] w-[full] animate-pulse rounded-[4px]" />
+          ) : (
+            <InfoBox
+              title={title}
+              source={description}
+              imgUrl={initialImgUrl || defaultImageUrl}
+            />
+          )}
 
           <div>
             <p className="caption1-sb mb-[0.4rem]">카테고리</p>

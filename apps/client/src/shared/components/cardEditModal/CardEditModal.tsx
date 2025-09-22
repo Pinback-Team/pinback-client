@@ -33,7 +33,7 @@ export default function CardEditModal({
   onClose,
   prevData,
 }: CardEditModalProps) {
-  const { meta } = usePageMeta(prevData.url);
+  const { meta, loading } = usePageMeta(prevData.url);
   const { data: category } = useGetDashboardCategories();
   const { mutate: editArticle } = usePutEditArticle();
   const queryClient = useQueryClient();
@@ -177,11 +177,15 @@ export default function CardEditModal({
           </button>
         </header>
 
-        <InfoBox
-          title={meta.title}
-          source={meta.description}
-          imgUrl={meta.imgUrl}
-        />
+        {loading ? (
+          <div className="bg-gray100 h-[6.8rem] w-[full] animate-pulse rounded-[4px]" />
+        ) : (
+          <InfoBox
+            title={meta.title}
+            source={meta.description}
+            imgUrl={meta.imgUrl}
+          />
+        )}
 
         <section className="flex flex-col gap-[0.8rem]">
           <p className="caption1-sb text-font-black-1">카테고리</p>
