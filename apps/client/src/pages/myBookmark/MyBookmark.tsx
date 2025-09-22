@@ -101,6 +101,8 @@ const MyBookmark = () => {
     return <div>Loading...</div>;
   }
 
+  console.log(category);
+
   return (
     <div className="flex h-screen flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
       <div className="flex items-center gap-[0.4rem]">
