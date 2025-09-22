@@ -19,7 +19,7 @@ const BadgeTxtStyleVariants = cva('sub3-b', {
 });
 
 const BadgeStyleVariants = cva(
-  'text-white-bg sub5-sb rounded-[0.4rem] px-[0.8rem] py-[0.4rem]',
+  'text-white-bg sub5-sb rounded-[0.4rem] w-[2.5rem] h-[2.8rem] flex items-center justify-center',
   {
     variants: {
       active: {
