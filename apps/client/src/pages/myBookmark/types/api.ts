@@ -4,7 +4,7 @@ interface Category {
   categoryColor: string;
 }
 
-interface BookmarkArticle {
+export interface BookmarkArticle {
   articleId: number;
   url: string;
   memo: string;

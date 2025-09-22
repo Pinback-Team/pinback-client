@@ -76,12 +76,13 @@ const proxyServices = [
       `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
     extractHtml: (response: AxiosResponse) => response.data,
   },
-  {
-    name: 'AllOrigins',
-    buildUrl: (targetUrl: string) =>
-      `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
-    extractHtml: (response: AxiosResponse) => response.data?.contents,
-  },
+  // TODO: 2개까지 보낼 필요 없어서 일단 주석처리
+  // {
+  //   name: 'AllOrigins',
+  //   buildUrl: (targetUrl: string) =>
+  //     `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
+  //   extractHtml: (response: AxiosResponse) => response.data?.contents,
+  // },
 ];
 
 /**

@@ -33,12 +33,12 @@ export const useGetBookmarkUnreadArticles = (
 
 export const useGetCategoryBookmarkArticles = (
   categoryId: string | null,
-  readStatus: boolean,
+  readStatus: boolean | null,
   page: number,
   size: number
 ): UseQueryResult<CategoryBookmarkArticleResponse, AxiosError> => {
   return useQuery({
-    queryKey: ['categoryBookmarkArticles', categoryId, page, size],
+    queryKey: ['categoryBookmarkArticles', readStatus, categoryId, page, size],
     queryFn: () =>
       getCategoryBookmarkArticles(categoryId, readStatus, page, size),
     enabled: !!categoryId,
