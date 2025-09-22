@@ -199,44 +199,30 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
         date: isRemindOn ? currentDate : date,
         time: isRemindOn ? currentTime : time,
       });
-      postArticle(
-        {
-          url,
+      postArticle({
+        url,
+        categoryId: saveData.selectedCategory
+          ? parseInt(saveData.selectedCategory)
+          : 0,
+        memo: saveData.memo,
+        remindTime: isRemindOn
+          ? combineDateTime(saveData.date ?? '', saveData.time ?? '')
+          : null,
+      });
+    } else {
+      putArticle({
+        articleId: isArticleId,
+        data: {
           categoryId: saveData.selectedCategory
             ? parseInt(saveData.selectedCategory)
             : 0,
           memo: saveData.memo,
+          now: new Date().toISOString(),
           remindTime: isRemindOn
             ? combineDateTime(saveData.date ?? '', saveData.time ?? '')
             : null,
         },
-        {
-          onSuccess: () => {
-            window.close();
-          },
-        }
-      );
-    } else {
-      putArticle(
-        {
-          articleId: isArticleId,
-          data: {
-            categoryId: saveData.selectedCategory
-              ? parseInt(saveData.selectedCategory)
-              : 0,
-            memo: saveData.memo,
-            now: new Date().toISOString(),
-            remindTime: isRemindOn
-              ? combineDateTime(saveData.date ?? '', saveData.time ?? '')
-              : null,
-          },
-        },
-        {
-          onSuccess: () => {
-            window.close();
-          },
-        }
-      );
+      });
     }
   };
 
