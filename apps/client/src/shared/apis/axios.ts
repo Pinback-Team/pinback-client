@@ -23,7 +23,7 @@ export const putCategory = async (id: number, categoryName: string) => {
 
 export const getAcorns = async () => {
   const now = formatLocalDateTime(new Date());
-  const { data } = await apiRequest.get('/api/v1/users/acorns?now=', {
+  const { data } = await apiRequest.get('/api/v1/users/acorns?', {
     params: { now },
   });
   return data.data;
