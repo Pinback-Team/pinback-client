@@ -96,7 +96,6 @@ export default function CardEditModal({
       now: new Date().toISOString(),
       remindTime,
     };
-    console.log('remindTime', remindTime);
 
     editArticle(
       {
