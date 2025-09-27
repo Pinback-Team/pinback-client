@@ -133,10 +133,6 @@ const MyBookmark = () => {
     return null;
   };
 
-  if (articlesToDisplay.length === 0) {
-    return <div>Loading...</div>;
-  }
-
   const totalArticleCount =
     (category
       ? categoryArticlesData?.pages[0]?.totalArticle
