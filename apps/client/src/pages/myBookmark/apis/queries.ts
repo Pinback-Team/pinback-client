@@ -1,46 +1,53 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import {
   getBookmarkArticles,
   getBookmarkUnreadArticles,
   getCategoryBookmarkArticles,
 } from './axios';
-import {
-  BookmarkArticleResponse,
-  CategoryBookmarkArticleResponse,
-  UnreadBookmarkArticleResponse,
-} from '@pages/myBookmark/types/api';
 
-export const useGetBookmarkArticles = (
-  page: number,
-  size: number
-): UseQueryResult<BookmarkArticleResponse, AxiosError> => {
-  return useQuery({
-    queryKey: ['bookmarkReadArticles', page, size],
-    queryFn: () => getBookmarkArticles(page, size),
+export const useGetBookmarkArticles = () => {
+  return useInfiniteQuery({
+    queryKey: ['bookmarkReadArticles'],
+    queryFn: ({ pageParam = 0 }) => getBookmarkArticles(pageParam, 20),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.articles.length === 0) {
+        return undefined;
+      }
+      return allPages.length;
+    },
   });
 };
 
-export const useGetBookmarkUnreadArticles = (
-  page: number,
-  size: number
-): UseQueryResult<UnreadBookmarkArticleResponse, AxiosError> => {
-  return useQuery({
-    queryKey: ['bookmarkUnreadArticles', page, size],
-    queryFn: () => getBookmarkUnreadArticles(page, size),
+export const useGetBookmarkUnreadArticles = () => {
+  return useInfiniteQuery({
+    queryKey: ['bookmarkUnreadArticles'],
+    queryFn: ({ pageParam = 0 }) => getBookmarkUnreadArticles(pageParam, 20),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.articles.length === 0) {
+        return undefined;
+      }
+      return allPages.length;
+    },
   });
 };
 
 export const useGetCategoryBookmarkArticles = (
   categoryId: string | null,
-  readStatus: boolean | null,
-  page: number,
-  size: number
-): UseQueryResult<CategoryBookmarkArticleResponse, AxiosError> => {
-  return useQuery({
-    queryKey: ['categoryBookmarkArticles', readStatus, categoryId, page, size],
-    queryFn: () =>
-      getCategoryBookmarkArticles(categoryId, readStatus, page, size),
+  readStatus: boolean | null
+) => {
+  return useInfiniteQuery({
+    queryKey: ['categoryBookmarkArticles', readStatus, categoryId],
+    queryFn: ({ pageParam = 0 }) =>
+      getCategoryBookmarkArticles(categoryId, readStatus, pageParam, 20),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.articles.length === 0) {
+        return undefined;
+      }
+      return allPages.length;
+    },
     enabled: !!categoryId,
   });
 };
