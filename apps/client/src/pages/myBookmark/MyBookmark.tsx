@@ -1,5 +1,5 @@
 import { Badge, PopupContainer } from '@pinback/design-system/ui';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import {
   useGetBookmarkArticles,
   useGetBookmarkUnreadArticles,
@@ -20,7 +20,7 @@ import {
   usePutArticleReadStatus,
 } from '@shared/apis/queries';
 import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
-import FetchCard from './components/fetchCard/FetchCard';
+import FetchCard from '@pages/myBookmark/components/fetchCard/FetchCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 
 const MyBookmark = () => {

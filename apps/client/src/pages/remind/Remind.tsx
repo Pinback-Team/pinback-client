@@ -5,7 +5,7 @@ import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
 import { REMIND_MOCK_DATA } from './constants';
-import { useGetRemindArticles } from './apis/queries';
+import { useGetRemindArticles } from '@pages/remind/apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
