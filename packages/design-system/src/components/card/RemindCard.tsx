@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import chippiNoImage from '../../assets/chippi_no_image.svg';
 import { Icon } from '../../icons';
 import Chip, { ChipColor } from '../chip/Chip';
@@ -20,17 +21,43 @@ const RemindCard = ({
   category,
   categoryColor,
   imageUrl,
-  // timeRemaining,
+  timeRemaining,
   onClick,
   onOptionsClick,
 }: RemindCardProps) => {
+  const [displayTime, setDisplayTime] = useState('');
+
+  useEffect(() => {
+    const endTime = new Date(timeRemaining).getTime() + 24 * 60 * 60 * 1000;
+
+    const updateRemainingTime = () => {
+      const now = new Date().getTime();
+      const remainingMilliseconds = endTime - now;
+
+      if (remainingMilliseconds <= 0) {
+        setDisplayTime('시간 만료');
+      } else {
+        const totalMinutes = Math.floor(remainingMilliseconds / (1000 * 60));
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        setDisplayTime(`${hours}시간 ${minutes}분`);
+      }
+    };
+
+    const intervalId = setInterval(updateRemainingTime, 60000);
+
+    updateRemainingTime();
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [timeRemaining]);
+
   return (
     <BaseCard onClick={onClick} className="h-[35.6rem]">
       <div className="bg-gray900 flex items-center gap-[0.4rem] py-[1.2rem] pl-[1.6rem] text-sm text-white">
         <Icon name="ic_clock_active" />
-        <span className="body2-m text-main400 mr-[0.2rem]">
-          {/* {timeRemaining || '-'} */}-
-        </span>
+        <span className="body2-m text-main400 mr-[0.2rem]">{displayTime}</span>
         <span className="body2-m text-white-bg">이후에 사라져요</span>
       </div>
 
