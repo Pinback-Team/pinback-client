@@ -37,9 +37,19 @@ apiRequest.interceptors.request.use(async (config) => {
   const isNoAuth = noAuthNeeded.some((url) => config.url?.includes(url));
 
   if (!isNoAuth) {
-    const token = localStorage.getItem('token');
-
-    if (!token || token === 'undefined' || token === 'null' || token === '') {
+    let token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+    if (email) {
+      try {
+        token = await refreshToken(email);
+      } catch (err) {
+        console.error('요청 인터셉터에서 토큰 재발급 실패:', err);
+        localStorage.removeItem('token');
+        localStorage.removeItem('email');
+        window.location.href = '/onboarding';
+        throw err;
+      }
+    } else {
       console.error('토큰이 없습니다. 온보딩을 먼저 완료해주세요.');
       throw new Error('토큰이 없습니다. 온보딩을 먼저 완료해주세요.');
     }
