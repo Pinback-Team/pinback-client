@@ -1,22 +1,29 @@
+/* eslint-env serviceworker */
+/* eslint-disable no-undef */
+
+importScripts(
+  './firebase_sdk/firebase-app-compat.js',
+  './firebase_sdk/firebase-messaging-compat.js',
+  './firebase-config.js'
+);
+
 self.addEventListener('install', function () {
   self.skipWaiting();
 });
 
 self.addEventListener('activate', function () {
-  console.log('fcm sw activate..');
+  console.log('실행중..');
 });
 
-self.addEventListener('push', function (e) {
-  if (!e.data.json()) return;
-  const resultData = e.data.json().notification;
-  const notificationTitle = resultData.title;
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
+  console.log('Received background message ', payload);
+
+  const notificationTitle = payload.notification?.title ?? '알림이 도착했어요!';
   const notificationOptions = {
-    body: resultData.body,
+    body: payload.notification?.body,
   };
-  console.log(resultData.title, {
-    body: resultData.body,
-  });
-  e.waitUntil(
-    self.registration.showNotification(notificationTitle, notificationOptions)
-  );
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
