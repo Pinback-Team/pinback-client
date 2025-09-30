@@ -169,7 +169,12 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
   const handleSwitchChange = (checked: boolean) => {
     setIsRemindOn(checked);
   };
-
+  function getKSTISOString() {
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000;
+    const kst = new Date(now.getTime() - offset);
+    return kst.toISOString().slice(0, 19);
+  }
   // 마지막! 저장하기 버튼 분기 (api 다르게 탐)
   const handleSave = async () => {
     const currentDate = date;
@@ -188,7 +193,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
       selectedCategory: selected,
       date: isRemindOn ? currentDate : date,
       time: isRemindOn ? currentTime : time,
-      createdAt: new Date().toISOString(),
+      createdAt: getKSTISOString(),
     };
 
     if (type === 'add') {
@@ -222,7 +227,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
             ? parseInt(saveData.selectedCategory)
             : 0,
           memo: saveData.memo,
-          now: new Date().toISOString(),
+          now: getKSTISOString(),
           remindTime: isRemindOn
             ? combineDateTime(saveData.date ?? '', saveData.time ?? '')
             : null,
