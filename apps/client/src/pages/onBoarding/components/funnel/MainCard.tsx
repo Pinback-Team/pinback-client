@@ -100,6 +100,7 @@ const MainCard = () => {
       const token = await requestFCMToken();
       if (token) {
         setFcmToken(token);
+        localStorage.setItem('FcmToken', token);
       } else {
         alert('푸시 알람 설정 에러');
       }
