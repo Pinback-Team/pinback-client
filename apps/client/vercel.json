@@ -1,8 +1,10 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+      "source": "/firebase-messaging-sw.js",
+      "destination": "/firebase-messaging-sw.js"
+    },
+    { "source": "/firebase_sdk/(.*)", "destination": "/firebase_sdk/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

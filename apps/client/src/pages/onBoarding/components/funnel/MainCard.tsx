@@ -59,8 +59,6 @@ const MainCard = () => {
     }
   }, [location.search]);
 
-  
-
   // FCM 구간
   const [fcmToken, setFcmToken] = useState<string | null>(null);
   const app = initializeApp(firebaseConfig);
@@ -131,24 +129,23 @@ const MainCard = () => {
   const [remindTime, setRemindTime] = useState('09:00');
   const nextStep = async () => {
     if (step === 3) {
-      if (alarmSelected==1){
+      if (alarmSelected == 1) {
         setRemindTime('09:00');
-      } else if (alarmSelected==2){
+      } else if (alarmSelected == 2) {
         setRemindTime('20:00');
-      } else{
+      } else {
         const raw = AlarmsType[alarmSelected - 1].time;
-        setRemindTime(normalizeTime(raw))
+        setRemindTime(normalizeTime(raw));
       }
 
-      
       setDirection(1);
       setStep((prev) => prev + 1);
       return;
     }
-    if ((isMac && step <5) || (!isMac && step <4)) {
+    if ((isMac && step < 5) || (!isMac && step < 4)) {
       setDirection(1);
       setStep((prev) => prev + 1);
-    } else if ( (isMac && step === 5) || (!isMac && step==4)) {
+    } else if ((isMac && step === 5) || (!isMac && step == 4)) {
       postSignData(
         {
           email: userEmail,
@@ -164,7 +161,7 @@ const MainCard = () => {
             if (savedEmail) {
               window.location.href = '/';
             }
-          }
+          },
         }
       );
     }
@@ -205,7 +202,7 @@ const MainCard = () => {
       </div>
 
       <div className="mb-[4.8rem] mt-[1.2rem] flex w-full justify-between px-[3.2rem]">
-        {step < 4 &&  step > 0 && (
+        {step < 4 && step > 0 && (
           <Button
             variant="secondary"
             size="medium"

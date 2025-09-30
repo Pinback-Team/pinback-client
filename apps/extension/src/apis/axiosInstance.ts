@@ -33,16 +33,28 @@ apiRequest.interceptors.request.use(async (config) => {
 
   let token = await new Promise<string | undefined>((resolve) => {
     chrome.storage.local.get('token', (result) => {
-      resolve(result.token); 
+      resolve(result.token);
     });
   });
 
-  // 토큰 없으면 fetchToken 호출
-  if (!token || token === 'undefined') {
-    token = await fetchToken(email);
+  if (!isNoAuth) {
+    if (email) {
+      try {
+        token = await fetchToken(email);
+      } catch (err) {
+        console.error('요청 인터셉터에서 토큰 재발급 실패:', err);
+        localStorage.removeItem('token');
+        localStorage.removeItem('email');
+        window.location.href = '/onboarding';
+        throw err;
+      }
+    } else {
+      throw new Error('토큰이 없습니다. 온보딩을 먼저 완료해주세요.');
+    }
+
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
-  config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
