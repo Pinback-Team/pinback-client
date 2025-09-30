@@ -4,9 +4,18 @@
   "version": "0.1.0",
   "action": { "default_popup": "popup.html" },
   "icons": {
-    "128": "icon.png"
+    "128": "icon.png",
+    "256": "icon.png",
+    "512": "icon.png"
   },
-  "permissions": ["activeTab", "tabs", "storage", "bookmarks", "identity","identity.email"],
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "bookmarks",
+    "identity",
+    "identity.email"
+  ],
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
