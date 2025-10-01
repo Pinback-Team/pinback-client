@@ -77,12 +77,6 @@ export default function CardEditModal({
   const handleSwitchChange = (checked: boolean) => {
     setIsRemindOn(checked);
   };
-  function getKSTISOString() {
-    const now = new Date();
-    const offset = now.getTimezoneOffset() * 60000;
-    const kst = new Date(now.getTime() - offset);
-    return kst.toISOString().slice(0, 19);
-  }
 
   function getKSTISOString() {
     const now = new Date();
