@@ -55,7 +55,18 @@ const Remind = () => {
     containerRef,
   } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
 
-  const articlesToDisplay = data?.pages.flatMap((page) => page.articles) ?? [];
+  // const articlesToDisplay = data?.pages.flatMap((page) => page.articles) ?? [];
+
+  const articlesToDisplay =
+    data?.pages
+      .flatMap((page) => page.articles)
+      .filter((article) => {
+        const now = new Date().getTime();
+        const remindTime = new Date(article.remindAt).getTime();
+        const displayTimeLimit = 24 * 60 * 60 * 1000;
+
+        return remindTime > now && remindTime <= now + displayTimeLimit;
+      }) ?? [];
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
