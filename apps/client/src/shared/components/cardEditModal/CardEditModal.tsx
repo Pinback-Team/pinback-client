@@ -19,7 +19,7 @@ import {
 } from '@shared/apis/queries';
 import { usePageMeta } from '@shared/hooks/usePageMeta';
 import { ArticleDetailResponse, EditArticleRequest } from '@shared/types/api';
-import { buildUtcIso } from '@shared/utils/datetime';
+import { combineDateTime } from '@shared/utils/datetime';
 import { updateDate, updateTime } from '@shared/utils/formatDateTime';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -84,6 +84,13 @@ export default function CardEditModal({
     return kst.toISOString().slice(0, 19);
   }
 
+  function getKSTISOString() {
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000; // UTC 기준 오프셋 (분 단위)
+    const kst = new Date(now.getTime() - offset); // UTC → KST 보정
+    return kst.toISOString().slice(0, 19); // 밀리초, Z 제거
+  }
+
   const saveData = () => {
     if (!prevData?.id) {
       console.error('Article ID is missing, cannot save.');
@@ -92,7 +99,7 @@ export default function CardEditModal({
     }
 
     const remindTime =
-      isRemindOn && date && time ? buildUtcIso(date, time) : null;
+      isRemindOn && date && time ? combineDateTime(date, time) : null;
 
     const editArticleData: EditArticleRequest = {
       memo,

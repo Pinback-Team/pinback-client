@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Badge, PopupContainer } from '@pinback/design-system/ui';
 import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
 import { REMIND_MOCK_DATA } from './constants';
-import { useGetRemindArticles } from './apis/queries';
+import { useGetRemindArticles } from '@pages/remind/apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
@@ -17,12 +17,14 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 import FetchCard from './components/fetchCard/FetchCard';
+import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const formattedDate = useMemo(() => {
     return formatLocalDateTime();
@@ -34,12 +36,16 @@ const Remind = () => {
     useGetArticleDetail();
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
   const { mutate: deleteArticle } = useDeleteRemindArticle();
-  const { data, isPending } = useGetRemindArticles(
+  const { data, isPending, fetchNextPage, hasNextPage } = useGetRemindArticles(
     formattedDate,
-    activeBadge === 'read',
-    0,
-    10
+    activeBadge === 'read'
   );
+
+  const observerRef = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    root: scrollContainerRef,
+  });
 
   const {
     state: menu,
@@ -48,6 +54,8 @@ const Remind = () => {
     style,
     containerRef,
   } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
+
+  const articlesToDisplay = data?.pages.flatMap((page) => page.articles) ?? [];
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
@@ -73,7 +81,11 @@ const Remind = () => {
   };
 
   const EmptyStateComponent = () => {
-    if (data?.readArticleCount === 0 && data?.unreadArticleCount === 0) {
+    const firstPageData = data?.pages[0];
+    if (
+      firstPageData?.readArticleCount === 0 &&
+      firstPageData?.unreadArticleCount === 0
+    ) {
       return <NoRemindArticles />;
     }
 
@@ -85,27 +97,33 @@ const Remind = () => {
     return <div>Loading...</div>;
   }
 
+  const unreadArticleCount = data?.pages[0]?.unreadArticleCount || 0;
+  const readArticleCount = data?.pages[0]?.readArticleCount || 0;
+
   return (
     <div className="flex flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
       <p className="head3">리마인드</p>
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="안 읽음"
-          countNum={data?.unreadArticleCount || 0}
+          countNum={unreadArticleCount}
           onClick={() => handleBadgeClick('notRead')}
           isActive={activeBadge === 'notRead'}
         />
         <Badge
           text="읽음"
-          countNum={data?.readArticleCount || 0}
+          countNum={readArticleCount}
           onClick={() => handleBadgeClick('read')}
           isActive={activeBadge === 'read'}
         />
       </div>
 
-      {data?.articles && data.articles.length > 0 ? (
-        <div className="scrollbar-hide mt-[2.6rem] flex flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
-          {data.articles.map((article) => (
+      {articlesToDisplay.length > 0 ? (
+        <div
+          ref={scrollContainerRef}
+          className="scrollbar-hide mt-[2.6rem] flex flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth"
+        >
+          {articlesToDisplay.map((article) => (
             <FetchCard
               key={article.articleId}
               article={article}
@@ -132,6 +150,7 @@ const Remind = () => {
               }}
             />
           ))}
+          <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
         </div>
       ) : (
         <EmptyStateComponent />
@@ -192,6 +211,7 @@ const Remind = () => {
           />
           <div className="absolute inset-0 flex items-center justify-center p-4">
             <CardEditModal
+              key={articleDetail.id}
               onClose={() => setIsEditOpen(false)}
               prevData={articleDetail}
             />

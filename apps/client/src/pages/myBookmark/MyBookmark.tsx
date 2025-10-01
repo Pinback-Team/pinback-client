@@ -1,5 +1,5 @@
 import { Badge, PopupContainer } from '@pinback/design-system/ui';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   useGetBookmarkArticles,
   useGetBookmarkUnreadArticles,
@@ -20,12 +20,12 @@ import {
   usePutArticleReadStatus,
 } from '@shared/apis/queries';
 import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
-import FetchCard from './components/fetchCard/FetchCard';
+import FetchCard from '@pages/myBookmark/components/fetchCard/FetchCard';
+import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
   const [isEditOpen, setIsEditOpen] = useState(false);
-
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
@@ -34,15 +34,30 @@ const MyBookmark = () => {
   const category = searchParams.get('category');
   const categoryId = searchParams.get('id');
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
   const { mutate: deleteArticle } = useDeleteRemindArticle();
-  const { data: articles, isPending } = useGetBookmarkArticles(0, 20);
-  const { data: unreadArticles } = useGetBookmarkUnreadArticles(0, 20);
-  const { data: categoryArticles } = useGetCategoryBookmarkArticles(
+
+  const {
+    data: articlesData,
+    fetchNextPage: fetchNextArticles,
+    hasNextPage: hasNextArticles,
+  } = useGetBookmarkArticles();
+
+  const {
+    data: unreadArticlesData,
+    fetchNextPage: fetchNextUnreadArticles,
+    hasNextPage: hasNextUnreadArticles,
+  } = useGetBookmarkUnreadArticles();
+
+  const {
+    data: categoryArticlesData,
+    fetchNextPage: fetchNextCategoryArticles,
+    hasNextPage: hasNextCategoryArticles,
+  } = useGetCategoryBookmarkArticles(
     categoryId,
-    activeBadge === 'notRead' ? false : null,
-    0,
-    10
+    activeBadge === 'notRead' ? false : null
   );
 
   const { mutate: getArticleDetail, data: articleDetail } =
@@ -57,10 +72,28 @@ const MyBookmark = () => {
   } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
 
   const articlesToDisplay = category
-    ? categoryArticles?.articles
+    ? (categoryArticlesData?.pages.flatMap((page) => page.articles) ?? [])
     : activeBadge === 'all'
-      ? articles?.articles
-      : unreadArticles?.articles;
+      ? (articlesData?.pages.flatMap((page) => page.articles) ?? [])
+      : (unreadArticlesData?.pages.flatMap((page) => page.articles) ?? []);
+
+  const hasNextPage = category
+    ? hasNextCategoryArticles
+    : activeBadge === 'all'
+      ? hasNextArticles
+      : hasNextUnreadArticles;
+
+  const fetchNextPage = category
+    ? fetchNextCategoryArticles
+    : activeBadge === 'all'
+      ? fetchNextArticles
+      : fetchNextUnreadArticles;
+
+  const observerRef = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    root: scrollContainerRef,
+  });
 
   const handleDeleteArticle = (id: number) => {
     deleteArticle(id, {
@@ -90,18 +123,25 @@ const MyBookmark = () => {
   };
 
   const EmptyStateComponent = () => {
-    if (articles?.totalArticle === 0) {
-      return <NoArticles />;
+    if (articlesToDisplay.length === 0) {
+      const totalArticlesInAllView = articlesData?.pages[0]?.totalArticle;
+      if (totalArticlesInAllView === 0) {
+        return <NoArticles />;
+      }
+      return <NoUnreadArticles />;
     }
-    return <NoUnreadArticles />;
+    return null;
   };
 
-  // TODO: 로딩 상태 디자인 필요
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
+  const totalArticleCount =
+    (category
+      ? categoryArticlesData?.pages[0]?.totalArticle
+      : articlesData?.pages[0]?.totalArticle) ?? 0;
 
-  console.log(category);
+  const totalUnreadArticleCount =
+    (category
+      ? categoryArticlesData?.pages[0]?.totalUnreadArticle
+      : articlesData?.pages[0]?.totalUnreadArticle) ?? 0;
 
   return (
     <div className="flex h-screen flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
@@ -124,32 +164,27 @@ const MyBookmark = () => {
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="전체보기"
-          countNum={
-            category
-              ? categoryArticles?.totalArticle || 0
-              : articles?.totalArticle || 0
-          }
+          countNum={totalArticleCount}
           onClick={() => handleBadgeClick('all')}
           isActive={activeBadge === 'all'}
         />
         <Badge
           text="안 읽음"
-          countNum={
-            category
-              ? categoryArticles?.totalUnreadArticle || 0
-              : articles?.totalUnreadArticle || 0
-          }
+          countNum={totalUnreadArticleCount}
           onClick={() => handleBadgeClick('notRead')}
           isActive={activeBadge === 'notRead'}
         />
       </div>
 
-      {articlesToDisplay && articlesToDisplay.length > 0 ? (
-        <div className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth">
+      {articlesToDisplay.length > 0 ? (
+        <div
+          ref={scrollContainerRef}
+          className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap content-start gap-[1.6rem] overflow-y-auto scroll-smooth"
+        >
           {articlesToDisplay.map((article) => (
             <FetchCard
               key={article.articleId}
-              article={article} // article 객체를 통째로 넘겨줍니다.
+              article={article}
               onClick={() => {
                 window.open(article.url, '_blank');
                 updateToReadStatus(article.articleId, {
@@ -164,9 +199,7 @@ const MyBookmark = () => {
                     queryClient.invalidateQueries({
                       queryKey: ['categoryBookmarkArticles'],
                     });
-                    queryClient.invalidateQueries({
-                      queryKey: ['arcons'],
-                    });
+                    queryClient.invalidateQueries({ queryKey: ['arcons'] });
                   },
                   onError: (error) => {
                     console.error(error);
@@ -179,6 +212,7 @@ const MyBookmark = () => {
               }}
             />
           ))}
+          <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
         </div>
       ) : (
         <EmptyStateComponent />
@@ -203,7 +237,6 @@ const MyBookmark = () => {
         onClose={closeMenu}
       />
 
-      {/* 삭제 확인 모달 */}
       {isDeleteOpen && (
         <div className="fixed inset-0" aria-modal="true" role="dialog">
           <div
@@ -232,7 +265,6 @@ const MyBookmark = () => {
         </div>
       )}
 
-      {/* 편집 모달 */}
       {isEditOpen && articleDetail && (
         <div className="fixed inset-0 z-[1000]" aria-modal="true" role="dialog">
           <div
@@ -241,6 +273,7 @@ const MyBookmark = () => {
           />
           <div className="absolute inset-0 flex items-center justify-center p-4">
             <CardEditModal
+              key={articleDetail.id}
               onClose={() => setIsEditOpen(false)}
               prevData={articleDetail}
             />

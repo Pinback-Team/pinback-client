@@ -171,9 +171,9 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
   };
   function getKSTISOString() {
     const now = new Date();
-    const offset = now.getTimezoneOffset() * 60000;
-    const kst = new Date(now.getTime() - offset);
-    return kst.toISOString().slice(0, 19);
+    const offset = now.getTimezoneOffset() * 60000; // UTC 기준 오프셋 (분 단위)
+    const kst = new Date(now.getTime() - offset); // UTC → KST 보정
+    return kst.toISOString().slice(0, 19); // 밀리초, Z 제거
   }
   // 마지막! 저장하기 버튼 분기 (api 다르게 탐)
   const handleSave = async () => {
