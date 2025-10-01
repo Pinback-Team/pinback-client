@@ -1,8 +1,10 @@
+import { Icon } from '@/icons';
 import { cva } from 'class-variance-authority';
 export interface BadgeProps {
   text: string;
   countNum?: number;
   isActive: boolean;
+  leftIcon?: React.ReactNode;
   onClick?: () => void;
 }
 
@@ -33,18 +35,21 @@ const BadgeStyleVariants = cva(
   }
 );
 
-const Badge = ({ text, countNum, isActive, onClick }: BadgeProps) => {
+const Badge = ({ text, countNum, isActive, onClick, leftIcon }: BadgeProps) => {
   return (
     <div
       className="flex cursor-pointer items-center justify-center gap-[0.8rem]"
       onClick={onClick}
     >
+      {leftIcon}
       <span className={BadgeTxtStyleVariants({ active: isActive })}>
         {text}
       </span>
-      <span className={BadgeStyleVariants({ active: isActive })}>
-        {countNum}
-      </span>
+      {countNum && (
+        <span className={BadgeStyleVariants({ active: isActive })}>
+          {countNum}
+        </span>
+      )}
     </div>
   );
 };
