@@ -42,9 +42,12 @@ const Badge = ({ text, countNum, isActive, onClick }: BadgeProps) => {
       <span className={BadgeTxtStyleVariants({ active: isActive })}>
         {text}
       </span>
-      <span className={BadgeStyleVariants({ active: isActive })}>
-        {countNum}
-      </span>
+
+      {typeof countNum === 'number' && countNum >= 0 && (
+        <span className={BadgeStyleVariants({ active: isActive })}>
+          {countNum}
+        </span>
+      )}
     </div>
   );
 };
