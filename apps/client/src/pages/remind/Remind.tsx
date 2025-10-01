@@ -18,7 +18,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 import FetchCard from './components/fetchCard/FetchCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
-import { Icon } from '@pinback/design-system/icons';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -122,22 +121,12 @@ const Remind = () => {
           // countNum={unreadArticleCount}
           onClick={() => handleBadgeClick('notRead')}
           isActive={activeBadge === 'notRead'}
-          leftIcon={
-            <Icon
-              name="ic_clock_disable"
-              width={20}
-              height={20}
-              color="gray600"
-              fill="gray600"
-            />
-          }
         />
         <Badge
           text="읽음"
           // countNum={readArticleCount}
           onClick={() => handleBadgeClick('read')}
           isActive={activeBadge === 'read'}
-          leftIcon={<Icon name="ic_clock_active" width={20} height={20} />}
         />
       </div>
 
