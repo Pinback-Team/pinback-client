@@ -28,8 +28,7 @@ const RemindCard = ({
   const [displayTime, setDisplayTime] = useState('');
 
   useEffect(() => {
-    // const endTime = new Date(timeRemaining).getTime() + 24 * 60 * 60 * 1000;
-    const endTime = new Date(timeRemaining).getTime();
+    const endTime = new Date(timeRemaining).getTime() + 24 * 60 * 60 * 1000;
 
     const updateRemainingTime = () => {
       const now = new Date().getTime();
