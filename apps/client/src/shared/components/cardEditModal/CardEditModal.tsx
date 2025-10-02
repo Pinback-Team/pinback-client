@@ -244,7 +244,12 @@ export default function CardEditModal({
           {timeError && <p className="body3-r text-error">{timeError}</p>}
         </section>
         {/* TODO: onClick 추후  저장 api 연결후 실패/성공 연결 */}
-        <Button onClick={saveData}>저장하기</Button>
+        <Button
+          onClick={saveData}
+          disabled={!!dateError || !!timeError || isPopError}
+        >
+          저장하기
+        </Button>
       </div>
       {toastIsOpen && (
         <div className="absolute bottom-[2.4rem] left-1/2 -translate-x-1/2">
