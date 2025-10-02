@@ -12,8 +12,8 @@ export default function InfoCard() {
 
       <p className="caption2-m text-font-gray-3">
         현재 제목과 이미지 자동 불러오기 기능은 개선 중이에요. 저장한 콘텐츠를
-        쉽게 구분하 려면, 메모에 직접 제목이나 키워드를 기록해 두면 더 편리해요
-        <span aria-hidden>📝</span>.
+        쉽게 구분하려면, 메모에 직접 제목이나 키워드를 기록해 두면 더 편리해요.
+        <span aria-hidden>📝</span>
       </p>
     </div>
   );
