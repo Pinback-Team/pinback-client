@@ -18,6 +18,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 import FetchCard from './components/fetchCard/FetchCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
+import Tooltip from '@shared/components/tooltip/Tooltip';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -129,6 +130,7 @@ const Remind = () => {
           isActive={activeBadge === 'read'}
         />
       </div>
+      <Tooltip />
 
       {articlesToDisplay.length > 0 ? (
         <div
