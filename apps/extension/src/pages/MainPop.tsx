@@ -197,45 +197,59 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
     };
 
     if (type === 'add') {
-      save({
-        url,
-        title,
-        description,
-        imgUrl,
-        memo,
-        isRemindOn,
-        selectedCategory: selected,
-        date: isRemindOn ? currentDate : date,
-        time: isRemindOn ? currentTime : time,
-      });
-      postArticle({
-        url,
-        categoryId: saveData.selectedCategory
-          ? parseInt(saveData.selectedCategory)
-          : 0,
-        memo: saveData.memo,
-        remindTime: isRemindOn
-          ? combineDateTime(saveData.date ?? '', saveData.time ?? '')
-          : null,
-      });
-    } else {
-      setToastIsOpen(true);
-      putArticle({
-        articleId: isArticleId,
-        data: {
+      postArticle(
+        {
+          url,
           categoryId: saveData.selectedCategory
             ? parseInt(saveData.selectedCategory)
             : 0,
           memo: saveData.memo,
-          now: getKSTISOString(),
           remindTime: isRemindOn
             ? combineDateTime(saveData.date ?? '', saveData.time ?? '')
             : null,
         },
-      });
-      setTimeout(() => {
-        window.close();
-      }, 1000);
+        {
+          onSuccess: () => {
+            save({
+              url,
+              title,
+              description,
+              imgUrl,
+              memo,
+              isRemindOn,
+              selectedCategory: selected,
+              date: isRemindOn ? currentDate : date,
+              time: isRemindOn ? currentTime : time,
+            });
+            window.close();
+          },
+        }
+      );
+    } else {
+      setToastIsOpen(true);
+      putArticle(
+        {
+          articleId: isArticleId,
+          data: {
+            categoryId: saveData.selectedCategory
+              ? parseInt(saveData.selectedCategory)
+              : 0,
+            memo: saveData.memo,
+            now: getKSTISOString(),
+            remindTime: isRemindOn
+              ? combineDateTime(saveData.date ?? '', saveData.time ?? '')
+              : null,
+          },
+        },
+        {
+          onSuccess: () => {
+            window.close();
+          },
+        }
+      );
+      // setTimeout(() => {
+      //   window.close();
+      // }, 1000);
     }
   };
 
