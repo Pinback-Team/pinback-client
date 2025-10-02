@@ -18,6 +18,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 import FetchCard from './components/fetchCard/FetchCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
+import Tooltip from '@shared/components/tooltip/Tooltip';
 
 const Remind = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -55,7 +56,17 @@ const Remind = () => {
     containerRef,
   } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
 
-  const articlesToDisplay = data?.pages.flatMap((page) => page.articles) ?? [];
+  const articlesToDisplay =
+    data?.pages
+      .flatMap((page) => page.articles)
+      .filter((article) => {
+        const now = new Date().getTime();
+        const remindTime = new Date(article.remindAt).getTime();
+        // 만료 시간 = 리마인드 시간 + 24시간
+        const expirationTime = remindTime + 24 * 60 * 60 * 1000;
+
+        return now >= remindTime && now < expirationTime;
+      }) ?? [];
 
   const getItemTitle = (id: number | null) =>
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
@@ -97,8 +108,9 @@ const Remind = () => {
     return <div>Loading...</div>;
   }
 
-  const unreadArticleCount = data?.pages[0]?.unreadArticleCount || 0;
-  const readArticleCount = data?.pages[0]?.readArticleCount || 0;
+  // TODO: 임시
+  // const unreadArticleCount = data?.pages[0]?.unreadArticleCount || 0;
+  // const readArticleCount = data?.pages[0]?.readArticleCount || 0;
 
   return (
     <div className="flex flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
@@ -106,17 +118,18 @@ const Remind = () => {
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="안 읽음"
-          countNum={unreadArticleCount}
+          // countNum={unreadArticleCount}
           onClick={() => handleBadgeClick('notRead')}
           isActive={activeBadge === 'notRead'}
         />
         <Badge
           text="읽음"
-          countNum={readArticleCount}
+          // countNum={readArticleCount}
           onClick={() => handleBadgeClick('read')}
           isActive={activeBadge === 'read'}
         />
       </div>
+      <Tooltip />
 
       {articlesToDisplay.length > 0 ? (
         <div

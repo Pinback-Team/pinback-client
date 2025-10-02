@@ -44,7 +44,6 @@ apiRequest.interceptors.request.use(async (config) => {
       } catch (err) {
         console.error('요청 인터셉터에서 토큰 재발급 실패:', err);
         localStorage.removeItem('token');
-        localStorage.removeItem('email');
         window.location.href = '/onboarding';
         throw err;
       }

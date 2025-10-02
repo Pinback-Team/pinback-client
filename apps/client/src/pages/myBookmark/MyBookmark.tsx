@@ -22,6 +22,7 @@ import {
 import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
 import FetchCard from '@pages/myBookmark/components/fetchCard/FetchCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
+import Tooltip from '@shared/components/tooltip/Tooltip';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
@@ -175,6 +176,7 @@ const MyBookmark = () => {
           isActive={activeBadge === 'notRead'}
         />
       </div>
+      <Tooltip />
 
       {articlesToDisplay.length > 0 ? (
         <div
