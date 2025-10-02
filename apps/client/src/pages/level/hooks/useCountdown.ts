@@ -5,9 +5,10 @@ export function useCountdown(targetTime: string) {
 
   useEffect(() => {
     const target = new Date(targetTime).getTime();
+    const DAY = 24 * 60 * 60 * 1000;
 
     const interval = setInterval(() => {
-      const now = new Date().getTime();
+      const now = Date.now();
       const diff = target - now;
 
       if (diff <= 0) {
@@ -16,12 +17,16 @@ export function useCountdown(targetTime: string) {
         return;
       }
 
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      const displayDiff = diff > DAY ? diff % DAY : diff;
 
-      const format = (n: number) => String(n).padStart(2, '0');
-      setTimeLeft(`${format(hours)}:${format(minutes)}:${format(seconds)}`);
+      const hours = Math.floor(displayDiff / (1000 * 60 * 60));
+      const minutes = Math.floor(
+        (displayDiff % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      const seconds = Math.floor((displayDiff % (1000 * 60)) / 1000);
+
+      const pad = (n: number) => String(n).padStart(2, '0');
+      setTimeLeft(`${pad(hours)}:${pad(minutes)}:${pad(seconds)}`);
     }, 1000);
 
     return () => clearInterval(interval);
