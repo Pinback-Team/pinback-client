@@ -359,7 +359,11 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
             ) : null}
           </div>
 
-          <Button size="medium" onClick={handleSave}>
+          <Button
+            size="medium"
+            onClick={handleSave}
+            disabled={isPopError || !!dateError || !!timeError}
+          >
             저장
           </Button>
         </div>
