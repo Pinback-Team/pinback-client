@@ -42,8 +42,6 @@ messaging.onBackgroundMessage((payload) => {
     icon: '/FCM-IMG.png',
     data: { url },
     requireInteraction: true,
-    renotify: true,
-    tag: 'pinback-push',
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
