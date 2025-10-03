@@ -35,15 +35,15 @@ messaging.onBackgroundMessage((payload) => {
   console.log('Received background message ', payload);
 
   const url = payload.data?.url || 'https://www.pinback.today';
-  const notificationTitle = 'pinback';
+  const notificationTitle = payload.notification?.title || 'pinback';
 
   const notificationOptions = {
-    body: '저장한 북마크를 확인해 보세요!',
+    body: payload.notification?.body || '저장한 북마크를 확인해 보세요!',
     icon: payload.notification?.image || '/FCM-IMG.png',
     image: payload.notification?.image || '/FCM-IMG.png',
     data: { url },
     requireInteraction: true,
-    tag: Date.now().toString(),
+    tag: `pinback-${Date.now()}`, // 빈 문자열이 아닌 고유한 태그
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
