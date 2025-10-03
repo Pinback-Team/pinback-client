@@ -33,10 +33,15 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log('Received background message ', payload);
 
-  const notificationTitle = payload.notification?.title ?? 'pinback';
+  const url = payload.data?.url || 'https://www.pinback.today';
+  const notificationTitle = payload.notification?.title || 'pinback';
+
   const notificationOptions = {
-    body: payload.data?.body ?? '저장한 북마크를 확인해 보세요!',
-    icon: payload.data?.icon ?? '/FCM-IMG.png',
+    body: payload.notification?.body || '저장한 북마크를 확인해 보세요!',
+    icon: payload.notification?.image || '/FCM-IMG.png',
+    image: payload.notification?.image || '/FCM-IMG.png',
+    data: { url },
   };
+
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
