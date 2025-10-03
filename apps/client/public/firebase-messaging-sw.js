@@ -35,8 +35,8 @@ messaging.onBackgroundMessage((payload) => {
   console.log('Received background message ', payload);
 
   const url = payload.data?.url || 'https://www.pinback.today';
+  const notificationTitle = 'pinback';
 
-  const notificationTitle = 'pinback'; // 무조건 기본값
   const notificationOptions = {
     body: '저장한 북마크를 확인해 보세요!',
     icon: '/FCM-IMG.png',
