@@ -40,6 +40,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationOptions = {
     body: '저장한 북마크를 확인해 보세요!',
     icon: '/FCM-IMG.png',
+    image: '/FCM-IMG.png',
     data: { url },
     requireInteraction: true,
   };
@@ -50,7 +51,7 @@ messaging.onBackgroundMessage((payload) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
-  const url = event.notification.data?.url || 'https://www.pinback.today';
+  const url = event.notification.data?.url || 'https://pinback.today';
 
   event.waitUntil(
     clients
