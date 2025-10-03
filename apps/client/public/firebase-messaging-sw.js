@@ -18,12 +18,11 @@ importScripts(
   'https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js'
 );
 
-self.addEventListener('install', () => {
+self.addEventListener('install', function () {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', () => {
-  clients.claim();
+self.addEventListener('activate', function () {
   console.log('실행중..');
 });
 
@@ -34,38 +33,10 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log('Received background message ', payload);
 
-  const url = payload.data?.url || 'https://www.pinback.today';
-  const notificationTitle = payload.notification?.title || 'pinback';
-
+  const notificationTitle = payload.notification?.title ?? 'pinback';
   const notificationOptions = {
-    body: payload.notification?.body || '저장한 북마크를 확인해 보세요!',
-    icon: payload.notification?.image || '/FCM-IMG.png',
-    image: payload.notification?.image || '/FCM-IMG.png',
-    data: { url },
-    requireInteraction: true,
-    tag: `pinback-${Date.now()}`, // 빈 문자열이 아닌 고유한 태그
+    body: payload.data?.body ?? '저장한 북마크를 확인해 보세요!',
+    icon: payload.data?.icon ?? '/FCM-IMG.png',
   };
-
   self.registration.showNotification(notificationTitle, notificationOptions);
-});
-
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-
-  const url = event.notification.data?.url || 'https://pinback.today';
-
-  event.waitUntil(
-    clients
-      .matchAll({ type: 'window', includeUncontrolled: true })
-      .then((clientList) => {
-        for (const client of clientList) {
-          if (client.url.includes('pinback.today') && 'focus' in client) {
-            return client.focus();
-          }
-        }
-        if (clients.openWindow) {
-          return clients.openWindow(url);
-        }
-      })
-  );
 });
