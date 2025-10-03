@@ -39,10 +39,11 @@ messaging.onBackgroundMessage((payload) => {
 
   const notificationOptions = {
     body: '저장한 북마크를 확인해 보세요!',
-    icon: '/FCM-IMG.png',
-    image: '/FCM-IMG.png',
+    icon: payload.notification?.image || '/FCM-IMG.png',
+    image: payload.notification?.image || '/FCM-IMG.png',
     data: { url },
     requireInteraction: true,
+    tag: Date.now().toString(),
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
@@ -51,7 +52,7 @@ messaging.onBackgroundMessage((payload) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
-  const url = event.notification.data?.url || 'https://pinback.today';
+  const url = event.notification.data?.url || 'https://www.pinback.today';
 
   event.waitUntil(
     clients
