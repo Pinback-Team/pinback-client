@@ -37,6 +37,30 @@ messaging.onBackgroundMessage((payload) => {
   const notificationOptions = {
     body: payload.data?.body ?? '저장한 북마크를 확인해 보세요!',
     icon: payload.data?.icon ?? '/FCM-IMG.png',
+    data: {
+      url: 'https://www.pinback.today',
+    },
+    requireInteraction: true,
+    renotify: true,
   };
   self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  event.waitUntil(
+    clients
+      .matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientList) => {
+        for (const client of clientList) {
+          if (client.url.includes('pinback.today') && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        if (clients.openWindow) {
+          return clients.openWindow('https://www.pinback.today');
+        }
+      })
+  );
 });
