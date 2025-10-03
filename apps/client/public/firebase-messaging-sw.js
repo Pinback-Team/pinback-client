@@ -18,11 +18,11 @@ importScripts(
   'https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js'
 );
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', () => {
   clients.claim();
   console.log('실행중..');
 });
@@ -43,6 +43,7 @@ messaging.onBackgroundMessage((payload) => {
     data: { url },
     requireInteraction: true,
     renotify: true,
+    tag: 'pinback-push',
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
