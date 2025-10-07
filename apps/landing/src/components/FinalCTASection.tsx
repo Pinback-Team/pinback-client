@@ -23,7 +23,8 @@ const FinalCTASection = () => {
           <Button
             variant="primary"
             onClick={() => {
-              window.location.href = 'https://www.pinback.today/onboarding';
+              window.location.href =
+                'https://chromewebstore.google.com/detail/pinback-extension/engpidnjjbemfjmpcplchpfhokkgnbec?hl=ko&utm_source=ext_sidebar';
             }}
           >
             지금 시작하기
