@@ -19,11 +19,11 @@ const FinalCTASection = () => {
           도토리를 모아볼까요?
         </p>
         <div>
-          {/* TODO : 랜딩페이디 크롬스토어 설치페이지로 링크 추후 수정 필요! */}
           <Button
             variant="primary"
             onClick={() => {
-              window.location.href = 'https://www.pinback.today/onboarding';
+              window.location.href =
+                'https://chromewebstore.google.com/detail/pinback-extension/engpidnjjbemfjmpcplchpfhokkgnbec?hl=ko&utm_source=ext_sidebar';
             }}
           >
             지금 시작하기
