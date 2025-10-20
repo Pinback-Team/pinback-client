@@ -52,6 +52,10 @@ jobs:
           onlyChanged: true
           autoAcceptChanges: true
           exitOnceUploaded: true
+        env:
+          CHROMATIC_TEMP_DIR: './.chromatic-tmp'
+      - name: Clean storybook cache
+        run: rm -rf packages/design-system/node_modules/.cache/storybook
 
       - name: Comment PR on Success
         if: success() && github.event_name == 'pull_request'

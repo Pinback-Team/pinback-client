@@ -45,3 +45,51 @@ messaging.onBackgroundMessage((payload) => {
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+self.addEventListener('notificationclick', (event) => {
+  console.log('🔔 알림 클릭됨:', event);
+
+  const targetUrl = event.notification.data?.url || 'https://www.pinback.today';
+
+  fetch(
+    `https://www.google-analytics.com/mp/collect?measurement_id=G-847ZNSCC3J&api_secret=1hei57fPTKyGX5Cw73rwgA`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        client_id: 'serviceworker',
+        events: [
+          {
+            name: 'reminder_push_click',
+            params: {
+              category: '리마인드 알림',
+              label: '리마인드 푸시 알림 클릭 (대시보드 이동)',
+            },
+          },
+        ],
+      }),
+    }
+  ).catch((err) => console.warn('GA 이벤트 전송 실패', err));
+
+  event.waitUntil(
+    (async () => {
+      const clientList = await clients.matchAll({
+        type: 'window',
+        includeUncontrolled: true,
+      });
+
+      for (const client of clientList) {
+        if (client.url === targetUrl && 'focus' in client) {
+          client.focus();
+          event.notification.close();
+          return;
+        }
+      }
+
+      if (clients.openWindow) {
+        const newClient = await clients.openWindow(targetUrl);
+        event.notification.close();
+        return newClient;
+      }
+    })()
+  );
+});
