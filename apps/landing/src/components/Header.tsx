@@ -3,7 +3,7 @@ import { Button, sendGAEvent } from '@pinback/design-system/ui';
 
 const Header = () => {
   const handleHeaderInstallClick = () => {
-    sendGAEvent('랜딩페이지', '랜딩페이지', '헤더 설치 버튼 클릭');
+    sendGAEvent('landing', 'landing', '3-landing-headerBtn');
     window.location.href =
       'https://chromewebstore.google.com/detail/pinback-extension/engpidnjjbemfjmpcplchpfhokkgnbec?hl=ko&utm_source=ext_sidebar';
   };

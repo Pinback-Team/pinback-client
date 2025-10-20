@@ -24,7 +24,7 @@ const App = () => {
   };
 
   const handleDuplicateRightClick = () => {
-    sendGAEvent('익스텐션', '익스텐션', '대시보드 가기 버튼 클릭');
+    sendGAEvent('extension', 'extension', '1-extension-dashBoard-clickBtn');
     chrome.tabs.create({ url: 'https://www.pinback.today/' });
   };
 

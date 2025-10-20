@@ -2,34 +2,63 @@ export {};
 
 declare global {
   interface Window {
-    gtag?: (...args: unknown[]) => void;
+    gtag?: (...args: any[]) => void;
+    __gtagInitialized?: boolean;
   }
 }
 
 /**
- * @param action 이벤트 이름임
- * @param category 이벤트 카테고리
- * @param label 이벤트 라벨
- * @param value 이벤트 값
+ * gtag 로드 상태를 감지
  */
-export const sendGAEvent = (
+const ensureGtagReady = async (maxRetry = 10, delay = 300) => {
+  for (let i = 0; i < maxRetry; i++) {
+    if (typeof window.gtag === 'function') return true;
+    await new Promise((res) => setTimeout(res, delay));
+  }
+  console.warn('⚠️ gtag not loaded after retries');
+  return false;
+};
+
+/**
+ * GA 이벤트 전송
+ */
+export const sendGAEvent = async (
   action: string,
   category?: string,
   label?: string,
   value?: number
 ) => {
-  if (typeof window === 'undefined' || !window.gtag) return;
+  const ready = await ensureGtagReady();
+  if (!ready || !window.gtag) return;
+
+  if (window.__gtagInitialized) return;
+  window.__gtagInitialized = true;
+  setTimeout(() => (window.__gtagInitialized = false), 200); // 0.2초 뒤 리셋
+
   window.gtag('event', action, {
     event_category: category,
     event_label: label,
     value,
   });
+
+  console.log(`✅ GA 이벤트 전송됨: ${action}`);
 };
 
-export const trackPageView = (title?: string) => {
-  if (!window.gtag) return;
-  window.gtag('event', '화면 접근', {
+/**
+ * 페이지뷰 트래킹
+ */
+export const trackPageView = async (title?: string) => {
+  const ready = await ensureGtagReady();
+  if (!ready || !window.gtag) return;
+
+  if (window.__gtagInitialized) return;
+  window.__gtagInitialized = true;
+  setTimeout(() => (window.__gtagInitialized = false), 200);
+
+  window.gtag('event', 'page_view', {
     page_title: title ?? document.title,
     page_path: window.location.pathname,
   });
+
+  console.log('📍 페이지뷰 트래킹:', window.location.pathname);
 };

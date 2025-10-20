@@ -3,7 +3,7 @@ import Chippiface from '../assets/5_chippiface.json';
 import { sendGAEvent, Button } from '@pinback/design-system/ui';
 const FinalCTASection = () => {
   const handleInstallClick = () => {
-    sendGAEvent('랜딩페이지', '랜딩페이지', '하단 설치 버튼 클릭');
+    sendGAEvent('landing', 'landing', '2-landing-bottomBtn');
     window.location.href =
       'https://chromewebstore.google.com/detail/pinback-extension/engpidnjjbemfjmpcplchpfhokkgnbec?hl=ko&utm_source=ext_sidebar';
   };
