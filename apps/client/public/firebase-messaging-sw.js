@@ -52,7 +52,7 @@ self.addEventListener('notificationclick', (event) => {
   const targetUrl = event.notification.data?.url || 'https://www.pinback.today';
 
   fetch(
-    `https://www.google-analytics.com/mp/collect?measurement_id=G-847ZNSCC3J&api_secret=YOUR_API_SECRET`,
+    `https://www.google-analytics.com/mp/collect?measurement_id=G-847ZNSCC3J&api_secret=1hei57fPTKyGX5Cw73rwgA`,
     {
       method: 'POST',
       body: JSON.stringify({
