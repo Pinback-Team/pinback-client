@@ -16,5 +16,4 @@ export type { WheelPickerOption } from './wheelPicker/WheelPicker';
 export { default as Popup } from './popup/Popup';
 export { default as PopupContainer } from './popup/PopupContainer';
 export { default as InfoBox } from './infobox/InfoBox';
-export { validateDate, validateTime } from './dateTime/utils/ValidateData';
-export { sendGAEvent, trackPageView } from './gtag/utils/gtag';
+export {validateDate, validateTime} from './dateTime/utils/ValidateData';
