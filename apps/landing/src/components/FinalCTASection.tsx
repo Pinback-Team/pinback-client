@@ -1,13 +1,8 @@
 import Lottie from 'lottie-react';
 import Chippiface from '../assets/5_chippiface.json';
-import { sendGAEvent, Button } from '@pinback/design-system/ui';
-const FinalCTASection = () => {
-  const handleInstallClick = () => {
-    sendGAEvent('랜딩페이지', '랜딩페이지', '하단 설치 버튼 클릭');
-    window.location.href =
-      'https://chromewebstore.google.com/detail/pinback-extension/engpidnjjbemfjmpcplchpfhokkgnbec?hl=ko&utm_source=ext_sidebar';
-  };
+import { Button } from '@pinback/design-system/ui';
 
+const FinalCTASection = () => {
   return (
     <section className="bg-white-bg flex h-dvh w-full flex-col items-center justify-center gap-[6.4rem] overflow-hidden px-[17.2rem] text-center">
       <Lottie
@@ -24,7 +19,13 @@ const FinalCTASection = () => {
           도토리를 모아볼까요?
         </p>
         <div>
-          <Button variant="primary" onClick={handleInstallClick}>
+          <Button
+            variant="primary"
+            onClick={() => {
+              window.location.href =
+                'https://chromewebstore.google.com/detail/pinback-extension/engpidnjjbemfjmpcplchpfhokkgnbec?hl=ko&utm_source=ext_sidebar';
+            }}
+          >
             지금 시작하기
           </Button>
         </div>
