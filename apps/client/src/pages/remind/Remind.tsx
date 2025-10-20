@@ -1,5 +1,9 @@
-import { useMemo, useRef, useState } from 'react';
-import { Badge, PopupContainer } from '@pinback/design-system/ui';
+import { useMemo, useRef, useState, useEffect } from 'react';
+import {
+  Badge,
+  PopupContainer,
+  trackPageView,
+} from '@pinback/design-system/ui';
 import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
@@ -21,6 +25,10 @@ import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 import Tooltip from '@shared/components/tooltip/Tooltip';
 
 const Remind = () => {
+  useEffect(() => {
+    trackPageView('대시보드 페이지 방문');
+  }, []);
+
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
