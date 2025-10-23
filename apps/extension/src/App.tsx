@@ -4,7 +4,6 @@ import MainPop from './pages/MainPop';
 import { useState, useEffect } from 'react';
 import { useGetArticleSaved } from '@apis/query/queries';
 import { usePageMeta } from './hooks/usePageMeta';
-import { sendGAEvent } from '@pinback/design-system/ui';
 const App = () => {
   const { url } = usePageMeta();
   const { data: isSaved } = useGetArticleSaved(url);
@@ -24,7 +23,6 @@ const App = () => {
   };
 
   const handleDuplicateRightClick = () => {
-    sendGAEvent('extension', 'extension', '1-extension-dashBoard-clickBtn');
     chrome.tabs.create({ url: 'https://www.pinback.today/' });
   };
 
