@@ -221,7 +221,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
               date: isRemindOn ? currentDate : date,
               time: isRemindOn ? currentTime : time,
             });
-            window.close();
+            //window.close();
           },
         }
       );
@@ -247,9 +247,6 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
           },
         }
       );
-      // setTimeout(() => {
-      //   window.close();
-      // }, 1000);
     }
   };
 

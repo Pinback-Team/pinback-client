@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "PinBack Extension",
-  "version": "0.1.0",
+  "name": "Pinback - 북마크 관리와 리마인드 도구",
+  "version": "1.0.1",
   "action": { "default_popup": "popup.html" },
   "icons": {
     "128": "icon.png",
