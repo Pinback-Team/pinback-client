@@ -1,5 +1,6 @@
-import { Outlet,useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from '@shared/components/sidebar/Sidebar';
+import { Suspense } from 'react';
 
 const Layout = () => {
   const location = useLocation();
@@ -8,9 +9,11 @@ const Layout = () => {
   return (
     <>
       <div className="flex h-screen">
-         {!isOnboarding && <Sidebar />}
+        {!isOnboarding && <Sidebar />}
         <main className="bg-gray-bg flex-1 overflow-y-auto">
-          <Outlet />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </>

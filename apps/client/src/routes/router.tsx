@@ -1,11 +1,13 @@
-import Category from '@pages/category/Category';
-import Level from '@pages/level/Level';
-import MyBookmark from '@pages/myBookmark/MyBookmark';
-import OnBoarding from '@pages/onBoarding/OnBoarding';
 import Remind from '@pages/remind/Remind';
 import { ROUTES_CONFIG } from '@routes/routesConfig';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from 'src/layout/Layout';
+import { lazy } from 'react';
+
+const MyBookmark = lazy(() => import('@pages/myBookmark/MyBookmark'));
+const Category = lazy(() => import('@pages/category/Category'));
+const Level = lazy(() => import('@pages/level/Level'));
+const OnBoarding = lazy(() => import('@pages/onBoarding/OnBoarding'));
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +15,7 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: ROUTES_CONFIG.remind.path,
+        index: true,
         element: <Remind />,
       },
       {
