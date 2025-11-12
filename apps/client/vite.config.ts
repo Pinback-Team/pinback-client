@@ -18,8 +18,27 @@ export default defineConfig({
       symbolId: 'icon-[name]',
       inject: 'body-last',
     }),
-    visualizer({ filename: 'bundle-analysis.html', open: true }),
+    visualizer({ filename: 'dist/bundle-analysis.html', open: true }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id: string) => {
+          if (
+            id.includes('node_modules/react/') ||
+            id.includes('node_modules/react-dom/') ||
+            id.includes('node_modules/react-router-dom/')
+          ) {
+            return '@react-vendor';
+          }
+          if (id.includes('node_modules/framer-motion/')) {
+            return '@framer-motion-vendor';
+          }
+        },
+      },
+    },
+  },
+
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
