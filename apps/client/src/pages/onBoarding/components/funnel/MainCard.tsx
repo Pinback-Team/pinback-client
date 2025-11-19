@@ -5,16 +5,19 @@ import StoryStep from './step/StoryStep';
 import AlarmStep from './step/AlarmStep';
 import MacStep from './step/MacStep';
 import FinalStep from './step/FinalStep';
+import SocialLoginStep from './step/SocialLoginStep';
 import { cva } from 'class-variance-authority';
 import { usePostSignUp } from '@shared/apis/queries';
-const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
-import { AlarmsType } from '@constants/alarms';
-import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { firebaseConfig } from '../../../../firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
 import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
-import { useLocation } from 'react-router-dom';
+import { AlarmsType } from '@constants/alarms';
+import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
+
+const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
+
 const variants = {
   slideIn: (direction: number) => ({
     x: direction > 0 ? 200 : -200,
@@ -26,6 +29,7 @@ const variants = {
     opacity: 0,
   }),
 };
+
 const CardStyle = cva(
   'bg-white-bg flex h-[54.8rem] w-[63.2rem] flex-col items-center justify-between rounded-[2.4rem] pt-[3.2rem]',
   {
@@ -38,17 +42,18 @@ const CardStyle = cva(
     defaultVariants: { overflow: false },
   }
 );
+
 const MainCard = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(0);
   const [alarmSelected, setAlarmSelected] = useState<1 | 2 | 3>(1);
   const [isMac, setIsMac] = useState(false);
-  // api 구간
+
   const { mutate: postSignData } = usePostSignUp();
 
-  // 익스텐션에서부터 이메일 받아오는 구간!
   const [userEmail, setUserEmail] = useState('');
-  const location = useLocation();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -57,9 +62,12 @@ const MainCard = () => {
       setUserEmail(emailParam);
       localStorage.setItem('email', emailParam);
     }
+    const stepParam = params.get('step');
+    if (stepParam && !isNaN(Number(stepParam))) {
+      setStep(Number(stepParam));
+    }
   }, [location.search]);
 
-  // FCM 구간
   const [fcmToken, setFcmToken] = useState<string | null>(null);
   const app = initializeApp(firebaseConfig);
   const messaging = getMessaging(app);
@@ -77,15 +85,9 @@ const MainCard = () => {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
       });
 
-      if (forFcmtoken) {
-        return forFcmtoken;
-      } else {
-        alert('토큰 생성 실패. 다시 시도해주세요.');
-        return null;
-      }
+      return forFcmtoken ?? null;
     } catch (error) {
-      console.error('FCM 토큰 받는 도중 오류:', error);
-      alert('알림 설정 중 오류가 발생했습니다. 다시 시도해주세요.');
+      console.error('FCM 토큰 오류:', error);
       return null;
     }
   };
@@ -101,8 +103,6 @@ const MainCard = () => {
       if (token) {
         setFcmToken(token);
         localStorage.setItem('FcmToken', token);
-      } else {
-        alert('푸시 알람 설정 에러');
       }
     })();
   }, []);
@@ -113,40 +113,45 @@ const MainCard = () => {
       case 2:
         return <StoryStep step={step as 0 | 1 | 2} />;
       case 3:
+        return <SocialLoginStep />;
+      case 4:
         return (
           <AlarmStep selected={alarmSelected} setSelected={setAlarmSelected} />
         );
-      case 4:
+      case 5:
         if (isMac) return <MacStep />;
         return <FinalStep />;
-      case 5:
+      case 6:
         if (isMac) return <FinalStep />;
         return null;
+
       default:
         return <FinalStep />;
     }
   };
 
   const [remindTime, setRemindTime] = useState('09:00');
+
   const nextStep = async () => {
-    if (step === 3) {
-      if (alarmSelected == 1) {
-        setRemindTime('09:00');
-      } else if (alarmSelected == 2) {
-        setRemindTime('20:00');
-      } else {
+    const next = step + 1;
+
+    if (step === 4) {
+      if (alarmSelected === 1) setRemindTime('09:00');
+      else if (alarmSelected === 2) setRemindTime('20:00');
+      else {
         const raw = AlarmsType[alarmSelected - 1].time;
         setRemindTime(normalizeTime(raw));
       }
-
-      setDirection(1);
-      setStep((prev) => prev + 1);
-      return;
     }
+
     if ((isMac && step < 5) || (!isMac && step < 4)) {
       setDirection(1);
-      setStep((prev) => prev + 1);
-    } else if ((isMac && step === 5) || (!isMac && step == 4)) {
+      setStep(next);
+      navigate(`/onboarding?step=${next}`);
+      return;
+    }
+
+    if ((isMac && step === 6) || (!isMac && step === 5)) {
       postSignData(
         {
           email: userEmail,
@@ -170,13 +175,15 @@ const MainCard = () => {
 
   const prevStep = () => {
     if (step > 0) {
+      const prev = step - 1;
       setDirection(-1);
-      setStep((prev) => prev - 1);
+      setStep(prev);
+      navigate(`/onboarding?step=${prev}`);
     }
   };
 
   return (
-    <div className={CardStyle({ overflow: step === 3 && alarmSelected === 3 })}>
+    <div className={CardStyle({ overflow: step === 4 && alarmSelected === 3 })}>
       {step < 3 && (
         <Progress
           value={stepProgress[step].progress}
@@ -207,7 +214,6 @@ const MainCard = () => {
           <Button
             variant="secondary"
             size="medium"
-            isDisabled={step === 0}
             className="w-[4.8rem]"
             onClick={prevStep}
           >
@@ -217,7 +223,6 @@ const MainCard = () => {
         <Button
           variant="primary"
           size="medium"
-          isDisabled={step === 6}
           className="ml-auto w-[4.8rem]"
           onClick={nextStep}
         >
