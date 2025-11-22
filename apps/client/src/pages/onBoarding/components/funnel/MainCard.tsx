@@ -85,9 +85,15 @@ const MainCard = () => {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
       });
 
-      return forFcmtoken ?? null;
+      if (forFcmtoken) {
+        return forFcmtoken;
+      } else {
+        alert('토큰 생성 실패. 다시 시도해주세요.');
+        return null;
+      }
     } catch (error) {
-      console.error('FCM 토큰 오류:', error);
+      console.error('FCM 토큰 받는 도중 오류:', error);
+      alert('알림 설정 중 오류가 발생했습니다. 다시 시도해주세요.');
       return null;
     }
   };
@@ -103,6 +109,8 @@ const MainCard = () => {
       if (token) {
         setFcmToken(token);
         localStorage.setItem('FcmToken', token);
+      } else {
+        alert('푸시 알람 설정 에러');
       }
     })();
   }, []);
@@ -144,7 +152,7 @@ const MainCard = () => {
       }
     }
 
-    if ((isMac && step < 5) || (!isMac && step < 4)) {
+    if ((isMac && step < 6) || (!isMac && step < 5)) {
       setDirection(1);
       setStep(next);
       navigate(`/onboarding?step=${next}`);
@@ -220,14 +228,16 @@ const MainCard = () => {
             뒤로
           </Button>
         )}
-        <Button
-          variant="primary"
-          size="medium"
-          className="ml-auto w-[4.8rem]"
-          onClick={nextStep}
-        >
-          다음
-        </Button>
+        {step !== 3 && (
+          <Button
+            variant="primary"
+            size="medium"
+            className="ml-auto w-[4.8rem]"
+            onClick={nextStep}
+          >
+            다음
+          </Button>
+        )}
       </div>
     </div>
   );

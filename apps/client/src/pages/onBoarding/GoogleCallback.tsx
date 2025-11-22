@@ -25,7 +25,7 @@ const GoogleCallback = () => {
       });
       console.log(res);
       const { isUser, userId, email, accessToken } = res.data.data;
-
+      console.log({ isUser, userId, email, accessToken });
       // 공통 저장
       localStorage.setItem('email', email);
       localStorage.setItem('userId', userId);
@@ -34,11 +34,9 @@ const GoogleCallback = () => {
         // 기존 유저
         localStorage.setItem('token', accessToken);
         navigate('/');
-        window.location.reload();
       } else {
         // 신규 유저
         navigate('/onboarding?step=4');
-        window.location.reload();
       }
     } catch (error) {
       console.error('로그인 오류:', error);
@@ -46,7 +44,7 @@ const GoogleCallback = () => {
       navigate('/onboarding?step=3');
     }
   };
-
+  //TODO: 로딩 컴포넌트로 교체
   return (
     <div className="flex h-screen items-center justify-center">
       로그인 처리 중...
