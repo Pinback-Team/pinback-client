@@ -23,9 +23,7 @@ const GoogleCallback = () => {
       const res = await apiRequest.post('/api/v2/auth/google', {
         code,
       });
-      console.log(res);
       const { isUser, userId, email, accessToken } = res.data.data;
-      console.log({ isUser, userId, email, accessToken });
       // 공통 저장
       localStorage.setItem('email', email);
       localStorage.setItem('userId', userId);
