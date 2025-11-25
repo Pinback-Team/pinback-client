@@ -1,4 +1,4 @@
-import MacNotice from '/assets/onBoarding/story/macNotice.svg';
+import MacNotice from '/assets/onBoarding/story/macNotice.webp';
 import dotori from '/assets/onBoarding/icons/dotori.svg';
 const MacStep = () => {
   return (
