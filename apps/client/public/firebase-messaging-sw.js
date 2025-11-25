@@ -26,6 +26,10 @@ self.addEventListener('activate', function () {
   console.log('실행중..');
 });
 
+self.addEventListener('activate', () => {
+  clients.claim();
+});
+
 firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();

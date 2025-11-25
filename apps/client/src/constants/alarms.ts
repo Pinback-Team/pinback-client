@@ -1,6 +1,6 @@
-import avatar1 from '/assets/onBoarding/icons/chippi_morning.svg';
-import avatar2 from '/assets/onBoarding/icons/chippi_night.svg';
-import avatar3 from '/assets/onBoarding/icons/chippi_bell.svg';
+import avatar1 from '/assets/onBoarding/icons/chippi_morning.webp';
+import avatar2 from '/assets/onBoarding/icons/chippi_night.webp';
+import avatar3 from '/assets/onBoarding/icons/chippi_bell.webp';
 
 export interface AlarmType {
   img: string;
