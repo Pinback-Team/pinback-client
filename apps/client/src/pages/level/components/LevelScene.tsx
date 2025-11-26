@@ -8,6 +8,12 @@ import chippi_level3 from '../../../assets/chippi_level3.png';
 import chippi_level4 from '../../../assets/chippi_level4.png';
 import chippi_level5 from '../../../assets/chippi_level5.png';
 
+// import chippi_level1 from '../../../assets/Lv.1.png';
+// import chippi_level2 from '../../../assets/Lv.2.png';
+// import chippi_level3 from '../../../assets/Lv.3.png';
+// import chippi_level4 from '../../../assets/Lv.4.png';
+// import chippi_level5 from '../../../assets/Lv.5.png';
+
 const SCENE_BY_LEVEL: Record<TreeLevel, string> = {
   1: chippi_level1,
   2: chippi_level2,
