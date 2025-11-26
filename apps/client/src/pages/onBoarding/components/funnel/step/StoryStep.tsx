@@ -13,6 +13,8 @@ const StoryStep = ({ step }: StoryStepProps) => {
         src={story.img}
         className="mb-[1.6rem] mt-[2.4rem] w-[31.2rem]"
         alt="onboarding"
+        decoding="async"
+        fetchPriority="high"
       />
       <p className="sub4-sb text-center text-black">{story.text}</p>
     </div>

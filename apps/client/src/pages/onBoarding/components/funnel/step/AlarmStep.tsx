@@ -1,4 +1,4 @@
-import dotori from '@assets/onBoarding/icons/dotori.svg';
+import dotori from '/assets/onBoarding/icons/dotori.svg';
 import AlarmBox from '../AlarmBox';
 interface AlarmStepProps {
   selected: 1 | 2 | 3;
