@@ -2,11 +2,17 @@ import { cn } from '@pinback/design-system/utils';
 import { TreeLevel } from '@pages/level/types/treeLevelType';
 import { HTMLAttributes } from 'react';
 
-import chippi_level1 from '../../../assets/Lv.1.png';
-import chippi_level2 from '../../../assets/Lv.2.png';
-import chippi_level3 from '../../../assets/Lv.3.png';
-import chippi_level4 from '../../../assets/Lv.4.png';
-import chippi_level5 from '../../../assets/Lv.5.png';
+import chippi_level1 from '../../../assets/Lv.1.webp';
+import chippi_level2 from '../../../assets/Lv.2.webp';
+import chippi_level3 from '../../../assets/Lv.3.webp';
+import chippi_level4 from '../../../assets/Lv.4.webp';
+import chippi_level5 from '../../../assets/Lv.5.webp';
+
+// import chippi_level1 from '../../../assets/Lv.1.png';
+// import chippi_level2 from '../../../assets/Lv.2.png';
+// import chippi_level3 from '../../../assets/Lv.3.png';
+// import chippi_level4 from '../../../assets/Lv.4.png';
+// import chippi_level5 from '../../../assets/Lv.5.png';
 
 const SCENE_BY_LEVEL: Record<TreeLevel, string> = {
   1: chippi_level1,
