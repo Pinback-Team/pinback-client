@@ -1,11 +1,13 @@
 import { Progress, Button } from '@pinback/design-system/ui';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import StoryStep from './step/StoryStep';
-import AlarmStep from './step/AlarmStep';
-import MacStep from './step/MacStep';
-import FinalStep from './step/FinalStep';
+
 import SocialLoginStep from './step/SocialLoginStep';
+const StoryStep = lazy(() => import('./step/StoryStep'));
+const AlarmStep = lazy(() => import('./step/AlarmStep'));
+const MacStep = lazy(() => import('./step/MacStep'));
+const FinalStep = lazy(() => import('./step/FinalStep'));
+
 import { cva } from 'class-variance-authority';
 import { usePostSignUp } from '@shared/apis/queries';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -212,7 +214,7 @@ const MainCard = () => {
             transition={{ duration: 0.4 }}
             className="flex h-full flex-col items-center"
           >
-            {renderStep()}
+            <Suspense fallback={null}>{renderStep()}</Suspense>
           </motion.div>
         </AnimatePresence>
       </div>

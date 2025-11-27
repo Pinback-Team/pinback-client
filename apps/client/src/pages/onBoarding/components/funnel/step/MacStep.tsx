@@ -1,5 +1,5 @@
-import MacNotice from '@assets/onBoarding/story/macNotice.svg';
-import dotori from '@assets/onBoarding/icons/dotori.svg';
+import MacNotice from '/assets/onBoarding/story/macNotice.webp';
+import dotori from '/assets/onBoarding/icons/dotori.svg';
 const MacStep = () => {
   return (
     <div className="flex h-full flex-col items-center">

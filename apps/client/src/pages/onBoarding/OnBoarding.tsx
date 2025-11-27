@@ -1,4 +1,4 @@
-import onBoardingBg from '@assets/onBoarding/background/onBoardingBg.svg';
+import onBoardingBg from '/assets/onBoarding/background/onBoardingBg.webp';
 import Header from './components/header/Header';
 import MainCard from './components/funnel/MainCard';
 import { useEffect } from 'react';
