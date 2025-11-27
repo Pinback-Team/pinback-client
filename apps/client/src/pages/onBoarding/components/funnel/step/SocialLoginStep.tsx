@@ -1,5 +1,5 @@
 import Chippi from '@assets/chippi_extension_popup.svg';
-import GoogleLogo from '@assets/onBoarding/icons/googleLogo.svg';
+import GoogleLogo from '/assets/onBoarding/icons/googleLogo.svg';
 
 const SocialLoginStep = () => {
   const handleGoogleLogin = () => {
