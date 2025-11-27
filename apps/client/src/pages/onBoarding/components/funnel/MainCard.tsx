@@ -1,14 +1,11 @@
 import { Progress, Button } from '@pinback/design-system/ui';
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
 import SocialLoginStep from './step/SocialLoginStep';
 const StoryStep = lazy(() => import('./step/StoryStep'));
 const AlarmStep = lazy(() => import('./step/AlarmStep'));
 const MacStep = lazy(() => import('./step/MacStep'));
 const FinalStep = lazy(() => import('./step/FinalStep'));
-
-import SocialLoginStep from './step/SocialLoginStep';
 import { cva } from 'class-variance-authority';
 import { usePostSignUp } from '@shared/apis/queries';
 import { useNavigate, useLocation } from 'react-router-dom';
