@@ -8,12 +8,6 @@ import chippi_level3 from '../../../assets/Lv.3.webp';
 import chippi_level4 from '../../../assets/Lv.4.webp';
 import chippi_level5 from '../../../assets/Lv.5.webp';
 
-// import chippi_level1 from '../../../assets/Lv.1.png';
-// import chippi_level2 from '../../../assets/Lv.2.png';
-// import chippi_level3 from '../../../assets/Lv.3.png';
-// import chippi_level4 from '../../../assets/Lv.4.png';
-// import chippi_level5 from '../../../assets/Lv.5.png';
-
 const SCENE_BY_LEVEL: Record<TreeLevel, string> = {
   1: chippi_level1,
   2: chippi_level2,
@@ -33,6 +27,11 @@ export default function LevelScene({ level, className }: LevelSceneProps) {
       <img
         src={src}
         draggable={false}
+        loading="eager"
+        decoding="async"
+        fetchPriority="high"
+        width={1200}
+        height={810}
         className="pointer-events-none h-full w-full select-none rounded-[1.2rem] object-contain object-[right_bottom]"
       />
     </div>

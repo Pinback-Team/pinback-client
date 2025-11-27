@@ -1,13 +1,16 @@
 import { Icon } from '@pinback/design-system/icons';
 import { cn } from '@pinback/design-system/utils';
 import LevelScene from '@pages/level/components/LevelScene';
-import LevelInfoCard from '@pages/level/components/LevelInfoCard';
 import TreeStatusCard from '@pages/level/components/TreeStatusCard';
 import { getTreeLevel } from '@shared/utils/treeLevel';
 import { TreeLevel } from '@pages/level/types/treeLevelType';
 import { Badge } from '@pinback/design-system/ui';
 import { useGetArcons } from '@shared/apis/queries';
-import NextAcornTime from './components/NextAcornTime';
+import { lazy, Suspense } from 'react';
+const LevelInfoCard = lazy(
+  () => import('@pages/level/components/LevelInfoCard')
+);
+const NextAcornTime = lazy(() => import('./components/NextAcornTime'));
 
 export default function Level() {
   const { data, isPending, isError } = useGetArcons();
@@ -21,10 +24,13 @@ export default function Level() {
   const info = getTreeLevel(acornCount);
   const isLevel5 = info.level === 5 || acornCount >= 7;
 
+  const defaultLevel: TreeLevel = 1;
+  const level = isPending ? defaultLevel : (info.level as TreeLevel);
+
   return (
     <div className={cn('bg-subcolor mx-auto h-dvh w-full overflow-hidden')}>
       <div className="relative h-full w-full overflow-hidden rounded-[1.2rem]">
-        <LevelScene level={info.level as TreeLevel} />
+        <LevelScene level={level} />
         <div className="absolute inset-0">
           <div className="flex flex-col items-start gap-[2rem] px-[8rem] py-[5.2rem]">
             <div className="flex flex-row items-center gap-[0.8rem]">
@@ -46,7 +52,9 @@ export default function Level() {
                     'peer-hover:opacity-100 peer-focus-visible:opacity-100'
                   )}
                 >
-                  <LevelInfoCard />
+                  <Suspense fallback={null}>
+                    <LevelInfoCard />
+                  </Suspense>
                 </div>
               </div>
             </div>
@@ -61,10 +69,12 @@ export default function Level() {
             </div>
           </div>
           {isLevel5 && (
-            <NextAcornTime
-              className="absolute bottom-[5.2rem] left-1/2 z-[10] -translate-x-1/2"
-              nextAcornTime={nextAcornTime}
-            />
+            <Suspense fallback={null}>
+              <NextAcornTime
+                className="absolute bottom-[5.2rem] left-1/2 z-[10] -translate-x-1/2"
+                nextAcornTime={nextAcornTime}
+              />
+            </Suspense>
           )}
         </div>
       </div>
