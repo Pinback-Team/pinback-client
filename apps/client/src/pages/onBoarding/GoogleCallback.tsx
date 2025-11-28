@@ -1,14 +1,14 @@
 import apiRequest from '@shared/apis/setting/axiosInstance';
 import LoadingChippi from '@shared/components/loadingChippi/LoadingChippi';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const GoogleCallback = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get('code');
+    const code = searchParams.get('code');
 
     if (!code) {
       alert('로그인 실패. 다시 시도해주세요.');
@@ -19,30 +19,36 @@ const GoogleCallback = () => {
     loginWithCode(code);
   }, []);
 
+  const handleUserLogin = (
+    isUser: boolean,
+    accessToken: string | undefined
+  ) => {
+    if (isUser) {
+      if (accessToken) {
+        localStorage.setItem('token', accessToken);
+      }
+      navigate('/');
+    } else {
+      navigate('/onboarding?step=4');
+    }
+  };
+
   const loginWithCode = async (code: string) => {
     try {
-      const res = await apiRequest.post('/api/v2/auth/google', {
-        code,
-      });
+      const res = await apiRequest.post('/api/v2/auth/google', { code });
       const { isUser, userId, email, accessToken } = res.data.data;
-      // 공통 저장
+
       localStorage.setItem('email', email);
       localStorage.setItem('userId', userId);
 
-      if (isUser) {
-        // 기존 유저
-        localStorage.setItem('token', accessToken);
-        navigate('/');
-      } else {
-        // 신규 유저
-        navigate('/onboarding?step=4');
-      }
+      handleUserLogin(isUser, accessToken);
     } catch (error) {
       console.error('로그인 오류:', error);
       alert('로그인 중 오류가 발생했습니다.');
       navigate('/onboarding?step=3');
     }
   };
+
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <LoadingChippi className="mb-6" />
