@@ -1,4 +1,5 @@
 import apiRequest from '@shared/apis/setting/axiosInstance';
+import LoadingChippi from '@shared/components/loadingChippi/LoadingChippi';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -42,12 +43,7 @@ const GoogleCallback = () => {
       navigate('/onboarding?step=3');
     }
   };
-  //TODO: 로딩 컴포넌트로 교체
-  return (
-    <div className="flex h-screen items-center justify-center">
-      로그인 처리 중...
-    </div>
-  );
+  return <LoadingChippi />;
 };
 
 export default GoogleCallback;
