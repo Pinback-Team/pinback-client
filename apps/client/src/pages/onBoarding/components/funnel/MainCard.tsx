@@ -15,7 +15,7 @@ import { getMessaging, getToken } from 'firebase/messaging';
 import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
 import { AlarmsType } from '@constants/alarms';
 import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
-const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
+const stepProgress = [{ progress: 33 }, { progress: 66 }, { progress: 100 }];
 
 export const Step = {
   STORY_0: 'STORY_0',
