@@ -43,7 +43,17 @@ const GoogleCallback = () => {
       navigate('/onboarding?step=3');
     }
   };
-  return <LoadingChippi />;
+  return (
+    <div className="flex h-screen flex-col items-center justify-center">
+      <LoadingChippi className="mb-6" />
+      <p className="text-font-black-2 head3 mt-[1.6rem]">
+        잠시만 기다려주세요…
+      </p>
+      <p className="body1-m text-font-gray-3 text-center">
+        치삐가 로그인 중입니다
+      </p>
+    </div>
+  );
 };
 
 export default GoogleCallback;
