@@ -165,8 +165,12 @@ const MainCard = () => {
   const nextStep = async () => {
     const idx = stepOrder.indexOf(step);
     const next = stepOrder[idx + 1];
+    const isAlarmStep = step === Step.ALARM;
+    const isFinalStep = step === Step.FINAL;
+    const isMacStep = next === Step.MAC;
+    const shouldSkipMacStep = isMacStep && !isMac;
 
-    if (step === Step.ALARM) {
+    if (isAlarmStep) {
       if (alarmSelected === 1) setRemindTime('09:00');
       else if (alarmSelected === 2) setRemindTime('20:00');
       else {
@@ -175,16 +179,14 @@ const MainCard = () => {
       }
     }
 
-    // 다음 스텝이 MAC인데 Mac 사용자가 아닐 경우 → 바로 FINAL로 건너뛰기
-    if (next === Step.MAC && !isMac) {
+    if (shouldSkipMacStep) {
       setDirection(1);
       setStep(Step.FINAL);
       navigate(`/onboarding?step=${Step.FINAL}`);
       return;
     }
 
-    // 마지막 스텝(Final)인 경우 → API 호출
-    if (step === Step.FINAL) {
+    if (isFinalStep) {
       postSignData(
         { email: userEmail, remindDefault: remindTime, fcmToken },
         {
@@ -198,7 +200,6 @@ const MainCard = () => {
       return;
     }
 
-    // 일반적인 next 이동
     setDirection(1);
     setStep(next);
     navigate(`/onboarding?step=${next}`);
