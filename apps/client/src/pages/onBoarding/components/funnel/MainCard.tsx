@@ -16,20 +16,12 @@ import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWo
 import { AlarmsType } from '@constants/alarms';
 import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
 const stepProgress = [{ progress: 33 }, { progress: 66 }, { progress: 100 }];
-
-export const Step = {
-  STORY_0: 'STORY_0',
-  STORY_1: 'STORY_1',
-  STORY_2: 'STORY_2',
-  SOCIAL_LOGIN: 'SOCIAL_LOGIN',
-  ALARM: 'ALARM',
-  MAC: 'MAC',
-  FINAL: 'FINAL',
-} as const;
-
-export type StepType = (typeof Step)[keyof typeof Step];
-
-const storySteps: StepType[] = [Step.STORY_0, Step.STORY_1, Step.STORY_2];
+import {
+  Step,
+  stepOrder,
+  StepType,
+  storySteps,
+} from '@pages/onBoarding/constants/onboardingSteps';
 
 const variants = {
   slideIn: (direction: number) => ({
@@ -69,15 +61,6 @@ const MainCard = () => {
   const [remindTime, setRemindTime] = useState('09:00');
   const [fcmToken, setFcmToken] = useState<string | null>(null);
 
-  const stepOrder: StepType[] = [
-    Step.STORY_0,
-    Step.STORY_1,
-    Step.STORY_2,
-    Step.SOCIAL_LOGIN,
-    Step.ALARM,
-    Step.MAC,
-    Step.FINAL,
-  ];
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const emailParam = params.get('email');
