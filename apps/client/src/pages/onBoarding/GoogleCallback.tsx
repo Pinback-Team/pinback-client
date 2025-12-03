@@ -12,7 +12,7 @@ const GoogleCallback = () => {
 
     if (!code) {
       alert('로그인 실패. 다시 시도해주세요.');
-      navigate('/onboarding?step=3');
+      navigate('/onboarding?step=SOCIAL_LOGIN');
       return;
     }
 
@@ -29,7 +29,7 @@ const GoogleCallback = () => {
       }
       navigate('/');
     } else {
-      navigate('/onboarding?step=4');
+      navigate('/onboarding?step=ALARM');
     }
   };
 
@@ -44,8 +44,7 @@ const GoogleCallback = () => {
       handleUserLogin(isUser, accessToken);
     } catch (error) {
       console.error('로그인 오류:', error);
-      alert('로그인 중 오류가 발생했습니다.');
-      navigate('/onboarding?step=3');
+      navigate('/onboarding?step=SOCIAL_LOGIN');
     }
   };
 

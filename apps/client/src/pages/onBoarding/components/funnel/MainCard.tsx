@@ -63,10 +63,9 @@ const MainCard = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const emailParam = params.get('email');
-    if (emailParam) {
-      setUserEmail(emailParam);
-      localStorage.setItem('email', emailParam);
+    const storedEmail = localStorage.getItem('email');
+    if (storedEmail) {
+      setUserEmail(storedEmail);
     }
 
     const stepParam = params.get('step') as StepType;
