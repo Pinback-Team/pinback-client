@@ -35,7 +35,7 @@ const refreshToken = async (email: string) => {
 apiRequest.interceptors.request.use(async (config) => {
   const noAuthNeeded = [
     '/api/v1/auth/token',
-    '/api/v1/auth/signup',
+    '/api/v2/auth/signup',
     '/api/v2/auth/google',
   ];
   const isNoAuth = noAuthNeeded.some((url) => config.url?.includes(url));
@@ -70,7 +70,7 @@ apiRequest.interceptors.response.use(
     const originalRequest = error.config;
     const noAuthNeeded = [
       '/api/v1/auth/token',
-      '/api/v1/auth/signup',
+      '/api/v2/auth/signup',
       '/api/v2/auth/google',
     ];
     const isNoAuth = noAuthNeeded.some((url) =>
