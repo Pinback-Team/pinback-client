@@ -23,6 +23,8 @@ import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUn
 import FetchCard from '@pages/myBookmark/components/fetchCard/FetchCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 import Tooltip from '@shared/components/tooltip/Tooltip';
+import ArticlesLoadingBoundary from '@shared/components/articlesLoadingBoundary/ArticlesLoadingBoundary';
+import ArticlesErrorBoundary from '@shared/components/articlesErrorBoundary/ArticlesErrorBoundary';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
