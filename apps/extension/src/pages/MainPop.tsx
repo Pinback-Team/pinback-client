@@ -15,7 +15,7 @@ import { useState, useEffect } from 'react';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
-
+import HomeImg from '@assets/home.svg';
 import {
   usePostArticle,
   useGetCategoriesExtension,
@@ -285,15 +285,16 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
           />
         )}
         <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
-          <div className="mr-auto">
-            <Icon
-              name="main_logo"
-              width={72}
-              height={20}
+          <div className="flex items-center justify-between">
+            <img
+              src={HomeImg}
+              className="cursor-pointer"
+              alt="home"
               onClick={() => {
                 chrome.tabs.create({ url: 'https://www.pinback.today/' });
               }}
             />
+            <Icon name="main_logo" width={72} height={20} />
           </div>
 
           {loading ? (
