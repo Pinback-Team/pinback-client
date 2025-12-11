@@ -1,5 +1,5 @@
 import dotori from '/assets/onBoarding/icons/dotori.svg';
-import finalImg from '/assets/onBoarding/story/final.svg';
+import finalImg from '/assets/onBoarding/story/final.webp';
 import extImg from '/assets/onBoarding/icons/ext1.svg';
 import pinImg from '/assets/onBoarding/icons/pin1.svg';
 const FinalStep = () => {
