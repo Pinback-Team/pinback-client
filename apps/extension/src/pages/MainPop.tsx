@@ -15,7 +15,7 @@ import { useState, useEffect } from 'react';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
 import { Icon } from '@pinback/design-system/icons';
-import HomeImg from '@assets/home.svg';
+
 import {
   usePostArticle,
   useGetCategoriesExtension,
@@ -47,6 +47,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
   const { data: categoryData, refetch } = useGetCategoriesExtension({
     enabled: false,
   });
+  const [isHover, setIsHover] = useState(false);
   useEffect(() => {
     if (type === 'add' && remindData?.data) {
       const newDate = updateDate(remindData.data.data.remindDate);
@@ -70,7 +71,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
   useEffect(() => {
     if (!loading && !title) {
       alert('이 페이지는 저장할 수 없어요 🐿️');
-      window.close();
+      // window.close();
     }
   }, [loading, title]);
 
@@ -221,7 +222,6 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
               date: isRemindOn ? currentDate : date,
               time: isRemindOn ? currentTime : time,
             });
-            //window.close();
           },
         }
       );
@@ -243,7 +243,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
         },
         {
           onSuccess: () => {
-            window.close();
+            // window.close();
           },
         }
       );
@@ -286,13 +286,13 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
         )}
         <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
           <div className="flex items-center justify-between">
-            <img
-              src={HomeImg}
+            <Icon
+              name={isHover ? 'ext_home2' : 'ext_home1'}
+              width={28}
+              height={28}
               className="cursor-pointer"
-              alt="home"
-              onClick={() => {
-                chrome.tabs.create({ url: 'https://www.pinback.today/' });
-              }}
+              onMouseEnter={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
             />
             <Icon name="main_logo" width={72} height={20} />
           </div>
