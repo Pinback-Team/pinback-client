@@ -14,8 +14,7 @@ import {
 import { useState, useEffect } from 'react';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
-import { Icon } from '@pinback/design-system/icons';
-
+import Header from '@shared/components/Header';
 import {
   usePostArticle,
   useGetCategoriesExtension,
@@ -47,7 +46,6 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
   const { data: categoryData, refetch } = useGetCategoriesExtension({
     enabled: false,
   });
-  const [isHover, setIsHover] = useState(false);
   useEffect(() => {
     if (type === 'add' && remindData?.data) {
       const newDate = updateDate(remindData.data.data.remindDate);
@@ -71,7 +69,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
   useEffect(() => {
     if (!loading && !title) {
       alert('이 페이지는 저장할 수 없어요 🐿️');
-      // window.close();
+      window.close();
     }
   }, [loading, title]);
 
@@ -243,7 +241,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
         },
         {
           onSuccess: () => {
-            // window.close();
+            window.close();
           },
         }
       );
@@ -284,19 +282,9 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
             onRightClick={saveHandleCategory}
           />
         )}
-        <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
-          <div className="flex items-center justify-between">
-            <Icon
-              name={isHover ? 'ext_home2' : 'ext_home1'}
-              width={28}
-              height={28}
-              className="cursor-pointer"
-              onMouseEnter={() => setIsHover(true)}
-              onMouseLeave={() => setIsHover(false)}
-            />
-            <Icon name="main_logo" width={72} height={20} />
-          </div>
 
+        <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
+          <Header />
           {loading ? (
             <div className="bg-gray100 h-[6.8rem] w-[full] animate-pulse rounded-[4px]" />
           ) : (
