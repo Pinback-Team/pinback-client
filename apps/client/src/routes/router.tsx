@@ -1,6 +1,7 @@
 import Category from '@pages/category/Category';
 import Level from '@pages/level/Level';
 import MyBookmark from '@pages/myBookmark/MyBookmark';
+import GoogleCallback from '@pages/onBoarding/GoogleCallback';
 import OnBoarding from '@pages/onBoarding/OnBoarding';
 import Remind from '@pages/remind/Remind';
 import { ROUTES_CONFIG } from '@routes/routesConfig';
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES_CONFIG.onBoarding.path,
         element: <OnBoarding />,
+      },
+      {
+        path: ROUTES_CONFIG.onBoardingCallback.path,
+        element: <GoogleCallback />,
       },
     ],
   },

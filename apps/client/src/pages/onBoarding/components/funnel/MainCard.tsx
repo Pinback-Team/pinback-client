@@ -1,21 +1,28 @@
 import { Progress, Button } from '@pinback/design-system/ui';
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import SocialLoginStep from './step/SocialLoginStep';
 const StoryStep = lazy(() => import('./step/StoryStep'));
 const AlarmStep = lazy(() => import('./step/AlarmStep'));
 const MacStep = lazy(() => import('./step/MacStep'));
 const FinalStep = lazy(() => import('./step/FinalStep'));
-
 import { cva } from 'class-variance-authority';
 import { usePostSignUp } from '@shared/apis/queries';
-const stepProgress = [{ progress: 30 }, { progress: 60 }, { progress: 100 }];
-import { AlarmsType } from '@constants/alarms';
-import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { firebaseConfig } from '../../../../firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
 import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
-import { useLocation } from 'react-router-dom';
+import { AlarmsType } from '@constants/alarms';
+import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
+const stepProgress = [{ progress: 33 }, { progress: 66 }, { progress: 100 }];
+import {
+  Step,
+  stepOrder,
+  StepType,
+  storySteps,
+} from '@pages/onBoarding/constants/onboardingSteps';
+
 const variants = {
   slideIn: (direction: number) => ({
     x: direction > 0 ? 200 : -200,
@@ -27,6 +34,7 @@ const variants = {
     opacity: 0,
   }),
 };
+
 const CardStyle = cva(
   'bg-white-bg flex h-[54.8rem] w-[63.2rem] flex-col items-center justify-between rounded-[2.4rem] pt-[3.2rem]',
   {
@@ -39,29 +47,33 @@ const CardStyle = cva(
     defaultVariants: { overflow: false },
   }
 );
+
 const MainCard = () => {
-  const [step, setStep] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { mutate: postSignData } = usePostSignUp();
+
+  const [step, setStep] = useState<StepType>(Step.STORY_0);
   const [direction, setDirection] = useState(0);
   const [alarmSelected, setAlarmSelected] = useState<1 | 2 | 3>(1);
   const [isMac, setIsMac] = useState(false);
-  // api 구간
-  const { mutate: postSignData } = usePostSignUp();
-
-  // 익스텐션에서부터 이메일 받아오는 구간!
   const [userEmail, setUserEmail] = useState('');
-  const location = useLocation();
+  const [remindTime, setRemindTime] = useState('09:00');
+  const [fcmToken, setFcmToken] = useState<string | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const emailParam = params.get('email');
-    if (emailParam) {
-      setUserEmail(emailParam);
-      localStorage.setItem('email', emailParam);
+    const storedEmail = localStorage.getItem('email');
+    if (storedEmail) {
+      setUserEmail(storedEmail);
+    }
+
+    const stepParam = params.get('step') as StepType;
+    if (stepParam && Object.values(Step).includes(stepParam)) {
+      setStep(stepParam);
     }
   }, [location.search]);
 
-  // FCM 구간
-  const [fcmToken, setFcmToken] = useState<string | null>(null);
   const app = initializeApp(firebaseConfig);
   const messaging = getMessaging(app);
 
@@ -69,6 +81,7 @@ const MainCard = () => {
     try {
       const permission = await Notification.requestPermission();
       registerServiceWorker();
+
       if (permission !== 'granted') {
         alert('알림 권한 허용이 필요합니다!');
         return null;
@@ -107,80 +120,92 @@ const MainCard = () => {
       }
     })();
   }, []);
+
   const renderStep = () => {
     switch (step) {
-      case 0:
-      case 1:
-      case 2:
-        return <StoryStep step={step as 0 | 1 | 2} />;
-      case 3:
+      case Step.STORY_0:
+      case Step.STORY_1:
+      case Step.STORY_2:
+        return (
+          <StoryStep step={Number(step.replace('STORY_', '')) as 0 | 1 | 2} />
+        );
+      case Step.SOCIAL_LOGIN:
+        return <SocialLoginStep />;
+      case Step.ALARM:
         return (
           <AlarmStep selected={alarmSelected} setSelected={setAlarmSelected} />
         );
-      case 4:
-        if (isMac) return <MacStep />;
+      case Step.MAC:
+        return <MacStep />;
+      case Step.FINAL:
         return <FinalStep />;
-      case 5:
-        if (isMac) return <FinalStep />;
-        return null;
       default:
         return <FinalStep />;
     }
   };
 
-  const [remindTime, setRemindTime] = useState('09:00');
   const nextStep = async () => {
-    if (step === 3) {
-      if (alarmSelected == 1) {
-        setRemindTime('09:00');
-      } else if (alarmSelected == 2) {
-        setRemindTime('20:00');
-      } else {
+    const idx = stepOrder.indexOf(step);
+    const next = stepOrder[idx + 1];
+    const isAlarmStep = step === Step.ALARM;
+    const isFinalStep = step === Step.FINAL;
+    const isMacStep = next === Step.MAC;
+    const shouldSkipMacStep = isMacStep && !isMac;
+
+    if (isAlarmStep) {
+      if (alarmSelected === 1) setRemindTime('09:00');
+      else if (alarmSelected === 2) setRemindTime('20:00');
+      else {
         const raw = AlarmsType[alarmSelected - 1].time;
         setRemindTime(normalizeTime(raw));
       }
+    }
 
+    if (shouldSkipMacStep) {
       setDirection(1);
-      setStep((prev) => prev + 1);
+      setStep(Step.FINAL);
+      navigate(`/onboarding?step=${Step.FINAL}`);
       return;
     }
-    if ((isMac && step < 5) || (!isMac && step < 4)) {
-      setDirection(1);
-      setStep((prev) => prev + 1);
-    } else if ((isMac && step === 5) || (!isMac && step == 4)) {
+
+    if (isFinalStep) {
       postSignData(
+        { email: userEmail, remindDefault: remindTime, fcmToken },
         {
-          email: userEmail,
-          remindDefault: remindTime,
-          fcmToken: fcmToken,
-        },
-        {
-          onSuccess: () => {
-            window.location.href = '/';
-          },
+          onSuccess: () => (window.location.href = '/'),
           onError: () => {
             const savedEmail = localStorage.getItem('email');
-            if (savedEmail) {
-              window.location.href = '/';
-            }
+            if (savedEmail) window.location.href = '/';
           },
         }
       );
+      return;
     }
+
+    setDirection(1);
+    setStep(next);
+    navigate(`/onboarding?step=${next}`);
   };
 
   const prevStep = () => {
-    if (step > 0) {
+    const idx = stepOrder.indexOf(step);
+    if (idx > 0) {
+      const previous = stepOrder[idx - 1];
       setDirection(-1);
-      setStep((prev) => prev - 1);
+      setStep(previous);
+      navigate(`/onboarding?step=${previous}`);
     }
   };
 
   return (
-    <div className={CardStyle({ overflow: step === 3 && alarmSelected === 3 })}>
-      {step < 3 && (
+    <div
+      className={CardStyle({
+        overflow: step === Step.ALARM && alarmSelected === 3,
+      })}
+    >
+      {storySteps.includes(step) && (
         <Progress
-          value={stepProgress[step].progress}
+          value={stepProgress[storySteps.indexOf(step)].progress}
           variant="profile"
           className="w-[15.6rem]"
         />
@@ -204,26 +229,27 @@ const MainCard = () => {
       </div>
 
       <div className="mb-[4.8rem] mt-[1.2rem] flex w-full justify-between px-[3.2rem]">
-        {step < 4 && step > 0 && (
+        {!([Step.STORY_0, Step.SOCIAL_LOGIN] as StepType[]).includes(step) && (
           <Button
             variant="secondary"
             size="medium"
-            isDisabled={step === 0}
             className="w-[4.8rem]"
             onClick={prevStep}
           >
             뒤로
           </Button>
         )}
-        <Button
-          variant="primary"
-          size="medium"
-          isDisabled={step === 6}
-          className="ml-auto w-[4.8rem]"
-          onClick={nextStep}
-        >
-          다음
-        </Button>
+
+        {step !== Step.SOCIAL_LOGIN && (
+          <Button
+            variant="primary"
+            size="medium"
+            className="ml-auto w-[4.8rem]"
+            onClick={nextStep}
+          >
+            다음
+          </Button>
+        )}
       </div>
     </div>
   );

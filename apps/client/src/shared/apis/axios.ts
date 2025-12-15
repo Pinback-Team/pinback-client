@@ -36,7 +36,7 @@ export interface postSignUpRequest {
 }
 
 export const postSignUp = async (responsedata: postSignUpRequest) => {
-  const { data } = await apiRequest.post('/api/v1/auth/signup', responsedata);
+  const { data } = await apiRequest.patch('/api/v2/auth/signup', responsedata);
   return data;
 };
 
