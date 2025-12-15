@@ -19,4 +19,8 @@ export const ROUTES_CONFIG = {
     title: '온보딩',
     path: '/onBoarding',
   },
+  onBoardingCallback: {
+    title: '구글 OAuth 콜백',
+    path: '/onboarding/callback',
+  },
 };
