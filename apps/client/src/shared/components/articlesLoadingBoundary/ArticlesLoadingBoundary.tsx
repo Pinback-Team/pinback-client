@@ -1,18 +1,15 @@
-import chippiError from '@assets/chippi_error.svg';
+import LoadingChippi from '@shared/components/loadingChippi/LoadingChippi';
 
 const ArticlesLoadingBoundary = () => {
   return (
-    <div className="mt-[10rem] flex flex-col items-center justify-center text-center">
-      {/* ToDo: 로딩 컴포넌트 변경 예정 */}
-      <img
-        src={chippiError}
-        alt="Error"
-        className="mt-[1rem] h-auto w-[18rem]"
-      />
+    <div className="flex h-full flex-col items-center justify-center pt-[5rem] text-center">
+      <div className="mb-[2rem]">
+        <LoadingChippi />
+      </div>
 
-      <p className="body1-m text-font-gray-3 mb-[3rem]">
-        치삐가 목록을 불러오고 있어요!
-      </p>
+      <p className="head3 text-font-gray-1 mb-[1rem]">잠시만 기다려주세요...</p>
+
+      <p className="body1-m text-font-gray-3">치삐가 목록을 불러오고 있어요!</p>
     </div>
   );
 };
