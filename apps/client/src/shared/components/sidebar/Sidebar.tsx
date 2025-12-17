@@ -140,6 +140,7 @@ export function Sidebar() {
             className="h-[2.4rem] w-[8.7rem] cursor-pointer"
           />
           <button
+            type="button"
             className="h-[3.6rem] w-[3.6rem] flex-shrink-0 overflow-hidden rounded-full border border-gray-200"
             onClick={() => console.log('프로필 클릭', profileImageUrl)}
           >
