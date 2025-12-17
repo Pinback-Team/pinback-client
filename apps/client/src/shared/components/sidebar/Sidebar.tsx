@@ -16,6 +16,7 @@ import {
   useGetArcons,
   usePutCategory,
   useDeleteCategory,
+  useGetGoogleProfile,
 } from '@shared/apis/queries';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -33,6 +34,9 @@ export function Sidebar() {
   const { mutate: createCategory } = usePostCategory();
   const { data, isPending } = useGetArcons();
   const { mutate: deleteCategory } = useDeleteCategory();
+  const { data: googleProfileData } = useGetGoogleProfile();
+
+  const profileImageUrl = googleProfileData?.googleProfile || null;
 
   const {
     activeTab,
@@ -128,12 +132,27 @@ export function Sidebar() {
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
       <div className="flex h-full flex-col px-[0.8rem]">
-        <header className="px-[0.8rem] py-[2.8rem]">
+        {/* TODO: 사이드바 프로필 클릭이벤트 추가 */}
+        <header className="flex items-center justify-between px-[0.8rem] py-[2.8rem]">
           <Icon
             name="logo"
             aria-label="Pinback 로고"
             className="h-[2.4rem] w-[8.7rem] cursor-pointer"
           />
+          <button
+            className="h-[3.6rem] w-[3.6rem] flex-shrink-0 overflow-hidden rounded-full border border-gray-200"
+            onClick={() => console.log('프로필 클릭', profileImageUrl)}
+          >
+            {profileImageUrl ? (
+              <img
+                src={profileImageUrl}
+                alt="프로필 이미지"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="h-full w-full bg-gray-200" />
+            )}
+          </button>
         </header>
 
         <hr className="my-[0.8rem] border-gray-100" />

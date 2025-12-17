@@ -71,3 +71,8 @@ export const deleteRemindArticle = async (id: number) => {
   const response = await apiRequest.delete(`/api/v1/articles/${id}`);
   return response;
 };
+
+export const getGoogleProfile = async () => {
+  const { data } = await apiRequest.get('/api/v2/users/me/google-profile');
+  return data.data;
+};
