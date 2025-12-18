@@ -18,6 +18,7 @@ const LogOutPop = () => {
       </p>
       <button
         className="sub4-sb mt-[1.6rem] flex h-[4.4rem] w-[25.15rem] items-center justify-between rounded-full border border-gray-100 bg-white px-[2rem]"
+        type="button"
         onClick={() => {
           chrome.tabs.create({
             url: 'https://www.pinback.today/onboarding?step=SOCIAL_LOGIN',

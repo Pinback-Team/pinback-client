@@ -3,7 +3,7 @@ import { useState } from 'react';
 const Header = () => {
   const [isHover, setIsHover] = useState(false);
   return (
-    <div className="flex items-center justify-between">
+    <header className="flex items-center justify-between">
       <Icon
         name={isHover ? 'ext_home2' : 'ext_home1'}
         width={28}
@@ -16,7 +16,7 @@ const Header = () => {
         }}
       />
       <Icon name="main_logo" width={72} height={20} />
-    </div>
+    </header>
   );
 };
 
