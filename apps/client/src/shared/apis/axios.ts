@@ -76,3 +76,8 @@ export const getGoogleProfile = async () => {
   const { data } = await apiRequest.get('/api/v2/users/me/google-profile');
   return data.data;
 };
+
+export const getMyProfile = async () => {
+  const { data } = await apiRequest.get('/api/v2/users/me');
+  return data.data;
+};

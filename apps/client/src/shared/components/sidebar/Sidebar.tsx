@@ -17,6 +17,7 @@ import {
   usePutCategory,
   useDeleteCategory,
   useGetGoogleProfile,
+  useGetMyProfile,
 } from '@shared/apis/queries';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -26,7 +27,7 @@ import ProfilePopup from '../profilePopup/ProfilePopup';
 export function Sidebar() {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [toastIsOpen, setToastIsOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false); // ⭐ 프로필 팝업 상태
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -37,10 +38,14 @@ export function Sidebar() {
   const { data, isPending } = useGetArcons();
   const { mutate: deleteCategory } = useDeleteCategory();
   const { data: googleProfileData } = useGetGoogleProfile();
+  const { data: myProfile } = useGetMyProfile();
 
   const profileImageUrl = googleProfileData?.googleProfile || null;
-  const profileEmail = googleProfileData?.email ?? '이메일 없음';
-  const profileName = googleProfileData?.name ?? '이름 없음';
+
+  const chippiImageUrl = myProfile?.profileImage ?? null;
+  const profileEmail = myProfile?.email ?? '';
+  const profileName = myProfile?.name ?? '';
+  const remindAt = myProfile?.remindAt ?? 'AM 09:00';
 
   const {
     activeTab,
@@ -138,7 +143,6 @@ export function Sidebar() {
             className="h-[2.4rem] w-[8.7rem] cursor-pointer"
           />
 
-          {/* ⭐ 프로필 버튼 클릭 → 팝업 열기 */}
           <button
             type="button"
             className="h-[3.6rem] w-[3.6rem] flex-shrink-0 overflow-hidden rounded-full border border-gray-200"
@@ -241,17 +245,17 @@ export function Sidebar() {
         </footer>
       </div>
 
-      {/* ⭐⭐ 프로필 팝업 표시 ⭐⭐ */}
+      {/* 팝업 영역 */}
+
       <ProfilePopup
         open={profileOpen}
         onClose={() => setProfileOpen(false)}
-        profileImage={profileImageUrl}
+        profileImage={chippiImageUrl}
         name={profileName}
         email={profileEmail}
-        remindTime="AM 09:00"
+        remindTime={remindAt}
       />
 
-      {/* 카테고리 팝업 */}
       <PopupPortal
         popup={popup}
         onClose={handlePopupClose}
