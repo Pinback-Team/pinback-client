@@ -1,6 +1,7 @@
 import { Icon } from '@pinback/design-system/icons';
 import { Button } from '@pinback/design-system/ui';
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ProfilePopupProps {
   open: boolean;
@@ -19,6 +20,8 @@ export default function ProfilePopup({
   name,
   remindTime = 'AM 09:00',
 }: ProfilePopupProps) {
+  const navigate = useNavigate();
+
   const popupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,6 +36,12 @@ export default function ProfilePopup({
   }, [open, onClose]);
 
   if (!open) return null;
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+    navigate('/onboarding');
+  };
 
   return (
     <div className="fixed inset-0 z-[2000] flex items-start justify-start pl-[19rem] pt-[7rem]">
@@ -62,7 +71,7 @@ export default function ProfilePopup({
         </div>
 
         <div className="w-full px-[7.6rem]">
-          <Button variant="secondary" size="small">
+          <Button variant="secondary" size="small" onClick={handleLogout}>
             로그아웃
           </Button>
         </div>
