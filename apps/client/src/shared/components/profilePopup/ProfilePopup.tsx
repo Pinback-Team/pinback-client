@@ -62,7 +62,9 @@ export default function ProfilePopup({
         </div>
 
         <div className="w-full px-[7.6rem]">
-          <Button variant="secondary">로그아웃</Button>
+          <Button variant="secondary" size="small">
+            로그아웃
+          </Button>
         </div>
       </div>
     </div>
