@@ -35,7 +35,7 @@ export default function ProfilePopup({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[20000] flex items-start justify-center pt-[10rem]">
+    <div className="fixed inset-0 z-[2000] flex items-start justify-start pl-[19rem] pt-[7rem]">
       <div
         ref={popupRef}
         className="common-shadow flex w-[26rem] flex-col items-center rounded-[1.2rem] bg-white pb-[2.4rem] pt-[3.2rem]"

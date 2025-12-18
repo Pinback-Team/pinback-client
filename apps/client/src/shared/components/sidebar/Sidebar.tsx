@@ -21,10 +21,12 @@ import {
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import ProfilePopup from '../profilePopup/ProfilePopup';
 
 export function Sidebar() {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [toastIsOpen, setToastIsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false); // ⭐ 프로필 팝업 상태
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -37,6 +39,8 @@ export function Sidebar() {
   const { data: googleProfileData } = useGetGoogleProfile();
 
   const profileImageUrl = googleProfileData?.googleProfile || null;
+  const profileEmail = googleProfileData?.email ?? '이메일 없음';
+  const profileName = googleProfileData?.name ?? '이름 없음';
 
   const {
     activeTab,
@@ -80,9 +84,7 @@ export function Sidebar() {
         queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
         close();
       },
-      onError: () => {
-        setToastIsOpen(true);
-      },
+      onError: () => setToastIsOpen(true),
     });
   };
 
@@ -96,9 +98,7 @@ export function Sidebar() {
           close();
           moveNewCategory(id);
         },
-        onError: () => {
-          setToastIsOpen(true);
-        },
+        onError: () => setToastIsOpen(true),
       }
     );
   };
@@ -109,9 +109,7 @@ export function Sidebar() {
         queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
         close();
       },
-      onError: () => {
-        setToastIsOpen(true);
-      },
+      onError: () => setToastIsOpen(true),
     });
   };
 
@@ -132,22 +130,24 @@ export function Sidebar() {
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
       <div className="flex h-full flex-col px-[0.8rem]">
-        {/* TODO: 사이드바 프로필 클릭이벤트 추가 */}
+        {/* 헤더 */}
         <header className="flex items-center justify-between px-[0.8rem] py-[2.8rem]">
           <Icon
             name="logo"
             aria-label="Pinback 로고"
             className="h-[2.4rem] w-[8.7rem] cursor-pointer"
           />
+
+          {/* ⭐ 프로필 버튼 클릭 → 팝업 열기 */}
           <button
             type="button"
             className="h-[3.6rem] w-[3.6rem] flex-shrink-0 overflow-hidden rounded-full border border-gray-200"
-            onClick={() => console.log('프로필 클릭', profileImageUrl)}
+            onClick={() => setProfileOpen(true)}
           >
             {profileImageUrl ? (
               <img
                 src={profileImageUrl}
-                alt="프로필 이미지"
+                alt="프로필"
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -158,6 +158,7 @@ export function Sidebar() {
 
         <hr className="my-[0.8rem] border-gray-100" />
 
+        {/* 메뉴 영역 */}
         <div className="flex-1 overflow-y-auto">
           <SideItem
             icon="clock"
@@ -231,8 +232,8 @@ export function Sidebar() {
               acorns={acornCount}
               isActive={activeTab === 'level'}
               onClick={() => {
-                setSelectedCategoryId(null);
                 closeMenu();
+                setSelectedCategoryId(null);
                 goLevel();
               }}
             />
@@ -240,10 +241,21 @@ export function Sidebar() {
         </footer>
       </div>
 
+      {/* ⭐⭐ 프로필 팝업 표시 ⭐⭐ */}
+      <ProfilePopup
+        open={profileOpen}
+        onClose={() => setProfileOpen(false)}
+        profileImage={profileImageUrl}
+        name={profileName}
+        email={profileEmail}
+        remindTime="AM 09:00"
+      />
+
+      {/* 카테고리 팝업 */}
       <PopupPortal
         popup={popup}
         onClose={handlePopupClose}
-        onChange={handleCategoryChange}
+        onChange={setNewCategoryName}
         onCreateConfirm={handleCreateCategory}
         onEditConfirm={(id) => handlePatchCategory(id)}
         onDeleteConfirm={(id) => handleDeleteCategory(id)}
