@@ -16,6 +16,7 @@ import {
   getArticleDetail,
   getAcorns,
   deleteRemindArticle,
+  getSideInfo,
 } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
 import {
@@ -134,5 +135,12 @@ export const useGetPageMeta = (url: string) => {
     enabled: !!url,
     staleTime: Infinity,
     retry: false,
+  });
+};
+
+export const useGetSideInfo = () => {
+  return useQuery({
+    queryKey: ['sideInfo'],
+    queryFn: () => getSideInfo(),
   });
 };

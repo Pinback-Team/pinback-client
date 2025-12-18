@@ -10,12 +10,14 @@ import { useSidebarNav } from '@shared/hooks/useSidebarNav';
 import { useCategoryPopups } from '@shared/hooks/useCategoryPopups';
 import OptionsMenuPortal from './OptionsMenuPortal';
 import PopupPortal from './PopupPortal';
+import SideInfoPop from './SideInfoPop';
 import {
   useGetDashboardCategories,
   usePostCategory,
   useGetArcons,
   usePutCategory,
   useDeleteCategory,
+  useGetSideInfo,
 } from '@shared/apis/queries';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -33,7 +35,9 @@ export function Sidebar() {
   const { mutate: createCategory } = usePostCategory();
   const { data, isPending } = useGetArcons();
   const { mutate: deleteCategory } = useDeleteCategory();
+  const { data: sideInfo } = useGetSideInfo();
 
+  console.log('여기', sideInfo);
   const {
     activeTab,
     selectedCategoryId,
@@ -126,7 +130,9 @@ export function Sidebar() {
   const canCreateMore = categoryCount < MAX_CATEGORIES;
 
   return (
-    <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
+    <aside className="bg-white-bg relative sticky top-0 h-screen w-[24rem] border-r border-gray-300">
+      <SideInfoPop />
+
       <div className="flex h-full flex-col px-[0.8rem]">
         <header className="px-[0.8rem] py-[2.8rem]">
           <Icon
