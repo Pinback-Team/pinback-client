@@ -1,5 +1,6 @@
 import { Icon } from '@pinback/design-system/icons';
 import { Button } from '@pinback/design-system/ui';
+import formatRemindTime from '@shared/utils/formatRemindTime';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,10 +19,9 @@ export default function ProfilePopup({
   profileImage,
   email,
   name,
-  remindTime = 'AM 09:00',
+  remindTime,
 }: ProfilePopupProps) {
   const navigate = useNavigate();
-
   const popupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function ProfilePopup({
         <div className="text-font-gray-3 mb-[1.6rem] flex items-center gap-[0.2rem]">
           <Icon name="ic_clock_active" width={18} height={18} />
           <span className="">리마인드 알람&nbsp;</span>
-          <span className="caption2-m">{remindTime}</span>
+          <span className="caption2-m">{formatRemindTime(remindTime)}</span>
         </div>
 
         <div className="w-full px-[7.6rem]">
