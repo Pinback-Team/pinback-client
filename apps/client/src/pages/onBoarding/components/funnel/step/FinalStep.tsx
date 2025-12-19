@@ -4,7 +4,7 @@ import extImg from '/assets/onBoarding/icons/ext.svg';
 import pinImg from '/assets/onBoarding/icons/pin.svg';
 const FinalStep = () => {
   return (
-    <div className="flex h-full flex-col items-center">
+    <div className="flex h-full flex-col items-center px-[3.2rem]">
       <img src={dotori} className="mb-[1.2rem]" alt="dotori" />
       <p className="head2 text-font-black-1">Pinback에 오신 걸 환영해요</p>
       <p className="body2-m text-font-gray-3 mb-[1.4rem] mt-[0.8rem] text-center">
