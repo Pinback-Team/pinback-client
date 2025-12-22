@@ -22,7 +22,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import ProfilePopup from '../profilePopup/ProfilePopup';
+import ProfilePopupPortal from '../profilePopup/ProfilePopupPortal';
 
 export function Sidebar() {
   const [newCategoryName, setNewCategoryName] = useState('');
@@ -247,7 +247,7 @@ export function Sidebar() {
 
       {/* 팝업 영역 */}
 
-      <ProfilePopup
+      <ProfilePopupPortal
         open={profileOpen}
         onClose={() => setProfileOpen(false)}
         profileImage={chippiImageUrl}

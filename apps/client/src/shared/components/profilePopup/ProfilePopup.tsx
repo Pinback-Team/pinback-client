@@ -31,7 +31,9 @@ export default function ProfilePopup({
       }
     }
 
-    if (open) document.addEventListener('mousedown', handleClickOutside);
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [open, onClose]);
 
@@ -66,7 +68,7 @@ export default function ProfilePopup({
 
         <div className="text-font-gray-3 mb-[1.6rem] flex items-center gap-[0.2rem]">
           <Icon name="ic_clock_active" width={18} height={18} />
-          <span className="">리마인드 알람&nbsp;</span>
+          <span>리마인드 알람&nbsp;</span>
           <span className="caption2-m">{formatRemindTime(remindTime)}</span>
         </div>
 
