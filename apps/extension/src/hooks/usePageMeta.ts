@@ -47,7 +47,7 @@ export const usePageMeta = () => {
       //   // chrome-extension:// 은 내부 페이지로 취급하지 않음
 
       //   if (isInternalChromePage || !imageUrl?.title) {
-      //     window.close();
+      //
       //     return;
       //   }
       setMeta(newMeta);
