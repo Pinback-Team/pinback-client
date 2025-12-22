@@ -31,6 +31,8 @@ const onboardingUrl = import.meta.env.DEV
   ? 'http://localhost:5173/onboarding?step=SOCIAL_LOGIN'
   : 'https://pinback.today/onboarding?step=SOCIAL_LOGIN';
 
+let isRedirecting = false;
+
 apiRequest.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -50,11 +52,17 @@ apiRequest.interceptors.response.use(
       (error.response.status === 401 || error.response.status === 403) &&
       !isNoAuth
     ) {
-      chrome.storage.local.remove(['token', 'email'], () => {});
+      if (!isRedirecting) {
+        isRedirecting = true;
 
-      chrome.tabs.create({ url: onboardingUrl });
+        chrome.storage.local.remove(['token', 'email'], () => {});
 
-      return Promise.reject(error);
+        chrome.tabs.create({ url: onboardingUrl }, () => {
+          setTimeout(() => {
+            isRedirecting = false;
+          }, 2000);
+        });
+      }
     }
 
     return Promise.reject(error);
