@@ -80,6 +80,11 @@ export const usePostSignUp = () => {
       };
       if (newToken) {
         localStorage.setItem('token', newToken);
+        if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+          chrome.storage.local.set({ token: newToken }, () => {
+            console.log('Token saved to chrome storage');
+          });
+        }
         sendTokenToExtension(newToken);
       }
 

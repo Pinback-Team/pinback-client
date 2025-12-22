@@ -26,7 +26,14 @@ const GoogleCallback = () => {
     if (isUser) {
       if (accessToken) {
         localStorage.setItem('token', accessToken);
+
+        if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+          chrome.storage.local.set({ token: accessToken }, () => {
+            console.log('Token saved to chrome storage');
+          });
+        }
       }
+
       navigate('/');
     } else {
       navigate('/onboarding?step=ALARM');
