@@ -16,6 +16,8 @@ import {
   getArticleDetail,
   getAcorns,
   deleteRemindArticle,
+  getGoogleProfile,
+  getMyProfile,
 } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
 import {
@@ -136,3 +138,18 @@ export const useGetPageMeta = (url: string) => {
     retry: false,
   });
 };
+
+export const useGetGoogleProfile = () => {
+  return useQuery({
+    queryKey: ['googleProfile'],
+    queryFn: getGoogleProfile,
+    staleTime: Infinity,
+  });
+};
+
+export function useGetMyProfile() {
+  return useQuery({
+    queryKey: ['myProfile'],
+    queryFn: getMyProfile,
+  });
+}
