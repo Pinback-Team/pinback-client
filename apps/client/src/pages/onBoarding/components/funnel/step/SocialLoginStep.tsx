@@ -10,6 +10,8 @@ const SocialLoginStep = () => {
       ? import.meta.env.VITE_GOOGLE_REDIRECT_URI_PROD
       : import.meta.env.VITE_GOOGLE_REDIRECT_URI_DEV;
 
+    console.log('redirectUri:', redirectUri);
+
     if (!clientId || !redirectUri) {
       alert('Google OAuth 설정이 누락되었습니다.');
       return;
