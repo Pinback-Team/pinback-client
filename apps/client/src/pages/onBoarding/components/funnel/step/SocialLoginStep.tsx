@@ -1,30 +1,9 @@
 import Chippi from '@assets/chippi_extension_popup.svg';
 import GoogleLogo from '/assets/onBoarding/icons/googleLogo.svg';
 import { Link } from 'react-router-dom';
-import { Icon } from '@pinback/design-system/icons';
+import { handleGoogleLogin } from '@shared/utils/handleGoogleLogin';
 
 const SocialLoginStep = () => {
-  const handleGoogleLogin = () => {
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-
-    const redirectUri = import.meta.env.PROD
-      ? import.meta.env.VITE_GOOGLE_REDIRECT_URI_PROD
-      : import.meta.env.VITE_GOOGLE_REDIRECT_URI_DEV;
-
-    if (!clientId || !redirectUri) {
-      alert('Google OAuth 설정이 누락되었습니다.');
-      return;
-    }
-    const googleAuthUrl =
-      `https://accounts.google.com/o/oauth2/v2/auth?` +
-      `client_id=${clientId}` +
-      `&redirect_uri=${redirectUri}` +
-      `&response_type=code` +
-      `&scope=email profile`;
-
-    window.location.href = googleAuthUrl;
-  };
-
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <img
@@ -32,7 +11,6 @@ const SocialLoginStep = () => {
         alt="치삐 이미지"
         className="h-[19.4rem] w-[19.4rem] object-contain"
       />
-      <Icon name={'logo'} height={34} width={123} />
 
       <h1 className="head2 text-font-black-1 mb-[0.8rem] text-center">
         치삐를 만나려면 로그인이 필요해요!
