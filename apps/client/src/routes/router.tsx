@@ -1,5 +1,6 @@
 import Category from '@pages/category/Category';
 import Level from '@pages/level/Level';
+import Login from '@pages/login/Login';
 import MyBookmark from '@pages/myBookmark/MyBookmark';
 import GoogleCallback from '@pages/onBoarding/GoogleCallback';
 import OnBoarding from '@pages/onBoarding/OnBoarding';
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES_CONFIG.onBoardingCallback.path,
         element: <GoogleCallback />,
+      },
+      {
+        path: ROUTES_CONFIG.login.path,
+        element: <Login />,
       },
     ],
   },
