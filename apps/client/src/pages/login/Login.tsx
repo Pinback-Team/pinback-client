@@ -16,7 +16,7 @@ const Login = () => {
       <Header />
 
       <main className="flex w-full flex-1 items-center justify-center">
-        <div className="bg-white-bg flex h-[54.8rem] w-[63.2rem] flex-col items-center justify-center rounded-[2.4rem] pt-[3.2rem]">
+        <div className="bg-white-bg flex h-[54.8rem] w-[63.2rem] flex-col items-center justify-center rounded-[2.4rem]">
           <img
             src={Chippi}
             alt="치삐 이미지"
