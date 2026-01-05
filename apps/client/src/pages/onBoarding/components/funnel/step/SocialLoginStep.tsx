@@ -1,5 +1,7 @@
 import Chippi from '@assets/chippi_extension_popup.svg';
 import GoogleLogo from '/assets/onBoarding/icons/googleLogo.svg';
+import { Link } from 'react-router-dom';
+import { Icon } from '@pinback/design-system/icons';
 
 const SocialLoginStep = () => {
   const handleGoogleLogin = () => {
@@ -24,12 +26,13 @@ const SocialLoginStep = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center pt-6">
+    <div className="flex h-full flex-col items-center justify-center">
       <img
         src={Chippi}
         alt="치삐 이미지"
         className="h-[19.4rem] w-[19.4rem] object-contain"
       />
+      <Icon name={'logo'} height={34} width={123} />
 
       <h1 className="head2 text-font-black-1 mb-[0.8rem] text-center">
         치삐를 만나려면 로그인이 필요해요!
@@ -50,6 +53,24 @@ const SocialLoginStep = () => {
         />
         구글 계정으로 로그인
       </button>
+      {/*TODO: 개인정보처리방침 추가되면 링크 수정*/}
+      <p className="text-font-gray-3 caption2-m mt-[2.4rem] text-center">
+        가입 시 pinback의{' '}
+        <Link
+          to="/privacy"
+          className="underline underline-offset-2 hover:opacity-70"
+        >
+          이용 약관
+        </Link>{' '}
+        및{' '}
+        <Link
+          to="/privacy"
+          className="underline underline-offset-2 hover:opacity-70"
+        >
+          개인정보처리방침
+        </Link>
+        에 동의한 것으로 간주됩니다.
+      </p>
     </div>
   );
 };
