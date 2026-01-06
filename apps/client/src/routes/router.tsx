@@ -4,6 +4,7 @@ import MyBookmark from '@pages/myBookmark/MyBookmark';
 import GoogleCallback from '@pages/onBoarding/GoogleCallback';
 import OnBoarding from '@pages/onBoarding/OnBoarding';
 import PrivacyPolicy from '@pages/policy/PrivacyPolicy';
+import TermsOfService from '@pages/policy/TermsOfService';
 import Remind from '@pages/remind/Remind';
 import { ROUTES_CONFIG } from '@routes/routesConfig';
 import { createBrowserRouter } from 'react-router-dom';
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES_CONFIG.privacyPolicy.path,
         element: <PrivacyPolicy />,
+      },
+      {
+        path: ROUTES_CONFIG.termsOfService.path,
+        element: <TermsOfService />,
       },
     ],
   },
