@@ -18,6 +18,7 @@ import ArticlesLoadingBoundary from '@shared/components/articlesLoadingBoundary/
 import ArticlesErrorBoundary from '@shared/components/articlesErrorBoundary/ArticlesErrorBoundary';
 import { ErrorBoundary } from 'react-error-boundary';
 import MyBookmarkContent from '@pages/myBookmark/components/myBookmarkContent/MyBookmarkContent';
+import Footer from './components/footer/Footer';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
@@ -102,6 +103,7 @@ const MyBookmark = () => {
           />
         </ErrorBoundary>
       </Suspense>
+      <Footer />
 
       <OptionsMenuPortal
         open={menu.open}

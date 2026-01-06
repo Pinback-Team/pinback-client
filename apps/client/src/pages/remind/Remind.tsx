@@ -23,6 +23,7 @@ import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 import FetchCard from './components/fetchCard/FetchCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 import Tooltip from '@shared/components/tooltip/Tooltip';
+import Footer from './components/footer/Footer';
 
 const Remind = () => {
   useEffect(() => {
@@ -176,6 +177,8 @@ const Remind = () => {
       ) : (
         <EmptyStateComponent />
       )}
+
+      <Footer />
 
       <OptionsMenuPortal
         open={menu.open}
