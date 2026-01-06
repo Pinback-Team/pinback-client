@@ -1,4 +1,5 @@
 import { Icon } from '@pinback/design-system/icons';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -6,23 +7,19 @@ const Footer = () => {
   return (
     <footer className="absolute bottom-0 mt-auto w-full px-[8rem] py-[3.2rem]">
       <div className="mt-[2.4rem] flex gap-[0.8rem]">
-        <a
-          href="https://right-turquoise-268.notion.site/pinback-2c527450eb1c80eca220c1de3293e43a?source=copy_link"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to={'/terms'}
           className="caption1-sb text-font-gray-2 cursor-pointer hover:underline"
         >
           이용약관
-        </a>
+        </Link>
         <p className="caption1-sb text-font-gray-2">|</p>
-        <a
-          href=" https://right-turquoise-268.notion.site/pinback-2c527450eb1c804390effb2ee32072b2?source=copy_link"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to={'/policy'}
           className="caption1-sb text-font-gray-2 cursor-pointer hover:underline"
         >
           개인정보처리방침
-        </a>
+        </Link>
       </div>
 
       <div className="flex items-center justify-between">
