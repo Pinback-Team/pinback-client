@@ -23,6 +23,10 @@ export const ROUTES_CONFIG = {
     title: '구글 OAuth 콜백',
     path: '/onboarding/callback',
   },
+  login: {
+    title: '로그인',
+    path: '/login',
+  },
   privacyPolicy: {
     title: '개인정보처리방침',
     path: '/policy',

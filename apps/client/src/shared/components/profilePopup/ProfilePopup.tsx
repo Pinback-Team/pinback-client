@@ -42,7 +42,7 @@ export default function ProfilePopup({
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('email');
-    navigate('/onboarding');
+    navigate('/login');
   };
 
   return (
