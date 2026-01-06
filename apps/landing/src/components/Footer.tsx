@@ -2,6 +2,7 @@ import { Icon } from '@pinback/design-system/icons';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const SERVICE_URL = 'https://pinback.today';
 
   return (
     <footer className="border-gray100 absolute bottom-0 w-full border-t-2 px-[8rem] py-[3.2rem]">
@@ -15,7 +16,7 @@ const Footer = () => {
         <div className="flex gap-[2.4rem]">
           <div className="flex gap-[0.8rem]">
             <a
-              href="https://right-turquoise-268.notion.site/pinback-2c527450eb1c80eca220c1de3293e43a?source=copy_link"
+              href={`${SERVICE_URL}/terms`}
               target="_blank"
               rel="noopener noreferrer"
               className="caption1-sb text-font-gray-2 cursor-pointer hover:underline"
@@ -24,7 +25,7 @@ const Footer = () => {
             </a>
             <p className="caption1-sb text-font-gray-2">|</p>
             <a
-              href=" https://right-turquoise-268.notion.site/pinback-2c527450eb1c804390effb2ee32072b2?source=copy_link"
+              href={`${SERVICE_URL}/policy`}
               target="_blank"
               rel="noopener noreferrer"
               className="caption1-sb text-font-gray-2 cursor-pointer hover:underline"
