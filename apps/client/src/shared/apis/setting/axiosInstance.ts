@@ -35,11 +35,14 @@ apiRequest.interceptors.response.use(
       originalRequest.url?.includes(url)
     );
 
+    const isLoginPage = window.location.pathname.startsWith('/login');
+
     if (
       error.response &&
       (error.response.status === 401 || error.response.status === 403) &&
       !originalRequest._retry &&
-      !isNoAuth
+      !isNoAuth &&
+      !isLoginPage
     ) {
       originalRequest._retry = true;
 
