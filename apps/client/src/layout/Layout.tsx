@@ -12,6 +12,7 @@ const Layout = () => {
   const isSidebarHidden =
     location.pathname.startsWith(ROUTES_CONFIG.onBoarding.path) ||
     location.pathname.startsWith(ROUTES_CONFIG.login.path) ||
+    location.pathname.startsWith(ROUTES_CONFIG.onBoardingCallback.path) ||
     isPolicyPage;
 
   return (
