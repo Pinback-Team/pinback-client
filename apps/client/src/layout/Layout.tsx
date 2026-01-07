@@ -10,9 +10,9 @@ const Layout = () => {
     location.pathname === ROUTES_CONFIG.termsOfService.path;
 
   const isSidebarHidden =
-    location.pathname.startsWith(ROUTES_CONFIG.onBoarding.path) ||
+    location.pathname.startsWith(ROUTES_CONFIG.onboarding.path) ||
     location.pathname.startsWith(ROUTES_CONFIG.login.path) ||
-    location.pathname.startsWith(ROUTES_CONFIG.onBoardingCallback.path) ||
+    location.pathname.startsWith(ROUTES_CONFIG.onboardingCallback.path) ||
     isPolicyPage;
 
   return (
