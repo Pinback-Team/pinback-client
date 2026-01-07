@@ -23,6 +23,7 @@ import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 import FetchCard from './components/fetchCard/FetchCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 import Tooltip from '@shared/components/tooltip/Tooltip';
+import Footer from './components/footer/Footer';
 
 const Remind = () => {
   useEffect(() => {
@@ -121,7 +122,7 @@ const Remind = () => {
   // const readArticleCount = data?.pages[0]?.readArticleCount || 0;
 
   return (
-    <div className="flex h-screen flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
+    <div className="flex h-screen flex-col pl-[8rem] pr-[5rem] pt-[5.2rem]">
       <p className="head3">리마인드</p>
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
@@ -176,6 +177,8 @@ const Remind = () => {
       ) : (
         <EmptyStateComponent />
       )}
+
+      <Footer />
 
       <OptionsMenuPortal
         open={menu.open}

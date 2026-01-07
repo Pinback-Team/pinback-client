@@ -6,6 +6,7 @@ import { handleGoogleLogin } from '@shared/utils/handleGoogleLogin';
 import { Link } from 'react-router-dom';
 import Chippi from '@assets/chippi_extension_popup.svg';
 import GoogleLogo from '/assets/onBoarding/icons/googleLogo.svg';
+import { ROUTES_CONFIG } from '@routes/routesConfig';
 
 const Login = () => {
   return (
@@ -48,14 +49,14 @@ const Login = () => {
           <p className="text-font-gray-3 caption2-m mt-[2.4rem] text-center">
             가입 시 pinback의{' '}
             <Link
-              to="/terms"
+              to={ROUTES_CONFIG.termsOfService.path}
               className="underline underline-offset-2 hover:opacity-70"
             >
               이용 약관
             </Link>{' '}
             및{' '}
             <Link
-              to="/privacy"
+              to={ROUTES_CONFIG.privacyPolicy.path}
               className="underline underline-offset-2 hover:opacity-70"
             >
               개인정보처리방침

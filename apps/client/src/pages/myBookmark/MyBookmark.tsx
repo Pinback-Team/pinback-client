@@ -18,6 +18,7 @@ import ArticlesLoadingBoundary from '@shared/components/articlesLoadingBoundary/
 import ArticlesErrorBoundary from '@shared/components/articlesErrorBoundary/ArticlesErrorBoundary';
 import { ErrorBoundary } from 'react-error-boundary';
 import MyBookmarkContent from '@pages/myBookmark/components/myBookmarkContent/MyBookmarkContent';
+import Footer from './components/footer/Footer';
 
 const MyBookmark = () => {
   const [activeBadge, setActiveBadge] = useState<'all' | 'notRead'>('all');
@@ -69,7 +70,7 @@ const MyBookmark = () => {
     id == null ? '' : (REMIND_MOCK_DATA.find((d) => d.id === id)?.title ?? '');
 
   return (
-    <div className="flex h-screen flex-col py-[5.2rem] pl-[8rem] pr-[5rem]">
+    <div className="flex h-screen flex-col pl-[8rem] pr-[5rem] pt-[5.2rem]">
       <div className="flex items-center gap-[0.4rem]">
         <div className="flex items-center gap-[0.4rem]">
           <p className="head3">나의 북마크</p>
@@ -102,6 +103,7 @@ const MyBookmark = () => {
           />
         </ErrorBoundary>
       </Suspense>
+      <Footer />
 
       <OptionsMenuPortal
         open={menu.open}
