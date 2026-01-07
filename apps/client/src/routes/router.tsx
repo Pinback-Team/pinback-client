@@ -33,11 +33,11 @@ export const router = createBrowserRouter([
         element: <Level />,
       },
       {
-        path: ROUTES_CONFIG.onBoarding.path,
+        path: ROUTES_CONFIG.onboarding.path,
         element: <OnBoarding />,
       },
       {
-        path: ROUTES_CONFIG.onBoardingCallback.path,
+        path: ROUTES_CONFIG.onboardingCallback.path,
         element: <GoogleCallback />,
       },
       {
