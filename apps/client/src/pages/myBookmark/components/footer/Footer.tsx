@@ -6,7 +6,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto w-full pr-[3rem]">
+    <footer className="mt-auto w-full pb-[1.6rem] pr-[3rem]">
       <div className="mt-[2.4rem] flex gap-[0.8rem]">
         <Link
           to={ROUTES_CONFIG.termsOfService.path}
