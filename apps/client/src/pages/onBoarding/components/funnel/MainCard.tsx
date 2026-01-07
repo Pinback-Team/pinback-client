@@ -164,7 +164,7 @@ const MainCard = () => {
     if (shouldSkipMacStep) {
       setDirection(1);
       setStep(Step.FINAL);
-      navigate(`/onBoarding?step=${Step.FINAL}`);
+      navigate(`/onboarding?step=${Step.FINAL}`);
       return;
     }
 
@@ -184,7 +184,7 @@ const MainCard = () => {
 
     setDirection(1);
     setStep(next);
-    navigate(`/onBoarding?step=${next}`);
+    navigate(`/onboarding?step=${next}`);
   };
 
   const prevStep = () => {
@@ -193,7 +193,7 @@ const MainCard = () => {
       const previous = stepOrder[idx - 1];
       setDirection(-1);
       setStep(previous);
-      navigate(`/onBoarding?step=${previous}`);
+      navigate(`/onboarding?step=${previous}`);
     }
   };
 
