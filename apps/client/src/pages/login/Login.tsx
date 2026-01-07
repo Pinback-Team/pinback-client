@@ -55,7 +55,7 @@ const Login = () => {
             </Link>{' '}
             및{' '}
             <Link
-              to="/privacy"
+              to="/policy"
               className="underline underline-offset-2 hover:opacity-70"
             >
               개인정보처리방침
