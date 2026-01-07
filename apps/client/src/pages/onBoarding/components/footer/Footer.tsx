@@ -1,4 +1,5 @@
 import { Icon } from '@pinback/design-system/icons';
+import { ROUTES_CONFIG } from '@routes/routesConfig';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -8,14 +9,14 @@ const Footer = () => {
     <footer className="absolute bottom-0 mt-auto w-full px-[8rem] py-[3.2rem]">
       <div className="mt-[2.4rem] flex gap-[0.8rem]">
         <Link
-          to={'/terms'}
+          to={ROUTES_CONFIG.termsOfService.path}
           className="caption1-sb text-font-gray-2 cursor-pointer hover:underline"
         >
           이용약관
         </Link>
         <p className="caption1-sb text-font-gray-2">|</p>
         <Link
-          to={'/policy'}
+          to={ROUTES_CONFIG.privacyPolicy.path}
           className="caption1-sb text-font-gray-2 cursor-pointer hover:underline"
         >
           개인정보처리방침
