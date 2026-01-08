@@ -26,10 +26,6 @@ apiRequest.interceptors.request.use(async (config) => {
 });
 
 // TODO: 환경변수로 분리
-// eslint-disable-next-line turbo/no-undeclared-env-vars
-const onboardingUrl = import.meta.env.DEV
-  ? 'http://localhost:5173/onboarding?step=SOCIAL_LOGIN'
-  : 'https://pinback.today/onboarding?step=SOCIAL_LOGIN';
 
 let isRedirecting = false;
 
@@ -50,19 +46,10 @@ apiRequest.interceptors.response.use(
     if (
       error.response &&
       (error.response.status === 401 || error.response.status === 403) &&
-      !originalRequest._retry &&
       !isNoAuth
     ) {
       if (!isRedirecting) {
         isRedirecting = true;
-
-        chrome.storage.local.remove(['token', 'email'], () => {});
-
-        chrome.tabs.create({ url: onboardingUrl }, () => {
-          setTimeout(() => {
-            isRedirecting = false;
-          }, 2000);
-        });
       }
     }
 

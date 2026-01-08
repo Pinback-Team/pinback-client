@@ -1,5 +1,5 @@
 import { Icon } from '@pinback/design-system/icons';
-
+import LogOutImg from '/logout_chippi.svg';
 const LogOutPop = () => {
   return (
     <div className="bg-white-bg common-shadow flex h-[35.5rem] w-[31.2rem] flex-col items-center justify-center rounded-[1.2rem] px-[3.2rem] py-[2.4rem]">
@@ -7,7 +7,11 @@ const LogOutPop = () => {
         <Icon name="main_logo" width={72} height={20} />
       </div>
       <div className="flex items-center justify-center pb-[1rem] pt-[0.8rem] text-center">
-        <Icon name="logout_chippi.2512" width={132} height={132} />
+        <img
+          src={LogOutImg}
+          alt="로그아웃 치삐"
+          className="h-[13.2rem] w-[13.2rem]"
+        />
       </div>
       <p className="sub2-sb mb-[0.4rem] text-black">
         치삐를 만나려면 로그인이 필요해요!

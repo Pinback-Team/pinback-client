@@ -11,7 +11,7 @@ const App = () => {
 
   const [isDuplicatePop, setIsDuplicatePop] = useState(false);
   const [mainPopType, setMainPopType] = useState<'add' | 'edit'>('add');
-  const [isToken, setIsToken] = useState<boolean | null>(null);
+  const [isToken, setIsToken] = useState(false);
 
   useEffect(() => {
     chrome.storage.local.get('token', (result) => {
