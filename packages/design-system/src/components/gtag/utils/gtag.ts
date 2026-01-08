@@ -40,8 +40,7 @@ export const sendGAEvent = async (
     event_label: label,
     value,
   });
-
-  console.log(`✅ GA 이벤트 전송됨: ${action}`);
+=
 };
 
 /**
@@ -59,6 +58,4 @@ export const trackPageView = async (title?: string) => {
     page_title: title ?? document.title,
     page_path: window.location.pathname,
   });
-
-  console.log('📍 페이지뷰 트래킹:', window.location.pathname);
 };

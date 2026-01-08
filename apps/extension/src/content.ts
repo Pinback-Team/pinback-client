@@ -1,4 +1,3 @@
-console.log('컨텐츠 스크립트 로드됨');
 window.addEventListener('message', (event) => {
   if (event.source !== window) return;
   if (event.data.type === 'SET_TOKEN') {

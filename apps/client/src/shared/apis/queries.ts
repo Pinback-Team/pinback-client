@@ -83,8 +83,6 @@ export const usePostSignUp = () => {
         };
         sendTokenToExtension(newToken);
       }
-
-      console.log('회원가입 성공:', data);
     },
     onError: (error) => {
       console.error('회원가입 실패:', error);

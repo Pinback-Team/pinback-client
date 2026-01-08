@@ -35,8 +35,6 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log('Received background message ', payload);
-
   const url = payload.data?.url || 'https://www.pinback.today';
   const notificationTitle = payload.notification?.title || 'pinback';
   const notificationOptions = {
@@ -50,8 +48,6 @@ messaging.onBackgroundMessage((payload) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
-  console.log('🔔 알림 클릭됨:', event);
-
   const targetUrl = event.notification.data?.url || 'https://www.pinback.today';
 
   fetch(

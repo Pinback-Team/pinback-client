@@ -55,7 +55,6 @@ export const useSaveBookmark = () => {
                   reject(chrome.runtime.lastError);
                   return;
                 }
-                console.log('새 폴더 생성됨 👉', newFolder);
                 resolve(newFolder.id);
               }
             );
@@ -74,7 +73,6 @@ export const useSaveBookmark = () => {
               reject(chrome.runtime.lastError);
               return;
             }
-            console.log('📌 PinBack 폴더에 북마크 저장 완료:', newBookmark);
             resolve();
           }
         );

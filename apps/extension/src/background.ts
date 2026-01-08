@@ -1,9 +1,8 @@
-console.log('백그라운드 기능');
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
     chrome.identity.getProfileUserInfo(function (info) {
       chrome.storage.local.set({ email: info.email }, () => {
-        console.log(info.email);
+        console.log('User email saved:');
       });
       setTimeout(() => {
         chrome.tabs.create({
@@ -17,7 +16,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 chrome.runtime.onMessage.addListener((message) => {
   if (message.type === 'SET_TOKEN') {
     chrome.storage.local.set({ token: message.token }, () => {
-      console.log('Token saved!', message.token);
+      console.log('Token saved!');
     });
   }
 });
