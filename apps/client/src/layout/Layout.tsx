@@ -1,14 +1,24 @@
-import { Outlet,useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from '@shared/components/sidebar/Sidebar';
+import { ROUTES_CONFIG } from '@routes/routesConfig';
 
 const Layout = () => {
   const location = useLocation();
-  const isOnboarding = location.pathname.startsWith('/onboarding');
+
+  const isPolicyPage =
+    location.pathname === ROUTES_CONFIG.privacyPolicy.path ||
+    location.pathname === ROUTES_CONFIG.termsOfService.path;
+
+  const isSidebarHidden =
+    location.pathname.startsWith(ROUTES_CONFIG.onboarding.path) ||
+    location.pathname.startsWith(ROUTES_CONFIG.login.path) ||
+    location.pathname.startsWith(ROUTES_CONFIG.onboardingCallback.path) ||
+    isPolicyPage;
 
   return (
     <>
       <div className="flex h-screen">
-         {!isOnboarding && <Sidebar />}
+        {!isSidebarHidden && <Sidebar />}
         <main className="bg-gray-bg flex-1 overflow-y-auto">
           <Outlet />
         </main>
