@@ -69,22 +69,18 @@ export const usePostSignUp = () => {
     mutationFn: (data: postSignUpRequest) => postSignUp(data),
     onSuccess: (data) => {
       const newToken = data?.data?.token || data?.token;
-      const sendTokenToExtension = (token: string) => {
-        window.postMessage(
-          {
-            type: 'SET_TOKEN',
-            token,
-          },
-          window.location.origin
-        );
-      };
+
       if (newToken) {
         localStorage.setItem('token', newToken);
-        if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-          chrome.storage.local.set({ token: newToken }, () => {
-            console.log('Token saved to chrome storage');
-          });
-        }
+        const sendTokenToExtension = (token: string) => {
+          window.postMessage(
+            {
+              type: 'SET_TOKEN',
+              token,
+            },
+            window.location.origin
+          );
+        };
         sendTokenToExtension(newToken);
       }
 

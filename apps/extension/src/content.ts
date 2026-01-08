@@ -6,5 +6,8 @@ window.addEventListener('message', (event) => {
       type: 'SET_TOKEN',
       token: event.data.token,
     });
+    chrome.storage.local.set({ token: event.data.token }, () => {
+      console.log('Token saved!', event.data.token);
+    });
   }
 });

@@ -27,13 +27,17 @@ const GoogleCallback = () => {
       if (accessToken) {
         localStorage.setItem('token', accessToken);
 
-        if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-          chrome.storage.local.set({ token: accessToken }, () => {
-            console.log('Token saved to chrome storage');
-          });
-        }
+        const sendTokenToExtension = (token: string) => {
+          window.postMessage(
+            {
+              type: 'SET_TOKEN',
+              token,
+            },
+            window.location.origin
+          );
+        };
+        sendTokenToExtension(accessToken);
       }
-
       navigate('/');
     } else {
       navigate('/onboarding?step=ALARM');
