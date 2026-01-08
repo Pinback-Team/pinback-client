@@ -15,7 +15,6 @@ const App = () => {
 
   useEffect(() => {
     chrome.storage.local.get('token', (result) => {
-      console.log(!!result.token, result);
       setIsToken(!!result.token);
     });
   }, []);
