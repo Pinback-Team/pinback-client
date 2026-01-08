@@ -40,7 +40,6 @@ export const sendGAEvent = async (
     event_label: label,
     value,
   });
-=
 };
 
 /**
