@@ -20,3 +20,11 @@ chrome.runtime.onMessage.addListener((message) => {
     });
   }
 });
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === 'Extension-Logout') {
+    chrome.storage.local.remove('token', () => {
+      console.log('Token removed!');
+    });
+  }
+});

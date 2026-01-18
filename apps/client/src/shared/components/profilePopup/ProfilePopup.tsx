@@ -42,6 +42,15 @@ export default function ProfilePopup({
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('email');
+    const sendExtensionLogout = () => {
+      window.postMessage(
+        {
+          type: 'Extension-Logout',
+        },
+        window.location.origin
+      );
+    };
+    sendExtensionLogout();
     navigate('/login');
   };
 
