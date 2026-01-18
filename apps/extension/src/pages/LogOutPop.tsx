@@ -25,7 +25,7 @@ const LogOutPop = () => {
         type="button"
         onClick={() => {
           chrome.tabs.create({
-            url: 'https://www.pinback.today/onboarding?step=SOCIAL_LOGIN',
+            url: 'https://pinback.today/onboarding?step=SOCIAL_LOGIN',
           });
         }}
       >

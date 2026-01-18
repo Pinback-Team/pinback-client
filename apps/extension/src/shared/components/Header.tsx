@@ -12,7 +12,7 @@ const Header = () => {
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
         onClick={() => {
-          chrome.tabs.create({ url: 'https://www.pinback.today/' });
+          chrome.tabs.create({ url: 'https://pinback.today/' });
         }}
       />
       <Icon name="main_logo" width={72} height={20} />
