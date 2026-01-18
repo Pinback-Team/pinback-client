@@ -10,3 +10,12 @@ window.addEventListener('message', (event) => {
     });
   }
 });
+
+window.addEventListener('message', (event) => {
+  if (event.source !== window) return;
+  if (event.data.type === 'Extension-Logout') {
+    chrome.storage.local.remove('token', () => {
+      console.log('Token removed!');
+    });
+  }
+});
