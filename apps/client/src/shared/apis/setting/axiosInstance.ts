@@ -46,7 +46,7 @@ apiRequest.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
-      localStorage.removeItem('token');
+      // localStorage.removeItem('token');
       window.location.href = '/onboarding?step=SOCIAL_LOGIN';
 
       return Promise.reject(error);
