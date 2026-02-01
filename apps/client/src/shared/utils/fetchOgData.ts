@@ -69,19 +69,27 @@ export function parseOgData(html: string, sourceUrl: string): OGData {
  * - buildUrl: 타겟 URL로 프록시 요청 URL을 만드는 함수
  * - extractHtml: 프록시 응답에서 순수 HTML을 추출하는 함수
  */
+// const proxyServices = [
+//   // {
+//   //   name: 'CORSProxy.io',
+//   //   buildUrl: (targetUrl: string) =>
+//   //     `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+//   //   extractHtml: (response: AxiosResponse) => response.data,
+//   // },
+//   // TODO: 2개까지 보낼 필요 없어서 일단 주석처리
+//   {
+//     name: 'AllOrigins',
+//     buildUrl: (targetUrl: string) =>
+//       `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
+//     extractHtml: (response: AxiosResponse) => response.data?.contents,
+//   },
+// ];
 const proxyServices = [
-  // {
-  //   name: 'CORSProxy.io',
-  //   buildUrl: (targetUrl: string) =>
-  //     `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
-  //   extractHtml: (response: AxiosResponse) => response.data,
-  // },
-  // TODO: 2개까지 보낼 필요 없어서 일단 주석처리
   {
-    name: 'AllOrigins',
-    buildUrl: (targetUrl: string) =>
-      `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
-    extractHtml: (response: AxiosResponse) => response.data?.contents,
+    name: 'Codetabs',
+    buildUrl: (url: string) =>
+      `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+    extractHtml: (res: AxiosResponse) => res.data,
   },
 ];
 
