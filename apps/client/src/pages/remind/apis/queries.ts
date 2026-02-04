@@ -8,7 +8,7 @@ export const useGetRemindArticles = (nowDate: string, readStatus: boolean) => {
       getRemindArticles(nowDate, readStatus, pageParam, 20),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.articles.length === 0) {
+      if (!lastPage.hasNext) {
         return undefined;
       }
       return allPages.length;
