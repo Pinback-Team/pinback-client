@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useRef, useState } from 'react';
-import { within, userEvent, expect ,fn} from '@storybook/test';
+import { within, userEvent, expect, fn } from '@storybook/test';
 import Input from './Input';
 
 const meta: Meta<typeof Input> = {
@@ -27,7 +27,7 @@ const meta: Meta<typeof Input> = {
   },
   args: {
     isError: false,
-    placeholder: '값을 입력하세요', 
+    placeholder: '값을 입력하세요',
     onChange: fn(),
   },
 };

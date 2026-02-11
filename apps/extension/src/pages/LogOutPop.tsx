@@ -2,7 +2,7 @@ import { Icon } from '@pinback/design-system/icons';
 import LogOutImg from '/logout_chippi.svg';
 const LogOutPop = () => {
   return (
-    <div className="bg-white-bg common-shadow flex h-[35.5rem] w-[31.2rem] flex-col items-center justify-center rounded-[1.2rem] px-[3.2rem] py-[2.4rem]">
+    <div className="bg-white-bg common-shadow flex h-[37.5rem] w-[35.2rem] flex-col items-center justify-center rounded-[1.2rem] px-[3.2rem] py-[2.4rem] leading-normal">
       <div className="mr-auto">
         <Icon name="main_logo" width={72} height={20} />
       </div>
@@ -16,12 +16,12 @@ const LogOutPop = () => {
       <p className="sub2-sb mb-[0.4rem] text-black">
         치삐를 만나려면 로그인이 필요해요!
       </p>
-      <p className="body4-r text-font-gray-3 px-[4.15rem] text-center">
+      <p className="font-pretendard text-font-gray-3 text-center text-[1.3rem] font-normal leading-[1.5] tracking-[-0.025em]">
         지금 로그인하고 북마크한 정보의
         <br /> 리마인드 알람을 받아보세요
       </p>
       <button
-        className="sub4-sb mt-[1.6rem] flex h-[4.4rem] w-[25.15rem] items-center justify-between rounded-full border border-gray-100 bg-white px-[2rem]"
+        className="font-pretendard mt-[1.6rem] flex h-[4.4rem] w-[26.5rem] items-center justify-center gap-[1rem] rounded-full border border-gray-100 bg-white py-[1.15rem] py-[1.7rem] text-[1.5rem] font-semibold leading-[1.4] leading-normal tracking-[-0.02em]"
         type="button"
         onClick={() => {
           chrome.tabs.create({

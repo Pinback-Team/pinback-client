@@ -35,7 +35,6 @@ const App = () => {
 
   return (
     <>
-      {/* <LogOutPop /> */}
       {isToken ? (
         isDuplicatePop ? (
           <DuplicatePop
