@@ -166,7 +166,7 @@ export function Sidebar() {
         {/* 메뉴 영역 */}
         <div className="flex-1 overflow-y-auto">
           <SideItem
-            icon="clock"
+            icon="pin"
             label="관심 직무 핀"
             active={activeTab === 'job-pins'}
             onClick={() => {

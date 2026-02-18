@@ -1,1 +1,1 @@
-export type IconToken = 'clock' | 'bookmark';
+export type IconToken = 'clock' | 'bookmark' | 'pin';
