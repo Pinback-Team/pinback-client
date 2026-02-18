@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import svgSpritePlugin from '@pivanov/vite-plugin-svg-sprite';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -17,12 +18,32 @@ export default defineConfig({
       symbolId: 'icon-[name]',
       inject: 'body-last',
     }),
+    visualizer({ filename: 'dist/bundle-analysis.html', open: true }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id: string) => {
+          if (
+            id.includes('node_modules/react/') ||
+            id.includes('node_modules/react-dom/') ||
+            id.includes('node_modules/react-router-dom/')
+          ) {
+            return '@react-vendor';
+          }
+          if (id.includes('node_modules/framer-motion/')) {
+            return '@framer-motion-vendor';
+          }
+        },
+      },
+    },
+  },
+
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
       '@api': resolve(__dirname, './src/api'),
-      '@assets':resolve(__dirname,'./src/assets'),
+      '@assets': resolve(__dirname, './src/assets'),
       '@utils': resolve(__dirname, './src/utils'),
       '@constants': resolve(__dirname, './src/constants'),
       '@shared-types': resolve(__dirname, './src/types'),

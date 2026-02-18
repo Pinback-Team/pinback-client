@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: ROUTES_CONFIG.remind.path,
+        index: true,
         element: <Remind />,
       },
       {
