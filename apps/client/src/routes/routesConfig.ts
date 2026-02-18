@@ -35,4 +35,8 @@ export const ROUTES_CONFIG = {
     title: '이용약관',
     path: '/terms',
   },
+  jobPins: {
+    title: '관심 직무 핀',
+    path: '/job-pins',
+  },
 };
