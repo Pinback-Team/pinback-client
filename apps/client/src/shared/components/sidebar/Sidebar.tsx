@@ -54,6 +54,7 @@ export function Sidebar() {
     goBookmarks,
     selectCategory,
     goLevel,
+    goJobPins,
     setSelectedCategoryId,
     setActiveTab,
   } = useSidebarNav();
@@ -164,6 +165,15 @@ export function Sidebar() {
 
         {/* 메뉴 영역 */}
         <div className="flex-1 overflow-y-auto">
+          <SideItem
+            icon="clock"
+            label="관심 직무 핀"
+            active={activeTab === 'job-pins'}
+            onClick={() => {
+              closeMenu();
+              goJobPins();
+            }}
+          />
           <SideItem
             icon="clock"
             label="리마인드"
