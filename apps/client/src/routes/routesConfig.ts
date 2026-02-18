@@ -15,8 +15,24 @@ export const ROUTES_CONFIG = {
     title: '레벨',
     path: '/level',
   },
-  onBoarding: {
+  onboarding: {
     title: '온보딩',
-    path: '/onBoarding',
+    path: '/onboarding',
+  },
+  onboardingCallback: {
+    title: '구글 OAuth 콜백',
+    path: '/onboarding/callback',
+  },
+  login: {
+    title: '로그인',
+    path: '/login',
+  },
+  privacyPolicy: {
+    title: '개인정보처리방침',
+    path: '/policy',
+  },
+  termsOfService: {
+    title: '이용약관',
+    path: '/terms',
   },
 };

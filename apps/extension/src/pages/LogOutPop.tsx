@@ -1,0 +1,38 @@
+import { Icon } from '@pinback/design-system/icons';
+import LogOutImg from '/logout_chippi.svg';
+const LogOutPop = () => {
+  return (
+    <div className="bg-white-bg common-shadow flex h-[37.5rem] w-[35.2rem] flex-col items-center justify-center rounded-[1.2rem] px-[3.2rem] py-[2.4rem] leading-normal">
+      <div className="mr-auto">
+        <Icon name="main_logo" width={72} height={20} />
+      </div>
+      <div className="flex items-center justify-center pb-[1rem] pt-[0.8rem] text-center">
+        <img
+          src={LogOutImg}
+          alt="로그아웃 치삐"
+          className="h-[13.2rem] w-[13.2rem]"
+        />
+      </div>
+      <p className="sub2-sb mb-[0.4rem] text-black">
+        치삐를 만나려면 로그인이 필요해요!
+      </p>
+      <p className="font-pretendard text-font-gray-3 text-center text-[1.3rem] font-normal leading-[1.5] tracking-[-0.025em]">
+        지금 로그인하고 북마크한 정보의
+        <br /> 리마인드 알람을 받아보세요
+      </p>
+      <button
+        className="font-pretendard mt-[1.6rem] flex h-[4.4rem] w-[26.5rem] items-center justify-center gap-[1rem] rounded-full border border-gray-100 bg-white py-[1.15rem] py-[1.7rem] text-[1.5rem] font-semibold leading-[1.4] leading-normal tracking-[-0.02em]"
+        type="button"
+        onClick={() => {
+          chrome.tabs.create({
+            url: 'https://pinback.today/onboarding?step=SOCIAL_LOGIN',
+          });
+        }}
+      >
+        <Icon name="google" width={21} height={21} />
+        구글 계정으로 로그인/회원가입
+      </button>
+    </div>
+  );
+};
+export default LogOutPop;

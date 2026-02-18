@@ -1,6 +1,6 @@
-import story1 from '@assets/onBoarding/story/story1.svg';
-import story2 from '@assets/onBoarding/story/story2.svg';
-import story3 from '@assets/onBoarding/story/story3.svg';
+import story1 from '/assets/onBoarding/story/story1.webp';
+import story2 from '/assets/onBoarding/story/story2.webp';
+import story3 from '/assets/onBoarding/story/story3.webp';
 
 export interface Story {
   img: string;
@@ -40,5 +40,5 @@ export const stories: Story[] = [
       </>
     ),
     progress: 100,
-  }
+  },
 ];

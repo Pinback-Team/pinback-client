@@ -16,14 +16,18 @@ import {
   useGetArcons,
   usePutCategory,
   useDeleteCategory,
+  useGetGoogleProfile,
+  useGetMyProfile,
 } from '@shared/apis/queries';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import ProfilePopupPortal from '../profilePopup/ProfilePopupPortal';
 
 export function Sidebar() {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [toastIsOpen, setToastIsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -33,6 +37,15 @@ export function Sidebar() {
   const { mutate: createCategory } = usePostCategory();
   const { data, isPending } = useGetArcons();
   const { mutate: deleteCategory } = useDeleteCategory();
+  const { data: googleProfileData } = useGetGoogleProfile();
+  const { data: myProfile } = useGetMyProfile();
+
+  const profileImageUrl = googleProfileData?.googleProfile || null;
+
+  const chippiImageUrl = myProfile?.profileImage ?? null;
+  const profileEmail = myProfile?.email ?? '';
+  const profileName = myProfile?.name ?? '';
+  const remindAt = myProfile?.remindAt ?? 'AM 09:00';
 
   const {
     activeTab,
@@ -76,9 +89,7 @@ export function Sidebar() {
         queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
         close();
       },
-      onError: () => {
-        setToastIsOpen(true);
-      },
+      onError: () => setToastIsOpen(true),
     });
   };
 
@@ -92,9 +103,7 @@ export function Sidebar() {
           close();
           moveNewCategory(id);
         },
-        onError: () => {
-          setToastIsOpen(true);
-        },
+        onError: () => setToastIsOpen(true),
       }
     );
   };
@@ -105,9 +114,7 @@ export function Sidebar() {
         queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
         close();
       },
-      onError: () => {
-        setToastIsOpen(true);
-      },
+      onError: () => setToastIsOpen(true),
     });
   };
 
@@ -128,16 +135,34 @@ export function Sidebar() {
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
       <div className="flex h-full flex-col px-[0.8rem]">
-        <header className="px-[0.8rem] py-[2.8rem]">
+        {/* 헤더 */}
+        <header className="flex items-center justify-between px-[0.8rem] py-[2.8rem]">
           <Icon
             name="logo"
             aria-label="Pinback 로고"
             className="h-[2.4rem] w-[8.7rem] cursor-pointer"
           />
+
+          <button
+            type="button"
+            className="h-[3.6rem] w-[3.6rem] flex-shrink-0 overflow-hidden rounded-full border border-gray-200"
+            onClick={() => setProfileOpen(true)}
+          >
+            {profileImageUrl ? (
+              <img
+                src={profileImageUrl}
+                alt="프로필"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="h-full w-full bg-gray-200" />
+            )}
+          </button>
         </header>
 
         <hr className="my-[0.8rem] border-gray-100" />
 
+        {/* 메뉴 영역 */}
         <div className="flex-1 overflow-y-auto">
           <SideItem
             icon="clock"
@@ -211,8 +236,8 @@ export function Sidebar() {
               acorns={acornCount}
               isActive={activeTab === 'level'}
               onClick={() => {
-                setSelectedCategoryId(null);
                 closeMenu();
+                setSelectedCategoryId(null);
                 goLevel();
               }}
             />
@@ -220,10 +245,21 @@ export function Sidebar() {
         </footer>
       </div>
 
+      {/* 팝업 영역 */}
+
+      <ProfilePopupPortal
+        open={profileOpen}
+        onClose={() => setProfileOpen(false)}
+        profileImage={chippiImageUrl}
+        name={profileName}
+        email={profileEmail}
+        remindTime={remindAt}
+      />
+
       <PopupPortal
         popup={popup}
         onClose={handlePopupClose}
-        onChange={handleCategoryChange}
+        onChange={setNewCategoryName}
         onCreateConfirm={handleCreateCategory}
         onEditConfirm={(id) => handlePatchCategory(id)}
         onDeleteConfirm={(id) => handleDeleteCategory(id)}

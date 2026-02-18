@@ -1,14 +1,38 @@
-import { useNavigate } from 'react-router-dom';
-import { useCallback, useState } from 'react';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
 
 export type SidebarTab = 'mybookmark' | 'remind' | 'level';
 
 export function useSidebarNav() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+
   const [activeTab, setActiveTab] = useState<SidebarTab>('remind');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
   );
+
+  useEffect(() => {
+    const path = location.pathname;
+
+    if (path.startsWith('/my-bookmarks')) {
+      setActiveTab('mybookmark');
+
+      const id = searchParams.get('id');
+      if (id) {
+        setSelectedCategoryId(Number(id));
+      } else {
+        setSelectedCategoryId(null);
+      }
+    } else if (path === '/' || path.startsWith('/remind')) {
+      setActiveTab('remind');
+      setSelectedCategoryId(null);
+    } else if (path.startsWith('/level')) {
+      setActiveTab('level');
+      setSelectedCategoryId(null);
+    }
+  }, [location.pathname, searchParams]);
 
   const goRemind = useCallback(() => {
     setActiveTab('remind');

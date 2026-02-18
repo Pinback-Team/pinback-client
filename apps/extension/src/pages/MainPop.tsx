@@ -14,8 +14,7 @@ import {
 import { useState, useEffect } from 'react';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
-import { Icon } from '@pinback/design-system/icons';
-
+import Header from '@shared/components/Header';
 import {
   usePostArticle,
   useGetCategoriesExtension,
@@ -221,7 +220,6 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
               date: isRemindOn ? currentDate : date,
               time: isRemindOn ? currentTime : time,
             });
-            //window.close();
           },
         }
       );
@@ -284,18 +282,9 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
             onRightClick={saveHandleCategory}
           />
         )}
-        <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
-          <div className="mr-auto">
-            <Icon
-              name="main_logo"
-              width={72}
-              height={20}
-              onClick={() => {
-                chrome.tabs.create({ url: 'https://www.pinback.today/' });
-              }}
-            />
-          </div>
 
+        <div className="flex flex-col justify-between gap-[1.6rem] rounded-[12px] bg-white px-[3.2rem] py-[2.4rem] text-black">
+          <Header />
           {loading ? (
             <div className="bg-gray100 h-[6.8rem] w-[full] animate-pulse rounded-[4px]" />
           ) : (

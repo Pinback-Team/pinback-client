@@ -36,7 +36,7 @@ export interface postSignUpRequest {
 }
 
 export const postSignUp = async (responsedata: postSignUpRequest) => {
-  const { data } = await apiRequest.post('/api/v1/auth/signup', responsedata);
+  const { data } = await apiRequest.patch('/api/v2/auth/signup', responsedata);
   return data;
 };
 
@@ -70,4 +70,14 @@ export const deleteCategory = async (id: number) => {
 export const deleteRemindArticle = async (id: number) => {
   const response = await apiRequest.delete(`/api/v1/articles/${id}`);
   return response;
+};
+
+export const getGoogleProfile = async () => {
+  const { data } = await apiRequest.get('/api/v2/users/me/google-profile');
+  return data.data;
+};
+
+export const getMyProfile = async () => {
+  const { data } = await apiRequest.get('/api/v2/users/me');
+  return data.data;
 };

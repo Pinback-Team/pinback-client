@@ -164,8 +164,8 @@
 
 /* 기타 브라우저용 (IE, Edge 구버전, Firefox) */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 @theme {
@@ -298,4 +298,17 @@
     border-radius: 9999px;
     transition: none;
   }
+}
+
+@keyframes spinSmooth {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-smooth {
+  animation: spinSmooth 1.3s cubic-bezier(0.55, 0.2, 0.45, 0.8) infinite;
 }

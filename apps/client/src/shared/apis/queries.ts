@@ -16,6 +16,8 @@ import {
   getArticleDetail,
   getAcorns,
   deleteRemindArticle,
+  getGoogleProfile,
+  getMyProfile,
 } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
 import {
@@ -67,21 +69,20 @@ export const usePostSignUp = () => {
     mutationFn: (data: postSignUpRequest) => postSignUp(data),
     onSuccess: (data) => {
       const newToken = data?.data?.token || data?.token;
-      const sendTokenToExtension = (token: string) => {
-        window.postMessage(
-          {
-            type: 'SET_TOKEN',
-            token,
-          },
-          window.location.origin
-        );
-      };
+
       if (newToken) {
         localStorage.setItem('token', newToken);
+        const sendTokenToExtension = (token: string) => {
+          window.postMessage(
+            {
+              type: 'SET_TOKEN',
+              token,
+            },
+            window.location.origin
+          );
+        };
         sendTokenToExtension(newToken);
       }
-
-      console.log('회원가입 성공:', data);
     },
     onError: (error) => {
       console.error('회원가입 실패:', error);
@@ -136,3 +137,18 @@ export const useGetPageMeta = (url: string) => {
     retry: false,
   });
 };
+
+export const useGetGoogleProfile = () => {
+  return useQuery({
+    queryKey: ['googleProfile'],
+    queryFn: getGoogleProfile,
+    staleTime: Infinity,
+  });
+};
+
+export function useGetMyProfile() {
+  return useQuery({
+    queryKey: ['myProfile'],
+    queryFn: getMyProfile,
+  });
+}

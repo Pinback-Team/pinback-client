@@ -6,8 +6,14 @@ export const getRemindArticles = async (
   page: number,
   size: number
 ) => {
-  const { data } = await apiRequest.get(
-    `/api/v1/articles/remind?now=${nowDate}&read-status=${readStatus}&page=${page}&size=${size}`
-  );
+  const { data } = await apiRequest.get(`/api/v2/articles/remind`, {
+    params: {
+      now: nowDate,
+      'read-status': readStatus,
+      page,
+      size,
+    },
+  });
+
   return data.data;
 };

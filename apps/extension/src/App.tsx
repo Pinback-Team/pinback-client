@@ -4,13 +4,20 @@ import MainPop from './pages/MainPop';
 import { useState, useEffect } from 'react';
 import { useGetArticleSaved } from '@apis/query/queries';
 import { usePageMeta } from './hooks/usePageMeta';
+import LogOutPop from './pages/LogOutPop';
 const App = () => {
   const { url } = usePageMeta();
   const { data: isSaved } = useGetArticleSaved(url);
 
   const [isDuplicatePop, setIsDuplicatePop] = useState(false);
   const [mainPopType, setMainPopType] = useState<'add' | 'edit'>('add');
+  const [isToken, setIsToken] = useState(false);
 
+  useEffect(() => {
+    chrome.storage.local.get('token', (result) => {
+      setIsToken(!!result.token);
+    });
+  }, []);
   useEffect(() => {
     if (isSaved?.data) {
       setIsDuplicatePop(true);
@@ -23,18 +30,22 @@ const App = () => {
   };
 
   const handleDuplicateRightClick = () => {
-    chrome.tabs.create({ url: 'https://www.pinback.today/' });
+    chrome.tabs.create({ url: 'https://pinback.today/' });
   };
 
   return (
     <>
-      {isDuplicatePop ? (
-        <DuplicatePop
-          onLeftClick={handleDuplicateLeftClick}
-          onRightClick={handleDuplicateRightClick}
-        />
+      {isToken ? (
+        isDuplicatePop ? (
+          <DuplicatePop
+            onLeftClick={handleDuplicateLeftClick}
+            onRightClick={handleDuplicateRightClick}
+          />
+        ) : (
+          <MainPop type={mainPopType} />
+        )
       ) : (
-        <MainPop type={mainPopType} savedData={isSaved?.data} />
+        <LogOutPop />
       )}
     </>
   );

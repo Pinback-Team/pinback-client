@@ -26,16 +26,17 @@ self.addEventListener('activate', function () {
   console.log('실행중..');
 });
 
+self.addEventListener('activate', () => {
+  clients.claim();
+});
+
 firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log('Received background message ', payload);
-
-  const url = payload.data?.url || 'https://www.pinback.today';
+  const url = payload.data?.url || 'https://pinback.today';
   const notificationTitle = payload.notification?.title || 'pinback';
-
   const notificationOptions = {
     body: payload.notification?.body || '저장한 북마크를 확인해 보세요!',
     icon: payload.notification?.image || '/FCM-IMG.png',
@@ -47,9 +48,7 @@ messaging.onBackgroundMessage((payload) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
-  console.log('🔔 알림 클릭됨:', event);
-
-  const targetUrl = event.notification.data?.url || 'https://www.pinback.today';
+  const targetUrl = event.notification.data?.url || 'https://pinback.today';
 
   fetch(
     `https://www.google-analytics.com/mp/collect?measurement_id=G-847ZNSCC3J&api_secret=1hei57fPTKyGX5Cw73rwgA`,
