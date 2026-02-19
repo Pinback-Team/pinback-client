@@ -3,8 +3,16 @@ import GoogleLogo from '/assets/onBoarding/icons/googleLogo.svg';
 import { Link } from 'react-router-dom';
 import { handleGoogleLogin } from '@shared/utils/handleGoogleLogin';
 import { ROUTES_CONFIG } from '@routes/routesConfig';
-
+import { useEffect } from 'react';
+import { sendGAEvent } from '@pinback/design-system/ui';
 const SocialLoginStep = () => {
+  useEffect(() => {
+    sendGAEvent(
+      'onboard-social-login-step',
+      'onboard-social-login-step',
+      'onboard-social-login-step'
+    );
+  }, []);
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <img

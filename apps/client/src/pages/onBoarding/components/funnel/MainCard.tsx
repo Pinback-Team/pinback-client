@@ -1,4 +1,4 @@
-import { Progress, Button } from '@pinback/design-system/ui';
+import { Progress, Button, sendGAEvent } from '@pinback/design-system/ui';
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SocialLoginStep from './step/SocialLoginStep';
@@ -185,6 +185,11 @@ const MainCard = () => {
     setDirection(1);
     setStep(next);
     navigate(`/onboarding?step=${next}`);
+    sendGAEvent(
+      `onboard-step-${idx + 1}`,
+      `onboard-step-${idx + 1}`,
+      `onboard-step-${idx + 1}`
+    );
   };
 
   const prevStep = () => {

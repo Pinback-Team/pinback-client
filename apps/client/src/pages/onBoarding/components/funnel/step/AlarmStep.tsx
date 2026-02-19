@@ -1,10 +1,19 @@
 import dotori from '/assets/onBoarding/icons/dotori.svg';
 import AlarmBox from '../AlarmBox';
+import { useEffect } from 'react';
+import { sendGAEvent } from '@pinback/design-system/ui';
 interface AlarmStepProps {
   selected: 1 | 2 | 3;
   setSelected: (n: 1 | 2 | 3) => void;
 }
 const AlarmStep = ({ selected, setSelected }: AlarmStepProps) => {
+  useEffect(() => {
+    sendGAEvent(
+      'onboard-alarm-step',
+      'onboard-alarm-step',
+      'onboard-alarm-step'
+    );
+  }, []);
   return (
     <div className="flex flex-col items-center justify-between">
       <img src={dotori} className="mb-[1.2rem]" alt="dotori" />
