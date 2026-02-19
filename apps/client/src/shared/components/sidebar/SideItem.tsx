@@ -5,6 +5,7 @@ import { IconToken } from './types/IconTokenType';
 const ICON_MAP: Record<IconToken, { on: IconName; off: IconName }> = {
   clock: { on: 'ic_clock_active', off: 'ic_clock_disable' },
   bookmark: { on: 'ic_bookmark_active', off: 'ic_bookmark_disable' },
+  pin: { on: 'ic_pin_active', off: 'ic_pin_disable' },
 } as const;
 
 interface SideItemProps {

@@ -1,4 +1,5 @@
 import Category from '@pages/category/Category';
+import JobPins from '@pages/jobPins/JobPins';
 import Level from '@pages/level/Level';
 import Login from '@pages/login/Login';
 import MyBookmark from '@pages/myBookmark/MyBookmark';
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES_CONFIG.termsOfService.path,
         element: <TermsOfService />,
+      },
+      {
+        path: ROUTES_CONFIG.jobPins.path,
+        element: <JobPins />,
       },
     ],
   },

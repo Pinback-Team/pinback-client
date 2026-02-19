@@ -1,7 +1,8 @@
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
+import { ROUTES_CONFIG } from '@routes/routesConfig';
 
-export type SidebarTab = 'mybookmark' | 'remind' | 'level';
+export type SidebarTab = 'mybookmark' | 'remind' | 'level' | 'job-pins';
 
 export function useSidebarNav() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export function useSidebarNav() {
   useEffect(() => {
     const path = location.pathname;
 
-    if (path.startsWith('/my-bookmarks')) {
+    if (path.startsWith(ROUTES_CONFIG.myBookmarks.path)) {
       setActiveTab('mybookmark');
 
       const id = searchParams.get('id');
@@ -25,11 +26,17 @@ export function useSidebarNav() {
       } else {
         setSelectedCategoryId(null);
       }
-    } else if (path === '/' || path.startsWith('/remind')) {
+    } else if (
+      path === ROUTES_CONFIG.remind.path ||
+      path.startsWith('/remind')
+    ) {
       setActiveTab('remind');
       setSelectedCategoryId(null);
-    } else if (path.startsWith('/level')) {
+    } else if (path.startsWith(ROUTES_CONFIG.level.path)) {
       setActiveTab('level');
+      setSelectedCategoryId(null);
+    } else if (path.startsWith(ROUTES_CONFIG.jobPins.path)) {
+      setActiveTab('job-pins');
       setSelectedCategoryId(null);
     }
   }, [location.pathname, searchParams]);
@@ -37,20 +44,20 @@ export function useSidebarNav() {
   const goRemind = useCallback(() => {
     setActiveTab('remind');
     setSelectedCategoryId(null);
-    navigate('/');
+    navigate(ROUTES_CONFIG.remind.path);
   }, [navigate]);
 
   const goBookmarks = useCallback(() => {
     setActiveTab('mybookmark');
     setSelectedCategoryId(null);
-    navigate('/my-bookmarks');
+    navigate(ROUTES_CONFIG.myBookmarks.path);
   }, [navigate]);
 
   const selectCategory = useCallback(
     (id: number, name: string) => {
       setActiveTab('mybookmark');
       setSelectedCategoryId(id);
-      navigate(`/my-bookmarks?id=${id}&category=${name}`);
+      navigate(`${ROUTES_CONFIG.myBookmarks.path}?id=${id}&category=${name}`);
     },
     [navigate]
   );
@@ -58,7 +65,13 @@ export function useSidebarNav() {
   const goLevel = useCallback(() => {
     setActiveTab('level');
     setSelectedCategoryId(null);
-    navigate('/level');
+    navigate(ROUTES_CONFIG.level.path);
+  }, [navigate]);
+
+  const goJobPins = useCallback(() => {
+    setActiveTab('job-pins');
+    setSelectedCategoryId(null);
+    navigate(ROUTES_CONFIG.jobPins.path);
   }, [navigate]);
 
   return {
@@ -68,6 +81,7 @@ export function useSidebarNav() {
     goBookmarks,
     selectCategory,
     goLevel,
+    goJobPins,
     setSelectedCategoryId,
     setActiveTab,
   };
