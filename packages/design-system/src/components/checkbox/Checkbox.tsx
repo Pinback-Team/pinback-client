@@ -1,10 +1,10 @@
 import { cva } from 'class-variance-authority';
 import { cn } from '../../lib/utils';
-import { useId, useState } from 'react';
+import { InputHTMLAttributes, useId, useState } from 'react';
 
 interface CheckboxProps
   extends Omit<
-    React.InputHTMLAttributes<HTMLInputElement>,
+    InputHTMLAttributes<HTMLInputElement>,
     'type' | 'size' | 'checked' | 'defaultChecked' | 'onChange'
   > {
   isSelected?: boolean;
