@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
-import { useId, useState } from 'react';
 import { cn } from '../../lib/utils';
+import { useId, useState } from 'react';
 
 interface CheckboxProps
   extends Omit<
@@ -65,17 +65,21 @@ const Checkbox = ({
   disabled,
   ...props
 }: CheckboxProps) => {
-  const [internalSelected, setInternalSelected] = useState(defaultSelected);
   const generatedId = useId();
   const inputId = id ?? generatedId;
-  const selected = isSelected ?? internalSelected;
+
+  const [internalSelected, setInternalSelected] =
+    useState<boolean>(defaultSelected);
+
+  const isUncontrolled = isSelected === undefined;
+  const selected = isUncontrolled ? internalSelected : isSelected;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nextChecked = e.target.checked;
+
+    if (isUncontrolled) setInternalSelected(nextChecked);
+
     onSelectedChange?.(nextChecked);
-    if (isSelected === undefined) {
-      setInternalSelected(nextChecked);
-    }
   };
 
   return (
@@ -95,6 +99,7 @@ const Checkbox = ({
         onChange={handleChange}
         {...props}
       />
+
       <span
         aria-hidden="true"
         data-state={selected ? 'checked' : 'unchecked'}
