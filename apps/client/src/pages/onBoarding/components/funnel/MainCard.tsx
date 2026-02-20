@@ -3,6 +3,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SocialLoginStep from './step/SocialLoginStep';
 const StoryStep = lazy(() => import('./step/StoryStep'));
+const JobStep = lazy(() => import('./step/JobStep'));
 const AlarmStep = lazy(() => import('./step/AlarmStep'));
 const MacStep = lazy(() => import('./step/MacStep'));
 const FinalStep = lazy(() => import('./step/FinalStep'));
@@ -36,7 +37,7 @@ const variants = {
 };
 
 const CardStyle = cva(
-  'bg-white-bg flex h-[54.8rem] w-[63.2rem] flex-col items-center justify-between rounded-[2.4rem] pt-[3.2rem]',
+  'bg-white-bg flex h-[54.8rem] w-full max-w-[82.6rem] flex-col items-center justify-between rounded-[2.4rem] pt-[3.2rem]',
   {
     variants: {
       overflow: {
@@ -60,6 +61,7 @@ const MainCard = () => {
   const [userEmail, setUserEmail] = useState('');
   const [remindTime, setRemindTime] = useState('09:00');
   const [fcmToken, setFcmToken] = useState<string | null>(null);
+  const [jobShareAgree, setJobShareAgree] = useState(true);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -131,6 +133,13 @@ const MainCard = () => {
         );
       case Step.SOCIAL_LOGIN:
         return <SocialLoginStep />;
+      case Step.JOB:
+        return (
+          <JobStep
+            agreeChecked={jobShareAgree}
+            onAgreeChange={setJobShareAgree}
+          />
+        );
       case Step.ALARM:
         return (
           <AlarmStep selected={alarmSelected} setSelected={setAlarmSelected} />
@@ -251,6 +260,7 @@ const MainCard = () => {
             size="medium"
             className="ml-auto w-[4.8rem]"
             onClick={nextStep}
+            isDisabled={step === Step.JOB && !jobShareAgree}
           >
             다음
           </Button>
