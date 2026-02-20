@@ -56,7 +56,6 @@ const JobStep = ({
   const defaultJob: JobKey = 'planner';
   const [internalJob, setInternalJob] = useState<JobKey>(defaultJob);
   const [internalAgree, setInternalAgree] = useState(true);
-  const agreeId = useId();
 
   const activeJob = selectedJob ?? internalJob;
   const activeAgree = agreeChecked ?? internalAgree;
@@ -126,12 +125,8 @@ const JobStep = ({
         })}
       </div>
 
-      <label
-        htmlFor={agreeId}
-        className="mt-[2.4rem] flex max-w-[62rem] items-start gap-[1.2rem]"
-      >
+      <label className="mt-[2.4rem] flex max-w-[62rem] items-start gap-[1.2rem]">
         <Checkbox
-          id={agreeId}
           size="small"
           isSelected={activeAgree}
           onSelectedChange={handleAgreeChange}
