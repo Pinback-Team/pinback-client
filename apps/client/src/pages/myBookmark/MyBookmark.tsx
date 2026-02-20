@@ -13,7 +13,7 @@ import {
   useDeleteRemindArticle,
   usePutArticleReadStatus,
 } from '@shared/apis/queries';
-import Tooltip from '@shared/components/tooltip/Tooltip';
+import TooltipCard from '@shared/components/tooltipCard/TooltipCard';
 import ArticlesLoadingBoundary from '@shared/components/articlesLoadingBoundary/ArticlesLoadingBoundary';
 import ArticlesErrorBoundary from '@shared/components/articlesErrorBoundary/ArticlesErrorBoundary';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -87,7 +87,7 @@ const MyBookmark = () => {
         <p className="head3 text-main500">{category || ''}</p>
       </div>
 
-      <Tooltip />
+      <TooltipCard />
 
       <Suspense fallback={<ArticlesLoadingBoundary />}>
         <ErrorBoundary FallbackComponent={ArticlesErrorBoundary}>
