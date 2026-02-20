@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { cva } from 'class-variance-authority';
 import dotori from '/assets/onBoarding/icons/dotori.svg';
 import jobPlan from '/assets/onBoarding/jobs/jobPlan.svg';
