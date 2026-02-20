@@ -44,9 +44,16 @@ const GoogleCallback = () => {
     }
   };
 
+  const redirectUri = import.meta.env.PROD
+    ? import.meta.env.VITE_GOOGLE_REDIRECT_URI_PROD
+    : import.meta.env.VITE_GOOGLE_REDIRECT_URI_DEV;
+
   const loginWithCode = async (code: string) => {
     try {
-      const res = await apiRequest.post('/api/v2/auth/google', { code });
+      const res = await apiRequest.post('/api/v3/auth/google', {
+        code,
+        uri: redirectUri,
+      });
       const { isUser, userId, email, accessToken } = res.data.data;
 
       localStorage.setItem('email', email);
