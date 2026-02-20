@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { cva } from 'class-variance-authority';
 import dotori from '/assets/onBoarding/icons/dotori.svg';
 import jobPlan from '/assets/onBoarding/jobs/jobPlan.svg';
@@ -60,15 +60,12 @@ const JobStep = ({
   const activeJob = selectedJob ?? internalJob;
   const activeAgree = agreeChecked ?? internalAgree;
 
-  const jobs = useMemo(
-    () => [
-      { key: 'planner', label: '기획자' },
-      { key: 'designer', label: '디자이너' },
-      { key: 'frontend', label: '프론트엔드' },
-      { key: 'backend', label: '백엔드' },
-    ],
-    []
-  );
+  const jobs = () => [
+    { key: 'planner', label: '기획자' },
+    { key: 'designer', label: '디자이너' },
+    { key: 'frontend', label: '프론트엔드' },
+    { key: 'backend', label: '백엔드' },
+  ];
 
   const handleSelect = (job: JobKey) => {
     onSelectJob?.(job);
