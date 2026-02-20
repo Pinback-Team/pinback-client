@@ -37,19 +37,15 @@ const variants = {
 };
 
 const CardStyle = cva(
-  'bg-white-bg flex h-[54.8rem] w-full flex-col items-center justify-between rounded-[2.4rem] pt-[3.2rem]',
+  'bg-white-bg flex h-[54.8rem] w-full max-w-[82.6rem] flex-col items-center justify-between rounded-[2.4rem] pt-[3.2rem]',
   {
     variants: {
       overflow: {
         true: 'overflow-visible',
         false: 'overflow-hidden',
       },
-      size: {
-        default: 'max-w-[63.2rem]',
-        wide: 'max-w-[82.6rem]',
-      },
     },
-    defaultVariants: { overflow: false, size: 'default' },
+    defaultVariants: { overflow: false },
   }
 );
 
@@ -214,7 +210,6 @@ const MainCard = () => {
     <div
       className={CardStyle({
         overflow: step === Step.ALARM && alarmSelected === 3,
-        size: step === Step.JOB ? 'wide' : 'default',
       })}
     >
       {storySteps.includes(step) && (
