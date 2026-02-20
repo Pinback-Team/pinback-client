@@ -60,7 +60,7 @@ const JobStep = ({
   const activeJob = selectedJob ?? internalJob;
   const activeAgree = agreeChecked ?? internalAgree;
 
-  const jobs = () => [
+  const jobs: { key: JobKey; label: string }[] = [
     { key: 'planner', label: '기획자' },
     { key: 'designer', label: '디자이너' },
     { key: 'frontend', label: '프론트엔드' },
@@ -104,11 +104,11 @@ const JobStep = ({
               type="button"
               role="radio"
               aria-checked={isSelected}
-              onClick={() => handleSelect(job.key as JobKey)}
+              onClick={() => handleSelect(job.key)}
               className={jobCardStyle({ selected: isSelected })}
             >
               <div className="flex flex-col items-center gap-[1.6rem]">
-                <JobIcon type={job.key as JobKey} />
+                <JobIcon type={job.key} />
                 <span
                   className={`sub3-sb ${
                     isSelected ? 'text-main500' : 'text-font-black-1'
