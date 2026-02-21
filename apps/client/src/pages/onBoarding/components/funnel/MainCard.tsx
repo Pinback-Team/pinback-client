@@ -9,13 +9,13 @@ const MacStep = lazy(() => import('./step/MacStep'));
 const FinalStep = lazy(() => import('./step/FinalStep'));
 import { cva } from 'class-variance-authority';
 import { usePostSignUp } from '@shared/apis/queries';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { firebaseConfig } from '../../../../firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
 import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
 import { AlarmsType } from '@constants/alarms';
 import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
+import { useFunnel } from '@shared/hooks/useFunnel';
 const stepProgress = [{ progress: 33 }, { progress: 66 }, { progress: 100 }];
 import {
   Step,
@@ -50,11 +50,13 @@ const CardStyle = cva(
 );
 
 const MainCard = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   const { mutate: postSignData } = usePostSignUp();
 
-  const [step, setStep] = useState<StepType>(Step.STORY_0);
+  const { currentStep: step, currentIndex, setStep, goNext, goPrev } =
+    useFunnel<StepType>({
+      steps: stepOrder,
+      initialStep: Step.STORY_0,
+    });
   const [direction, setDirection] = useState(0);
   const [alarmSelected, setAlarmSelected] = useState<1 | 2 | 3>(1);
   const [isMac, setIsMac] = useState(false);
@@ -64,17 +66,11 @@ const MainCard = () => {
   const [jobShareAgree, setJobShareAgree] = useState(true);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
     const storedEmail = localStorage.getItem('email');
     if (storedEmail) {
       setUserEmail(storedEmail);
     }
-
-    const stepParam = params.get('step') as StepType;
-    if (stepParam && Object.values(Step).includes(stepParam)) {
-      setStep(stepParam);
-    }
-  }, [location.search]);
+  }, []);
 
   const app = initializeApp(firebaseConfig);
   const messaging = getMessaging(app);
@@ -154,8 +150,7 @@ const MainCard = () => {
   };
 
   const nextStep = async () => {
-    const idx = stepOrder.indexOf(step);
-    const next = stepOrder[idx + 1];
+    const next = stepOrder[currentIndex + 1];
     const isAlarmStep = step === Step.ALARM;
     const isFinalStep = step === Step.FINAL;
     const isMacStep = next === Step.MAC;
@@ -173,7 +168,6 @@ const MainCard = () => {
     if (shouldSkipMacStep) {
       setDirection(1);
       setStep(Step.FINAL);
-      navigate(`/onboarding?step=${Step.FINAL}`);
       return;
     }
 
@@ -192,22 +186,18 @@ const MainCard = () => {
     }
 
     setDirection(1);
-    setStep(next);
-    navigate(`/onboarding?step=${next}`);
+    goNext();
     sendGAEvent(
-      `onboard-step-${idx + 1}`,
-      `onboard-step-${idx + 1}`,
-      `onboard-step-${idx + 1}`
+      `onboard-step-${currentIndex + 1}`,
+      `onboard-step-${currentIndex + 1}`,
+      `onboard-step-${currentIndex + 1}`
     );
   };
 
   const prevStep = () => {
-    const idx = stepOrder.indexOf(step);
-    if (idx > 0) {
-      const previous = stepOrder[idx - 1];
+    if (currentIndex > 0) {
       setDirection(-1);
-      setStep(previous);
-      navigate(`/onboarding?step=${previous}`);
+      goPrev();
     }
   };
 
