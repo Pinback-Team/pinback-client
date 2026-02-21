@@ -1,5 +1,5 @@
-import { Progress, Button, sendGAEvent } from '@pinback/design-system/ui';
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { Progress, Button } from '@pinback/design-system/ui';
+import { lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SocialLoginStep from './step/SocialLoginStep';
 const StoryStep = lazy(() => import('./step/StoryStep'));
@@ -8,21 +8,13 @@ const AlarmStep = lazy(() => import('./step/AlarmStep'));
 const MacStep = lazy(() => import('./step/MacStep'));
 const FinalStep = lazy(() => import('./step/FinalStep'));
 import { cva } from 'class-variance-authority';
-import { usePostSignUp } from '@shared/apis/queries';
-import { firebaseConfig } from '../../../../firebase-config';
-import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken } from 'firebase/messaging';
-import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
-import { AlarmsType } from '@constants/alarms';
-import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
-import { useFunnel } from '@shared/hooks/useFunnel';
 const stepProgress = [{ progress: 33 }, { progress: 66 }, { progress: 100 }];
 import {
   Step,
-  stepOrder,
   StepType,
   storySteps,
 } from '@pages/onBoarding/constants/onboardingSteps';
+import { useOnboardingFunnel } from '@pages/onBoarding/hooks/useOnboardingFunnel';
 
 const variants = {
   slideIn: (direction: number) => ({
@@ -50,74 +42,16 @@ const CardStyle = cva(
 );
 
 const MainCard = () => {
-  const { mutate: postSignData } = usePostSignUp();
-
-  const { currentStep: step, currentIndex, setStep, goNext, goPrev } =
-    useFunnel<StepType>({
-      steps: stepOrder,
-      initialStep: Step.STORY_0,
-    });
-  const [direction, setDirection] = useState(0);
-  const [alarmSelected, setAlarmSelected] = useState<1 | 2 | 3>(1);
-  const [isMac, setIsMac] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
-  const [remindTime, setRemindTime] = useState('09:00');
-  const [fcmToken, setFcmToken] = useState<string | null>(null);
-  const [jobShareAgree, setJobShareAgree] = useState(true);
-
-  useEffect(() => {
-    const storedEmail = localStorage.getItem('email');
-    if (storedEmail) {
-      setUserEmail(storedEmail);
-    }
-  }, []);
-
-  const app = initializeApp(firebaseConfig);
-  const messaging = getMessaging(app);
-
-  const requestFCMToken = async (): Promise<string | null> => {
-    try {
-      const permission = await Notification.requestPermission();
-      registerServiceWorker();
-
-      if (permission !== 'granted') {
-        alert('알림 권한 허용이 필요합니다!');
-        return null;
-      }
-
-      const forFcmtoken = await getToken(messaging, {
-        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
-      });
-
-      if (forFcmtoken) {
-        return forFcmtoken;
-      } else {
-        alert('토큰 생성 실패. 다시 시도해주세요.');
-        return null;
-      }
-    } catch (error) {
-      console.error('FCM 토큰 받는 도중 오류:', error);
-      alert('알림 설정 중 오류가 발생했습니다. 다시 시도해주세요.');
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const ua = navigator.userAgent.toLowerCase();
-    if (ua.includes('mac os') || ua.includes('iphone') || ua.includes('ipad')) {
-      setIsMac(true);
-    }
-
-    (async () => {
-      const token = await requestFCMToken();
-      if (token) {
-        setFcmToken(token);
-        localStorage.setItem('FcmToken', token);
-      } else {
-        alert('푸시 알람 설정 에러');
-      }
-    })();
-  }, []);
+  const {
+    step,
+    direction,
+    alarmSelected,
+    jobShareAgree,
+    setAlarmSelected,
+    setJobShareAgree,
+    nextStep,
+    prevStep,
+  } = useOnboardingFunnel();
 
   const renderStep = () => {
     switch (step) {
@@ -146,58 +80,6 @@ const MainCard = () => {
         return <FinalStep />;
       default:
         return <FinalStep />;
-    }
-  };
-
-  const nextStep = async () => {
-    const next = stepOrder[currentIndex + 1];
-    const isAlarmStep = step === Step.ALARM;
-    const isFinalStep = step === Step.FINAL;
-    const isMacStep = next === Step.MAC;
-    const shouldSkipMacStep = isMacStep && !isMac;
-
-    if (isAlarmStep) {
-      if (alarmSelected === 1) setRemindTime('09:00');
-      else if (alarmSelected === 2) setRemindTime('20:00');
-      else {
-        const raw = AlarmsType[alarmSelected - 1].time;
-        setRemindTime(normalizeTime(raw));
-      }
-    }
-
-    if (shouldSkipMacStep) {
-      setDirection(1);
-      setStep(Step.FINAL);
-      return;
-    }
-
-    if (isFinalStep) {
-      postSignData(
-        { email: userEmail, remindDefault: remindTime, fcmToken },
-        {
-          onSuccess: () => (window.location.href = '/'),
-          onError: () => {
-            const savedEmail = localStorage.getItem('email');
-            if (savedEmail) window.location.href = '/';
-          },
-        }
-      );
-      return;
-    }
-
-    setDirection(1);
-    goNext();
-    sendGAEvent(
-      `onboard-step-${currentIndex + 1}`,
-      `onboard-step-${currentIndex + 1}`,
-      `onboard-step-${currentIndex + 1}`
-    );
-  };
-
-  const prevStep = () => {
-    if (currentIndex > 0) {
-      setDirection(-1);
-      goPrev();
     }
   };
 
