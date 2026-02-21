@@ -1,5 +1,6 @@
 import { Icon } from '@pinback/design-system/icons';
 import { cn } from '@pinback/design-system/utils';
+import { ReactNode } from 'react';
 
 type BalloonVariant = 'gray' | 'main';
 
@@ -7,7 +8,7 @@ interface BalloonProps {
   variant?: BalloonVariant;
   side?: 'top' | 'bottom' | 'left' | 'right';
   onClose?: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function Balloon({
