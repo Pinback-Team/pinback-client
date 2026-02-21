@@ -33,7 +33,7 @@ export function Balloon({
         <div className="flex-1">{children}</div>
 
         {onClose && (
-          <button onClick={onClose}>
+          <button type="button" onClick={onClose}>
             <Icon name="ic_close" size={16} />
           </button>
         )}

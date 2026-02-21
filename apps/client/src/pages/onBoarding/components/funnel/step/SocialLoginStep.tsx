@@ -30,6 +30,7 @@ const SocialLoginStep = () => {
       </p>
 
       <button
+        type="button"
         onClick={handleGoogleLogin}
         className="sub2-sb flex h-[5.2rem] w-[22.7rem] items-center justify-between gap-3 rounded-full border border-gray-100 bg-white px-[2rem]"
       >
