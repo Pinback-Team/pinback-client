@@ -1,7 +1,7 @@
 import { Icon } from '@pinback/design-system/icons';
 import InfoCard from './InfoCard';
 
-export default function Tooltip() {
+export default function TooltipCard() {
   return (
     <div className="mt-[0.8rem] flex items-center">
       <p className="body3-r text-font-gray-3">

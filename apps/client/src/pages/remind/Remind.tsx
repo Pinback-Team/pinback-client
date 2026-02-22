@@ -22,7 +22,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 import FetchCard from './components/fetchCard/FetchCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
-import Tooltip from '@shared/components/tooltip/Tooltip';
+import TooltipCard from '@shared/components/tooltipCard/TooltipCard';
 import Footer from './components/footer/Footer';
 
 const Remind = () => {
@@ -138,7 +138,7 @@ const Remind = () => {
           isActive={activeBadge === 'read'}
         />
       </div>
-      <Tooltip />
+      <TooltipCard />
 
       {articlesToDisplay.length > 0 ? (
         <div
