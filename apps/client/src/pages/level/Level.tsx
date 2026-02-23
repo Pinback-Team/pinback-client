@@ -80,7 +80,7 @@ export default function Level() {
                 isActive={true}
               />
 
-              <div className="absolute left-1/2 top-full z-[30] mt-[0.8rem] -translate-x-1/2">
+              <div className="absolute left-1/2 top-full z-[3] mt-[0.8rem] -translate-x-[53px]">
                 <Balloon variant="gray" side="top">
                   <span className="caption1-m text-white">{balloonText}</span>
                 </Balloon>
