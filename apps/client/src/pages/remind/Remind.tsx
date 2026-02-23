@@ -24,6 +24,7 @@ import FetchCard from './components/fetchCard/FetchCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 import Tooltip from '@shared/components/tooltip/Tooltip';
 import Footer from './components/footer/Footer';
+import JobSelectionFunnel from '@shared/components/jobSelectionFunnel/JobSelectionFunnel';
 
 const Remind = () => {
   useEffect(() => {
@@ -34,6 +35,9 @@ const Remind = () => {
   const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+  const [showJobSelectionFunnel, setShowJobSelectionFunnel] = useState(
+    () => localStorage.getItem('hasJob') === 'false'
+  );
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const formattedDate = useMemo(() => {
@@ -240,6 +244,17 @@ const Remind = () => {
               prevData={articleDetail}
             />
           </div>
+        </div>
+      )}
+
+      {showJobSelectionFunnel && (
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/40 p-4">
+          <JobSelectionFunnel
+            onComplete={() => {
+              localStorage.setItem('hasJob', 'true');
+              setShowJobSelectionFunnel(false);
+            }}
+          />
         </div>
       )}
     </div>
