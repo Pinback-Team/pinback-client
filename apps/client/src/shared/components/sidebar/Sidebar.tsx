@@ -1,3 +1,6 @@
+import Lottie from 'lottie-react';
+import Chippiface from '@assets/5_chippiface.json';
+
 import { Icon } from '@pinback/design-system/icons';
 import SideItem from './SideItem';
 import AccordionItem from './AccordionItem';
@@ -23,11 +26,17 @@ import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import ProfilePopupPortal from '../profilePopup/ProfilePopupPortal';
+import { AutoDismissToast } from '@pinback/design-system/ui';
+import { Balloon } from '@shared/components/balloon/Balloon';
 
 export function Sidebar() {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [toastIsOpen, setToastIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+
+  const [acornToastOpen, setAcornToastOpen] = useState(false);
+  const [acornToastKey, setAcornToastKey] = useState(0);
+  const [prevAcorn, setPrevAcorn] = useState<number | null>(null);
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -132,6 +141,20 @@ export function Sidebar() {
   const MAX_CATEGORIES = 10;
   const categoryCount = categories?.categories?.length ?? 0;
   const canCreateMore = categoryCount < MAX_CATEGORIES;
+
+  useEffect(() => {
+    if (prevAcorn === null) {
+      setPrevAcorn(acornCount);
+      return;
+    }
+
+    if (acornCount > prevAcorn) {
+      setAcornToastOpen(true);
+      setAcornToastKey((k) => k + 1);
+    }
+
+    setPrevAcorn(acornCount);
+  }, [acornCount, prevAcorn]);
 
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
@@ -238,25 +261,52 @@ export function Sidebar() {
           />
         </div>
 
-        <footer className="pb-[2.8rem] pt-[1.2rem]">
+        <footer className="relative pb-[2.8rem] pt-[1.2rem]">
           {isPending ? (
             <div className="h-[6.2rem] w-full animate-pulse rounded-[0.4rem] border bg-gray-100 p-[0.8rem]" />
           ) : (
-            <MyLevelItem
-              acorns={acornCount}
-              isActive={activeTab === 'level'}
-              onClick={() => {
-                closeMenu();
-                setSelectedCategoryId(null);
-                goLevel();
-              }}
-            />
+            <>
+              {acornToastOpen && (
+                <div className="absolute bottom-[10.2rem] left-1/2 z-[50] -translate-x-1/2">
+                  <AutoDismissToast
+                    key={acornToastKey}
+                    duration={3000}
+                    fadeMs={200}
+                    onClose={() => setAcornToastOpen(false)}
+                  >
+                    <Balloon variant="main" side="bottom">
+                      <div className="flex w-[20rem] items-center gap-[1.2rem]">
+                        <Lottie
+                          animationData={Chippiface}
+                          loop
+                          autoplay
+                          className="h-[4rem] w-[4rem] shrink-0"
+                        />
+                        <div className="caption2-m flex flex-col text-white">
+                          <span>치삐가 방금</span>
+                          <span>도토리 1개를 모았어요!</span>
+                        </div>
+                      </div>
+                    </Balloon>
+                  </AutoDismissToast>
+                </div>
+              )}
+
+              <MyLevelItem
+                acorns={acornCount}
+                isActive={activeTab === 'level'}
+                onClick={() => {
+                  closeMenu();
+                  setSelectedCategoryId(null);
+                  goLevel();
+                }}
+              />
+            </>
           )}
         </footer>
       </div>
 
       {/* 팝업 영역 */}
-
       <ProfilePopupPortal
         open={profileOpen}
         onClose={() => setProfileOpen(false)}
