@@ -38,10 +38,13 @@ export default function Level() {
               <div className="relative items-center">
                 <button
                   type="button"
-                  className="peer flex items-center justify-center p-[0.4rem]"
+                  className="peer flex items-center justify-center gap-[4px] p-[0.4rem]"
                   aria-describedby="level-info-card"
                 >
                   <Icon name="ic_info" width={20} height={20} />
+                  <span className="body3-r text-font-gray-3">
+                    치삐의 지식나무 숲, 어떻게하면 성장하나요?
+                  </span>
                 </button>
                 <div
                   id="level-info-card"
