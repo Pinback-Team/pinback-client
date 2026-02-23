@@ -22,7 +22,7 @@ import {
   useGetGoogleProfile,
   useGetMyProfile,
 } from '@shared/apis/queries';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import ProfilePopupPortal from '../profilePopup/ProfilePopupPortal';
@@ -36,8 +36,7 @@ export function Sidebar() {
 
   const [acornToastOpen, setAcornToastOpen] = useState(false);
   const [acornToastKey, setAcornToastKey] = useState(0);
-  const [prevAcorn, setPrevAcorn] = useState<number | null>(null);
-
+  const prevAcornRef = useRef<number | null>(null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -143,18 +142,20 @@ export function Sidebar() {
   const canCreateMore = categoryCount < MAX_CATEGORIES;
 
   useEffect(() => {
-    if (prevAcorn === null) {
-      setPrevAcorn(acornCount);
+    if (isPending) return;
+
+    if (prevAcornRef.current === null) {
+      prevAcornRef.current = acornCount;
       return;
     }
 
-    if (acornCount > prevAcorn) {
+    if (acornCount > prevAcornRef.current) {
       setAcornToastOpen(true);
       setAcornToastKey((k) => k + 1);
     }
 
-    setPrevAcorn(acornCount);
-  }, [acornCount, prevAcorn]);
+    prevAcornRef.current = acornCount;
+  }, [acornCount, isPending]);
 
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
