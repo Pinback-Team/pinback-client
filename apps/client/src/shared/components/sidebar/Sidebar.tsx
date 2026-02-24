@@ -23,12 +23,16 @@ import { useEffect, useRef, useState } from 'react';
 import { AutoDismissToast } from '@pinback/design-system/ui';
 import { Balloon } from '@shared/components/balloon/Balloon';
 import { useCategoryActions } from './hooks/useCategoryActions';
+import JobPinGuidePortal from './JobPinGuidePortal';
 
 export function Sidebar() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [acornToastOpen, setAcornToastOpen] = useState(false);
   const [acornToastKey, setAcornToastKey] = useState(0);
   const prevAcornRef = useRef<number | null>(null);
+
+  const jobPinRef = useRef<HTMLDivElement | null>(null);
+  const [guideOpen, setGuideOpen] = useState(false);
 
   const { data: categories } = useGetDashboardCategories();
   const { data, isPending } = useGetArcons();
@@ -82,6 +86,15 @@ export function Sidebar() {
     setToastIsOpen(false);
   }, [popup, setToastIsOpen]);
 
+  useEffect(() => {
+    const hasJob = localStorage.getItem('hasJob') === 'true';
+    const guideClosed = localStorage.getItem('jobPinGuideClosed') === 'true';
+
+    if (hasJob && !guideClosed) {
+      setGuideOpen(true);
+    }
+  }, []);
+
   const acornCount = data?.acornCount ?? 0;
 
   const MAX_CATEGORIES = 10;
@@ -110,6 +123,7 @@ export function Sidebar() {
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
       <div className="flex h-full flex-col px-[0.8rem]">
+        {/* Header */}
         <header className="flex items-center justify-between px-[0.8rem] py-[2.8rem]">
           <Icon name="logo" className="h-[2.4rem] w-[8.7rem]" />
 
@@ -131,16 +145,19 @@ export function Sidebar() {
 
         <hr className="my-[0.8rem] border-gray-100" />
 
+        {/* Menu */}
         <div className="flex-1 overflow-y-auto">
-          <SideItem
-            icon="pin"
-            label="관심 직무 핀"
-            active={activeTab === 'job-pins'}
-            onClick={() => {
-              closeMenu();
-              goJobPins();
-            }}
-          />
+          <div ref={jobPinRef}>
+            <SideItem
+              icon="pin"
+              label="관심 직무 핀"
+              active={activeTab === 'job-pins'}
+              onClick={() => {
+                closeMenu();
+                goJobPins();
+              }}
+            />
+          </div>
 
           <SideItem
             icon="clock"
@@ -193,6 +210,7 @@ export function Sidebar() {
           />
         </div>
 
+        {/* Footer */}
         <footer className="relative pb-[2.8rem] pt-[1.2rem]">
           {!isPending && (
             <>
@@ -235,6 +253,7 @@ export function Sidebar() {
         </footer>
       </div>
 
+      {/* Profile Popup */}
       <ProfilePopupPortal
         open={profileOpen}
         onClose={() => setProfileOpen(false)}
@@ -244,6 +263,7 @@ export function Sidebar() {
         remindTime={remindAt}
       />
 
+      {/* Category Popup */}
       <PopupPortal
         popup={popup}
         onClose={handlePopupClose}
@@ -254,6 +274,16 @@ export function Sidebar() {
         categoryList={categories?.categories ?? []}
         isToastOpen={toastIsOpen}
         onToastClose={() => setToastIsOpen(false)}
+      />
+
+      {/* JobPin Guide Tutorial */}
+      <JobPinGuidePortal
+        anchorEl={jobPinRef.current}
+        open={guideOpen}
+        onClose={() => {
+          setGuideOpen(false);
+          localStorage.setItem('jobPinGuideClosed', 'true');
+        }}
       />
     </aside>
   );
