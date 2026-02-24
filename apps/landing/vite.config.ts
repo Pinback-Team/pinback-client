@@ -17,4 +17,8 @@ export default defineConfig({
       inject: 'body-last',
     }),
   ],
+  server: {
+    port: 5174,
+    strictPort: true,
+  },
 });
