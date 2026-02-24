@@ -1,6 +1,5 @@
 import { Checkbox } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
-import dotori from '/assets/onBoarding/icons/dotori.svg';
 import jobPlan from '/assets/onBoarding/jobs/jobPlan.svg';
 import jobDesign from '/assets/onBoarding/jobs/jobDesign.svg';
 import jobFrontend from '/assets/onBoarding/jobs/jobFrontend.svg';
