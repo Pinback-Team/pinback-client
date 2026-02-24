@@ -57,7 +57,6 @@ const JobStep = ({
 
   return (
     <div className="flex w-full flex-col items-center">
-      <img src={dotori} className="mb-[1.2rem]" alt="dotori" />
       <div className="mb-[2.4rem] flex flex-col items-center gap-[0.8rem]">
         <p className="head3 text-font-black-1">직무를 선택해주세요</p>
         <p className="body2-m text-font-gray-3 text-center">
