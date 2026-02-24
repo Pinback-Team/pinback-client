@@ -28,4 +28,9 @@ export default defineConfig({
     copyPublicDir: true,
   },
   publicDir: 'public',
+
+  server: {
+    port: 5175,
+    strictPort: true,
+  },
 });
