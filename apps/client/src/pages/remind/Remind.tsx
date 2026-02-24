@@ -36,7 +36,7 @@ const Remind = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [showJobSelectionFunnel, setShowJobSelectionFunnel] = useState(
-    () => localStorage.getItem('hasJob') === 'false'
+    () => localStorage.getItem('hasJob') !== 'true'
   );
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -251,7 +251,7 @@ const Remind = () => {
         <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/40 p-4">
           <JobSelectionFunnel
             onComplete={() => {
-              localStorage.setItem('hasJob', 'true');
+              // TODO: 관심 직무 핀 API 연동 필요
               setShowJobSelectionFunnel(false);
             }}
           />
