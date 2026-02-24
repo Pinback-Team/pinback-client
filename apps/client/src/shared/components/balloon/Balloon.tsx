@@ -26,7 +26,7 @@ export function Balloon({
     <div className="relative inline-block">
       <div
         className={cn(
-          'relative flex items-start gap-3 rounded-[4px] p-[1.2rem]',
+          'relative flex w-full items-start whitespace-nowrap rounded-[5.5px] px-[1.2rem] py-[0.8rem]',
           variantStyle[variant]
         )}
       >
@@ -34,7 +34,7 @@ export function Balloon({
 
         {onClose && (
           <button type="button" onClick={onClose}>
-            <Icon name="ic_close" size={16} />
+            <Icon name="ic_close" size={20} />
           </button>
         )}
       </div>
