@@ -68,7 +68,7 @@ const Popup = ({
           {checkboxOption && (
             <label className="mt-[1.2rem] flex items-center gap-[0.8rem]">
               <Checkbox
-                size="medium"
+                size="xsmall"
                 isSelected={checkboxOption.isSelected}
                 defaultSelected={checkboxOption.defaultSelected}
                 onSelectedChange={checkboxOption.onSelectedChange}

@@ -10,7 +10,7 @@ interface CheckboxProps
   isSelected?: boolean;
   defaultSelected?: boolean;
   onSelectedChange?: (checked: boolean) => void;
-  size?: 'small' | 'medium';
+  size?: 'xsmall' | 'small' | 'medium';
 }
 
 const checkboxBoxVariants = cva(
@@ -18,6 +18,7 @@ const checkboxBoxVariants = cva(
   {
     variants: {
       size: {
+        xsmall: 'h-[1.6rem] w-[1.6rem]',
         small: 'h-[2rem] w-[2rem]',
         medium: 'h-[2.8rem] w-[2.8rem]',
       },
@@ -41,6 +42,7 @@ const checkboxBoxVariants = cva(
 const checkIconVariants = cva('', {
   variants: {
     size: {
+      xsmall: 'h-[0.7rem] w-[1rem]',
       small: 'h-[0.8rem] w-[1.1rem]',
       medium: 'h-[0.9rem] w-[1.2rem]',
     },
