@@ -17,13 +17,23 @@ type RemindProps = BaseProps & {
   date?: never;
 };
 
-type BookmarkProps = BaseProps & {
+type BookmarkDefaultProps = BaseProps & {
   type: 'bookmark';
+  variant?: 'default';
   date: string;
+  nickname?: never;
   timeRemaining?: never;
 };
 
-export type CardProps = RemindProps | BookmarkProps;
+type BookmarkSaveProps = BaseProps & {
+  type: 'bookmark';
+  variant: 'save';
+  nickname: string;
+  date?: never;
+  timeRemaining?: never;
+};
+
+export type CardProps = RemindProps | BookmarkDefaultProps | BookmarkSaveProps;
 
 const Card = (
   props: CardProps & {
