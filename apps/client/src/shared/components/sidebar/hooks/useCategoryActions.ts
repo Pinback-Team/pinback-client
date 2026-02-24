@@ -34,7 +34,9 @@ export function useCategoryActions({
   };
 
   const moveNewCategory = (id: number) => {
-    navigate(`/my-bookmarks?id=${id}&category=${newCategoryName}`);
+    navigate(
+      `/my-bookmarks?id=${id}&category=${encodeURIComponent(newCategoryName)}`
+    );
     setActiveTab('mybookmark');
     setSelectedCategoryId(id);
   };
