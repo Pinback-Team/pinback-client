@@ -8,7 +8,7 @@ import {
 } from '@shared/apis/queries';
 import { SidebarTab } from '@shared/hooks/useSidebarNav';
 
-interface Params {
+interface CategoryActionsParams {
   close: () => void;
   setActiveTab: Dispatch<SetStateAction<SidebarTab>>;
   setSelectedCategoryId: Dispatch<SetStateAction<number | null>>;
@@ -18,7 +18,7 @@ export function useCategoryActions({
   close,
   setActiveTab,
   setSelectedCategoryId,
-}: Params) {
+}: CategoryActionsParams) {
   const [newCategoryName, setNewCategoryName] = useState('');
   const [toastIsOpen, setToastIsOpen] = useState(false);
 

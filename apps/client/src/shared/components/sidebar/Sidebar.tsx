@@ -35,7 +35,7 @@ export function Sidebar() {
   const [guideOpen, setGuideOpen] = useState(false);
 
   const { data: categories } = useGetDashboardCategories();
-  const { data, isPending } = useGetArcons();
+  const { data, isPending: isAcornPending } = useGetArcons();
   const { data: googleProfileData } = useGetGoogleProfile();
   const { data: myProfile } = useGetMyProfile();
 
@@ -102,7 +102,7 @@ export function Sidebar() {
   const canCreateMore = categoryCount < MAX_CATEGORIES;
 
   useEffect(() => {
-    if (isPending) return;
+    if (isAcornPending) return;
 
     if (prevAcornRef.current === null) {
       prevAcornRef.current = acornCount;
@@ -115,7 +115,7 @@ export function Sidebar() {
     }
 
     prevAcornRef.current = acornCount;
-  }, [acornCount, isPending]);
+  }, [acornCount, isAcornPending]);
 
   const getCategoryName = (id: number | null) =>
     categories?.categories.find((c) => c.id === id)?.name ?? '';
@@ -212,7 +212,7 @@ export function Sidebar() {
 
         {/* Footer */}
         <footer className="relative pb-[2.8rem] pt-[1.2rem]">
-          {!isPending && (
+          {!isAcornPending && (
             <>
               {acornToastOpen && (
                 <div className="absolute bottom-[10.2rem] left-1/2 -translate-x-1/2">
