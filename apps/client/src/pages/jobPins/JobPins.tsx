@@ -1,36 +1,42 @@
-import { Icon } from '@pinback/design-system/icons';
-import { Balloon } from '@shared/components/balloon/Balloon';
+import { Card } from '@pinback/design-system/ui';
+import Footer from '@pages/myBookmark/components/footer/Footer';
+
+const MOCK_JOB_PINS = Array.from({ length: 30 }, (_, index) => ({
+  id: index + 1,
+  title: '텍스트텍스트텍스트텍스트텍스트텍스트텍스트',
+  content: '서브텍스트입니다서브텍스트입니다서브텍스트입니다서브텍스트입니다',
+  category: '카테고리명',
+  categoryColor: 'COLOR7' as const,
+  date: '2025.02.24',
+}));
 
 const JobPins = () => {
   return (
-    <div>
-      {' '}
-      <Balloon variant="main" side="bottom">
-        <div className="text-lg font-semibold">치삐가 방금</div>
+    <div className="flex h-screen flex-col pl-[8rem] pr-[5rem] pt-[5.2rem]">
+      <div className="flex items-center gap-[1.2rem]">
+        <p className="head3">관심 직무 핀</p>
+        <p className="head3 text-main500">기획자</p>
+      </div>
+      <p className="body3-r text-font-gray-3 mt-[0.8rem]">
+        같은 직무의 사람들이 저장한 아티클을 살펴봐요. 선택한 직무를 기준으로
+        최신 핀이 업데이트 돼요!
+      </p>
 
-        <div className="text-sm opacity-90">도토리 1개를 모았어요!</div>
-      </Balloon>
-      <Balloon variant="gray" side="left" onClose={() => alert('닫힘')}>
-        <div className="text-lg font-semibold">치삐가 방금</div>
+      <div className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap content-start gap-[1.6rem] overflow-y-auto scroll-smooth">
+        {MOCK_JOB_PINS.map((pin) => (
+          <Card
+            key={pin.id}
+            type="bookmark"
+            title={pin.title}
+            content={pin.content}
+            category={pin.category}
+            categoryColor={pin.categoryColor}
+            date={pin.date}
+          />
+        ))}
+      </div>
 
-        <div className="text-sm opacity-90">도토리 1개를 모았어요!</div>
-      </Balloon>
-      <Balloon variant="gray" side="left">
-        <Icon name="ic_info" size={16} />
-        <div className="text-sm opacity-90">도토리 1개를 모았어요!</div>
-      </Balloon>
-      <Balloon variant="main" side="bottom">
-        <div className="flex items-center gap-3">
-          {/* 캐릭터 이미지 */}
-          <Icon name="chippi_profile" size={40} />
-
-          {/* 텍스트 영역 */}
-          <div className="flex flex-col">
-            <div className="text-[18px] font-semibold">치삐가 방금</div>
-            <div className="text-[16px]">도토리 1개를 모았어요!</div>
-          </div>
-        </div>
-      </Balloon>
+      <Footer />
     </div>
   );
 };
