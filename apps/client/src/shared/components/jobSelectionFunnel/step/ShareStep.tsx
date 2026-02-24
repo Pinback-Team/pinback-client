@@ -1,4 +1,4 @@
-const shareStepImage = '/assets/jobSelectionFunnel/shareStep_description.svg';
+import shareStepImage from '/assets/jobSelectionFunnel/shareStep_description.svg';
 
 const ShareStep = () => {
   return (

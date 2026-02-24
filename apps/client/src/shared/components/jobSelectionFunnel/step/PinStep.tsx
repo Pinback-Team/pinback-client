@@ -1,4 +1,4 @@
-const pinStepImage = '/assets/jobSelectionFunnel/pinStep_description.svg';
+import pinStepImage from '/assets/jobSelectionFunnel/pinStep_description.svg';
 
 const PinStep = () => {
   return (
