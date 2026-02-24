@@ -39,7 +39,7 @@ const GoogleCallback = () => {
         };
         sendTokenToExtension(accessToken);
       }
-      if (hasJob !== undefined) {
+      if (typeof hasJob === 'boolean') {
         localStorage.setItem('hasJob', String(hasJob));
       }
       navigate('/');
