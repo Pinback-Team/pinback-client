@@ -7,7 +7,8 @@ const MOCK_JOB_PINS = Array.from({ length: 30 }, (_, index) => ({
   content: '서브텍스트입니다서브텍스트입니다서브텍스트입니다서브텍스트입니다',
   category: '카테고리명',
   categoryColor: 'COLOR7' as const,
-  date: '2025.02.24',
+  variant: 'save' as const,
+  nickname: index % 3 === 0 ? '구글닉네임명' : '',
 }));
 
 const JobPins = () => {
@@ -27,11 +28,12 @@ const JobPins = () => {
           <Card
             key={pin.id}
             type="bookmark"
+            variant={pin.variant}
             title={pin.title}
             content={pin.content}
             category={pin.category}
             categoryColor={pin.categoryColor}
-            date={pin.date}
+            nickname={pin.nickname}
           />
         ))}
       </div>
