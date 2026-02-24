@@ -1,6 +1,5 @@
 import Lottie from 'lottie-react';
 import Chippiface from '@assets/5_chippiface.json';
-
 import { Icon } from '@pinback/design-system/icons';
 import SideItem from './SideItem';
 import AccordionItem from './AccordionItem';
@@ -13,43 +12,30 @@ import { useSidebarNav } from '@shared/hooks/useSidebarNav';
 import { useCategoryPopups } from '@shared/hooks/useCategoryPopups';
 import OptionsMenuPortal from './OptionsMenuPortal';
 import PopupPortal from './PopupPortal';
+import ProfilePopupPortal from '../profilePopup/ProfilePopupPortal';
 import {
   useGetDashboardCategories,
-  usePostCategory,
   useGetArcons,
-  usePutCategory,
-  useDeleteCategory,
   useGetGoogleProfile,
   useGetMyProfile,
 } from '@shared/apis/queries';
 import { useEffect, useRef, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
-import ProfilePopupPortal from '../profilePopup/ProfilePopupPortal';
 import { AutoDismissToast } from '@pinback/design-system/ui';
 import { Balloon } from '@shared/components/balloon/Balloon';
+import { useCategoryActions } from './hooks/useCategoryActions';
 
 export function Sidebar() {
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [toastIsOpen, setToastIsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-
   const [acornToastOpen, setAcornToastOpen] = useState(false);
   const [acornToastKey, setAcornToastKey] = useState(0);
   const prevAcornRef = useRef<number | null>(null);
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   const { data: categories } = useGetDashboardCategories();
-  const { mutate: patchCategory } = usePutCategory();
-  const { mutate: createCategory } = usePostCategory();
   const { data, isPending } = useGetArcons();
-  const { mutate: deleteCategory } = useDeleteCategory();
   const { data: googleProfileData } = useGetGoogleProfile();
   const { data: myProfile } = useGetMyProfile();
 
   const profileImageUrl = googleProfileData?.googleProfile || null;
-
   const chippiImageUrl = myProfile?.profileImage ?? null;
   const profileEmail = myProfile?.email ?? '';
   const profileName = myProfile?.name ?? '';
@@ -78,65 +64,26 @@ export function Sidebar() {
     style,
   } = useAnchoredMenu((anchor) => rightOf(anchor, 30));
 
-  const getCategoryName = (id: number | null) =>
-    categories?.categories.find((category) => category.id === id)?.name ?? '';
-
-  const handleCategoryChange = (name: string) => {
-    setNewCategoryName(name);
-  };
-
-  const moveNewCategory = (id: number) => {
-    navigate(`/my-bookmarks?id=${id}&category=${newCategoryName}`);
-    setActiveTab('mybookmark');
-    setSelectedCategoryId(id);
-  };
-
-  const handleCreateCategory = () => {
-    createCategory(newCategoryName, {
-      onSuccess: () => {
-        handleCategoryChange('');
-        queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
-        close();
-      },
-      onError: () => setToastIsOpen(true),
-    });
-  };
-
-  const handlePatchCategory = (id: number) => {
-    patchCategory(
-      { id, categoryName: newCategoryName },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
-          setNewCategoryName('');
-          close();
-          moveNewCategory(id);
-        },
-        onError: () => setToastIsOpen(true),
-      }
-    );
-  };
-
-  const handleDeleteCategory = (id: number) => {
-    deleteCategory(id, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['dashboardCategories'] });
-        close();
-      },
-      onError: () => setToastIsOpen(true),
-    });
-  };
-
-  const handlePopupClose = () => {
-    setToastIsOpen(false);
-    close();
-  };
+  const {
+    toastIsOpen,
+    setToastIsOpen,
+    handleCategoryChange,
+    handleCreateCategory,
+    handlePatchCategory,
+    handleDeleteCategory,
+    handlePopupClose,
+  } = useCategoryActions({
+    close,
+    setActiveTab,
+    setSelectedCategoryId,
+  });
 
   useEffect(() => {
     setToastIsOpen(false);
-  }, [popup]);
+  }, [popup, setToastIsOpen]);
 
   const acornCount = data?.acornCount ?? 0;
+
   const MAX_CATEGORIES = 10;
   const categoryCount = categories?.categories?.length ?? 0;
   const canCreateMore = categoryCount < MAX_CATEGORIES;
@@ -157,26 +104,23 @@ export function Sidebar() {
     prevAcornRef.current = acornCount;
   }, [acornCount, isPending]);
 
+  const getCategoryName = (id: number | null) =>
+    categories?.categories.find((c) => c.id === id)?.name ?? '';
+
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
       <div className="flex h-full flex-col px-[0.8rem]">
-        {/* 헤더 */}
         <header className="flex items-center justify-between px-[0.8rem] py-[2.8rem]">
-          <Icon
-            name="logo"
-            aria-label="Pinback 로고"
-            className="h-[2.4rem] w-[8.7rem] cursor-pointer"
-          />
+          <Icon name="logo" className="h-[2.4rem] w-[8.7rem]" />
 
           <button
             type="button"
-            className="h-[3.6rem] w-[3.6rem] flex-shrink-0 overflow-hidden rounded-full border border-gray-200"
+            className="h-[3.6rem] w-[3.6rem] overflow-hidden rounded-full border"
             onClick={() => setProfileOpen(true)}
           >
             {profileImageUrl ? (
               <img
                 src={profileImageUrl}
-                alt="프로필"
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -187,7 +131,6 @@ export function Sidebar() {
 
         <hr className="my-[0.8rem] border-gray-100" />
 
-        {/* 메뉴 영역 */}
         <div className="flex-1 overflow-y-auto">
           <SideItem
             icon="pin"
@@ -198,6 +141,7 @@ export function Sidebar() {
               goJobPins();
             }}
           />
+
           <SideItem
             icon="clock"
             label="리마인드"
@@ -218,7 +162,7 @@ export function Sidebar() {
               goBookmarks();
             }}
           >
-            <ul className="bg-none">
+            <ul>
               {categories?.categories?.map((category) => (
                 <CategoryItem
                   key={category.id}
@@ -233,46 +177,30 @@ export function Sidebar() {
                 />
               ))}
 
-              {canCreateMore && (
-                <CreateItem
-                  onClick={() => {
-                    setToastIsOpen(false);
-                    openCreate();
-                  }}
-                />
-              )}
+              {canCreateMore && <CreateItem onClick={() => openCreate()} />}
             </ul>
           </AccordionItem>
 
           <OptionsMenuPortal
             open={menu.open}
-            style={style ?? undefined}
+            style={style}
             categoryId={menu.categoryId}
             getCategoryName={getCategoryName}
-            onEdit={(id, name) => {
-              setToastIsOpen(false);
-              openEdit(id, name);
-            }}
-            onDelete={(id, name) => {
-              setToastIsOpen(false);
-              openDelete(id, name);
-            }}
+            onEdit={(id, name) => openEdit(id, name)}
+            onDelete={(id, name) => openDelete(id, name)}
             onClose={closeMenu}
             containerRef={containerRef}
           />
         </div>
 
         <footer className="relative pb-[2.8rem] pt-[1.2rem]">
-          {isPending ? (
-            <div className="h-[6.2rem] w-full animate-pulse rounded-[0.4rem] border bg-gray-100 p-[0.8rem]" />
-          ) : (
+          {!isPending && (
             <>
               {acornToastOpen && (
-                <div className="absolute bottom-[10.2rem] left-1/2 z-[50] -translate-x-1/2">
+                <div className="absolute bottom-[10.2rem] left-1/2 -translate-x-1/2">
                   <AutoDismissToast
                     key={acornToastKey}
                     duration={3000}
-                    fadeMs={200}
                     onClose={() => setAcornToastOpen(false)}
                   >
                     <Balloon variant="main" side="bottom">
@@ -307,7 +235,6 @@ export function Sidebar() {
         </footer>
       </div>
 
-      {/* 팝업 영역 */}
       <ProfilePopupPortal
         open={profileOpen}
         onClose={() => setProfileOpen(false)}
@@ -320,7 +247,7 @@ export function Sidebar() {
       <PopupPortal
         popup={popup}
         onClose={handlePopupClose}
-        onChange={setNewCategoryName}
+        onChange={handleCategoryChange}
         onCreateConfirm={handleCreateCategory}
         onEditConfirm={(id) => handlePatchCategory(id)}
         onDeleteConfirm={(id) => handleDeleteCategory(id)}
