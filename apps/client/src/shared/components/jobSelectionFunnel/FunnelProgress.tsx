@@ -7,16 +7,13 @@ interface FunnelProgressProps {
 
 const FunnelProgress = ({ currentIndex, totalSteps }: FunnelProgressProps) => {
   const maxIndex = Math.max(1, totalSteps - 1);
-  const percent = Math.max(
-    0,
-    Math.min(100, (currentIndex / maxIndex) * 100)
-  );
+  const percent = Math.max(0, Math.min(100, (currentIndex / maxIndex) * 100));
 
   return (
     <div className="relative flex h-[2rem] w-[26.9rem] items-center justify-center">
-      <div className="absolute left-[0.6rem] right-[0.6rem] top-1/2 h-[0.7rem] -translate-y-1/2 rounded-full bg-gray100">
+      <div className="bg-gray100 absolute left-[0.6rem] right-[0.6rem] top-1/2 h-[0.7rem] -translate-y-1/2 rounded-full">
         <div
-          className="h-full rounded-full bg-main400 transition-[width] duration-300"
+          className="bg-main400 h-full rounded-full transition-[width] duration-500"
           style={{ width: `${percent}%` }}
         />
       </div>
@@ -28,7 +25,9 @@ const FunnelProgress = ({ currentIndex, totalSteps }: FunnelProgressProps) => {
               key={`funnel-progress-${index}`}
               className={cn(
                 'flex size-[2rem] items-center justify-center rounded-full text-[1.2rem] font-semibold leading-[1.5]',
-                isActive ? 'bg-main400 text-white' : 'bg-gray100 text-[#999999]'
+                isActive
+                  ? 'bg-main400 text-white'
+                  : 'bg-gray100 text-font-ltgray-4'
               )}
             >
               {index + 1}
