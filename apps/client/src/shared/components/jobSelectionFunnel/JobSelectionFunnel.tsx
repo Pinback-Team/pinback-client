@@ -23,7 +23,7 @@ export default function JobSelectionFunnel({
     });
 
   const [selectedJob, setSelectedJob] = useState<JobKey>('planner');
-  const [jobShareAgree, setJobShareAgree] = useState(true);
+  const [jobShareAgree, setJobShareAgree] = useState(false);
 
   const handleNext = () => {
     if (isLastStep) {
