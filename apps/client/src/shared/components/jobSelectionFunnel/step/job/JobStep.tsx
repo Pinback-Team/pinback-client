@@ -1,14 +1,13 @@
 import { Suspense } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import dotori from '/assets/onBoarding/icons/dotori.svg';
 import { Checkbox } from '@pinback/design-system/ui';
 import { JobsResponse } from '@shared/types/api';
 import JobCards from './JobCards';
 import JobCardsSkeleton from './JobCardsSkeleton';
 
-interface JobStepProps {
+export interface JobStepProps {
   selectedJob: string | null;
-  onSelectJob: (jobName: string) => void;
+  onSelectJob: (job: string) => void;
   agreeChecked: boolean;
   onAgreeChange: (checked: boolean) => void;
 }
@@ -25,7 +24,6 @@ const JobStep = ({
 
   return (
     <div className="flex w-full flex-col items-center">
-      <img src={dotori} className="mb-[1.2rem]" alt="dotori" />
       <div className="mb-[2.4rem] flex flex-col items-center gap-[0.8rem]">
         <p className="head3 text-font-black-1">직무를 선택해주세요</p>
         <p className="body2-m text-font-gray-3 text-center">
