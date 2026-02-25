@@ -29,3 +29,10 @@ export interface UnreadBookmarkArticleResponse {
 }
 
 export type CategoryBookmarkArticleResponse = UnreadBookmarkArticleResponse;
+
+// 나의 북마크 카운트 조회
+export interface BookmarkArticlesCountResponse {
+  totalArticleCount: number;
+  readArticleCount: number;
+  unreadArticleCount: number;
+}
