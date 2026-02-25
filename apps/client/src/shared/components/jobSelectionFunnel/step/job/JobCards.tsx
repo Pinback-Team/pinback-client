@@ -53,12 +53,6 @@ const JobCards = ({ activeJob, onSelectJob }: JobCardsProps) => {
   const { data: jobData } = useSuspenseGetJobs();
   const jobOptions = jobData.jobs;
 
-  useEffect(() => {
-    if (!activeJob && jobOptions.length > 0) {
-      onSelectJob(jobOptions[0].job);
-    }
-  }, [activeJob, jobOptions, onSelectJob]);
-
   return (
     <div
       role="radiogroup"
