@@ -3,6 +3,7 @@ import {
   UseMutationResult,
   useQuery,
   UseQueryResult,
+  useSuspenseQuery,
 } from '@tanstack/react-query';
 import {
   deleteCategory,
@@ -18,6 +19,7 @@ import {
   deleteRemindArticle,
   getGoogleProfile,
   getMyProfile,
+  getJobs,
 } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
 import {
@@ -26,6 +28,7 @@ import {
   EditArticleRequest,
   ArticleReadStatusResponse,
   ArticleDetailResponse,
+  JobsResponse,
 } from '@shared/types/api';
 import { fetchOGData } from '@shared/utils/fetchOgData';
 
@@ -146,9 +149,25 @@ export const useGetGoogleProfile = () => {
   });
 };
 
-export function useGetMyProfile() {
+export const useGetMyProfile = () => {
   return useQuery({
     queryKey: ['myProfile'],
     queryFn: getMyProfile,
   });
-}
+};
+
+export const useGetJobs = (): UseQueryResult<JobsResponse, AxiosError> => {
+  return useQuery({
+    queryKey: ['jobs'],
+    queryFn: getJobs,
+    staleTime: Infinity,
+  });
+};
+
+export const useSuspenseGetJobs = () => {
+  return useSuspenseQuery({
+    queryKey: ['jobs'],
+    queryFn: getJobs,
+    staleTime: Infinity,
+  });
+};

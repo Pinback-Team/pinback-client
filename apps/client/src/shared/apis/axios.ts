@@ -1,5 +1,5 @@
 import apiRequest from '@shared/apis/setting/axiosInstance';
-import { EditArticleRequest } from '@shared/types/api';
+import { EditArticleRequest, JobsResponse } from '@shared/types/api';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 
 export const getDashboardCategories = async () => {
@@ -79,5 +79,10 @@ export const getGoogleProfile = async () => {
 
 export const getMyProfile = async () => {
   const { data } = await apiRequest.get('/api/v2/users/me');
+  return data.data;
+};
+
+export const getJobs = async (): Promise<JobsResponse> => {
+  const { data } = await apiRequest.get('/api/v3/enums/jobs');
   return data.data;
 };
