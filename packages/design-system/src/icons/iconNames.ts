@@ -18,6 +18,7 @@ export const iconNames = [
   'ic_details_disable',
   'ic_extension',
   'ic_info',
+  'ic_memo',
   'ic_pin',
   'ic_pin_active',
   'ic_pin_disable',
