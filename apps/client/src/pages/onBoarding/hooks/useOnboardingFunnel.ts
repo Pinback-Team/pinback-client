@@ -27,6 +27,7 @@ export function useOnboardingFunnel() {
   const [remindTime, setRemindTime] = useState('09:00');
   const [fcmToken, setFcmToken] = useState<string | null>(null);
   const [jobShareAgree, setJobShareAgree] = useState(true);
+  const [selectedJob, setSelectedJob] = useState<string | null>(null);
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
@@ -149,8 +150,10 @@ export function useOnboardingFunnel() {
     direction,
     alarmSelected,
     jobShareAgree,
+    selectedJob,
     setAlarmSelected,
     setJobShareAgree,
+    setSelectedJob,
     nextStep,
     prevStep,
   };
