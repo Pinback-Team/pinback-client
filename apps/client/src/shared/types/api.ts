@@ -39,3 +39,12 @@ export interface ArticleDetailResponse {
   createdAt: string;
   categoryResponse: CategoryResponse;
 }
+
+export interface JobOption {
+  imageUrl: string;
+  job: string;
+}
+
+export interface JobsResponse {
+  jobs: JobOption[];
+}
