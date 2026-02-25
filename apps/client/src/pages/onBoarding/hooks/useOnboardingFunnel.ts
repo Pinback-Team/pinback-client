@@ -115,7 +115,12 @@ export function useOnboardingFunnel() {
 
     if (isFinalStep) {
       postSignData(
-        { email: userEmail, remindDefault: remindTime, fcmToken },
+        {
+          email: userEmail,
+          remindDefault: remindTime,
+          fcmToken,
+          job: selectedJob ?? '',
+        },
         {
           onSuccess: () => (window.location.href = '/'),
           onError: () => {
@@ -145,6 +150,7 @@ export function useOnboardingFunnel() {
     setStep,
     step,
     userEmail,
+    selectedJob,
   ]);
 
   const prevStep = useCallback(() => {
