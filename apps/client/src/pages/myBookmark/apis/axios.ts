@@ -1,3 +1,4 @@
+import { BookmarkArticlesCountResponse } from '@pages/myBookmark/types/api';
 import apiRequest from '@shared/apis/setting/axiosInstance';
 
 export const getBookmarkArticles = async (page: number, size: number) => {
@@ -13,6 +14,12 @@ export const getBookmarkUnreadArticles = async (page: number, size: number) => {
   );
   return data.data;
 };
+
+export const getBookmarkArticlesCount =
+  async (): Promise<BookmarkArticlesCountResponse> => {
+    const { data } = await apiRequest.get(`/api/v3/articles/count`);
+    return data.data;
+  };
 
 export const getCategoryBookmarkArticles = async (
   categoryId: string | null,
@@ -31,4 +38,13 @@ export const getCategoryBookmarkArticles = async (
     );
     return data.data;
   }
+};
+
+export const getCategoryBookmarkArticlesCount = async (
+  categoryId: string
+): Promise<BookmarkArticlesCountResponse> => {
+  const { data } = await apiRequest.get(
+    `/api/v3/articles/category/count?category-id=${categoryId}`
+  );
+  return data.data;
 };

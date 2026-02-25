@@ -1,8 +1,14 @@
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import {
+  useQuery,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import {
   getBookmarkArticles,
+  getBookmarkArticlesCount,
   getBookmarkUnreadArticles,
   getCategoryBookmarkArticles,
+  getCategoryBookmarkArticlesCount,
 } from './axios';
 
 export const useGetBookmarkArticles = () => {
@@ -25,6 +31,13 @@ export const useGetBookmarkUnreadArticles = () => {
   });
 };
 
+export const useGetBookmarkArticlesCount = () => {
+  return useSuspenseQuery({
+    queryKey: ['bookmarkArticlesCount'],
+    queryFn: getBookmarkArticlesCount,
+  });
+};
+
 export const useGetCategoryBookmarkArticles = (
   categoryId: string | null,
   readStatus: boolean | null
@@ -42,5 +55,15 @@ export const useGetCategoryBookmarkArticles = (
       if (!lastPage || lastPage.articles.length === 0) return undefined;
       return allPages.length;
     },
+  });
+};
+
+export const useGetCategoryBookmarkArticlesCount = (
+  categoryId: string | null
+) => {
+  return useQuery({
+    queryKey: ['categoryBookmarkArticlesCount', categoryId],
+    queryFn: () => getCategoryBookmarkArticlesCount(categoryId!),
+    enabled: !!categoryId,
   });
 };
