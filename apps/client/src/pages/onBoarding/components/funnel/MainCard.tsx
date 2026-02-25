@@ -47,8 +47,10 @@ const MainCard = () => {
     direction,
     alarmSelected,
     jobShareAgree,
+    selectedJob,
     setAlarmSelected,
     setJobShareAgree,
+    setSelectedJob,
     nextStep,
     prevStep,
   } = useOnboardingFunnel();
@@ -66,6 +68,8 @@ const MainCard = () => {
       case Step.JOB:
         return (
           <JobStep
+            selectedJob={selectedJob}
+            onSelectJob={setSelectedJob}
             agreeChecked={jobShareAgree}
             onAgreeChange={setJobShareAgree}
           />
@@ -132,7 +136,7 @@ const MainCard = () => {
             size="medium"
             className="ml-auto w-[4.8rem]"
             onClick={nextStep}
-            isDisabled={step === Step.JOB && !jobShareAgree}
+            isDisabled={step === Step.JOB && (!jobShareAgree || !selectedJob)}
           >
             다음
           </Button>
