@@ -87,3 +87,12 @@ export const getJobs = async (): Promise<JobsResponse> => {
   const { data } = await apiRequest.get('/api/v3/enums/jobs');
   return data.data;
 };
+
+export interface patchUserJobRequest {
+  job: string;
+}
+
+export const patchUserJob = async (requestData: patchUserJobRequest) => {
+  const { data } = await apiRequest.patch('/api/v3/users/job', requestData);
+  return data;
+};
