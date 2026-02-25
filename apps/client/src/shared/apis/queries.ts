@@ -11,7 +11,7 @@ import {
   postSignUp,
   postSignUpRequest,
   putEditArticle,
-  putCategory,
+  patchCategory,
   putArticleReadStatus,
   getArticleDetail,
   getAcorns,
@@ -50,10 +50,17 @@ export const usePostCategory = () => {
     }) => postCategory(categoryName, isPublic),
   });
 };
-export const usePutCategory = () => {
+export const usePatchCategory = () => {
   return useMutation({
-    mutationFn: ({ id, categoryName }: { id: number; categoryName: string }) =>
-      putCategory(id, categoryName),
+    mutationFn: ({
+      id,
+      categoryName,
+      isPublic,
+    }: {
+      id: number;
+      categoryName: string;
+      isPublic: boolean;
+    }) => patchCategory(id, categoryName, isPublic),
   });
 };
 

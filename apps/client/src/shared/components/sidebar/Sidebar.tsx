@@ -269,7 +269,9 @@ export function Sidebar() {
         onClose={handlePopupClose}
         onChange={handleCategoryChange}
         onCreateConfirm={handleCreateCategory}
-        onEditConfirm={(id) => handlePatchCategory(id)}
+        onEditConfirm={(id, name, isPublic) =>
+          handlePatchCategory(id, name, isPublic)
+        }
         onDeleteConfirm={(id) => handleDeleteCategory(id)}
         categoryList={categories?.categories ?? []}
         isToastOpen={toastIsOpen}

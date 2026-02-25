@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import {
   usePostCategory,
-  usePutCategory,
+  usePatchCategory,
   useDeleteCategory,
 } from '@shared/apis/queries';
 import { SidebarTab } from '@shared/hooks/useSidebarNav';
@@ -26,7 +26,7 @@ export function useCategoryActions({
   const navigate = useNavigate();
 
   const { mutate: createCategory } = usePostCategory();
-  const { mutate: patchCategory } = usePutCategory();
+  const { mutate: patchCategory } = usePatchCategory();
   const { mutate: deleteCategory } = useDeleteCategory();
 
   const handleCategoryChange = (name: string) => {
@@ -61,14 +61,25 @@ export function useCategoryActions({
     );
   };
 
-  const handlePatchCategory = (id: number) => {
+  const handlePatchCategory = (
+    id: number,
+    name?: string,
+    isPublic?: boolean
+  ) => {
+    if (!name) return;
+
     patchCategory(
-      { id, categoryName: newCategoryName },
+      {
+        id,
+        categoryName: name,
+        isPublic: isPublic ?? false,
+      },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: ['dashboardCategories'],
           });
+
           setNewCategoryName('');
           close();
           moveNewCategory(id);
