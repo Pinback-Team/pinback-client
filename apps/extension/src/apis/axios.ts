@@ -1,30 +1,24 @@
-import apiRequest from "./axiosInstance";
+import apiRequest from './axiosInstance';
 export interface PostArticleRequest {
   url: string;
   categoryId: number;
   memo?: string | null;
-  remindTime?: string | null; 
+  remindTime?: string | null;
 }
 
 export const postArticle = async (data: PostArticleRequest) => {
-  const response = await apiRequest.post("/api/v1/articles", data);
+  const response = await apiRequest.post('/api/v1/articles', data);
   return response.data;
 };
-
 
 export interface postSignupRequest {
   email: string;
-  remindDefault: string
+  remindDefault: string;
   fcmToken: string;
 }
 
-export const postSignup = async (data: postSignupRequest) => {
-  const response = await apiRequest.post("/api/v1/auth/signup", data);
-  return response.data;
-};
-
 export const getCategoriesExtension = async () => {
-  const response = await apiRequest.get("/api/v1/categories/extension");
+  const response = await apiRequest.get('/api/v1/categories/extension');
   return response.data;
 };
 
@@ -33,27 +27,26 @@ export interface postCategoriesRequest {
 }
 
 export const postCategories = async (data: postCategoriesRequest) => {
-  const response = await apiRequest.post("/api/v1/categories", data);
+  const response = await apiRequest.post('/api/v1/categories', data);
   return response.data;
-}
+};
 
 export const getRemindTime = async () => {
-  const now = new Date().toISOString().split(".")[0]; 
+  const now = new Date().toISOString().split('.')[0];
 
-  const response = await apiRequest.get("/api/v1/users/remind-time", {
+  const response = await apiRequest.get('/api/v1/users/remind-time', {
     params: { now },
   });
 
   return response.data;
 };
 
-
-export const getArticleSaved=async (url:string) => {
-  const response = await apiRequest.get("/api/v1/articles/saved", {
+export const getArticleSaved = async (url: string) => {
+  const response = await apiRequest.get('/api/v1/articles/saved', {
     params: { url },
   });
   return response.data;
-}
+};
 
 export interface PutArticleRequest {
   categoryId: number;
@@ -62,7 +55,10 @@ export interface PutArticleRequest {
   remindTime: string | null;
 }
 
-export const putArticle = async (articleId: number, data: PutArticleRequest) => {
+export const putArticle = async (
+  articleId: number,
+  data: PutArticleRequest
+) => {
   const response = await apiRequest.put(`/api/v1/articles/${articleId}`, data);
   return response.data;
 };
