@@ -5,7 +5,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { AlarmsType } from '@constants/alarms';
 import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
 import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
-import { Step, stepOrder, StepType } from '@pages/onBoarding/constants/onboardingSteps';
+import {
+  Step,
+  stepOrder,
+  StepType,
+} from '@pages/onBoarding/constants/onboardingSteps';
 import { firebaseConfig } from '../../../firebase-config';
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
@@ -14,11 +18,16 @@ type AlarmSelection = 1 | 2 | 3;
 
 export function useOnboardingFunnel() {
   const { mutate: postSignData } = usePostSignUp();
-  const { currentStep: step, currentIndex, setStep, goNext, goPrev } =
-    useFunnel<StepType>({
-      steps: stepOrder,
-      initialStep: Step.STORY_0,
-    });
+  const {
+    currentStep: step,
+    currentIndex,
+    setStep,
+    goNext,
+    goPrev,
+  } = useFunnel<StepType>({
+    steps: stepOrder,
+    initialStep: Step.STORY_0,
+  });
 
   const [direction, setDirection] = useState(0);
   const [alarmSelected, setAlarmSelected] = useState<AlarmSelection>(1);
@@ -26,7 +35,7 @@ export function useOnboardingFunnel() {
   const [userEmail, setUserEmail] = useState('');
   const [remindTime, setRemindTime] = useState('09:00');
   const [fcmToken, setFcmToken] = useState<string | null>(null);
-  const [jobShareAgree, setJobShareAgree] = useState(true);
+  const [jobShareAgree, setJobShareAgree] = useState(false);
   const [selectedJob, setSelectedJob] = useState<string | null>(null);
 
   useEffect(() => {
@@ -38,7 +47,8 @@ export function useOnboardingFunnel() {
 
   const requestFCMToken = useCallback(async (): Promise<string | null> => {
     try {
-      const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+      const app =
+        getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
       const messaging = getMessaging(app);
       const permission = await Notification.requestPermission();
       registerServiceWorker();
