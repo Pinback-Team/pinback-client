@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { cva } from 'class-variance-authority';
 import jobPlan from '/assets/onBoarding/jobs/jobPlan.svg';
 import jobDesign from '/assets/onBoarding/jobs/jobDesign.svg';
