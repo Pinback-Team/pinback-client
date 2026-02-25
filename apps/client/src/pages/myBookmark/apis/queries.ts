@@ -9,7 +9,9 @@ import {
   getCategoryBookmarkArticles,
   getCategoryBookmarkArticlesCount,
 } from './axios';
-import { BookmarkArticlesResponse } from '../types/api';
+import {
+  CategoryBookmarkArticleResponse,
+} from '../types/api';
 
 export const useGetBookmarkArticles = (readStatus: boolean | null) => {
   return useSuspenseInfiniteQuery({
@@ -37,9 +39,10 @@ export const useGetCategoryBookmarkArticles = (
     queryKey: ['categoryBookmarkArticles', readStatus, categoryId],
     queryFn: ({ pageParam = 0 }) => {
       if (!categoryId)
-        return Promise.resolve<BookmarkArticlesResponse>({
+        return Promise.resolve<CategoryBookmarkArticleResponse>({
           totalArticleCount: 0,
           unreadArticleCount: 0,
+          categoryName: '',
           articles: [],
         });
       return getCategoryBookmarkArticles(

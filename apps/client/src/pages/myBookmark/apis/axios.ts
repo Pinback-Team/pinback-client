@@ -29,18 +29,13 @@ export const getCategoryBookmarkArticles = async (
   readStatus: boolean | null,
   page: number,
   size: number
-) : Promise<CategoryBookmarkArticleResponse> => {
-  if (readStatus === null) {
-    const { data } = await apiRequest.get(
-      `/api/v1/articles/category?categoryId=${categoryId}&page=${page}&size=${size}`
-    );
-    return data.data;
-  } else {
-    const { data } = await apiRequest.get(
-      `/api/v1/articles/category?categoryId=${categoryId}&read-status=${readStatus}&page=${page}&size=${size}`
-    );
-    return data.data;
-  }
+): Promise<CategoryBookmarkArticleResponse> => {
+  const readStatusQuery =
+    readStatus === null ? '' : `&read-status=${readStatus}`;
+  const { data } = await apiRequest.get(
+    `/api/v3/articles/category?category-id=${categoryId}&page=${page}&size=${size}${readStatusQuery}`
+  );
+  return data.data;
 };
 
 export const getCategoryBookmarkArticlesCount = async (

@@ -12,7 +12,7 @@ export interface BookmarkArticle {
   memo: string | null;
   createdAt: string;
   isRead: boolean;
-  category: Category;
+  category?: Category;
 }
 
 // 북마크 조회(v3)
@@ -22,7 +22,12 @@ export interface BookmarkArticlesResponse {
   articles: BookmarkArticle[];
 }
 
-export type CategoryBookmarkArticleResponse = BookmarkArticlesResponse;
+export interface CategoryBookmarkArticleResponse {
+  totalArticleCount: number;
+  unreadArticleCount: number;
+  categoryName: string;
+  articles: BookmarkArticle[];
+}
 
 // 나의 북마크 카운트 조회
 export interface BookmarkArticlesCountResponse {
