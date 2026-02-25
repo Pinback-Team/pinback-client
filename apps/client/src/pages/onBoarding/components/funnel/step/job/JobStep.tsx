@@ -3,8 +3,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import dotori from '/assets/onBoarding/icons/dotori.svg';
 import { Checkbox } from '@pinback/design-system/ui';
 import { JobsResponse } from '@shared/types/api';
-import JobCards from './JobCards';
-import JobCardsSkeleton from './JobCardsSkeleton';
+import JobCards from '@shared/components/jobSelectionFunnel/step/job/JobCards';
+import JobCardsSkeleton from '@shared/components/jobSelectionFunnel/step/job/JobCardsSkeleton';
 
 interface JobStepProps {
   selectedJob: string | null;
