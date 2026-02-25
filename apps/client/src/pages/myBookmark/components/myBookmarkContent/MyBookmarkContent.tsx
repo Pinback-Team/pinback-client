@@ -2,16 +2,14 @@ import {
   useGetBookmarkArticles,
   useGetBookmarkArticlesCount,
   useGetCategoryBookmarkArticlesCount,
-  useGetBookmarkUnreadArticles,
   useGetCategoryBookmarkArticles,
 } from '@pages/myBookmark/apis/queries';
 
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
-import FetchCard from '@pages/myBookmark/components/fetchCard/FetchCard';
 import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
 import { MutableRefObject } from 'react';
-import { Badge } from '@pinback/design-system/ui';
+import { Badge, Card } from '@pinback/design-system/ui';
 
 interface MyBookmarkContentProps {
   activeBadge: 'all' | 'notRead';
@@ -34,17 +32,13 @@ const MyBookmarkContent = ({
   queryClient,
   scrollContainerRef,
 }: MyBookmarkContentProps) => {
-  const {
-    data: articlesData,
-    fetchNextPage: fetchNextArticles,
-    hasNextPage: hasNextArticles,
-  } = useGetBookmarkArticles();
+  const readStatus = activeBadge === 'notRead' ? false : null;
 
   const {
-    data: unreadArticlesData,
-    fetchNextPage: fetchNextUnreadArticles,
-    hasNextPage: hasNextUnreadArticles,
-  } = useGetBookmarkUnreadArticles();
+    data: bookmarkArticlesData,
+    fetchNextPage: fetchNextBookmarkArticles,
+    hasNextPage: hasNextBookmarkArticles,
+  } = useGetBookmarkArticles(readStatus);
   const { data: bookmarkCountData } = useGetBookmarkArticlesCount();
   const { data: categoryCountData } = useGetCategoryBookmarkArticlesCount(
     categoryId
@@ -56,7 +50,7 @@ const MyBookmarkContent = ({
     hasNextPage: hasNextCategoryArticles,
   } = useGetCategoryBookmarkArticles(
     categoryId,
-    activeBadge === 'notRead' ? false : null
+    readStatus
   );
 
   const categoryList =
@@ -66,9 +60,7 @@ const MyBookmarkContent = ({
 
   const articlesToDisplay = category
     ? categoryList
-    : activeBadge === 'all'
-      ? (articlesData?.pages.flatMap((page) => page.articles) ?? [])
-      : (unreadArticlesData?.pages.flatMap((page) => page.articles) ?? []);
+    : (bookmarkArticlesData?.pages.flatMap((page) => page.articles) ?? []);
 
   const totalArticle = categoryId
     ? categoryCountData?.totalArticleCount
@@ -79,15 +71,11 @@ const MyBookmarkContent = ({
 
   const hasNextPage = category
     ? hasNextCategoryArticles
-    : activeBadge === 'all'
-      ? hasNextArticles
-      : hasNextUnreadArticles;
+    : hasNextBookmarkArticles;
 
   const fetchNextPage = category
     ? fetchNextCategoryArticles
-    : activeBadge === 'all'
-      ? fetchNextArticles
-      : fetchNextUnreadArticles;
+    : fetchNextBookmarkArticles;
 
   const observerRef = useInfiniteScroll({
     fetchNextPage,
@@ -130,18 +118,21 @@ const MyBookmarkContent = ({
           className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap content-start gap-[1.6rem] overflow-y-auto scroll-smooth"
         >
           {articlesToDisplay.map((article) => (
-            <FetchCard
+            <Card
               key={article.articleId}
-              article={article}
+              type="bookmark"
+              title={article.title || '제목 없음'}
+              imageUrl={article.thumbnailUrl || undefined}
+              content={article.memo ?? undefined}
+              category={article.category.categoryName}
+              categoryColor={article.category.categoryColor}
+              date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
               onClick={() => {
                 window.open(article.url, '_blank');
                 updateToReadStatus(article.articleId, {
                   onSuccess: () => {
                     queryClient.invalidateQueries({
-                      queryKey: ['bookmarkReadArticles'],
-                    });
-                    queryClient.invalidateQueries({
-                      queryKey: ['bookmarkUnreadArticles'],
+                      queryKey: ['bookmarkArticles'],
                     });
                     queryClient.invalidateQueries({
                       queryKey: ['bookmarkArticlesCount'],

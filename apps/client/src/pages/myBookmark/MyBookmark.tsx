@@ -50,8 +50,7 @@ const MyBookmark = () => {
   const handleDeleteArticle = (id: number) => {
     deleteArticle(id, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['bookmarkReadArticles'] });
-        queryClient.invalidateQueries({ queryKey: ['bookmarkUnreadArticles'] });
+        queryClient.invalidateQueries({ queryKey: ['bookmarkArticles'] });
         queryClient.invalidateQueries({ queryKey: ['bookmarkArticlesCount'] });
         queryClient.invalidateQueries({
           queryKey: ['categoryBookmarkArticlesCount'],
