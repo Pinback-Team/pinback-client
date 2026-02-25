@@ -52,6 +52,10 @@ const MyBookmark = () => {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['bookmarkReadArticles'] });
         queryClient.invalidateQueries({ queryKey: ['bookmarkUnreadArticles'] });
+        queryClient.invalidateQueries({ queryKey: ['bookmarkArticlesCount'] });
+        queryClient.invalidateQueries({
+          queryKey: ['categoryBookmarkArticlesCount'],
+        });
         queryClient.invalidateQueries({
           queryKey: ['categoryBookmarkArticles'],
         });

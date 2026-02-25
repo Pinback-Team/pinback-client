@@ -1,5 +1,7 @@
 import {
   useGetBookmarkArticles,
+  useGetBookmarkArticlesCount,
+  useGetCategoryBookmarkArticlesCount,
   useGetBookmarkUnreadArticles,
   useGetCategoryBookmarkArticles,
 } from '@pages/myBookmark/apis/queries';
@@ -43,6 +45,10 @@ const MyBookmarkContent = ({
     fetchNextPage: fetchNextUnreadArticles,
     hasNextPage: hasNextUnreadArticles,
   } = useGetBookmarkUnreadArticles();
+  const { data: bookmarkCountData } = useGetBookmarkArticlesCount();
+  const { data: categoryCountData } = useGetCategoryBookmarkArticlesCount(
+    categoryId
+  );
 
   const {
     data: categoryArticlesData,
@@ -64,13 +70,12 @@ const MyBookmarkContent = ({
       ? (articlesData?.pages.flatMap((page) => page.articles) ?? [])
       : (unreadArticlesData?.pages.flatMap((page) => page.articles) ?? []);
 
-  const totalArticle = category
-    ? categoryArticlesData?.pages?.[0]?.totalArticle
-    : articlesData?.pages?.[0]?.totalArticle;
-
-  const totalUnread = category
-    ? categoryArticlesData?.pages?.[0]?.totalUnreadArticle
-    : articlesData?.pages?.[0]?.totalUnreadArticle;
+  const totalArticle = categoryId
+    ? categoryCountData?.totalArticleCount
+    : bookmarkCountData?.totalArticleCount;
+  const totalUnread = categoryId
+    ? categoryCountData?.unreadArticleCount
+    : bookmarkCountData?.unreadArticleCount;
 
   const hasNextPage = category
     ? hasNextCategoryArticles
@@ -93,7 +98,10 @@ const MyBookmarkContent = ({
   /** Empty 상태 컴포넌트 */
   const EmptyStateComponent = () => {
     if (articlesToDisplay.length === 0) {
-      if (articlesData?.pages?.[0]?.totalArticle === 0) return <NoArticles />;
+      const totalCount = categoryId
+        ? categoryCountData?.totalArticleCount
+        : bookmarkCountData?.totalArticleCount;
+      if ((totalCount ?? 0) === 0) return <NoArticles />;
       return <NoUnreadArticles />;
     }
     return null;
@@ -134,6 +142,12 @@ const MyBookmarkContent = ({
                     });
                     queryClient.invalidateQueries({
                       queryKey: ['bookmarkUnreadArticles'],
+                    });
+                    queryClient.invalidateQueries({
+                      queryKey: ['bookmarkArticlesCount'],
+                    });
+                    queryClient.invalidateQueries({
+                      queryKey: ['categoryBookmarkArticlesCount'],
                     });
                     queryClient.invalidateQueries({
                       queryKey: ['categoryBookmarkArticles'],
