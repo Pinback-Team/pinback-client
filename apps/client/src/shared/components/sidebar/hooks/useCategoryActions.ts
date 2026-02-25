@@ -40,18 +40,25 @@ export function useCategoryActions({
     setActiveTab('mybookmark');
     setSelectedCategoryId(id);
   };
-
-  const handleCreateCategory = () => {
-    createCategory(newCategoryName, {
-      onSuccess: () => {
-        setNewCategoryName('');
-        queryClient.invalidateQueries({
-          queryKey: ['dashboardCategories'],
-        });
-        close();
+  const handleCreateCategory = (isPublic: boolean) => {
+    createCategory(
+      {
+        categoryName: newCategoryName,
+        isPublic,
       },
-      onError: () => setToastIsOpen(true),
-    });
+      {
+        onSuccess: () => {
+          setNewCategoryName('');
+
+          queryClient.invalidateQueries({
+            queryKey: ['dashboardCategories'],
+          });
+
+          close();
+        },
+        onError: () => setToastIsOpen(true),
+      }
+    );
   };
 
   const handlePatchCategory = (id: number) => {

@@ -41,7 +41,13 @@ export const useGetDashboardCategories = (): UseQueryResult<
 
 export const usePostCategory = () => {
   return useMutation({
-    mutationFn: (categoryName: string) => postCategory(categoryName),
+    mutationFn: ({
+      categoryName,
+      isPublic,
+    }: {
+      categoryName: string;
+      isPublic: boolean;
+    }) => postCategory(categoryName, isPublic),
   });
 };
 export const usePutCategory = () => {

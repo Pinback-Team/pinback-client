@@ -7,9 +7,10 @@ export const getDashboardCategories = async () => {
   return data.data;
 };
 
-export const postCategory = async (categoryName: string) => {
-  const response = await apiRequest.post('/api/v1/categories', {
+export const postCategory = async (categoryName: string, isPublic: boolean) => {
+  const response = await apiRequest.post('/api/v3/categories', {
     categoryName,
+    isPublic,
   });
   return response;
 };

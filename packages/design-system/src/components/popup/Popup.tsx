@@ -74,7 +74,7 @@ const Popup = ({
                 onSelectedChange={checkboxOption.onSelectedChange}
                 disabled={checkboxOption.disabled}
               />
-              <span className="body3-r text-font-gray-2">
+              <span className="body3-r text-font-gray-3">
                 {checkboxOption.label}
               </span>
             </label>
