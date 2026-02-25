@@ -68,6 +68,9 @@ const MyBookmarkContent = ({
   const totalUnread = categoryId
     ? categoryCountData?.unreadArticleCount
     : bookmarkCountData?.unreadArticleCount;
+  const categoryNameFromResponse = categoryId
+    ? categoryArticlesData?.pages?.[0]?.categoryName || category || undefined
+    : undefined;
 
   const hasNextPage = category
     ? hasNextCategoryArticles
@@ -124,8 +127,14 @@ const MyBookmarkContent = ({
               title={article.title || '제목 없음'}
               imageUrl={article.thumbnailUrl || undefined}
               content={article.memo ?? undefined}
-              category={article.category.categoryName}
-              categoryColor={article.category.categoryColor}
+              category={
+                categoryId
+                  ? categoryNameFromResponse
+                  : article.category?.categoryName
+              }
+              categoryColor={
+                categoryId ? undefined : article.category?.categoryColor
+              }
               date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
               onClick={() => {
                 window.open(article.url, '_blank');
