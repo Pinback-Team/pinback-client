@@ -1,12 +1,12 @@
 import { Progress, Button } from '@pinback/design-system/ui';
 import { lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import SocialLoginStep from './step/SocialLoginStep';
-const StoryStep = lazy(() => import('./step/StoryStep'));
-const JobStep = lazy(() => import('./step/JobStep'));
-const AlarmStep = lazy(() => import('./step/AlarmStep'));
-const MacStep = lazy(() => import('./step/MacStep'));
-const FinalStep = lazy(() => import('./step/FinalStep'));
+import SocialLoginStep from './step/socialLogin/SocialLoginStep';
+const StoryStep = lazy(() => import('./step/story/StoryStep'));
+const JobStep = lazy(() => import('./step/job/JobStep'));
+const AlarmStep = lazy(() => import('./step/alarm/AlarmStep'));
+const MacStep = lazy(() => import('./step/mac/MacStep'));
+const FinalStep = lazy(() => import('./step/final/FinalStep'));
 import { cva } from 'class-variance-authority';
 const stepProgress = [{ progress: 33 }, { progress: 66 }, { progress: 100 }];
 import {

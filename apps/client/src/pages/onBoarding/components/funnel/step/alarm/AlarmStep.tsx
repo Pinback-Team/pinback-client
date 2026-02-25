@@ -1,5 +1,5 @@
 import dotori from '/assets/onBoarding/icons/dotori.svg';
-import AlarmBox from '../AlarmBox';
+import AlarmBox from '../../AlarmBox';
 import { useEffect } from 'react';
 import { sendGAEvent } from '@pinback/design-system/ui';
 interface AlarmStepProps {
