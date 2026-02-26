@@ -29,6 +29,7 @@ import {
   useMutation,
   UseMutationResult,
   useQuery,
+  useQueryClient,
   UseQueryResult,
   useSuspenseQuery,
 } from '@tanstack/react-query';
@@ -100,8 +101,31 @@ export const usePutArticleReadStatus = (): UseMutationResult<
   AxiosError,
   number
 > => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (articleId: number) => putArticleReadStatus(articleId),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['remindArticles'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['acorns'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['bookmarkReadArticles'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['bookmarkUnreadArticles'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['categoryBookmarkArticles'],
+      });
+    },
+    onError: (error) => {
+      console.error('읽음 처리 실패:', error);
+    },
   });
 };
 

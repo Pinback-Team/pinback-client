@@ -69,20 +69,13 @@ const Remind = () => {
     containerRef,
   } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
 
-  /**
-   * 24시간 유효한 리마인드만 표시
-   */
-
   const articlesToDisplay =
     data?.pages
       .flatMap((page) => page.articles)
       .filter((article) => {
         const now = new Date().getTime();
-
         const remindTime = new Date(article.remindAt).getTime();
-
         const expirationTime = remindTime + 24 * 60 * 60 * 1000;
-
         return now >= remindTime && now < expirationTime;
       }) ?? [];
 
@@ -95,15 +88,11 @@ const Remind = () => {
         queryClient.invalidateQueries({
           queryKey: ['remindArticles'],
         });
-
         queryClient.invalidateQueries({
           queryKey: ['acorns'],
         });
-
         setIsDeleteOpen(false);
-
         setDeleteTargetId(null);
-
         closeMenu();
       },
 
@@ -178,22 +167,7 @@ const Remind = () => {
                 categoryColor={article.category.categoryColor}
                 onClick={() => {
                   window.open(article.url, '_blank');
-
-                  updateToReadStatus(article.articleId, {
-                    onSuccess: () => {
-                      queryClient.invalidateQueries({
-                        queryKey: ['remindArticles'],
-                      });
-
-                      queryClient.invalidateQueries({
-                        queryKey: ['acorns'],
-                      });
-                    },
-
-                    onError: (error) => {
-                      console.error(error);
-                    },
-                  });
+                  updateToReadStatus(article.articleId);
                 }}
                 onOptionsClick={(e) => {
                   e.stopPropagation();
