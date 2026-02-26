@@ -3,6 +3,7 @@ import {
   deleteRemindArticle,
   getAcorns,
   getArticleDetail,
+  getCategoryDetail,
   getDashboardCategories,
   getGoogleProfile,
   getJobs,
@@ -20,6 +21,7 @@ import {
   AcornsResponse,
   ArticleDetailResponse,
   ArticleReadStatusResponse,
+  CategoryDetailResponse,
   DashboardCategoriesResponse,
   EditArticleRequest,
   JobsResponse,
@@ -214,5 +216,15 @@ export const useSuspenseGetJobs = () => {
 export const usePatchUserJob = () => {
   return useMutation({
     mutationFn: (data: patchUserJobRequest) => patchUserJob(data),
+  });
+};
+
+export const useGetCategoryDetail = (): UseMutationResult<
+  CategoryDetailResponse,
+  AxiosError,
+  number
+> => {
+  return useMutation({
+    mutationFn: (categoryId: number) => getCategoryDetail(categoryId),
   });
 };

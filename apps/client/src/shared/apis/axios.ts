@@ -103,3 +103,8 @@ export const patchUserJob = async (requestData: patchUserJobRequest) => {
   const { data } = await apiRequest.patch('/api/v3/users/job', requestData);
   return data;
 };
+
+export const getCategoryDetail = async (categoryId: number) => {
+  const { data } = await apiRequest.get(`/api/v3/categories/${categoryId}`);
+  return data.data;
+};

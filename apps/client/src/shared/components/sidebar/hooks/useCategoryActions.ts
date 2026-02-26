@@ -1,12 +1,13 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import {
-  usePostCategory,
-  usePatchCategory,
   useDeleteCategory,
+  useGetCategoryDetail,
+  usePatchCategory,
+  usePostCategory,
 } from '@shared/apis/queries';
 import { SidebarTab } from '@shared/hooks/useSidebarNav';
+import { useQueryClient } from '@tanstack/react-query';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface CategoryActionsParams {
   close: () => void;
@@ -28,6 +29,8 @@ export function useCategoryActions({
   const { mutate: createCategory } = usePostCategory();
   const { mutate: patchCategory } = usePatchCategory();
   const { mutate: deleteCategory } = useDeleteCategory();
+  const { mutate: getCategoryDetail, data: categoryDetail } =
+    useGetCategoryDetail();
 
   const handleCategoryChange = (name: string) => {
     setNewCategoryName(name);
@@ -37,9 +40,11 @@ export function useCategoryActions({
     navigate(
       `/my-bookmarks?id=${id}&category=${encodeURIComponent(newCategoryName)}`
     );
+
     setActiveTab('mybookmark');
     setSelectedCategoryId(id);
   };
+
   const handleCreateCategory = (isPublic: boolean) => {
     createCategory(
       {
@@ -101,6 +106,15 @@ export function useCategoryActions({
     });
   };
 
+  const handleOpenEditCategory = (id: number, openPopup: () => void) => {
+    getCategoryDetail(id, {
+      onSuccess: () => {
+        openPopup();
+      },
+      onError: () => setToastIsOpen(true),
+    });
+  };
+
   const handlePopupClose = () => {
     setToastIsOpen(false);
     close();
@@ -110,11 +124,12 @@ export function useCategoryActions({
     newCategoryName,
     toastIsOpen,
     setToastIsOpen,
-
+    categoryDetail,
     handleCategoryChange,
     handleCreateCategory,
     handlePatchCategory,
     handleDeleteCategory,
     handlePopupClose,
+    handleOpenEditCategory,
   };
 }

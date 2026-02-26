@@ -3,6 +3,7 @@ import { Icon } from '@pinback/design-system/icons';
 import { AutoDismissToast } from '@pinback/design-system/ui';
 import {
   useGetAcorns,
+  useGetCategoryDetail,
   useGetDashboardCategories,
   useGetGoogleProfile,
   useGetMyProfile,
@@ -33,6 +34,9 @@ export function Sidebar() {
 
   const jobPinRef = useRef<HTMLDivElement | null>(null);
   const [guideOpen, setGuideOpen] = useState(false);
+
+  const { mutate: getCategoryDetail, data: categoryDetail } =
+    useGetCategoryDetail();
 
   const { data: categories } = useGetDashboardCategories();
   const { data, isPending: isAcornPending } = useGetAcorns();
@@ -205,9 +209,15 @@ export function Sidebar() {
             style={style}
             categoryId={menu.categoryId}
             getCategory={getCategory}
-            onEdit={(id, name, isPublic) =>
-              openEdit(id, name, isPublic ?? true)
-            }
+            onEdit={(id) => {
+              getCategoryDetail(id, {
+                onSuccess: (data) => {
+                  openEdit(data.categoryId, data.categoryName, data.isPublic);
+                },
+              });
+
+              closeMenu();
+            }}
             onDelete={(id, name) => openDelete(id, name)}
             onClose={closeMenu}
             containerRef={containerRef}
