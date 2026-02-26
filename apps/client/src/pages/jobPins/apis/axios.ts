@@ -21,12 +21,6 @@ export const getJobPinsArticles = async (
   return (data as ApiResponse<JobPinsResponse>).data;
 };
 
-interface ApiResponse<T> {
-  code: string;
-  message: string;
-  data: T;
-}
-
 export interface JobPinsDetailResponse {
   articleId: number;
   ownerName: string;
