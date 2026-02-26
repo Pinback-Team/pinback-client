@@ -1,11 +1,4 @@
-import {
-  useGetBookmarkArticles,
-  useGetBookmarkArticlesCount,
-  useGetCategoryBookmarkArticlesCount,
-  useGetCategoryBookmarkArticles,
-} from '@pages/myBookmark/apis/queries';
-
-import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
+import { useMyBookmarkContentData } from '@pages/myBookmark/hooks/useMyBookmarkContentData';
 import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
 import { MutableRefObject } from 'react';
@@ -32,67 +25,23 @@ const MyBookmarkContent = ({
   queryClient,
   scrollContainerRef,
 }: MyBookmarkContentProps) => {
-  const readStatus = activeBadge === 'notRead' ? false : null;
-
   const {
-    data: bookmarkArticlesData,
-    fetchNextPage: fetchNextBookmarkArticles,
-    hasNextPage: hasNextBookmarkArticles,
-  } = useGetBookmarkArticles(readStatus);
-  const { data: bookmarkCountData } = useGetBookmarkArticlesCount();
-  const { data: categoryCountData } = useGetCategoryBookmarkArticlesCount(
-    categoryId
-  );
-
-  const {
-    data: categoryArticlesData,
-    fetchNextPage: fetchNextCategoryArticles,
-    hasNextPage: hasNextCategoryArticles,
-  } = useGetCategoryBookmarkArticles(
+    view,
+    list,
+    counts,
+    pagination,
+  } = useMyBookmarkContentData({
+    activeBadge,
+    category,
     categoryId,
-    readStatus
-  );
-
-  const categoryList =
-    categoryId && categoryArticlesData?.pages
-      ? categoryArticlesData.pages.flatMap((page) => page.articles)
-      : [];
-
-  const articlesToDisplay = category
-    ? categoryList
-    : (bookmarkArticlesData?.pages.flatMap((page) => page.articles) ?? []);
-
-  const totalArticle = categoryId
-    ? categoryCountData?.totalArticleCount
-    : bookmarkCountData?.totalArticleCount;
-  const totalUnread = categoryId
-    ? categoryCountData?.unreadArticleCount
-    : bookmarkCountData?.unreadArticleCount;
-  const categoryNameFromResponse = categoryId
-    ? categoryArticlesData?.pages?.[0]?.categoryName || category || undefined
-    : undefined;
-
-  const hasNextPage = category
-    ? hasNextCategoryArticles
-    : hasNextBookmarkArticles;
-
-  const fetchNextPage = category
-    ? fetchNextCategoryArticles
-    : fetchNextBookmarkArticles;
-
-  const observerRef = useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage,
-    root: scrollContainerRef,
+    scrollContainerRef,
   });
+  const totalCount = counts.total ?? 0;
 
   /** Empty 상태 컴포넌트 */
   const EmptyStateComponent = () => {
-    if (articlesToDisplay.length === 0) {
-      const totalCount = categoryId
-        ? categoryCountData?.totalArticleCount
-        : bookmarkCountData?.totalArticleCount;
-      if ((totalCount ?? 0) === 0) return <NoArticles />;
+    if (list.articles.length === 0) {
+      if (totalCount === 0) return <NoArticles />;
       return <NoUnreadArticles />;
     }
     return null;
@@ -103,24 +52,24 @@ const MyBookmarkContent = ({
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="전체보기"
-          countNum={totalArticle ?? 0}
+          countNum={counts.total ?? 0}
           onClick={() => onBadgeChange('all')}
           isActive={activeBadge === 'all'}
         />
         <Badge
           text="안 읽음"
-          countNum={totalUnread ?? 0}
+          countNum={counts.unread ?? 0}
           onClick={() => onBadgeChange('notRead')}
           isActive={activeBadge === 'notRead'}
         />
       </div>
 
-      {articlesToDisplay.length > 0 ? (
+      {list.articles.length > 0 ? (
         <div
           ref={scrollContainerRef}
           className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap content-start gap-[1.6rem] overflow-y-auto scroll-smooth"
         >
-          {articlesToDisplay.map((article) => (
+          {list.articles.map((article) => (
             <Card
               key={article.articleId}
               type="bookmark"
@@ -128,12 +77,12 @@ const MyBookmarkContent = ({
               imageUrl={article.thumbnailUrl || undefined}
               content={article.memo ?? undefined}
               category={
-                categoryId
-                  ? categoryNameFromResponse
+                view.isCategoryView
+                  ? view.categoryName
                   : article.category?.categoryName
               }
               categoryColor={
-                categoryId ? undefined : article.category?.categoryColor
+                view.isCategoryView ? undefined : article.category?.categoryColor
               }
               date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
               onClick={() => {
@@ -166,7 +115,10 @@ const MyBookmarkContent = ({
             />
           ))}
 
-          <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
+          <div
+            ref={pagination.sentinelRef}
+            style={{ height: '1px', width: '100%' }}
+          />
         </div>
       ) : (
         <EmptyStateComponent />
