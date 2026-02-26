@@ -115,10 +115,13 @@ export default function CardEditModal({
             queryKey: ['remindArticles'],
           });
           queryClient.invalidateQueries({
-            queryKey: ['bookmarkReadArticles'],
+            queryKey: ['bookmarkArticles'],
           });
           queryClient.invalidateQueries({
-            queryKey: ['bookmarkUnreadArticles'],
+            queryKey: ['bookmarkArticlesCount'],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ['categoryBookmarkArticlesCount'],
           });
           queryClient.invalidateQueries({
             queryKey: ['categoryBookmarkArticles'],
