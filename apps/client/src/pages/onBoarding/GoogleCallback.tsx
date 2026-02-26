@@ -44,7 +44,7 @@ const GoogleCallback = () => {
       }
       navigate('/');
     } else {
-      navigate('/onboarding?step=ALARM');
+      navigate('/onboarding?step=JOB');
     }
   };
 
