@@ -2,7 +2,7 @@ import {
   useGetJobPinsArticleDetail,
   useGetJobPinsArticles,
 } from '@pages/jobPins/apis/queries';
-import MemoPopup from '@pages/jobPins/components/memoPopup';
+import MemoPopup from '@pages/jobPins/components/MemoPopup';
 import Footer from '@pages/myBookmark/components/footer/Footer';
 import { Card } from '@pinback/design-system/ui';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
