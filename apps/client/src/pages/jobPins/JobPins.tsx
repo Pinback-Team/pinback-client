@@ -1,11 +1,13 @@
 import { useGetJobPinsArticles } from '@pages/jobPins/apis/queries';
+import JobPinsBottomNotice from '@pages/jobPins/components/JobPinsBottomNotice';
+import { useJobPinsBottomNotice } from '@pages/jobPins/hooks/useJobPinsBottomNotice';
 import Footer from '@pages/myBookmark/components/footer/Footer';
 import { Card } from '@pinback/design-system/ui';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
-import { useRef } from 'react';
 
 const JobPins = () => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const { scrollContainerRef, isBottomNoticeVisible, handleBottomWheel } =
+    useJobPinsBottomNotice();
 
   const { data, isPending, fetchNextPage, hasNextPage } =
     useGetJobPinsArticles();
@@ -43,6 +45,7 @@ const JobPins = () => {
       ) : articlesToDisplay.length > 0 ? (
         <div
           ref={scrollContainerRef}
+          onWheel={handleBottomWheel}
           className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap content-start gap-[1.6rem] overflow-y-auto scroll-smooth"
         >
           {articlesToDisplay.map((article) => (
@@ -60,6 +63,7 @@ const JobPins = () => {
             />
           ))}
 
+          <JobPinsBottomNotice visible={isBottomNoticeVisible} />
           <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
         </div>
       ) : (
