@@ -1,6 +1,9 @@
-import { useMemo, useRef, useState, useEffect } from 'react';
+import { useGetRemindArticles } from '@pages/remind/apis/queries';
+import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
+import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
 import {
   Badge,
+  Card,
   PopupContainer,
   trackPageView,
 } from '@pinback/design-system/ui';
@@ -8,29 +11,26 @@ import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
 import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
 import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
 import { belowOf } from '@shared/utils/anchorPosition';
-import { REMIND_MOCK_DATA } from './constants';
-import { useGetRemindArticles } from '@pages/remind/apis/queries';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
-import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
-import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { REMIND_MOCK_DATA } from './constants';
+
 import {
-  usePutArticleReadStatus,
   useDeleteRemindArticle,
   useGetArticleDetail,
+  usePutArticleReadStatus,
 } from '@shared/apis/queries';
-import { useQueryClient } from '@tanstack/react-query';
-import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
-import FetchCard from './components/fetchCard/FetchCard';
-import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
-import TooltipCard from '@shared/components/tooltipCard/TooltipCard';
-import Footer from './components/footer/Footer';
 import JobSelectionFunnel from '@shared/components/jobSelectionFunnel/JobSelectionFunnel';
+import TooltipCard from '@shared/components/tooltipCard/TooltipCard';
+import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
+import { useQueryClient } from '@tanstack/react-query';
+import Footer from './components/footer/Footer';
+import NoRemindArticles from './components/noRemindArticles/NoRemindArticles';
 
 const Remind = () => {
   useEffect(() => {
     trackPageView('대시보드 페이지 방문');
   }, []);
-
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -69,13 +69,18 @@ const Remind = () => {
     containerRef,
   } = useAnchoredMenu((anchor) => belowOf(anchor, 8));
 
+  /**
+   * 24시간 유효한 리마인드만 표시
+   */
+
   const articlesToDisplay =
     data?.pages
       .flatMap((page) => page.articles)
       .filter((article) => {
         const now = new Date().getTime();
+
         const remindTime = new Date(article.remindAt).getTime();
-        // 만료 시간 = 리마인드 시간 + 24시간
+
         const expirationTime = remindTime + 24 * 60 * 60 * 1000;
 
         return now >= remindTime && now < expirationTime;
@@ -87,13 +92,21 @@ const Remind = () => {
   const handleDeleteArticle = (id: number) => {
     deleteArticle(id, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['remindArticles'] });
-        queryClient.invalidateQueries({ queryKey: ['arcons'] });
+        queryClient.invalidateQueries({
+          queryKey: ['remindArticles'],
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: ['arcons'],
+        });
+
         setIsDeleteOpen(false);
+
         setDeleteTargetId(null);
+
         closeMenu();
-        close();
       },
+
       onError: (error) => {
         console.error('아티클 삭제 실패:', error);
       },
@@ -106,6 +119,7 @@ const Remind = () => {
 
   const EmptyStateComponent = () => {
     const firstPageData = data?.pages[0];
+
     if (
       firstPageData?.readArticleCount === 0 &&
       firstPageData?.unreadArticleCount === 0
@@ -116,32 +130,28 @@ const Remind = () => {
     return activeBadge === 'read' ? <NoReadArticles /> : <NoUnreadArticles />;
   };
 
-  // TODO: 로딩 상태 디자인 필요
   if (isPending) {
     return <div>Loading...</div>;
   }
 
-  // TODO: 임시
-  // const unreadArticleCount = data?.pages[0]?.unreadArticleCount || 0;
-  // const readArticleCount = data?.pages[0]?.readArticleCount || 0;
-
   return (
     <div className="flex h-screen flex-col pl-[8rem] pr-[5rem] pt-[5.2rem]">
       <p className="head3">리마인드</p>
+
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="안 읽음"
-          // countNum={unreadArticleCount}
           onClick={() => handleBadgeClick('notRead')}
           isActive={activeBadge === 'notRead'}
         />
+
         <Badge
           text="읽음"
-          // countNum={readArticleCount}
           onClick={() => handleBadgeClick('read')}
           isActive={activeBadge === 'read'}
         />
       </div>
+
       <TooltipCard />
 
       {articlesToDisplay.length > 0 ? (
@@ -149,34 +159,58 @@ const Remind = () => {
           ref={scrollContainerRef}
           className="scrollbar-hide mt-[2.6rem] flex flex-wrap gap-[1.6rem] overflow-y-auto scroll-smooth"
         >
-          {articlesToDisplay.map((article) => (
-            <FetchCard
-              key={article.articleId}
-              article={article}
-              onClick={() => {
-                window.open(article.url, '_blank');
+          {articlesToDisplay.map((article) => {
+            const displayTitle = article.title?.trim()
+              ? article.title
+              : '제목 없음';
 
-                updateToReadStatus(article.articleId, {
-                  onSuccess: () => {
-                    queryClient.invalidateQueries({
-                      queryKey: ['remindArticles'],
-                    });
-                    queryClient.invalidateQueries({
-                      queryKey: ['arcons'],
-                    });
-                  },
-                  onError: (error) => {
-                    console.error(error);
-                  },
-                });
-              }}
-              onOptionsClick={(e) => {
-                e.stopPropagation();
-                openMenu(article.articleId, e.currentTarget);
-              }}
-            />
-          ))}
-          <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
+            const displayImageUrl = article.thumbnailUrl || undefined;
+
+            return (
+              <Card
+                key={article.articleId}
+                type="remind"
+                title={displayTitle}
+                imageUrl={displayImageUrl}
+                content={article.memo}
+                timeRemaining={article.remindAt}
+                category={article.category.categoryName}
+                categoryColor={article.category.categoryColor}
+                onClick={() => {
+                  window.open(article.url, '_blank');
+
+                  updateToReadStatus(article.articleId, {
+                    onSuccess: () => {
+                      queryClient.invalidateQueries({
+                        queryKey: ['remindArticles'],
+                      });
+
+                      queryClient.invalidateQueries({
+                        queryKey: ['arcons'],
+                      });
+                    },
+
+                    onError: (error) => {
+                      console.error(error);
+                    },
+                  });
+                }}
+                onOptionsClick={(e) => {
+                  e.stopPropagation();
+
+                  openMenu(article.articleId, e.currentTarget);
+                }}
+              />
+            );
+          })}
+
+          <div
+            ref={observerRef}
+            style={{
+              height: '1px',
+              width: '100%',
+            }}
+          />
         </div>
       ) : (
         <EmptyStateComponent />
@@ -251,7 +285,6 @@ const Remind = () => {
         <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/40 p-4">
           <JobSelectionFunnel
             onComplete={() => {
-              // TODO: 관심 직무 핀 API 연동 필요
               setShowJobSelectionFunnel(false);
             }}
           />
