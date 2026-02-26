@@ -6,8 +6,15 @@ interface OptionsMenuPortalProps {
   style?: React.CSSProperties | null;
   containerRef: React.RefObject<HTMLDivElement | null>;
   categoryId: number | null;
-  getCategoryName: (id: number | null) => string;
-  onEdit: (id: number, name: string) => void;
+
+  getCategory: (id: number | null) => {
+    id: number;
+    name: string;
+    isPublic: boolean;
+  } | null;
+
+  onEdit: (id: number, name: string, isPublic: boolean) => void;
+
   onDelete: (id: number, name: string) => void;
   onClose: () => void;
 }
@@ -17,25 +24,27 @@ export default function OptionsMenuPortal({
   style,
   containerRef,
   categoryId,
-  getCategoryName,
+  getCategory,
   onEdit,
   onDelete,
   onClose,
 }: OptionsMenuPortalProps) {
   if (!open || !style) return null;
 
-  const id = categoryId;
-  const name = getCategoryName(categoryId);
+  const category = getCategory(categoryId);
+  if (!category) return null;
+
+  const { id, name, isPublic } = category;
 
   return createPortal(
     <div ref={containerRef} style={{ ...style, zIndex: 10000 }}>
       <OptionsMenuButton
         onEdit={() => {
-          if (id != null) onEdit(id, name);
+          onEdit(id, name, isPublic);
           onClose();
         }}
         onDelete={() => {
-          if (id != null) onDelete(id, name);
+          onDelete(id, name);
           onClose();
         }}
       />

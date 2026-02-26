@@ -120,6 +120,12 @@ export function Sidebar() {
   const getCategoryName = (id: number | null) =>
     categories?.categories.find((c) => c.id === id)?.name ?? '';
 
+  const getCategory = (id: number | null) => {
+    const c = categories?.categories.find((c) => c.id === id) ?? null;
+    if (!c) return null;
+    return { id: c.id, name: c.name, isPublic: (c as any).isPublic ?? false };
+  };
+
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
       <div className="flex h-full flex-col px-[0.8rem]">
@@ -197,13 +203,12 @@ export function Sidebar() {
               {canCreateMore && <CreateItem onClick={() => openCreate()} />}
             </ul>
           </AccordionItem>
-
           <OptionsMenuPortal
             open={menu.open}
             style={style}
             categoryId={menu.categoryId}
-            getCategoryName={getCategoryName}
-            onEdit={(id, name) => openEdit(id, name)}
+            getCategory={getCategory}
+            onEdit={(id, name, isPublic) => openEdit(id, name, isPublic)}
             onDelete={(id, name) => openDelete(id, name)}
             onClose={closeMenu}
             containerRef={containerRef}
@@ -265,6 +270,7 @@ export function Sidebar() {
 
       {/* Category Popup */}
       <PopupPortal
+        key={popup?.kind === 'edit' ? popup.id : popup?.kind}
         popup={popup}
         onClose={handlePopupClose}
         onChange={handleCategoryChange}

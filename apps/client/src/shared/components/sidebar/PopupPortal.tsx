@@ -41,12 +41,14 @@ export default function PopupPortal({
 }: Props) {
   const [draft, setDraft] = useState('');
 
-  const [shareToJobUsers, setShareToJobUsers] = useState(false);
+  const [shareToJobUsers, setShareToJobUsers] = useState(true);
 
   useEffect(() => {
     if (!popup) return;
+
     setDraft(popup.kind === 'edit' ? (popup.name ?? '') : '');
-    setShareToJobUsers(false);
+
+    setShareToJobUsers(popup.kind === 'edit' ? popup.isPublic : false);
   }, [popup]);
 
   if (!popup) return null;
