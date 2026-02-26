@@ -47,14 +47,14 @@ const JobPins = () => {
         >
           {articlesToDisplay.map((article) => (
             <Card
-              key={article.id}
+              key={article.articleId}
               type="bookmark"
               variant="save"
               title={article.title}
               imageUrl={article.thumbnailUrl}
               content={article.memo}
-              category={article.categoryName}
-              categoryColor={article.categoryColor}
+              category={article.category.categoryName}
+              categoryColor={article.category.categoryColor}
               nickname={article.ownerName}
               onClick={() => window.open(article.url, '_blank')}
             />
