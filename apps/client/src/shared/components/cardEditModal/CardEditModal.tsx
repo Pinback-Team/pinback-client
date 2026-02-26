@@ -1,3 +1,4 @@
+import noImage from '@assets/client_thumb.svg';
 import { Icon } from '@pinback/design-system/icons';
 import {
   AutoDismissToast,
@@ -17,13 +18,11 @@ import {
   useGetDashboardCategories,
   usePutEditArticle,
 } from '@shared/apis/queries';
-import { usePageMeta } from '@shared/hooks/usePageMeta';
 import { ArticleDetailResponse, EditArticleRequest } from '@shared/types/api';
 import { combineDateTime } from '@shared/utils/datetime';
 import { updateDate, updateTime } from '@shared/utils/formatDateTime';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import noImage from '@assets/client_thumb.svg';
 
 export interface CardEditModalProps {
   onClose: () => void;
@@ -34,7 +33,6 @@ export default function CardEditModal({
   onClose,
   prevData,
 }: CardEditModalProps) {
-  const { meta, loading } = usePageMeta(prevData.url);
   const { data: category } = useGetDashboardCategories();
   const { mutate: editArticle } = usePutEditArticle();
   const queryClient = useQueryClient();
@@ -86,7 +84,7 @@ export default function CardEditModal({
   }
 
   const saveData = () => {
-    if (!prevData?.id) {
+    if (!prevData?.articleId) {
       console.error('Article ID is missing, cannot save.');
       setToastIsOpen(true);
       return;
@@ -106,7 +104,7 @@ export default function CardEditModal({
 
     editArticle(
       {
-        articleId: prevData?.id,
+        articleId: prevData?.articleId,
         editArticleData,
       },
       {
@@ -185,15 +183,11 @@ export default function CardEditModal({
           </button>
         </header>
 
-        {loading ? (
-          <div className="bg-gray100 h-[6.8rem] w-[full] animate-pulse rounded-[4px]" />
-        ) : (
-          <InfoBox
-            title={meta.title}
-            source={meta.description}
-            imgUrl={meta.imgUrl || noImage}
-          />
-        )}
+        <InfoBox
+          title={prevData.title}
+          source={prevData.url}
+          imgUrl={prevData.thumbnailUrl || noImage}
+        />
 
         <section className="flex flex-col gap-[0.8rem]">
           <p className="caption1-sb text-font-black-1">카테고리</p>

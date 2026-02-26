@@ -32,7 +32,7 @@ interface CategoryResponse {
 }
 
 export interface ArticleDetailResponse {
-  id: number;
+  articleId: number;
   url: string;
   title: string;
   thumbnailUrl: string;
