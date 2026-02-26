@@ -1,42 +1,73 @@
-import { Card } from '@pinback/design-system/ui';
+import { useGetJobPinsArticles } from '@pages/jobPins/apis/queries';
 import Footer from '@pages/myBookmark/components/footer/Footer';
-
-const MOCK_JOB_PINS = Array.from({ length: 30 }, (_, index) => ({
-  id: index + 1,
-  title: '텍스트텍스트텍스트텍스트텍스트텍스트텍스트',
-  content: '서브텍스트입니다서브텍스트입니다서브텍스트입니다서브텍스트입니다',
-  category: '카테고리명',
-  categoryColor: 'COLOR7' as const,
-  variant: 'save' as const,
-  nickname: index % 3 === 0 ? '구글닉네임명' : '',
-}));
+import { Card } from '@pinback/design-system/ui';
+import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
+import { useRef } from 'react';
 
 const JobPins = () => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const { data, isPending, fetchNextPage, hasNextPage } =
+    useGetJobPinsArticles();
+
+  const observerRef = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    root: scrollContainerRef,
+  });
+
+  const articlesToDisplay =
+    data?.pages.flatMap((page) => page.articles ?? []) ?? [];
+
+  const job = data?.pages?.[0]?.job ?? null;
+
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="flex h-screen flex-col pl-[8rem] pr-[5rem] pt-[5.2rem]">
       <div className="flex items-center gap-[1.2rem]">
         <p className="head3">관심 직무 핀</p>
-        <p className="head3 text-main500">기획자</p>
+        {job && <p className="head3 text-main500">{job}</p>}
       </div>
       <p className="body3-r text-font-gray-3 mt-[0.8rem]">
         같은 직무의 사람들이 저장한 아티클을 살펴봐요. 선택한 직무를 기준으로
         최신 핀이 업데이트 돼요!
       </p>
 
-      <div className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap content-start gap-[1.6rem] overflow-y-auto scroll-smooth">
-        {MOCK_JOB_PINS.map((pin) => (
-          <Card
-            key={pin.id}
-            type="bookmark"
-            variant={pin.variant}
-            title={pin.title}
-            content={pin.content}
-            category={pin.category}
-            categoryColor={pin.categoryColor}
-            nickname={pin.nickname}
-          />
-        ))}
-      </div>
+      {job === null ? (
+        <p className="body2-m text-font-gray-3 mt-[4rem]">
+          기존 사용자 직무 선택 API로 직무 정보를 변경해주세요.
+        </p>
+      ) : articlesToDisplay.length > 0 ? (
+        <div
+          ref={scrollContainerRef}
+          className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap content-start gap-[1.6rem] overflow-y-auto scroll-smooth"
+        >
+          {articlesToDisplay.map((article) => (
+            <Card
+              key={article.articleId}
+              type="bookmark"
+              variant="save"
+              title={article.title}
+              imageUrl={article.thumbnailUrl}
+              content={article.memo}
+              category={article.category.categoryName}
+              categoryColor={article.category.categoryColor}
+              nickname={article.ownerName}
+              onClick={() => window.open(article.url, '_blank')}
+            />
+          ))}
+
+          <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
+        </div>
+      ) : (
+        // TODO: 아티클 없는경우 UI 수정
+        <p className="body2-m text-font-gray-3 mt-[4rem]">
+          아직 공유된 아티클이 없어요.
+        </p>
+      )}
 
       <Footer />
     </div>
