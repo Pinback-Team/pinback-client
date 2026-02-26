@@ -1,6 +1,10 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { JobPinsResponse } from '@pages/jobPins/types/api';
-import { getJobPinsArticles } from './axios';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
+import {
+  getJobPinsArticleDetail,
+  getJobPinsArticles,
+  JobPinsDetailResponse,
+} from './axios';
 
 export const useGetJobPinsArticles = () => {
   return useInfiniteQuery<JobPinsResponse>({
@@ -14,5 +18,11 @@ export const useGetJobPinsArticles = () => {
 
       return allPages.length;
     },
+  });
+};
+
+export const useGetJobPinsArticleDetail = () => {
+  return useMutation<JobPinsDetailResponse, Error, number>({
+    mutationFn: (articleId: number) => getJobPinsArticleDetail(articleId),
   });
 };

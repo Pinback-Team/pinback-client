@@ -1,38 +1,39 @@
 import {
-  useMutation,
-  UseMutationResult,
-  useQuery,
-  UseQueryResult,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import {
   deleteCategory,
+  deleteRemindArticle,
+  getAcorns,
+  getArticleDetail,
   getDashboardCategories,
+  getGoogleProfile,
+  getJobs,
+  getMyProfile,
+  patchCategory,
+  patchUserJob,
+  patchUserJobRequest,
   postCategory,
   postSignUp,
   postSignUpRequest,
-  putEditArticle,
-  patchCategory,
   putArticleReadStatus,
-  getArticleDetail,
-  getAcorns,
-  deleteRemindArticle,
-  getGoogleProfile,
-  getMyProfile,
-  getJobs,
-  patchUserJob,
-  patchUserJobRequest,
+  putEditArticle,
 } from '@shared/apis/axios';
-import { AxiosError } from 'axios';
 import {
-  DashboardCategoriesResponse,
   AcornsResponse,
-  EditArticleRequest,
-  ArticleReadStatusResponse,
   ArticleDetailResponse,
+  ArticleReadStatusResponse,
+  DashboardCategoriesResponse,
+  EditArticleRequest,
   JobsResponse,
 } from '@shared/types/api';
 import { fetchOGData } from '@shared/utils/fetchOgData';
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 export const useGetDashboardCategories = (): UseQueryResult<
   DashboardCategoriesResponse,
@@ -75,9 +76,9 @@ export const useDeleteCategory = () => {
   });
 };
 
-export const useGetArcons = (): UseQueryResult<AcornsResponse, AxiosError> => {
+export const useGetAcorns = (): UseQueryResult<AcornsResponse, AxiosError> => {
   return useQuery({
-    queryKey: ['arcons'],
+    queryKey: ['acorns'],
     queryFn: () => getAcorns(),
   });
 };
@@ -113,8 +114,31 @@ export const usePutArticleReadStatus = (): UseMutationResult<
   AxiosError,
   number
 > => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (articleId: number) => putArticleReadStatus(articleId),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['remindArticles'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['acorns'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['bookmarkReadArticles'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['bookmarkUnreadArticles'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['categoryBookmarkArticles'],
+      });
+    },
+    onError: (error) => {
+      console.error('읽음 처리 실패:', error);
+    },
   });
 };
 
