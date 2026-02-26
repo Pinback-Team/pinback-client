@@ -13,8 +13,11 @@ const JobPins = () => {
 
   const { data, isPending, fetchNextPage, hasNextPage } =
     useGetJobPinsArticles();
-  const { mutate: getJobPinDetail, data: jobPinDetail } =
-    useGetJobPinsArticleDetail();
+  const {
+    mutate: getJobPinDetail,
+    data: jobPinDetail,
+    reset: resetJobPinDetail,
+  } = useGetJobPinsArticleDetail();
 
   const observerRef = useInfiniteScroll({
     fetchNextPage,
@@ -96,7 +99,7 @@ const JobPins = () => {
         <MemoPopup
           userName={jobPinDetail.ownerName}
           memo={jobPinDetail.memo}
-          onClose={() => window.location.reload()}
+          onClose={resetJobPinDetail}
           onGoArticle={() => window.open(jobPinDetail.url, '_blank')}
         />
       )}
