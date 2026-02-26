@@ -1,38 +1,38 @@
 import {
+  deleteCategory,
+  deleteRemindArticle,
+  getAcorns,
+  getArticleDetail,
+  getDashboardCategories,
+  getGoogleProfile,
+  getJobs,
+  getMyProfile,
+  patchUserJob,
+  patchUserJobRequest,
+  postCategory,
+  postSignUp,
+  postSignUpRequest,
+  putArticleReadStatus,
+  putCategory,
+  putEditArticle,
+} from '@shared/apis/axios';
+import {
+  AcornsResponse,
+  ArticleDetailResponse,
+  ArticleReadStatusResponse,
+  DashboardCategoriesResponse,
+  EditArticleRequest,
+  JobsResponse,
+} from '@shared/types/api';
+import { fetchOGData } from '@shared/utils/fetchOgData';
+import {
   useMutation,
   UseMutationResult,
   useQuery,
   UseQueryResult,
   useSuspenseQuery,
 } from '@tanstack/react-query';
-import {
-  deleteCategory,
-  getDashboardCategories,
-  postCategory,
-  postSignUp,
-  postSignUpRequest,
-  putEditArticle,
-  putCategory,
-  putArticleReadStatus,
-  getArticleDetail,
-  getAcorns,
-  deleteRemindArticle,
-  getGoogleProfile,
-  getMyProfile,
-  getJobs,
-  patchUserJob,
-  patchUserJobRequest,
-} from '@shared/apis/axios';
 import { AxiosError } from 'axios';
-import {
-  DashboardCategoriesResponse,
-  AcornsResponse,
-  EditArticleRequest,
-  ArticleReadStatusResponse,
-  ArticleDetailResponse,
-  JobsResponse,
-} from '@shared/types/api';
-import { fetchOGData } from '@shared/utils/fetchOgData';
 
 export const useGetDashboardCategories = (): UseQueryResult<
   DashboardCategoriesResponse,
@@ -62,9 +62,9 @@ export const useDeleteCategory = () => {
   });
 };
 
-export const useGetArcons = (): UseQueryResult<AcornsResponse, AxiosError> => {
+export const useGetAcorns = (): UseQueryResult<AcornsResponse, AxiosError> => {
   return useQuery({
-    queryKey: ['arcons'],
+    queryKey: ['acorns'],
     queryFn: () => getAcorns(),
   });
 };

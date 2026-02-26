@@ -1,8 +1,8 @@
-import { useMyBookmarkContentData } from '@pages/myBookmark/hooks/useMyBookmarkContentData';
 import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
-import { MutableRefObject } from 'react';
+import { useMyBookmarkContentData } from '@pages/myBookmark/hooks/useMyBookmarkContentData';
 import { Badge, Card } from '@pinback/design-system/ui';
+import { MutableRefObject } from 'react';
 
 interface MyBookmarkContentProps {
   activeBadge: 'all' | 'notRead';
@@ -25,12 +25,7 @@ const MyBookmarkContent = ({
   queryClient,
   scrollContainerRef,
 }: MyBookmarkContentProps) => {
-  const {
-    view,
-    list,
-    counts,
-    pagination,
-  } = useMyBookmarkContentData({
+  const { view, list, counts, pagination } = useMyBookmarkContentData({
     activeBadge,
     category,
     categoryId,
@@ -82,7 +77,9 @@ const MyBookmarkContent = ({
                   : article.category?.categoryName
               }
               categoryColor={
-                view.isCategoryView ? undefined : article.category?.categoryColor
+                view.isCategoryView
+                  ? undefined
+                  : article.category?.categoryColor
               }
               date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
               onClick={() => {
@@ -101,7 +98,7 @@ const MyBookmarkContent = ({
                     queryClient.invalidateQueries({
                       queryKey: ['categoryBookmarkArticles'],
                     });
-                    queryClient.invalidateQueries({ queryKey: ['arcons'] });
+                    queryClient.invalidateQueries({ queryKey: ['acorns'] });
                   },
                   onError: (error: any) => {
                     console.error(error);

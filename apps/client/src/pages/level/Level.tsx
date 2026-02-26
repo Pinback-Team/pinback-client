@@ -1,12 +1,12 @@
-import { Icon } from '@pinback/design-system/icons';
-import { cn } from '@pinback/design-system/utils';
 import LevelScene from '@pages/level/components/LevelScene';
-import { getTreeLevel } from '@shared/utils/treeLevel';
 import { TreeLevel } from '@pages/level/types/treeLevelType';
+import { Icon } from '@pinback/design-system/icons';
 import { Badge } from '@pinback/design-system/ui';
-import { useGetArcons } from '@shared/apis/queries';
-import { lazy, Suspense } from 'react';
+import { cn } from '@pinback/design-system/utils';
+import { useGetAcorns } from '@shared/apis/queries';
 import { Balloon } from '@shared/components/balloon/Balloon';
+import { getTreeLevel } from '@shared/utils/treeLevel';
+import { lazy, Suspense } from 'react';
 
 const LevelInfoCard = lazy(
   () => import('@pages/level/components/LevelInfoCard')
@@ -14,7 +14,7 @@ const LevelInfoCard = lazy(
 const NextAcornTime = lazy(() => import('./components/NextAcornTime'));
 
 export default function Level() {
-  const { data, isPending, isError } = useGetArcons();
+  const { data, isPending, isError } = useGetAcorns();
 
   if (isPending) return <div />;
   if (isError) return <div />;

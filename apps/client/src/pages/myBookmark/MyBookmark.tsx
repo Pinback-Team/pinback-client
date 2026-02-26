@@ -58,7 +58,7 @@ const MyBookmark = () => {
         queryClient.invalidateQueries({
           queryKey: ['categoryBookmarkArticles'],
         });
-        queryClient.invalidateQueries({ queryKey: ['arcons'] });
+        queryClient.invalidateQueries({ queryKey: ['acorns'] });
         setIsDeleteOpen(false);
         setDeleteTargetId(null);
         closeMenu();

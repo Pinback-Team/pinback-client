@@ -1,29 +1,29 @@
-import Lottie from 'lottie-react';
 import Chippiface from '@assets/5_chippiface.json';
 import { Icon } from '@pinback/design-system/icons';
-import SideItem from './SideItem';
-import AccordionItem from './AccordionItem';
-import CategoryItem from './CategoryItem';
-import CreateItem from './CreateItem';
-import MyLevelItem from './MyLevelItem';
-import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
-import { rightOf } from '@shared/utils/anchorPosition';
-import { useSidebarNav } from '@shared/hooks/useSidebarNav';
-import { useCategoryPopups } from '@shared/hooks/useCategoryPopups';
-import OptionsMenuPortal from './OptionsMenuPortal';
-import PopupPortal from './PopupPortal';
-import ProfilePopupPortal from '../profilePopup/ProfilePopupPortal';
+import { AutoDismissToast } from '@pinback/design-system/ui';
 import {
+  useGetAcorns,
   useGetDashboardCategories,
-  useGetArcons,
   useGetGoogleProfile,
   useGetMyProfile,
 } from '@shared/apis/queries';
-import { useEffect, useRef, useState } from 'react';
-import { AutoDismissToast } from '@pinback/design-system/ui';
 import { Balloon } from '@shared/components/balloon/Balloon';
+import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
+import { useCategoryPopups } from '@shared/hooks/useCategoryPopups';
+import { useSidebarNav } from '@shared/hooks/useSidebarNav';
+import { rightOf } from '@shared/utils/anchorPosition';
+import Lottie from 'lottie-react';
+import { useEffect, useRef, useState } from 'react';
+import ProfilePopupPortal from '../profilePopup/ProfilePopupPortal';
+import AccordionItem from './AccordionItem';
+import CategoryItem from './CategoryItem';
+import CreateItem from './CreateItem';
 import { useCategoryActions } from './hooks/useCategoryActions';
 import JobPinGuidePortal from './JobPinGuidePortal';
+import MyLevelItem from './MyLevelItem';
+import OptionsMenuPortal from './OptionsMenuPortal';
+import PopupPortal from './PopupPortal';
+import SideItem from './SideItem';
 
 export function Sidebar() {
   const [profileOpen, setProfileOpen] = useState(false);
@@ -35,7 +35,7 @@ export function Sidebar() {
   const [guideOpen, setGuideOpen] = useState(false);
 
   const { data: categories } = useGetDashboardCategories();
-  const { data, isPending: isAcornPending } = useGetArcons();
+  const { data, isPending: isAcornPending } = useGetAcorns();
   const { data: googleProfileData } = useGetGoogleProfile();
   const { data: myProfile } = useGetMyProfile();
 

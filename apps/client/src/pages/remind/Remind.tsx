@@ -97,7 +97,7 @@ const Remind = () => {
         });
 
         queryClient.invalidateQueries({
-          queryKey: ['arcons'],
+          queryKey: ['acorns'],
         });
 
         setIsDeleteOpen(false);
@@ -186,7 +186,7 @@ const Remind = () => {
                       });
 
                       queryClient.invalidateQueries({
-                        queryKey: ['arcons'],
+                        queryKey: ['acorns'],
                       });
                     },
 
