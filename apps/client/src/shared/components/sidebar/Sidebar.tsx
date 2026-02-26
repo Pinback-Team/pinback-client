@@ -117,13 +117,10 @@ export function Sidebar() {
     prevAcornRef.current = acornCount;
   }, [acornCount, isAcornPending]);
 
-  const getCategoryName = (id: number | null) =>
-    categories?.categories.find((c) => c.id === id)?.name ?? '';
-
   const getCategory = (id: number | null) => {
     const c = categories?.categories.find((c) => c.id === id) ?? null;
     if (!c) return null;
-    return { id: c.id, name: c.name, isPublic: (c as any).isPublic ?? false };
+    return { id: c.id, name: c.name, isPublic: (c as any).isPublic ?? true };
   };
 
   return (
@@ -208,7 +205,9 @@ export function Sidebar() {
             style={style}
             categoryId={menu.categoryId}
             getCategory={getCategory}
-            onEdit={(id, name, isPublic) => openEdit(id, name, isPublic)}
+            onEdit={(id, name, isPublic) =>
+              openEdit(id, name, isPublic ?? true)
+            }
             onDelete={(id, name) => openDelete(id, name)}
             onClose={closeMenu}
             containerRef={containerRef}
