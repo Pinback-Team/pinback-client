@@ -32,10 +32,12 @@ interface CategoryResponse {
 }
 
 export interface ArticleDetailResponse {
-  id: number;
+  articleId: number;
   url: string;
-  memo: string;
-  remindAt: string;
+  title: string;
+  thumbnailUrl: string;
+  memo: string | null;
+  remindAt: string | null;
   createdAt: string;
   categoryResponse: CategoryResponse;
 }

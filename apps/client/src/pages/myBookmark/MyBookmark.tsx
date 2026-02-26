@@ -1,23 +1,23 @@
-import { PopupContainer } from '@pinback/design-system/ui';
-import { useState, useRef, Suspense } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import MyBookmarkContent from '@pages/myBookmark/components/myBookmarkContent/MyBookmarkContent';
 import { REMIND_MOCK_DATA } from '@pages/remind/constants';
-import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
-import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
-import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
-import { belowOf } from '@shared/utils/anchorPosition';
 import { Icon } from '@pinback/design-system/icons';
-import { useQueryClient } from '@tanstack/react-query';
+import { PopupContainer } from '@pinback/design-system/ui';
 import {
-  useGetArticleDetail,
   useDeleteRemindArticle,
+  useGetArticleDetail,
   usePutArticleReadStatus,
 } from '@shared/apis/queries';
-import TooltipCard from '@shared/components/tooltipCard/TooltipCard';
-import ArticlesLoadingBoundary from '@shared/components/articlesLoadingBoundary/ArticlesLoadingBoundary';
 import ArticlesErrorBoundary from '@shared/components/articlesErrorBoundary/ArticlesErrorBoundary';
+import ArticlesLoadingBoundary from '@shared/components/articlesLoadingBoundary/ArticlesLoadingBoundary';
+import CardEditModal from '@shared/components/cardEditModal/CardEditModal';
+import OptionsMenuPortal from '@shared/components/sidebar/OptionsMenuPortal';
+import TooltipCard from '@shared/components/tooltipCard/TooltipCard';
+import { useAnchoredMenu } from '@shared/hooks/useAnchoredMenu';
+import { belowOf } from '@shared/utils/anchorPosition';
+import { useQueryClient } from '@tanstack/react-query';
+import { Suspense, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import MyBookmarkContent from '@pages/myBookmark/components/myBookmarkContent/MyBookmarkContent';
+import { useSearchParams } from 'react-router-dom';
 import Footer from './components/footer/Footer';
 
 const MyBookmark = () => {
@@ -58,7 +58,7 @@ const MyBookmark = () => {
         queryClient.invalidateQueries({
           queryKey: ['categoryBookmarkArticles'],
         });
-        queryClient.invalidateQueries({ queryKey: ['arcons'] });
+        queryClient.invalidateQueries({ queryKey: ['acorns'] });
         setIsDeleteOpen(false);
         setDeleteTargetId(null);
         closeMenu();
@@ -163,7 +163,7 @@ const MyBookmark = () => {
           />
           <div className="absolute inset-0 flex items-center justify-center p-4">
             <CardEditModal
-              key={articleDetail.id}
+              key={articleDetail.articleId}
               onClose={() => setIsEditOpen(false)}
               prevData={articleDetail}
             />
