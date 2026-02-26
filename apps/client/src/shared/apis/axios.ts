@@ -48,8 +48,9 @@ export const putArticleReadStatus = async (articleId: number) => {
   return data;
 };
 
+// 이거 업데이트
 export const getArticleDetail = async (articleId: number) => {
-  const { data } = await apiRequest.get(`/api/v1/articles/${articleId}`);
+  const { data } = await apiRequest.get(`/api/v3/articles/${articleId}`);
   return data.data;
 };
 
