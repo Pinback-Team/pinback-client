@@ -20,6 +20,8 @@ import {
   getGoogleProfile,
   getMyProfile,
   getJobs,
+  patchUserJob,
+  patchUserJobRequest,
 } from '@shared/apis/axios';
 import { AxiosError } from 'axios';
 import {
@@ -169,5 +171,11 @@ export const useSuspenseGetJobs = () => {
     queryKey: ['jobs'],
     queryFn: getJobs,
     staleTime: Infinity,
+  });
+};
+
+export const usePatchUserJob = () => {
+  return useMutation({
+    mutationFn: (data: patchUserJobRequest) => patchUserJob(data),
   });
 };

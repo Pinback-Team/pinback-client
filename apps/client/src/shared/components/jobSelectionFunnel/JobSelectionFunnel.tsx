@@ -1,4 +1,5 @@
 import { Button } from '@pinback/design-system/ui';
+import { usePatchUserJob } from '@shared/apis/queries';
 import { useFunnel } from '@shared/hooks/useFunnel';
 import { useState } from 'react';
 import FunnelProgress from './FunnelProgress';
@@ -24,9 +25,14 @@ export default function JobSelectionFunnel({
 
   const [selectedJob, setSelectedJob] = useState<string | null>(null);
   const [jobShareAgree, setJobShareAgree] = useState(false);
+  const { mutateAsync: patchUserJob, isPending: isPatchUserJobPending } =
+    usePatchUserJob();
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (isLastStep) {
+      if (selectedJob) {
+        await patchUserJob({ job: selectedJob });
+      }
       onComplete?.();
       return;
     }
@@ -59,7 +65,10 @@ export default function JobSelectionFunnel({
           size="medium"
           className="w-[4.8rem]"
           onClick={handleNext}
-          isDisabled={currentStep === 'job' && (!jobShareAgree || !selectedJob)}
+          isDisabled={
+            isPatchUserJobPending ||
+            (currentStep === 'job' && (!jobShareAgree || !selectedJob))
+          }
         >
           {isLastStep ? '완료' : '다음'}
         </Button>
