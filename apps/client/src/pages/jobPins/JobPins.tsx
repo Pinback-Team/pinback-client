@@ -1,8 +1,9 @@
 import { useGetJobPinsArticles } from '@pages/jobPins/apis/queries';
+import MemoPopup from '@pages/jobPins/components/memoPopup';
 import Footer from '@pages/myBookmark/components/footer/Footer';
 import { Card } from '@pinback/design-system/ui';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 const JobPins = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -15,6 +16,8 @@ const JobPins = () => {
     hasNextPage,
     root: scrollContainerRef,
   });
+
+  const [selectedArticle, setSelectedArticle] = useState<any>(null);
 
   const articlesToDisplay =
     data?.pages.flatMap((page) => page.articles ?? []) ?? [];
@@ -31,6 +34,7 @@ const JobPins = () => {
         <p className="head3">관심 직무 핀</p>
         {job && <p className="head3 text-main500">{job}</p>}
       </div>
+
       <p className="body3-r text-font-gray-3 mt-[0.8rem]">
         같은 직무의 사람들이 저장한 아티클을 살펴봐요. 선택한 직무를 기준으로
         최신 핀이 업데이트 돼요!
@@ -56,20 +60,32 @@ const JobPins = () => {
               category={article.category.categoryName}
               categoryColor={article.category.categoryColor}
               nickname={article.ownerName}
-              onClick={() => window.open(article.url, '_blank')}
+              onClick={() => setSelectedArticle(article)}
             />
           ))}
 
           <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
         </div>
       ) : (
-        // TODO: 아티클 없는경우 UI 수정
         <p className="body2-m text-font-gray-3 mt-[4rem]">
           아직 공유된 아티클이 없어요.
         </p>
       )}
 
       <Footer />
+
+      {/* Memo Popup */}
+      {selectedArticle && (
+        <MemoPopup
+          userName={selectedArticle.ownerName}
+          memo={selectedArticle.memo}
+          onClose={() => setSelectedArticle(null)}
+          onGoArticle={() => {
+            window.open(selectedArticle.url, '_blank');
+            setSelectedArticle(null);
+          }}
+        />
+      )}
     </div>
   );
 };
