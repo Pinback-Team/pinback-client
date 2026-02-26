@@ -1,23 +1,26 @@
-import { useGetJobPinsArticles } from '@pages/jobPins/apis/queries';
+import {
+  useGetJobPinsArticleDetail,
+  useGetJobPinsArticles,
+} from '@pages/jobPins/apis/queries';
 import MemoPopup from '@pages/jobPins/components/memoPopup';
 import Footer from '@pages/myBookmark/components/footer/Footer';
 import { Card } from '@pinback/design-system/ui';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 const JobPins = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const { data, isPending, fetchNextPage, hasNextPage } =
     useGetJobPinsArticles();
+  const { mutate: getJobPinDetail, data: jobPinDetail } =
+    useGetJobPinsArticleDetail();
 
   const observerRef = useInfiniteScroll({
     fetchNextPage,
     hasNextPage,
     root: scrollContainerRef,
   });
-
-  const [selectedArticle, setSelectedArticle] = useState<any>(null);
 
   const articlesToDisplay =
     data?.pages.flatMap((page) => page.articles ?? []) ?? [];
@@ -49,22 +52,36 @@ const JobPins = () => {
           ref={scrollContainerRef}
           className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap content-start gap-[1.6rem] overflow-y-auto scroll-smooth"
         >
-          {articlesToDisplay.map((article) => (
-            <Card
-              key={article.articleId}
-              type="bookmark"
-              variant="save"
-              title={article.title}
-              imageUrl={article.thumbnailUrl}
-              content={article.memo}
-              category={article.category.categoryName}
-              categoryColor={article.category.categoryColor}
-              nickname={article.ownerName}
-              onClick={() => setSelectedArticle(article)}
-            />
-          ))}
+          {articlesToDisplay.map((article) => {
+            const displayTitle = article.title?.trim()
+              ? article.title
+              : '제목 없음';
 
-          <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
+            const displayImageUrl = article.thumbnailUrl || undefined;
+
+            return (
+              <Card
+                key={article.articleId}
+                type="bookmark"
+                variant="save"
+                title={displayTitle}
+                imageUrl={displayImageUrl}
+                content={article.memo}
+                category={article.category?.categoryName}
+                categoryColor={article.category?.categoryColor}
+                nickname={article.ownerName}
+                onClick={() => getJobPinDetail(article.articleId)}
+              />
+            );
+          })}
+
+          <div
+            ref={observerRef}
+            style={{
+              height: '1px',
+              width: '100%',
+            }}
+          />
         </div>
       ) : (
         <p className="body2-m text-font-gray-3 mt-[4rem]">
@@ -75,15 +92,12 @@ const JobPins = () => {
       <Footer />
 
       {/* Memo Popup */}
-      {selectedArticle && (
+      {jobPinDetail && (
         <MemoPopup
-          userName={selectedArticle.ownerName}
-          memo={selectedArticle.memo}
-          onClose={() => setSelectedArticle(null)}
-          onGoArticle={() => {
-            window.open(selectedArticle.url, '_blank');
-            setSelectedArticle(null);
-          }}
+          userName={jobPinDetail.ownerName}
+          memo={jobPinDetail.memo}
+          onClose={() => window.location.reload()}
+          onGoArticle={() => window.open(jobPinDetail.url, '_blank')}
         />
       )}
     </div>
