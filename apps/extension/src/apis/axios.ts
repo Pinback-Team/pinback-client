@@ -11,12 +11,6 @@ export const postArticle = async (data: PostArticleRequest) => {
   return response.data;
 };
 
-export interface postSignupRequest {
-  email: string;
-  remindDefault: string;
-  fcmToken: string;
-}
-
 export const getCategoriesExtension = async () => {
   const response = await apiRequest.get('/api/v1/categories/extension');
   return response.data;
