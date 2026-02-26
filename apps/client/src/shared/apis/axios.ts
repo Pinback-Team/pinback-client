@@ -1,5 +1,5 @@
 import apiRequest from '@shared/apis/setting/axiosInstance';
-import { EditArticleRequest } from '@shared/types/api';
+import { EditArticleRequest, JobsResponse } from '@shared/types/api';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 
 export const getDashboardCategories = async () => {
@@ -39,10 +39,11 @@ export interface postSignUpRequest {
   email: string;
   remindDefault: string;
   fcmToken: string | null;
+  job: string;
 }
 
 export const postSignUp = async (responsedata: postSignUpRequest) => {
-  const { data } = await apiRequest.patch('/api/v2/auth/signup', responsedata);
+  const { data } = await apiRequest.patch('/api/v3/auth/signup', responsedata);
   return data;
 };
 
@@ -86,4 +87,18 @@ export const getGoogleProfile = async () => {
 export const getMyProfile = async () => {
   const { data } = await apiRequest.get('/api/v2/users/me');
   return data.data;
+};
+
+export const getJobs = async (): Promise<JobsResponse> => {
+  const { data } = await apiRequest.get('/api/v3/enums/jobs');
+  return data.data;
+};
+
+export interface patchUserJobRequest {
+  job: string;
+}
+
+export const patchUserJob = async (requestData: patchUserJobRequest) => {
+  const { data } = await apiRequest.patch('/api/v3/users/job', requestData);
+  return data;
 };

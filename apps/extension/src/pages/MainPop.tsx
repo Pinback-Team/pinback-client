@@ -1,34 +1,34 @@
 import {
-  InfoBox,
-  Button,
-  Textarea,
-  DateTime,
-  Switch,
-  PopupContainer,
-  Dropdown,
-  validateDate,
-  validateTime,
-  Toast,
-  AutoDismissToast,
-} from '@pinback/design-system/ui';
-import { useState, useEffect } from 'react';
-import { usePageMeta } from '@hooks/usePageMeta';
-import { useSaveBookmark } from '@hooks/useSaveBookmarks';
-import Header from '@shared/components/Header';
-import {
-  usePostArticle,
   useGetCategoriesExtension,
   useGetRemindTime,
+  usePostArticle,
   usePutArticle,
 } from '@apis/query/queries';
-import { ArticleResponse } from '@shared-types/types';
+import thumbImg from '@assets/extension_thumb.svg';
+import { useCategoryManager } from '@hooks/useCategoryManager';
+import { usePageMeta } from '@hooks/usePageMeta';
+import { useSaveBookmark } from '@hooks/useSaveBookmarks';
 import {
+  AutoDismissToast,
+  Button,
+  DateTime,
+  Dropdown,
+  InfoBox,
+  PopupContainer,
+  Switch,
+  Textarea,
+  Toast,
+  validateDate,
+  validateTime,
+} from '@pinback/design-system/ui';
+import { ArticleResponse } from '@shared-types/types';
+import Header from '@shared/components/Header';
+import {
+  combineDateTime,
   updateDate,
   updateTime,
-  combineDateTime,
 } from '@utils/remindTimeFormat';
-import { useCategoryManager } from '@hooks/useCategoryManager';
-import thumbImg from '@assets/extension_thumb.svg';
+import { useEffect, useState } from 'react';
 interface MainPopProps {
   type: 'add' | 'edit';
   savedData?: ArticleResponse | null;
@@ -324,7 +324,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
             <p className="caption1-sb mb-[0.4rem]">메모</p>
             <Textarea
               maxLength={500}
-              placeholder="나중에 내가 꺼내줄 수 있게 살짝 적어줘!"
+              placeholder="나중에 기억하기 쉽게 메모를 남겨주세요!"
               value={memo}
               onChange={(e) => setMemo(e.target.value)}
             />

@@ -7,7 +7,7 @@ export interface PostArticleRequest {
 }
 
 export const postArticle = async (data: PostArticleRequest) => {
-  const response = await apiRequest.post('/api/v1/articles', data);
+  const response = await apiRequest.post('/api/v3/articles', data);
   return response.data;
 };
 

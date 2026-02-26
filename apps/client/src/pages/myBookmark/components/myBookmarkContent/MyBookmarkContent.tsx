@@ -1,15 +1,8 @@
-import {
-  useGetBookmarkArticles,
-  useGetBookmarkUnreadArticles,
-  useGetCategoryBookmarkArticles,
-} from '@pages/myBookmark/apis/queries';
-
-import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
-import FetchCard from '@pages/myBookmark/components/fetchCard/FetchCard';
+import { useMyBookmarkContentData } from '@pages/myBookmark/hooks/useMyBookmarkContentData';
 import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
 import { MutableRefObject } from 'react';
-import { Badge } from '@pinback/design-system/ui';
+import { Badge, Card } from '@pinback/design-system/ui';
 
 interface MyBookmarkContentProps {
   activeBadge: 'all' | 'notRead';
@@ -33,67 +26,22 @@ const MyBookmarkContent = ({
   scrollContainerRef,
 }: MyBookmarkContentProps) => {
   const {
-    data: articlesData,
-    fetchNextPage: fetchNextArticles,
-    hasNextPage: hasNextArticles,
-  } = useGetBookmarkArticles();
-
-  const {
-    data: unreadArticlesData,
-    fetchNextPage: fetchNextUnreadArticles,
-    hasNextPage: hasNextUnreadArticles,
-  } = useGetBookmarkUnreadArticles();
-
-  const {
-    data: categoryArticlesData,
-    fetchNextPage: fetchNextCategoryArticles,
-    hasNextPage: hasNextCategoryArticles,
-  } = useGetCategoryBookmarkArticles(
+    view,
+    list,
+    counts,
+    pagination,
+  } = useMyBookmarkContentData({
+    activeBadge,
+    category,
     categoryId,
-    activeBadge === 'notRead' ? false : null
-  );
-
-  const categoryList =
-    categoryId && categoryArticlesData?.pages
-      ? categoryArticlesData.pages.flatMap((page) => page.articles)
-      : [];
-
-  const articlesToDisplay = category
-    ? categoryList
-    : activeBadge === 'all'
-      ? (articlesData?.pages.flatMap((page) => page.articles) ?? [])
-      : (unreadArticlesData?.pages.flatMap((page) => page.articles) ?? []);
-
-  const totalArticle = category
-    ? categoryArticlesData?.pages?.[0]?.totalArticle
-    : articlesData?.pages?.[0]?.totalArticle;
-
-  const totalUnread = category
-    ? categoryArticlesData?.pages?.[0]?.totalUnreadArticle
-    : articlesData?.pages?.[0]?.totalUnreadArticle;
-
-  const hasNextPage = category
-    ? hasNextCategoryArticles
-    : activeBadge === 'all'
-      ? hasNextArticles
-      : hasNextUnreadArticles;
-
-  const fetchNextPage = category
-    ? fetchNextCategoryArticles
-    : activeBadge === 'all'
-      ? fetchNextArticles
-      : fetchNextUnreadArticles;
-
-  const observerRef = useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage,
-    root: scrollContainerRef,
+    scrollContainerRef,
   });
+  const totalCount = counts.total ?? 0;
 
   /** Empty 상태 컴포넌트 */
   const EmptyStateComponent = () => {
-    if (articlesToDisplay.length === 0) {
-      if (articlesData?.pages?.[0]?.totalArticle === 0) return <NoArticles />;
+    if (list.articles.length === 0) {
+      if (totalCount === 0) return <NoArticles />;
       return <NoUnreadArticles />;
     }
     return null;
@@ -104,36 +52,51 @@ const MyBookmarkContent = ({
       <div className="mt-[3rem] flex gap-[2.4rem]">
         <Badge
           text="전체보기"
-          countNum={totalArticle ?? 0}
+          countNum={counts.total ?? 0}
           onClick={() => onBadgeChange('all')}
           isActive={activeBadge === 'all'}
         />
         <Badge
           text="안 읽음"
-          countNum={totalUnread ?? 0}
+          countNum={counts.unread ?? 0}
           onClick={() => onBadgeChange('notRead')}
           isActive={activeBadge === 'notRead'}
         />
       </div>
 
-      {articlesToDisplay.length > 0 ? (
+      {list.articles.length > 0 ? (
         <div
           ref={scrollContainerRef}
           className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap content-start gap-[1.6rem] overflow-y-auto scroll-smooth"
         >
-          {articlesToDisplay.map((article) => (
-            <FetchCard
+          {list.articles.map((article) => (
+            <Card
               key={article.articleId}
-              article={article}
+              type="bookmark"
+              title={article.title || '제목 없음'}
+              imageUrl={article.thumbnailUrl || undefined}
+              content={article.memo ?? undefined}
+              category={
+                view.isCategoryView
+                  ? view.categoryName
+                  : article.category?.categoryName
+              }
+              categoryColor={
+                view.isCategoryView ? undefined : article.category?.categoryColor
+              }
+              date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
               onClick={() => {
                 window.open(article.url, '_blank');
                 updateToReadStatus(article.articleId, {
                   onSuccess: () => {
                     queryClient.invalidateQueries({
-                      queryKey: ['bookmarkReadArticles'],
+                      queryKey: ['bookmarkArticles'],
                     });
                     queryClient.invalidateQueries({
-                      queryKey: ['bookmarkUnreadArticles'],
+                      queryKey: ['bookmarkArticlesCount'],
+                    });
+                    queryClient.invalidateQueries({
+                      queryKey: ['categoryBookmarkArticlesCount'],
                     });
                     queryClient.invalidateQueries({
                       queryKey: ['categoryBookmarkArticles'],
@@ -152,7 +115,10 @@ const MyBookmarkContent = ({
             />
           ))}
 
-          <div ref={observerRef} style={{ height: '1px', width: '100%' }} />
+          <div
+            ref={pagination.sentinelRef}
+            style={{ height: '1px', width: '100%' }}
+          />
         </div>
       ) : (
         <EmptyStateComponent />

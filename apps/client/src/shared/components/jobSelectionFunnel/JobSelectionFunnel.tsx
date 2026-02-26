@@ -1,10 +1,11 @@
 import { Button } from '@pinback/design-system/ui';
+import { usePatchUserJob } from '@shared/apis/queries';
 import { useFunnel } from '@shared/hooks/useFunnel';
 import { useState } from 'react';
 import FunnelProgress from './FunnelProgress';
-import JobStep, { JobKey } from './step/JobStep';
-import PinStep from './step/PinStep';
-import ShareStep from './step/ShareStep';
+import JobStep from './step/job/JobStep';
+import PinStep from './step/pin/PinStep';
+import ShareStep from './step/share/ShareStep';
 
 const funnelSteps = ['job', 'pin', 'share'] as const;
 type FunnelStep = (typeof funnelSteps)[number];
@@ -22,11 +23,16 @@ export default function JobSelectionFunnel({
       initialStep: 'job',
     });
 
-  const [selectedJob, setSelectedJob] = useState<JobKey>('planner');
+  const [selectedJob, setSelectedJob] = useState<string | null>(null);
   const [jobShareAgree, setJobShareAgree] = useState(false);
+  const { mutateAsync: patchUserJob, isPending: isPatchUserJobPending } =
+    usePatchUserJob();
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (isLastStep) {
+      if (selectedJob) {
+        await patchUserJob({ job: selectedJob });
+      }
       onComplete?.();
       return;
     }
@@ -59,7 +65,10 @@ export default function JobSelectionFunnel({
           size="medium"
           className="w-[4.8rem]"
           onClick={handleNext}
-          isDisabled={currentStep === 'job' && !jobShareAgree}
+          isDisabled={
+            isPatchUserJobPending ||
+            (currentStep === 'job' && (!jobShareAgree || !selectedJob))
+          }
         >
           {isLastStep ? '완료' : '다음'}
         </Button>

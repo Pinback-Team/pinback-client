@@ -1,27 +1,19 @@
-import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query';
 import {
+  getArticleSaved,
+  getCategoriesExtension,
+  getRemindTime,
   postArticle,
   PostArticleRequest,
-  postSignup,
-  postSignupRequest,
-  getCategoriesExtension,
   postCategories,
   postCategoriesRequest,
-  getRemindTime,
-  getArticleSaved,
   putArticle,
   PutArticleRequest,
 } from '@apis/axios';
+import { useMutation, useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 export const usePostArticle = () => {
   return useMutation({
     mutationFn: (data: PostArticleRequest) => postArticle(data),
-  });
-};
-
-export const usePostSignup = () => {
-  return useMutation({
-    mutationFn: (data: postSignupRequest) => postSignup(data),
   });
 };
 
