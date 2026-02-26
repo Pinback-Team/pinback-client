@@ -7,7 +7,18 @@ export interface PostArticleRequest {
 }
 
 export const postArticle = async (data: PostArticleRequest) => {
-  const response = await apiRequest.post('/api/v1/articles', data);
+  const response = await apiRequest.post('/api/v3/articles', data);
+  return response.data;
+};
+
+export interface postSignupRequest {
+  email: string;
+  remindDefault: string;
+  fcmToken: string;
+}
+
+export const postSignup = async (data: postSignupRequest) => {
+  const response = await apiRequest.post('/api/v1/auth/signup', data);
   return response.data;
 };
 

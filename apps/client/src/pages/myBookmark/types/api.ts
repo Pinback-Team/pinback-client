@@ -7,25 +7,31 @@ interface Category {
 export interface BookmarkArticle {
   articleId: number;
   url: string;
-  memo: string;
+  title: string | null;
+  thumbnailUrl: string | null;
+  memo: string | null;
   createdAt: string;
   isRead: boolean;
-  category: Category;
+  category?: Category;
 }
 
-// 북마크 전체 조회
-export interface BookmarkArticleResponse {
-  totalArticle: number;
-  totalUnreadArticle: number;
-  isNewUser: boolean;
+// 북마크 조회(v3)
+export interface BookmarkArticlesResponse {
+  totalArticleCount: number;
+  unreadArticleCount: number;
   articles: BookmarkArticle[];
 }
 
-// 북마크 안 읽음 조회
-export interface UnreadBookmarkArticleResponse {
-  totalArticle: number;
-  totalUnreadArticle: number;
+export interface CategoryBookmarkArticleResponse {
+  totalArticleCount: number;
+  unreadArticleCount: number;
+  categoryName: string;
   articles: BookmarkArticle[];
 }
 
-export type CategoryBookmarkArticleResponse = UnreadBookmarkArticleResponse;
+// 나의 북마크 카운트 조회
+export interface BookmarkArticlesCountResponse {
+  totalArticleCount: number;
+  readArticleCount: number;
+  unreadArticleCount: number;
+}
