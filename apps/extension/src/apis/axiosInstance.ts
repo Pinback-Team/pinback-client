@@ -36,7 +36,7 @@ apiRequest.interceptors.response.use(
 
     const noAuthNeeded = [
       '/api/v1/auth/token',
-      '/api/v2/auth/signup',
+      '/api/v3/auth/signup',
       '/api/v2/auth/google',
     ];
     const isNoAuth = noAuthNeeded.some((url) =>
