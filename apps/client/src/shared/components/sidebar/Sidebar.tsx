@@ -35,8 +35,7 @@ export function Sidebar() {
   const jobPinRef = useRef<HTMLDivElement | null>(null);
   const [guideOpen, setGuideOpen] = useState(false);
 
-  const { mutate: getCategoryDetail, data: categoryDetail } =
-    useGetCategoryDetail();
+  const { mutate: getCategoryDetail } = useGetCategoryDetail();
 
   const { data: categories } = useGetDashboardCategories();
   const { data, isPending: isAcornPending } = useGetAcorns();

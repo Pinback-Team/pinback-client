@@ -2,7 +2,6 @@ export interface Category {
   id: number;
   name: string;
   unreadCount: number;
-  isPublic: boolean;
 }
 
 export interface DashboardCategoriesResponse {
