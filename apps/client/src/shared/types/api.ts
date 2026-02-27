@@ -50,3 +50,7 @@ export interface JobOption {
 export interface JobsResponse {
   jobs: JobOption[];
 }
+
+export interface HasJobResponse {
+  hasJob: boolean;
+}

@@ -5,6 +5,7 @@ import {
   getArticleDetail,
   getDashboardCategories,
   getGoogleProfile,
+  getHasJob,
   getJobs,
   getMyProfile,
   patchUserJob,
@@ -22,6 +23,7 @@ import {
   ArticleReadStatusResponse,
   DashboardCategoriesResponse,
   EditArticleRequest,
+  HasJobResponse,
   JobsResponse,
 } from '@shared/types/api';
 import { fetchOGData } from '@shared/utils/fetchOgData';
@@ -179,6 +181,16 @@ export const useGetMyProfile = () => {
   return useQuery({
     queryKey: ['myProfile'],
     queryFn: getMyProfile,
+  });
+};
+
+export const useGetHasJob = (
+  enabled = true
+): UseQueryResult<HasJobResponse, AxiosError> => {
+  return useQuery({
+    queryKey: ['hasJob'],
+    queryFn: getHasJob,
+    enabled,
   });
 };
 
