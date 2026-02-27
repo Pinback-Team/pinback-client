@@ -20,7 +20,6 @@ import {
   useGetArticleDetail,
   usePutArticleReadStatus,
 } from '@shared/apis/queries';
-import JobSelectionFunnel from '@shared/components/jobSelectionFunnel/JobSelectionFunnel';
 import TooltipCard from '@shared/components/tooltipCard/TooltipCard';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 import { useQueryClient } from '@tanstack/react-query';
@@ -35,9 +34,6 @@ const Remind = () => {
   const [activeBadge, setActiveBadge] = useState<'read' | 'notRead'>('notRead');
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
-  const [showJobSelectionFunnel, setShowJobSelectionFunnel] = useState(
-    () => localStorage.getItem('hasJob') !== 'true'
-  );
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const formattedDate = useMemo(() => {
@@ -252,16 +248,6 @@ const Remind = () => {
               prevData={articleDetail}
             />
           </div>
-        </div>
-      )}
-
-      {showJobSelectionFunnel && (
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/40 p-4">
-          <JobSelectionFunnel
-            onComplete={() => {
-              setShowJobSelectionFunnel(false);
-            }}
-          />
         </div>
       )}
     </div>
