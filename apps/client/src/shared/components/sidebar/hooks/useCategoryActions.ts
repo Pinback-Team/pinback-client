@@ -120,6 +120,21 @@ export function useCategoryActions({
     close();
   };
 
+  const handleEditCategory = (
+    id: number,
+    openEdit: (id: number, name: string, isPublic: boolean) => void,
+    closeMenu: () => void
+  ) => {
+    getCategoryDetail(id, {
+      onSuccess: (data) => {
+        openEdit(data.categoryId, data.categoryName, data.isPublic);
+      },
+      onError: () => setToastIsOpen(true),
+    });
+
+    closeMenu();
+  };
+
   return {
     newCategoryName,
     toastIsOpen,
@@ -131,5 +146,6 @@ export function useCategoryActions({
     handleDeleteCategory,
     handlePopupClose,
     handleOpenEditCategory,
+    handleEditCategory,
   };
 }
