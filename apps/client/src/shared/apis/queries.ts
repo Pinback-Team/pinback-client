@@ -211,7 +211,14 @@ export const useSuspenseGetJobs = () => {
 };
 
 export const usePatchUserJob = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (data: patchUserJobRequest) => patchUserJob(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['hasJob'],
+      });
+    },
   });
 };
