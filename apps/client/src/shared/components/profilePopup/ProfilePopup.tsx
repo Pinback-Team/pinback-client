@@ -1,5 +1,6 @@
 import { Icon } from '@pinback/design-system/icons';
 import { Button } from '@pinback/design-system/ui';
+import { useQueryClient } from '@tanstack/react-query';
 import formatRemindTime from '@shared/utils/formatRemindTime';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +23,7 @@ export default function ProfilePopup({
   remindTime,
 }: ProfilePopupProps) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const popupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,6 +44,8 @@ export default function ProfilePopup({
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('email');
+    localStorage.removeItem('userId');
+    queryClient.clear();
     const sendExtensionLogout = () => {
       window.postMessage(
         {
