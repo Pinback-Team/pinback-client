@@ -121,7 +121,11 @@ export function Sidebar() {
   const getCategory = (id: number | null) => {
     const c = categories?.categories.find((c) => c.id === id) ?? null;
     if (!c) return null;
-    return { id: c.id, name: c.name, isPublic: (c as any).isPublic ?? true };
+
+    return {
+      id: c.id,
+      name: c.name,
+    };
   };
 
   return (

@@ -1,5 +1,5 @@
-import { createPortal } from 'react-dom';
 import OptionsMenuButton from '@shared/components/optionsMenuButton/OptionsMenuButton';
+import { createPortal } from 'react-dom';
 
 interface OptionsMenuPortalProps {
   open: boolean;
@@ -10,9 +10,8 @@ interface OptionsMenuPortalProps {
   getCategory?: (id: number | null) => {
     id: number;
     name: string;
-    isPublic: boolean;
   } | null;
-  onEdit: (id: number, name: string, isPublic?: boolean) => void;
+  onEdit: (id: number) => void;
   onDelete: (id: number, name: string) => void;
   onClose: () => void;
 }
@@ -32,7 +31,6 @@ export default function OptionsMenuPortal({
 
   let id: number | null = categoryId;
   let name = '';
-  let isPublic = false;
 
   if (getCategory) {
     const category = getCategory(categoryId);
@@ -41,7 +39,6 @@ export default function OptionsMenuPortal({
 
     id = category.id;
     name = category.name;
-    isPublic = category.isPublic;
   } else if (getCategoryName) {
     name = getCategoryName(categoryId);
   }
@@ -57,21 +54,18 @@ export default function OptionsMenuPortal({
       <OptionsMenuButton
         onEdit={() => {
           if (id != null) {
-            onEdit(id, name, isPublic);
+            onEdit(id);
           }
-
           onClose();
         }}
         onDelete={() => {
           if (id != null) {
             onDelete(id, name);
           }
-
           onClose();
         }}
       />
     </div>,
-
     document.body
   );
 }
