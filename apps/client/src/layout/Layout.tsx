@@ -1,9 +1,9 @@
-import { Outlet, useLocation } from 'react-router-dom';
-import { Sidebar } from '@shared/components/sidebar/Sidebar';
 import { ROUTES_CONFIG } from '@routes/routesConfig';
 import { useGetHasJob } from '@shared/apis/queries';
 import JobSelectionFunnel from '@shared/components/jobSelectionFunnel/JobSelectionFunnel';
+import { Sidebar } from '@shared/components/sidebar/Sidebar';
 import { useQueryClient } from '@tanstack/react-query';
+import { Outlet, useLocation } from 'react-router-dom';
 
 const Layout = () => {
   const location = useLocation();
@@ -28,6 +28,7 @@ const Layout = () => {
   const shouldShowJobSelectionFunnel =
     isLoggedIn &&
     !isAuthPage &&
+    !isPolicyPage &&
     !isHasJobLoading &&
     hasJobData?.hasJob === false;
 
