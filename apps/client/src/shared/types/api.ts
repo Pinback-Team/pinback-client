@@ -56,3 +56,7 @@ export interface CategoryDetailResponse {
   categoryName: string;
   isPublic: boolean;
 }
+
+export interface HasJobResponse {
+  hasJob: boolean;
+}
