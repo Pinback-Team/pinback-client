@@ -32,7 +32,7 @@ export interface postCategoriesRequest {
 }
 
 export const postCategories = async (data: postCategoriesRequest) => {
-  const { data: response } = await apiRequest.post('/api/v3/categories', data);
+  const response = await apiRequest.post('/api/v3/categories', data);
 
   return response.data;
 };
