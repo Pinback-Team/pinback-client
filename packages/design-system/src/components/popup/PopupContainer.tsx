@@ -23,8 +23,6 @@ interface BasePopupProps {
   helperText?: string;
   onLeftClick?: () => void;
   onRightClick?: () => void;
-
-  // ⭐ 추가
   checkboxOption?: PopupCheckboxOption;
 }
 interface PopupContainerProps extends BasePopupProps {
