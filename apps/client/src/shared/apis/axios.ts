@@ -11,16 +11,22 @@ export const getDashboardCategories = async () => {
   return data.data;
 };
 
-export const postCategory = async (categoryName: string) => {
-  const response = await apiRequest.post('/api/v1/categories', {
+export const postCategory = async (categoryName: string, isPublic: boolean) => {
+  const response = await apiRequest.post('/api/v3/categories', {
     categoryName,
+    isPublic,
   });
   return response;
 };
 
-export const putCategory = async (id: number, categoryName: string) => {
-  const response = await apiRequest.put(`/api/v1/categories/${id}`, {
+export const patchCategory = async (
+  id: number,
+  categoryName: string,
+  isPublic: boolean
+) => {
+  const response = await apiRequest.patch(`/api/v3/categories/${id}`, {
     categoryName,
+    isPublic,
   });
   return response;
 };
@@ -105,4 +111,9 @@ export interface patchUserJobRequest {
 export const patchUserJob = async (requestData: patchUserJobRequest) => {
   const { data } = await apiRequest.patch('/api/v3/users/job', requestData);
   return data;
+};
+
+export const getCategoryDetail = async (categoryId: number) => {
+  const { data } = await apiRequest.get(`/api/v3/categories/${categoryId}`);
+  return data.data;
 };

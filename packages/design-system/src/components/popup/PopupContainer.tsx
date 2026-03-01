@@ -3,6 +3,14 @@ import { createPortal } from 'react-dom';
 import Popup from './Popup';
 type PopupType = 'input' | 'subtext' | 'default';
 
+interface PopupCheckboxOption {
+  label: string;
+  defaultSelected?: boolean;
+  isSelected?: boolean;
+  onSelectedChange?: (checked: boolean) => void;
+  disabled?: boolean;
+}
+
 interface BasePopupProps {
   type: PopupType;
   title: string;
@@ -15,6 +23,7 @@ interface BasePopupProps {
   helperText?: string;
   onLeftClick?: () => void;
   onRightClick?: () => void;
+  checkboxOption?: PopupCheckboxOption;
 }
 interface PopupContainerProps extends BasePopupProps {
   isOpen: boolean;
@@ -44,12 +53,12 @@ const PopupContainer = ({
     <div className="fixed inset-0 z-10 flex items-center justify-center">
       <div className="absolute inset-0 bg-[#00000099]" />
       <div className="relative">
-        <Popup 
-          {...popupProps} 
-          onLeftClick={popupProps.onLeftClick ?? onClose} 
+        <Popup
+          {...popupProps}
+          onLeftClick={popupProps.onLeftClick ?? onClose}
           inputValue={popupProps.inputValue}
-          onInputChange={popupProps.onInputChange} 
-          />
+          onInputChange={popupProps.onInputChange}
+        />
       </div>
     </div>,
     document.body // body 위에서 렌더링 되게 함!

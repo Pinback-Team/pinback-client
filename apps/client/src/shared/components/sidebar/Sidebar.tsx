@@ -76,6 +76,7 @@ export function Sidebar() {
     handlePatchCategory,
     handleDeleteCategory,
     handlePopupClose,
+    handleEditCategory,
   } = useCategoryActions({
     close,
     setActiveTab,
@@ -117,8 +118,15 @@ export function Sidebar() {
     prevAcornRef.current = acornCount;
   }, [acornCount, isAcornPending]);
 
-  const getCategoryName = (id: number | null) =>
-    categories?.categories.find((c) => c.id === id)?.name ?? '';
+  const getCategory = (id: number | null) => {
+    const c = categories?.categories.find((c) => c.id === id) ?? null;
+    if (!c) return null;
+
+    return {
+      id: c.id,
+      name: c.name,
+    };
+  };
 
   return (
     <aside className="bg-white-bg sticky top-0 h-screen w-[24rem] border-r border-gray-300">
@@ -197,13 +205,12 @@ export function Sidebar() {
               {canCreateMore && <CreateItem onClick={() => openCreate()} />}
             </ul>
           </AccordionItem>
-
           <OptionsMenuPortal
             open={menu.open}
             style={style}
             categoryId={menu.categoryId}
-            getCategoryName={getCategoryName}
-            onEdit={(id, name) => openEdit(id, name)}
+            getCategory={getCategory}
+            onEdit={(id) => handleEditCategory(id, openEdit, closeMenu)}
             onDelete={(id, name) => openDelete(id, name)}
             onClose={closeMenu}
             containerRef={containerRef}
@@ -265,11 +272,14 @@ export function Sidebar() {
 
       {/* Category Popup */}
       <PopupPortal
+        key={popup?.kind === 'edit' ? popup.id : popup?.kind}
         popup={popup}
         onClose={handlePopupClose}
         onChange={handleCategoryChange}
         onCreateConfirm={handleCreateCategory}
-        onEditConfirm={(id) => handlePatchCategory(id)}
+        onEditConfirm={(id, name, isPublic) =>
+          handlePatchCategory(id, name, isPublic)
+        }
         onDeleteConfirm={(id) => handleDeleteCategory(id)}
         categoryList={categories?.categories ?? []}
         isToastOpen={toastIsOpen}

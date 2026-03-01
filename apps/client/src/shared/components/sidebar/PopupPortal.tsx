@@ -8,8 +8,14 @@ interface Props {
   popup: PopupState | null;
   onClose: () => void;
   onChange?: (value: string) => void;
-  onCreateConfirm?: () => void;
-  onEditConfirm?: (id: number, draft?: string) => void;
+
+  onCreateConfirm?: (shareToJobUsers: boolean) => void;
+  onEditConfirm?: (
+    id: number,
+    draft?: string,
+    shareToJobUsers?: boolean
+  ) => void;
+
   onDeleteConfirm?: (id: number) => void;
   categoryList?: { id: number; name: string }[];
   isToastOpen?: boolean;
@@ -35,9 +41,14 @@ export default function PopupPortal({
 }: Props) {
   const [draft, setDraft] = useState('');
 
+  const [shareToJobUsers, setShareToJobUsers] = useState(true);
+
   useEffect(() => {
     if (!popup) return;
+
     setDraft(popup.kind === 'edit' ? (popup.name ?? '') : '');
+
+    setShareToJobUsers(popup.kind === 'edit' ? popup.isPublic : false);
   }, [popup]);
 
   if (!popup) return null;
@@ -78,12 +89,12 @@ export default function PopupPortal({
 
   const handleCreate = () => {
     if (blocked) return;
-    onCreateConfirm?.();
+    onCreateConfirm?.(shareToJobUsers);
   };
 
   const handleEdit = () => {
     if (blocked || popup.kind !== 'edit') return;
-    onEditConfirm?.(popup.id, value);
+    onEditConfirm?.(popup.id, value, shareToJobUsers);
   };
 
   const handleDelete = () => {
@@ -94,6 +105,8 @@ export default function PopupPortal({
   const action = toastAction ?? (popup.kind as 'create' | 'edit' | 'delete');
   const actionLabel =
     action === 'create' ? '추가' : action === 'edit' ? '수정' : '삭제';
+
+  const showCheckbox = popup.kind === 'create' || popup.kind === 'edit';
 
   return createPortal(
     <div className="fixed inset-0 z-[11000]">
@@ -112,6 +125,15 @@ export default function PopupPortal({
             placeholder="카테고리 제목을 입력해주세요"
             onLeftClick={onClose}
             onRightClick={handleCreate}
+            checkboxOption={
+              showCheckbox
+                ? {
+                    label: '같은 관심 직무 사용자들에게 공유하기',
+                    isSelected: shareToJobUsers,
+                    onSelectedChange: setShareToJobUsers,
+                  }
+                : undefined
+            }
           />
         )}
 
@@ -127,6 +149,15 @@ export default function PopupPortal({
             onInputChange={handleInputChange}
             onLeftClick={onClose}
             onRightClick={handleEdit}
+            checkboxOption={
+              showCheckbox
+                ? {
+                    label: '같은 관심 직무 사용자들에게 공유하기',
+                    isSelected: shareToJobUsers,
+                    onSelectedChange: setShareToJobUsers,
+                  }
+                : undefined
+            }
           />
         )}
 

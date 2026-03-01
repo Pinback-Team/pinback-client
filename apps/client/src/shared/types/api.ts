@@ -51,6 +51,12 @@ export interface JobsResponse {
   jobs: JobOption[];
 }
 
+export interface CategoryDetailResponse {
+  categoryId: number;
+  categoryName: string;
+  isPublic: boolean;
+}
+
 export interface HasJobResponse {
   hasJob: boolean;
 }

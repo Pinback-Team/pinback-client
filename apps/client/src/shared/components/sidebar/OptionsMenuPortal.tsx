@@ -1,13 +1,17 @@
-import { createPortal } from 'react-dom';
 import OptionsMenuButton from '@shared/components/optionsMenuButton/OptionsMenuButton';
+import { createPortal } from 'react-dom';
 
 interface OptionsMenuPortalProps {
   open: boolean;
   style?: React.CSSProperties | null;
   containerRef: React.RefObject<HTMLDivElement | null>;
   categoryId: number | null;
-  getCategoryName: (id: number | null) => string;
-  onEdit: (id: number, name: string) => void;
+  getCategoryName?: (id: number | null) => string;
+  getCategory?: (id: number | null) => {
+    id: number;
+    name: string;
+  } | null;
+  onEdit: (id: number) => void;
   onDelete: (id: number, name: string) => void;
   onClose: () => void;
 }
@@ -18,24 +22,49 @@ export default function OptionsMenuPortal({
   containerRef,
   categoryId,
   getCategoryName,
+  getCategory,
   onEdit,
   onDelete,
   onClose,
 }: OptionsMenuPortalProps) {
   if (!open || !style) return null;
 
-  const id = categoryId;
-  const name = getCategoryName(categoryId);
+  let id: number | null = categoryId;
+  let name = '';
+
+  if (!getCategory && !getCategoryName) {
+    return null;
+  }
+
+  if (getCategory) {
+    const category = getCategory(categoryId);
+    if (!category) return null;
+
+    id = category.id;
+    name = category.name;
+  } else {
+    name = getCategoryName!(categoryId);
+  }
 
   return createPortal(
-    <div ref={containerRef} style={{ ...style, zIndex: 10000 }}>
+    <div
+      ref={containerRef}
+      style={{
+        ...style,
+        zIndex: 100,
+      }}
+    >
       <OptionsMenuButton
         onEdit={() => {
-          if (id != null) onEdit(id, name);
+          if (id != null) {
+            onEdit(id);
+          }
           onClose();
         }}
         onDelete={() => {
-          if (id != null) onDelete(id, name);
+          if (id != null) {
+            onDelete(id, name);
+          }
           onClose();
         }}
       />

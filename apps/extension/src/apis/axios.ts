@@ -26,13 +26,14 @@ export const getCategoriesExtension = async () => {
   const response = await apiRequest.get('/api/v1/categories/extension');
   return response.data;
 };
-
 export interface postCategoriesRequest {
   categoryName: string;
+  isPublic: boolean;
 }
 
 export const postCategories = async (data: postCategoriesRequest) => {
-  const response = await apiRequest.post('/api/v1/categories', data);
+  const response = await apiRequest.post('/api/v3/categories', data);
+
   return response.data;
 };
 

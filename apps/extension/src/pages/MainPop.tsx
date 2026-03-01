@@ -133,6 +133,8 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
     options,
     categoryTitle,
     setCategoryTitle,
+    isPublic,
+    setIsPublic,
     isPopError,
     errorTxt,
     saveCategory,
@@ -280,6 +282,11 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
               resetPopup();
             }}
             onRightClick={saveHandleCategory}
+            checkboxOption={{
+              label: '같은 관심 직무 사용자들에게 공유하기',
+              isSelected: isPublic,
+              onSelectedChange: setIsPublic,
+            }}
           />
         )}
 

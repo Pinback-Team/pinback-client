@@ -11,6 +11,7 @@ export const useCategoryManager = () => {
   const { mutate: postCategories } = usePostCategories();
 
   const [categoryTitle, setCategoryTitle] = useState('');
+  const [isPublic, setIsPublic] = useState(false);
   const [isPopError, setIsPopError] = useState(false);
   const [errorTxt, setErrorTxt] = useState('');
 
@@ -32,7 +33,10 @@ export const useCategoryManager = () => {
     }
 
     postCategories(
-      { categoryName: categoryTitle },
+      {
+        categoryName: categoryTitle,
+        isPublic,
+      },
       {
         onSuccess: (res) => {
           const newCategory: Category = {
@@ -57,6 +61,7 @@ export const useCategoryManager = () => {
 
   const resetPopup = () => {
     setCategoryTitle('');
+    setIsPublic(false);
     setIsPopError(false);
     setErrorTxt('');
   };
@@ -65,6 +70,8 @@ export const useCategoryManager = () => {
     options,
     categoryTitle,
     setCategoryTitle,
+    isPublic,
+    setIsPublic,
     isPopError,
     errorTxt,
     saveCategory,

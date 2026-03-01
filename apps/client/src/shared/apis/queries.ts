@@ -3,24 +3,26 @@ import {
   deleteRemindArticle,
   getAcorns,
   getArticleDetail,
+  getCategoryDetail,
   getDashboardCategories,
   getGoogleProfile,
   getHasJob,
   getJobs,
   getMyProfile,
+  patchCategory,
   patchUserJob,
   patchUserJobRequest,
   postCategory,
   postSignUp,
   postSignUpRequest,
   putArticleReadStatus,
-  putCategory,
   putEditArticle,
 } from '@shared/apis/axios';
 import {
   AcornsResponse,
   ArticleDetailResponse,
   ArticleReadStatusResponse,
+  CategoryDetailResponse,
   DashboardCategoriesResponse,
   EditArticleRequest,
   HasJobResponse,
@@ -49,13 +51,26 @@ export const useGetDashboardCategories = (): UseQueryResult<
 
 export const usePostCategory = () => {
   return useMutation({
-    mutationFn: (categoryName: string) => postCategory(categoryName),
+    mutationFn: ({
+      categoryName,
+      isPublic,
+    }: {
+      categoryName: string;
+      isPublic: boolean;
+    }) => postCategory(categoryName, isPublic),
   });
 };
-export const usePutCategory = () => {
+export const usePatchCategory = () => {
   return useMutation({
-    mutationFn: ({ id, categoryName }: { id: number; categoryName: string }) =>
-      putCategory(id, categoryName),
+    mutationFn: ({
+      id,
+      categoryName,
+      isPublic,
+    }: {
+      id: number;
+      categoryName: string;
+      isPublic: boolean;
+    }) => patchCategory(id, categoryName, isPublic),
   });
 };
 
@@ -220,5 +235,15 @@ export const usePatchUserJob = () => {
         queryKey: ['hasJob'],
       });
     },
+  });
+};
+
+export const useGetCategoryDetail = (): UseMutationResult<
+  CategoryDetailResponse,
+  AxiosError,
+  number
+> => {
+  return useMutation({
+    mutationFn: (categoryId: number) => getCategoryDetail(categoryId),
   });
 };

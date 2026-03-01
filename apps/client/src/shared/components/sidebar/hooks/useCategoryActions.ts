@@ -1,12 +1,13 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import {
-  usePostCategory,
-  usePutCategory,
   useDeleteCategory,
+  useGetCategoryDetail,
+  usePatchCategory,
+  usePostCategory,
 } from '@shared/apis/queries';
 import { SidebarTab } from '@shared/hooks/useSidebarNav';
+import { useQueryClient } from '@tanstack/react-query';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface CategoryActionsParams {
   close: () => void;
@@ -26,8 +27,10 @@ export function useCategoryActions({
   const navigate = useNavigate();
 
   const { mutate: createCategory } = usePostCategory();
-  const { mutate: patchCategory } = usePutCategory();
+  const { mutate: patchCategory } = usePatchCategory();
   const { mutate: deleteCategory } = useDeleteCategory();
+  const { mutate: getCategoryDetail, data: categoryDetail } =
+    useGetCategoryDetail();
 
   const handleCategoryChange = (name: string) => {
     setNewCategoryName(name);
@@ -37,31 +40,51 @@ export function useCategoryActions({
     navigate(
       `/my-bookmarks?id=${id}&category=${encodeURIComponent(newCategoryName)}`
     );
+
     setActiveTab('mybookmark');
     setSelectedCategoryId(id);
   };
 
-  const handleCreateCategory = () => {
-    createCategory(newCategoryName, {
-      onSuccess: () => {
-        setNewCategoryName('');
-        queryClient.invalidateQueries({
-          queryKey: ['dashboardCategories'],
-        });
-        close();
+  const handleCreateCategory = (isPublic: boolean) => {
+    createCategory(
+      {
+        categoryName: newCategoryName,
+        isPublic,
       },
-      onError: () => setToastIsOpen(true),
-    });
+      {
+        onSuccess: () => {
+          setNewCategoryName('');
+
+          queryClient.invalidateQueries({
+            queryKey: ['dashboardCategories'],
+          });
+
+          close();
+        },
+        onError: () => setToastIsOpen(true),
+      }
+    );
   };
 
-  const handlePatchCategory = (id: number) => {
+  const handlePatchCategory = (
+    id: number,
+    name?: string,
+    isPublic?: boolean
+  ) => {
+    if (!name) return;
+
     patchCategory(
-      { id, categoryName: newCategoryName },
+      {
+        id,
+        categoryName: name,
+        isPublic: isPublic ?? false,
+      },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: ['dashboardCategories'],
           });
+
           setNewCategoryName('');
           close();
           moveNewCategory(id);
@@ -83,20 +106,46 @@ export function useCategoryActions({
     });
   };
 
+  const handleOpenEditCategory = (id: number, openPopup: () => void) => {
+    getCategoryDetail(id, {
+      onSuccess: () => {
+        openPopup();
+      },
+      onError: () => setToastIsOpen(true),
+    });
+  };
+
   const handlePopupClose = () => {
     setToastIsOpen(false);
     close();
+  };
+
+  const handleEditCategory = (
+    id: number,
+    openEdit: (id: number, name: string, isPublic: boolean) => void,
+    closeMenu: () => void
+  ) => {
+    getCategoryDetail(id, {
+      onSuccess: (data) => {
+        openEdit(data.categoryId, data.categoryName, data.isPublic);
+      },
+      onError: () => setToastIsOpen(true),
+    });
+
+    closeMenu();
   };
 
   return {
     newCategoryName,
     toastIsOpen,
     setToastIsOpen,
-
+    categoryDetail,
     handleCategoryChange,
     handleCreateCategory,
     handlePatchCategory,
     handleDeleteCategory,
     handlePopupClose,
+    handleOpenEditCategory,
+    handleEditCategory,
   };
 }
