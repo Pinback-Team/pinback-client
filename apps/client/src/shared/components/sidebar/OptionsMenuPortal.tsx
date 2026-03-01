@@ -32,15 +32,18 @@ export default function OptionsMenuPortal({
   let id: number | null = categoryId;
   let name = '';
 
+  if (!getCategory && !getCategoryName) {
+    return null;
+  }
+
   if (getCategory) {
     const category = getCategory(categoryId);
-
     if (!category) return null;
 
     id = category.id;
     name = category.name;
-  } else if (getCategoryName) {
-    name = getCategoryName(categoryId);
+  } else {
+    name = getCategoryName!(categoryId);
   }
 
   return createPortal(
@@ -48,7 +51,7 @@ export default function OptionsMenuPortal({
       ref={containerRef}
       style={{
         ...style,
-        zIndex: 10000,
+        zIndex: 100,
       }}
     >
       <OptionsMenuButton
