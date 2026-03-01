@@ -35,7 +35,7 @@ export function Sidebar() {
   const jobPinRef = useRef<HTMLDivElement | null>(null);
   const [guideOpen, setGuideOpen] = useState(false);
 
-  const { data: hasJobData, isLoading: isHasJobLoading } = useGetHasJob(false);
+  const { data: hasJobData } = useGetHasJob(false);
   const { data: categories } = useGetDashboardCategories();
   const { data, isPending: isAcornPending } = useGetAcorns();
   const { data: googleProfileData } = useGetGoogleProfile();
@@ -92,10 +92,10 @@ export function Sidebar() {
   useEffect(() => {
     const guideClosed = localStorage.getItem('jobPinGuideClosed') === 'true';
 
-    if (!isHasJobLoading && hasJobData?.hasJob && !guideClosed) {
+    if (hasJobData?.hasJob && !guideClosed) {
       setGuideOpen(true);
     }
-  }, [hasJobData, isHasJobLoading]);
+  }, [hasJobData]);
 
   const acornCount = data?.acornCount ?? 0;
 
