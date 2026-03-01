@@ -1,7 +1,7 @@
 import dotori from '/assets/onBoarding/icons/dotori.svg';
-import finalImg from '/assets/onBoarding/story/final.webp';
 import extImg from '/assets/onBoarding/icons/ext.svg';
 import pinImg from '/assets/onBoarding/icons/pin.svg';
+import finalImg from '/assets/onBoarding/story/final.webp';
 const FinalStep = () => {
   return (
     <div className="flex h-full flex-col items-center px-[3.2rem]">
@@ -14,7 +14,11 @@ const FinalStep = () => {
         <img src={pinImg} className="mx-[0.39rem] inline-block" alt="pin" />을
         선택하여 북마크를 빠르게 저장해보세요
       </p>
-      <img src={finalImg} className="" alt="mac" />
+      <img
+        src={finalImg}
+        className="h-[29.2rem] w-[56.8rem] object-contain"
+        alt="핀백 사용 설명"
+      />
     </div>
   );
 };
