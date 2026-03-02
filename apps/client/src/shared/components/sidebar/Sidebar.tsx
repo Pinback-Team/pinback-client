@@ -5,6 +5,7 @@ import {
   useGetAcorns,
   useGetDashboardCategories,
   useGetGoogleProfile,
+  useGetHasJob,
   useGetMyProfile,
 } from '@shared/apis/queries';
 import { Balloon } from '@shared/components/balloon/Balloon';
@@ -34,6 +35,7 @@ export function Sidebar() {
   const jobPinRef = useRef<HTMLDivElement | null>(null);
   const [guideOpen, setGuideOpen] = useState(false);
 
+  const { data: hasJobData } = useGetHasJob(false);
   const { data: categories } = useGetDashboardCategories();
   const { data, isPending: isAcornPending } = useGetAcorns();
   const { data: googleProfileData } = useGetGoogleProfile();
@@ -88,13 +90,12 @@ export function Sidebar() {
   }, [popup, setToastIsOpen]);
 
   useEffect(() => {
-    const hasJob = localStorage.getItem('hasJob') === 'true';
     const guideClosed = localStorage.getItem('jobPinGuideClosed') === 'true';
 
-    if (hasJob && !guideClosed) {
+    if (hasJobData?.hasJob && !guideClosed) {
       setGuideOpen(true);
     }
-  }, []);
+  }, [hasJobData]);
 
   const acornCount = data?.acornCount ?? 0;
 
@@ -205,6 +206,7 @@ export function Sidebar() {
               {canCreateMore && <CreateItem onClick={() => openCreate()} />}
             </ul>
           </AccordionItem>
+
           <OptionsMenuPortal
             open={menu.open}
             style={style}
@@ -234,7 +236,7 @@ export function Sidebar() {
                           animationData={Chippiface}
                           loop
                           autoplay
-                          className="h-[4rem] w-[4rem] shrink-0"
+                          className="h-[4rem] w-[4rem]"
                         />
                         <div className="caption2-m flex flex-col text-white">
                           <span>치삐가 방금</span>
@@ -286,7 +288,7 @@ export function Sidebar() {
         onToastClose={() => setToastIsOpen(false)}
       />
 
-      {/* JobPin Guide Tutorial */}
+      {/* JobPin Guide */}
       <JobPinGuidePortal
         anchorEl={jobPinRef.current}
         open={guideOpen}
