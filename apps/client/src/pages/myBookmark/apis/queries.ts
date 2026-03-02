@@ -57,7 +57,6 @@ export const useGetCategoryBookmarkArticles = (
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage) return undefined;
       return lastPage.articles.length < PAGE_SIZE ? undefined : allPages.length;
-      return allPages.length;
     },
   });
 };
