@@ -6,13 +6,15 @@ import {
   JobPinsDetailResponse,
 } from './axios';
 
+const PAGE_SIZE = 20;
+
 export const useGetJobPinsArticles = () => {
   return useInfiniteQuery<JobPinsResponse>({
     queryKey: ['jobPinsArticles'],
     queryFn: ({ pageParam = 0 }) => getJobPinsArticles(pageParam as number, 20),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.articles.length === 0) {
+      if (lastPage.articles.length < PAGE_SIZE) {
         return undefined;
       }
 
