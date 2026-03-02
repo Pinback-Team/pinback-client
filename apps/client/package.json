@@ -15,11 +15,12 @@
     "class-variance-authority": "^0.7.1",
     "firebase": "^12.2.1",
     "framer-motion": "^12.23.12",
+    "lottie-react": "^2.4.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-error-boundary": "^6.0.0",
-    "react-router-dom": "^7.8.2",
-    "lottie-react": "^2.4.1"
+    "react-intersection-observer": "^10.0.3",
+    "react-router-dom": "^7.8.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

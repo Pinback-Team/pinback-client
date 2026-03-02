@@ -3,15 +3,15 @@ import {
   useSuspenseInfiniteQuery,
   useSuspenseQuery,
 } from '@tanstack/react-query';
+import { CategoryBookmarkArticleResponse } from '../types/api';
 import {
   getBookmarkArticles,
   getBookmarkArticlesCount,
   getCategoryBookmarkArticles,
   getCategoryBookmarkArticlesCount,
 } from './axios';
-import {
-  CategoryBookmarkArticleResponse,
-} from '../types/api';
+
+const PAGE_SIZE = 20;
 
 export const useGetBookmarkArticles = (readStatus: boolean | null) => {
   return useSuspenseInfiniteQuery({
@@ -20,7 +20,7 @@ export const useGetBookmarkArticles = (readStatus: boolean | null) => {
       getBookmarkArticles(readStatus, Number(pageParam), 20),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) =>
-      lastPage.articles.length === 0 ? undefined : allPages.length,
+      lastPage.articles.length < PAGE_SIZE ? undefined : allPages.length,
   });
 };
 
@@ -55,8 +55,8 @@ export const useGetCategoryBookmarkArticles = (
 
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (!lastPage || lastPage.articles.length === 0) return undefined;
-      return allPages.length;
+      if (!lastPage) return undefined;
+      return lastPage.articles.length < PAGE_SIZE ? undefined : allPages.length;
     },
   });
 };

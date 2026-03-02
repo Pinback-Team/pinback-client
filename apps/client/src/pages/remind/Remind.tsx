@@ -46,15 +46,14 @@ const Remind = () => {
     useGetArticleDetail();
   const { mutate: updateToReadStatus } = usePutArticleReadStatus();
   const { mutate: deleteArticle } = useDeleteRemindArticle();
-  const { data, isPending, fetchNextPage, hasNextPage } = useGetRemindArticles(
-    formattedDate,
-    activeBadge === 'read'
-  );
+  const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useGetRemindArticles(formattedDate, activeBadge === 'read');
 
   const observerRef = useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage,
-    root: scrollContainerRef,
+    loadMore: fetchNextPage,
+    hasMore: hasNextPage,
+    isLoadingMore: isFetchingNextPage,
+    rootRef: scrollContainerRef,
   });
 
   const {
