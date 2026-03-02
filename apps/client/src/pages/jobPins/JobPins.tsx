@@ -13,7 +13,7 @@ const JobPins = () => {
   const { scrollContainerRef, isBottomNoticeVisible, handleBottomWheel } =
     useJobPinsBottomNotice();
 
-  const { data, isPending, fetchNextPage, hasNextPage } =
+  const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetJobPinsArticles();
   const {
     mutate: getJobPinDetail,
@@ -22,9 +22,10 @@ const JobPins = () => {
   } = useGetJobPinsArticleDetail();
 
   const observerRef = useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage,
-    root: scrollContainerRef,
+    loadMore: fetchNextPage,
+    hasMore: hasNextPage,
+    isLoadingMore: isFetchingNextPage,
+    rootRef: scrollContainerRef,
   });
 
   const articlesToDisplay =

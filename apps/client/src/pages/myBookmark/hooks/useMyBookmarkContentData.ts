@@ -27,16 +27,18 @@ export const useMyBookmarkContentData = ({
     data: bookmarkArticlesData,
     fetchNextPage: fetchNextBookmarkArticles,
     hasNextPage: hasNextBookmarkArticles,
+    isFetchingNextPage: isFetchingNextBookmarkArticles,
   } = useGetBookmarkArticles(readStatus);
+
   const { data: bookmarkCountData } = useGetBookmarkArticlesCount();
-  const { data: categoryCountData } = useGetCategoryBookmarkArticlesCount(
-    categoryId
-  );
+  const { data: categoryCountData } =
+    useGetCategoryBookmarkArticlesCount(categoryId);
 
   const {
     data: categoryArticlesData,
     fetchNextPage: fetchNextCategoryArticles,
     hasNextPage: hasNextCategoryArticles,
+    isFetchingNextPage: isFetchingNextCategoryArticles,
   } = useGetCategoryBookmarkArticles(categoryId, readStatus);
 
   const categoryList =
@@ -62,14 +64,20 @@ export const useMyBookmarkContentData = ({
   const hasNextPage = isCategoryView
     ? hasNextCategoryArticles
     : hasNextBookmarkArticles;
+
   const fetchNextPage = isCategoryView
     ? fetchNextCategoryArticles
     : fetchNextBookmarkArticles;
 
+  const isFetchingNextPage = isCategoryView
+    ? isFetchingNextCategoryArticles
+    : isFetchingNextBookmarkArticles;
+
   const sentinelRef = useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage,
-    root: scrollContainerRef,
+    loadMore: fetchNextPage,
+    hasMore: hasNextPage,
+    isLoadingMore: isFetchingNextPage,
+    rootRef: scrollContainerRef,
   });
 
   return {
