@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 type UseInfiniteScrollProps = {
@@ -27,17 +27,10 @@ export const useInfiniteScroll = ({
   rootMargin = '200px 0px',
   enabled = true,
 }: UseInfiniteScrollProps) => {
-  const [rootEl, setRootEl] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    setRootEl(rootRef?.current ?? null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const lockRef = useRef(false);
 
   const { ref, inView } = useInView({
-    root: rootEl,
+    root: rootRef?.current ?? null,
     threshold: 0,
     rootMargin,
   });
