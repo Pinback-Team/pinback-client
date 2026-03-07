@@ -75,7 +75,7 @@ const MyBookmarkCard = ({
         {variant === 'save' ? (
           <div className="mt-[1.2rem] flex items-center justify-between">
             <p className="caption2-m text-font-ltgray-4">
-              {`(${displayNickname})님의 핀`}
+              {`${displayNickname}님의 핀`}
             </p>
             <Icon name="ic_memo" size={24} className="shrink-0" />
           </div>
