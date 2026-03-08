@@ -6,15 +6,16 @@ export interface CategoryResponse {
 
 export interface ArticleResponse {
   id: number;
+  articleId: number;
   url: string;
   memo: string;
-  remindAt: string | null;  
+  remindAt: string | null;
   categoryResponse: CategoryResponse;
-  createdAt: string;       
+  createdAt: string;
 }
 
 export interface Category {
-    categoryId: number;
-    categoryName: string;
-    categoryColor:string;
-  }
+  categoryId: number;
+  categoryName: string;
+  categoryColor: string;
+}

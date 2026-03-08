@@ -1,13 +1,16 @@
+import { useGetArticleDetail, useGetArticleSaved } from '@apis/query/queries';
+import { useEffect, useState } from 'react';
 import './App.css';
-import DuplicatePop from './pages/DuplicatePop';
-import MainPop from './pages/MainPop';
-import { useState, useEffect } from 'react';
-import { useGetArticleSaved } from '@apis/query/queries';
 import { usePageMeta } from './hooks/usePageMeta';
+import DuplicatePop from './pages/DuplicatePop';
 import LogOutPop from './pages/LogOutPop';
+import MainPop from './pages/MainPop';
+
 const App = () => {
   const { url } = usePageMeta();
-  const { data: isSaved } = useGetArticleSaved(url);
+  const { data: savedArticle } = useGetArticleSaved(url);
+  const articleId = savedArticle?.data?.id;
+  const { data: articleDetail } = useGetArticleDetail(articleId!);
 
   const [isDuplicatePop, setIsDuplicatePop] = useState(false);
   const [mainPopType, setMainPopType] = useState<'add' | 'edit'>('add');
@@ -18,11 +21,13 @@ const App = () => {
       setIsToken(!!result.token);
     });
   }, []);
+
+  // 이미 저장된 아티클이면 DuplicatePop 표시
   useEffect(() => {
-    if (isSaved?.data) {
+    if (savedArticle?.data) {
       setIsDuplicatePop(true);
     }
-  }, [isSaved]);
+  }, [savedArticle]);
 
   const handleDuplicateLeftClick = () => {
     setIsDuplicatePop(false);
@@ -42,7 +47,7 @@ const App = () => {
             onRightClick={handleDuplicateRightClick}
           />
         ) : (
-          <MainPop type={mainPopType} />
+          <MainPop type={mainPopType} savedData={articleDetail} />
         )
       ) : (
         <LogOutPop />

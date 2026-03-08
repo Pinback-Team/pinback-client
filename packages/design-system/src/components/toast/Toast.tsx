@@ -1,10 +1,11 @@
 import { cn } from '../../lib/utils';
 
 export interface ToastProps {
-  text: string;
+  text?: string;
+  children?: React.ReactNode;
 }
 
-export default function Toast({ text }: ToastProps) {
+export default function Toast({ text, children }: ToastProps) {
   return (
     <div
       role="alert"
@@ -15,7 +16,10 @@ export default function Toast({ text }: ToastProps) {
         'common-shadow'
       )}
     >
-      <p className="caption2-sb whitespace-pre-line">{text}</p>
+      <div className="flex items-center gap-[0.4rem]">
+        {children}
+        {text && <p className="caption2-sb whitespace-nowrap">{text}</p>}
+      </div>
     </div>
   );
 }

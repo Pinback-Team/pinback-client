@@ -65,6 +65,13 @@ export const putArticle = async (
   articleId: number,
   data: PutArticleRequest
 ) => {
-  const response = await apiRequest.put(`/api/v1/articles/${articleId}`, data);
-  return response.data;
+  const response = await apiRequest.put(`/api/v1/articles/${articleId}`, {
+    ...data,
+  });
+  return response;
+};
+
+export const getArticleDetail = async (articleId: number) => {
+  const response = await apiRequest.get(`/api/v3/articles/${articleId}`);
+  return response.data.data;
 };

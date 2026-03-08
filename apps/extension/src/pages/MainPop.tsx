@@ -8,6 +8,7 @@ import thumbImg from '@assets/extension_thumb.svg';
 import { useCategoryManager } from '@hooks/useCategoryManager';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
+import { Icon } from '@pinback/design-system/icons';
 import {
   AutoDismissToast,
   Button,
@@ -111,7 +112,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
       categoryData?.data?.categories?.length
     ) {
       setMemo(savedData.memo ?? '');
-      setIsArticleId(savedData.id ?? 0);
+      setIsArticleId(savedData.articleId ?? 0);
 
       if (savedData.remindAt) {
         const [rawDate, rawTime] = savedData.remindAt.split('T');
@@ -121,9 +122,10 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
       } else {
         setIsRemindOn(false);
       }
+
       if (savedData.categoryResponse) {
-        setSelected(savedData.categoryResponse?.categoryId.toString());
-        setSelectedCategoryName(savedData.categoryResponse?.categoryName);
+        setSelected(savedData.categoryResponse.categoryId.toString());
+        setSelectedCategoryName(savedData.categoryResponse.categoryName);
       }
     }
   }, [type, savedData, categoryData?.data?.categories?.length]);
@@ -243,7 +245,9 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
         },
         {
           onSuccess: () => {
-            window.close();
+            setTimeout(() => {
+              window.close();
+            }, 2000);
           },
         }
       );
@@ -254,13 +258,15 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
     <div className="App">
       <div className="relative flex h-[56.8rem] w-[31.2rem] items-center justify-center">
         {toastIsOpen && (
-          <div className="absolute bottom-[5rem] left-1/2 -translate-x-1/2">
+          <div className="absolute bottom-[8rem] left-1/2 -translate-x-1/2">
             <AutoDismissToast
               duration={1000}
               fadeMs={1000}
               onClose={() => setToastIsOpen(false)}
             >
-              <Toast text={`수정내용을 저장했어요`} />
+              <Toast text={`수정내용을 저장했어요`}>
+                <Icon name="check_circle" size={20} />
+              </Toast>
             </AutoDismissToast>
           </div>
         )}
