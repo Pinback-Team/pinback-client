@@ -1,4 +1,5 @@
 import {
+  getArticleDetail,
   getArticleSaved,
   getCategoriesExtension,
   getRemindTime,
@@ -59,5 +60,13 @@ export const usePutArticle = () => {
       articleId: number;
       data: PutArticleRequest;
     }) => putArticle(articleId, data),
+  });
+};
+
+export const useGetArticleDetail = (articleId?: number) => {
+  return useQuery({
+    queryKey: ['articleDetail', articleId],
+    queryFn: () => getArticleDetail(articleId!),
+    enabled: !!articleId,
   });
 };
