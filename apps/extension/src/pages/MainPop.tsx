@@ -258,7 +258,7 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
     <div className="App">
       <div className="relative flex h-[56.8rem] w-[31.2rem] items-center justify-center">
         {toastIsOpen && (
-          <div className="absolute bottom-[5rem] left-1/2 -translate-x-1/2">
+          <div className="absolute bottom-[8rem] left-1/2 -translate-x-1/2">
             <AutoDismissToast
               duration={1000}
               fadeMs={1000}
