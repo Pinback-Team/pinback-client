@@ -38,9 +38,6 @@ const App = () => {
     chrome.tabs.create({ url: 'https://pinback.today/' });
   };
 
-  console.log('savedArticle', savedArticle);
-  console.log('articleId', savedArticle?.data?.articleId);
-
   return (
     <>
       {isToken ? (
