@@ -245,7 +245,9 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
         },
         {
           onSuccess: () => {
-            window.close();
+            setTimeout(() => {
+              window.close();
+            }, 2000);
           },
         }
       );
