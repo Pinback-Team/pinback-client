@@ -131,6 +131,7 @@ export function useOnboardingFunnel() {
           onError: () => {
             const savedEmail = localStorage.getItem('email');
             if (savedEmail) {
+              alert('회원가입에 실패했습니다. 다시 시도해주세요.');
               window.location.href = '/';
             }
           },
