@@ -8,6 +8,7 @@ import thumbImg from '@assets/extension_thumb.svg';
 import { useCategoryManager } from '@hooks/useCategoryManager';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
+import { Icon } from '@pinback/design-system/icons';
 import {
   AutoDismissToast,
   Button,
@@ -260,7 +261,9 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
               fadeMs={1000}
               onClose={() => setToastIsOpen(false)}
             >
-              <Toast text={`수정내용을 저장했어요`} />
+              <Toast text={`수정내용을 저장했어요`}>
+                <Icon name="check_circle" size={20} />
+              </Toast>
             </AutoDismissToast>
           </div>
         )}
