@@ -1,20 +1,20 @@
-import { Progress, Button } from '@pinback/design-system/ui';
-import { lazy, Suspense } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import SocialLoginStep from './step/socialLogin/SocialLoginStep';
-const StoryStep = lazy(() => import('./step/story/StoryStep'));
-const JobStep = lazy(() => import('./step/job/JobStep'));
-const AlarmStep = lazy(() => import('./step/alarm/AlarmStep'));
-const MacStep = lazy(() => import('./step/mac/MacStep'));
-const FinalStep = lazy(() => import('./step/final/FinalStep'));
-import { cva } from 'class-variance-authority';
-const stepProgress = [{ progress: 33 }, { progress: 66 }, { progress: 100 }];
 import {
   Step,
   StepType,
   storySteps,
 } from '@pages/onBoarding/constants/onboardingSteps';
 import { useOnboardingFunnel } from '@pages/onBoarding/hooks/useOnboardingFunnel';
+import { Button, Progress } from '@pinback/design-system/ui';
+import { cva } from 'class-variance-authority';
+import { AnimatePresence, motion } from 'framer-motion';
+import { lazy, Suspense } from 'react';
+import SocialLoginStep from './step/socialLogin/SocialLoginStep';
+const StoryStep = lazy(() => import('./step/story/StoryStep'));
+const JobStep = lazy(() => import('./step/job/JobStep'));
+const AlarmStep = lazy(() => import('./step/alarm/AlarmStep'));
+const MacStep = lazy(() => import('./step/mac/MacStep'));
+const FinalStep = lazy(() => import('./step/final/FinalStep'));
+const stepProgress = [{ progress: 33 }, { progress: 66 }, { progress: 100 }];
 
 const variants = {
   slideIn: (direction: number) => ({
@@ -119,7 +119,9 @@ const MainCard = () => {
       </div>
 
       <div className="mb-[4.8rem] mt-[1.2rem] flex w-full justify-between px-[3.2rem]">
-        {!([Step.STORY_0, Step.SOCIAL_LOGIN] as StepType[]).includes(step) && (
+        {!(
+          [Step.STORY_0, Step.SOCIAL_LOGIN, Step.MAC, Step.FINAL] as StepType[]
+        ).includes(step) && (
           <Button
             variant="secondary"
             size="medium"
@@ -130,7 +132,7 @@ const MainCard = () => {
           </Button>
         )}
 
-        {step !== Step.SOCIAL_LOGIN && (
+        {!([Step.SOCIAL_LOGIN, Step.FINAL] as StepType[]).includes(step) && (
           <Button
             variant="primary"
             size="medium"

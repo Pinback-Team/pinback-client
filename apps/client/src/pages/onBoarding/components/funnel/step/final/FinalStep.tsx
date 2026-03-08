@@ -16,7 +16,7 @@ const FinalStep = () => {
       </p>
       <img
         src={finalImg}
-        className="h-[29.2rem] w-[56.8rem] object-contain"
+        className="h-[35rem] object-contain"
         alt="핀백 사용 설명"
       />
     </div>
