@@ -1,18 +1,18 @@
-import { sendGAEvent } from '@pinback/design-system/ui';
-import { usePostSignUp } from '@shared/apis/queries';
-import { useFunnel } from '@shared/hooks/useFunnel';
-import { useCallback, useEffect, useState } from 'react';
 import { AlarmsType } from '@constants/alarms';
-import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
-import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
 import {
   Step,
   stepOrder,
   StepType,
 } from '@pages/onBoarding/constants/onboardingSteps';
-import { firebaseConfig } from '../../../firebase-config';
+import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
+import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';
+import { sendGAEvent } from '@pinback/design-system/ui';
+import { usePostSignUp } from '@shared/apis/queries';
+import { useFunnel } from '@shared/hooks/useFunnel';
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
+import { useCallback, useEffect, useState } from 'react';
+import { firebaseConfig } from '../../../firebase-config';
 
 type AlarmSelection = 1 | 2 | 3;
 
@@ -94,38 +94,45 @@ export function useOnboardingFunnel() {
   const nextStep = useCallback(async () => {
     const next = stepOrder[currentIndex + 1];
     const isAlarmStep = step === Step.ALARM;
-    const isFinalStep = step === Step.FINAL;
     const isMacStep = next === Step.MAC;
     const shouldSkipMacStep = isMacStep && !isMac;
 
+    // AlarmStep에서 알람 시간 세팅 + 회원가입 실행
     if (isAlarmStep) {
-      if (alarmSelected === 1) setRemindTime('09:00');
-      else if (alarmSelected === 2) setRemindTime('20:00');
+      let finalRemindTime = remindTime;
+
+      if (alarmSelected === 1) finalRemindTime = '09:00';
+      else if (alarmSelected === 2) finalRemindTime = '20:00';
       else {
         const raw = AlarmsType[alarmSelected - 1].time;
-        setRemindTime(normalizeTime(raw));
+        finalRemindTime = normalizeTime(raw);
       }
-    }
 
-    if (shouldSkipMacStep) {
-      setDirection(1);
-      setStep(Step.FINAL);
-      return;
-    }
+      setRemindTime(finalRemindTime);
 
-    if (isFinalStep) {
       postSignData(
         {
           email: userEmail,
-          remindDefault: remindTime,
+          remindDefault: finalRemindTime,
           fcmToken,
           job: selectedJob ?? '',
         },
         {
-          onSuccess: () => (window.location.href = '/'),
+          onSuccess: () => {
+            setDirection(1);
+
+            // MacStep 스킵 여부 처리
+            if (shouldSkipMacStep) {
+              setStep(Step.FINAL);
+            } else {
+              goNext();
+            }
+          },
           onError: () => {
             const savedEmail = localStorage.getItem('email');
-            if (savedEmail) window.location.href = '/';
+            if (savedEmail) {
+              window.location.href = '/';
+            }
           },
         }
       );
@@ -147,10 +154,10 @@ export function useOnboardingFunnel() {
     isMac,
     postSignData,
     remindTime,
+    selectedJob,
     setStep,
     step,
     userEmail,
-    selectedJob,
   ]);
 
   const prevStep = useCallback(() => {
