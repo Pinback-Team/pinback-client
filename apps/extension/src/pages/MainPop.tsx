@@ -106,13 +106,19 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
 
   // 타입 (수정상태인지 초기 저장인지! 에 따라서 ui 화면 데이터 보여줄 지 분기!)
   useEffect(() => {
+    console.log(
+      'savedData?.categoryResponse?.categoryName',
+      savedData?.categoryResponse?.categoryName
+    );
+    console.log(savedData);
     if (
       type === 'edit' &&
       savedData &&
       categoryData?.data?.categories?.length
     ) {
+      console.log('edit 모드입니다.');
       setMemo(savedData.memo ?? '');
-      setIsArticleId(savedData.id ?? 0);
+      setIsArticleId(savedData.articleId ?? 0);
 
       if (savedData.remindAt) {
         const [rawDate, rawTime] = savedData.remindAt.split('T');
@@ -122,9 +128,10 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
       } else {
         setIsRemindOn(false);
       }
+
       if (savedData.categoryResponse) {
-        setSelected(savedData.categoryResponse?.categoryId.toString());
-        setSelectedCategoryName(savedData.categoryResponse?.categoryName);
+        setSelected(savedData.categoryResponse.categoryId.toString());
+        setSelectedCategoryName(savedData.categoryResponse.categoryName);
       }
     }
   }, [type, savedData, categoryData?.data?.categories?.length]);
