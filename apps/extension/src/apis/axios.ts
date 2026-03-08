@@ -61,7 +61,6 @@ export interface PutArticleRequest {
   remindTime: string | null;
 }
 
-// 이거 오류남 확인 요망
 export const putArticle = async (
   articleId: number,
   data: PutArticleRequest
@@ -72,7 +71,6 @@ export const putArticle = async (
   return response;
 };
 
-//아티클 상세조회
 export const getArticleDetail = async (articleId: number) => {
   const response = await apiRequest.get(`/api/v3/articles/${articleId}`);
   return response.data.data;
