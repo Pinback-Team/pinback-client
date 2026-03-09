@@ -105,15 +105,13 @@ export function useOnboardingFunnel() {
       else if (alarmSelected === 2) finalRemindTime = '20:00';
       else {
         const raw = AlarmsType[alarmSelected - 1].time;
-        finalRemindTime = normalizeTime(raw);
+        setRemindTime(normalizeTime(raw));
       }
-
-      setRemindTime(finalRemindTime);
 
       postSignData(
         {
           email: userEmail,
-          remindDefault: finalRemindTime,
+          remindDefault: remindTime,
           fcmToken,
           job: selectedJob ?? '',
         },
