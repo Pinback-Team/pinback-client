@@ -21,7 +21,8 @@ const GoogleCallback = () => {
 
   const handleUserLogin = (
     isUser: boolean,
-    accessToken: string | undefined,
+    accessToken: string | null,
+    refreshToken: string | null,
     hasJob?: boolean
   ) => {
     if (isUser) {
@@ -39,6 +40,11 @@ const GoogleCallback = () => {
         };
         sendTokenToExtension(accessToken);
       }
+
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
+
       if (typeof hasJob === 'boolean') {
         localStorage.setItem('hasJob', String(hasJob));
       }
@@ -58,12 +64,14 @@ const GoogleCallback = () => {
         code,
         uri: redirectUri,
       });
-      const { isUser, userId, email, accessToken, hasJob } = res.data.data;
+
+      const { isUser, userId, email, accessToken, refreshToken, hasJob } =
+        res.data.data;
 
       localStorage.setItem('email', email);
       localStorage.setItem('userId', userId);
 
-      handleUserLogin(isUser, accessToken, hasJob);
+      handleUserLogin(isUser, accessToken, refreshToken, hasJob);
     } catch (error) {
       console.error('로그인 오류:', error);
       navigate('/onboarding?step=SOCIAL_LOGIN');
