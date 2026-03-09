@@ -99,10 +99,8 @@ export function useOnboardingFunnel() {
 
     // AlarmStep에서 알람 시간 세팅 + 회원가입 실행
     if (isAlarmStep) {
-      let finalRemindTime = remindTime;
-
-      if (alarmSelected === 1) finalRemindTime = '09:00';
-      else if (alarmSelected === 2) finalRemindTime = '20:00';
+      if (alarmSelected === 1) setRemindTime('09:00');
+      else if (alarmSelected === 2) setRemindTime('20:00');
       else {
         const raw = AlarmsType[alarmSelected - 1].time;
         setRemindTime(normalizeTime(raw));
