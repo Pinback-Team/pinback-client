@@ -8,6 +8,16 @@ const apiRequest = axios.create({
   },
 });
 
+const reissueToken = async () => {
+  return await axios.post(
+    `${import.meta.env.VITE_BASE_URL}/api/v3/auth/reissue`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+};
+
 // 요청 인터셉터
 apiRequest.interceptors.request.use(async (config) => {
   const token = localStorage.getItem('token');
@@ -48,13 +58,7 @@ apiRequest.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const res = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/api/v3/auth/reissue`,
-          {},
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await reissueToken();
 
         const newAccessToken = res.data.data.token;
         localStorage.setItem('token', newAccessToken);
