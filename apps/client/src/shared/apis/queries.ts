@@ -84,6 +84,7 @@ export const useGetAcorns = (): UseQueryResult<AcornsResponse, AxiosError> => {
   return useQuery({
     queryKey: ['acorns'],
     queryFn: () => getAcorns(),
+    refetchOnWindowFocus: true,
   });
 };
 
@@ -129,6 +130,7 @@ export const usePutArticleReadStatus = (): UseMutationResult<
       });
       queryClient.invalidateQueries({
         queryKey: ['acorns'],
+        refetchType: 'none',
       });
       queryClient.invalidateQueries({
         queryKey: ['bookmarkReadArticles'],
