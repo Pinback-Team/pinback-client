@@ -17,6 +17,21 @@ const reissueToken = async () => {
   );
 };
 
+const syncAccessToken = (token: string) => {
+  localStorage.setItem('token', token);
+
+  window.postMessage(
+    { type: 'SET_TOKEN', token },
+    window.location.origin
+  );
+};
+
+const clearAuthSessionAndRedirect = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('refreshToken');
+  window.location.href = '/onboarding?step=SOCIAL_LOGIN';
+};
+
 // Axios 인스턴스
 const apiRequest = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -59,23 +74,20 @@ apiRequest.interceptors.response.use(
 
       try {
         const res = await reissueToken();
+        const newAccessToken = res.data?.data?.token;
 
-        const newAccessToken = res.data.data.token;
-        localStorage.setItem('token', newAccessToken);
+        if (!newAccessToken) {
+          throw new Error('토큰 재발급 응답에 access token이 없습니다.');
+        }
 
-        window.postMessage(
-          { type: 'SET_TOKEN', token: newAccessToken },
-          window.location.origin
-        );
-
+        syncAccessToken(newAccessToken);
+        originalRequest.headers = originalRequest.headers ?? {};
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return apiRequest(originalRequest);
       } catch (reissueError) {
         console.error('토큰 재발급 실패. 다시 로그인해주세요.', reissueError);
 
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        window.location.href = '/onboarding?step=SOCIAL_LOGIN';
+        clearAuthSessionAndRedirect();
 
         return Promise.reject(reissueError);
       }
