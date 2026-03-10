@@ -60,10 +60,16 @@ const GoogleCallback = () => {
 
   const loginWithCode = async (code: string) => {
     try {
-      const res = await apiRequest.post('/api/v3/auth/google', {
-        code,
-        uri: redirectUri,
-      });
+      const res = await apiRequest.post(
+        '/api/v3/auth/google',
+        {
+          code,
+          uri: redirectUri,
+        },
+        {
+          withCredentials: true, // 👈 이거 필수!!
+        }
+      );
 
       const { isUser, userId, email, accessToken, refreshToken, hasJob } =
         res.data.data;
