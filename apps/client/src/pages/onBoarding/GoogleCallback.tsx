@@ -67,7 +67,7 @@ const GoogleCallback = () => {
           uri: redirectUri,
         },
         {
-          withCredentials: true, // 👈 이거 필수!!
+          withCredentials: true,
         }
       );
 
