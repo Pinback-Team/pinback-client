@@ -1,17 +1,9 @@
 import apiRequest from '@shared/apis/setting/axiosInstance';
 import LoadingChippi from '@shared/components/loadingChippi/LoadingChippi';
+import { authStorage } from '@shared/utils/authStorage';
+import { extensionBridge } from '@shared/utils/extensionBridge';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-
-const sendTokenToExtension = (token: string) => {
-  window.postMessage(
-    {
-      type: 'SET_TOKEN',
-      token,
-    },
-    window.location.origin
-  );
-};
 
 const GoogleCallback = () => {
   const navigate = useNavigate();
@@ -37,16 +29,16 @@ const GoogleCallback = () => {
   ) => {
     if (isUser) {
       if (accessToken) {
-        localStorage.setItem('token', accessToken);
-        sendTokenToExtension(accessToken);
+        authStorage.setAccessToken(accessToken);
+        extensionBridge.syncToken(accessToken);
       }
 
       if (refreshToken) {
-        localStorage.setItem('refreshToken', refreshToken);
+        authStorage.setRefreshToken(refreshToken);
       }
 
       if (typeof hasJob === 'boolean') {
-        localStorage.setItem('hasJob', String(hasJob));
+        authStorage.setHasJob(hasJob);
       }
       navigate('/');
     } else {
@@ -74,8 +66,7 @@ const GoogleCallback = () => {
       const { isUser, userId, email, accessToken, refreshToken, hasJob } =
         res.data.data;
 
-      localStorage.setItem('email', email);
-      localStorage.setItem('userId', userId);
+      authStorage.setUserIdentity(email, userId);
 
       handleUserLogin(isUser, accessToken, refreshToken, hasJob);
     } catch (error) {

@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { authStorage } from '@shared/utils/authStorage';
+import { extensionBridge } from '@shared/utils/extensionBridge';
 
 const noAuthNeeded = [
   '/api/v1/auth/token',
@@ -18,17 +20,13 @@ const reissueToken = async () => {
 };
 
 const syncAccessToken = (token: string) => {
-  localStorage.setItem('token', token);
-
-  window.postMessage(
-    { type: 'SET_TOKEN', token },
-    window.location.origin
-  );
+  authStorage.setAccessToken(token);
+  extensionBridge.syncToken(token);
 };
 
 const clearAuthSessionAndRedirect = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('refreshToken');
+  authStorage.clearSession();
+  extensionBridge.logout();
   window.location.href = '/onboarding?step=SOCIAL_LOGIN';
 };
 
@@ -42,7 +40,7 @@ const apiRequest = axios.create({
 
 // 요청 인터셉터
 apiRequest.interceptors.request.use(async (config) => {
-  const token = localStorage.getItem('token');
+  const token = authStorage.getAccessToken();
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
