@@ -1,12 +1,11 @@
 import axios from 'axios';
 
-// Axios 인스턴스
-const apiRequest = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+const noAuthNeeded = [
+  '/api/v1/auth/token',
+  '/api/v3/auth/signup',
+  '/api/v3/auth/google',
+  '/api/v3/auth/reissue',
+];
 
 const reissueToken = async () => {
   return await axios.post(
@@ -17,6 +16,14 @@ const reissueToken = async () => {
     }
   );
 };
+
+// Axios 인스턴스
+const apiRequest = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 // 요청 인터셉터
 apiRequest.interceptors.request.use(async (config) => {
@@ -34,13 +41,6 @@ apiRequest.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    const noAuthNeeded = [
-      '/api/v1/auth/token',
-      '/api/v3/auth/signup',
-      '/api/v3/auth/google',
-      '/api/v3/auth/reissue',
-    ];
 
     const isNoAuth = noAuthNeeded.some((url) =>
       originalRequest.url?.includes(url)
