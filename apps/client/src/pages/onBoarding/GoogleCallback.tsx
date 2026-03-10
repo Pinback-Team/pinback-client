@@ -3,6 +3,16 @@ import LoadingChippi from '@shared/components/loadingChippi/LoadingChippi';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+const sendTokenToExtension = (token: string) => {
+  window.postMessage(
+    {
+      type: 'SET_TOKEN',
+      token,
+    },
+    window.location.origin
+  );
+};
+
 const GoogleCallback = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -28,16 +38,6 @@ const GoogleCallback = () => {
     if (isUser) {
       if (accessToken) {
         localStorage.setItem('token', accessToken);
-
-        const sendTokenToExtension = (token: string) => {
-          window.postMessage(
-            {
-              type: 'SET_TOKEN',
-              token,
-            },
-            window.location.origin
-          );
-        };
         sendTokenToExtension(accessToken);
       }
 
