@@ -3,6 +3,16 @@ import LoadingChippi from '@shared/components/loadingChippi/LoadingChippi';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+const sendTokenToExtension = (token: string) => {
+  window.postMessage(
+    {
+      type: 'SET_TOKEN',
+      token,
+    },
+    window.location.origin
+  );
+};
+
 const GoogleCallback = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -21,24 +31,20 @@ const GoogleCallback = () => {
 
   const handleUserLogin = (
     isUser: boolean,
-    accessToken: string | undefined,
+    accessToken: string | null,
+    refreshToken: string | null,
     hasJob?: boolean
   ) => {
     if (isUser) {
       if (accessToken) {
         localStorage.setItem('token', accessToken);
-
-        const sendTokenToExtension = (token: string) => {
-          window.postMessage(
-            {
-              type: 'SET_TOKEN',
-              token,
-            },
-            window.location.origin
-          );
-        };
         sendTokenToExtension(accessToken);
       }
+
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
+
       if (typeof hasJob === 'boolean') {
         localStorage.setItem('hasJob', String(hasJob));
       }
@@ -54,16 +60,24 @@ const GoogleCallback = () => {
 
   const loginWithCode = async (code: string) => {
     try {
-      const res = await apiRequest.post('/api/v3/auth/google', {
-        code,
-        uri: redirectUri,
-      });
-      const { isUser, userId, email, accessToken, hasJob } = res.data.data;
+      const res = await apiRequest.post(
+        '/api/v3/auth/google',
+        {
+          code,
+          uri: redirectUri,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      const { isUser, userId, email, accessToken, refreshToken, hasJob } =
+        res.data.data;
 
       localStorage.setItem('email', email);
       localStorage.setItem('userId', userId);
 
-      handleUserLogin(isUser, accessToken, hasJob);
+      handleUserLogin(isUser, accessToken, refreshToken, hasJob);
     } catch (error) {
       console.error('로그인 오류:', error);
       navigate('/onboarding?step=SOCIAL_LOGIN');
