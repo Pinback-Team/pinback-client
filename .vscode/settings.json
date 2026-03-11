@@ -3,5 +3,21 @@
     {
       "mode": "auto"
     }
-  ]
+  ],
+  "cSpell.words": ["pinback", "PinBack", "turbopack", "turborepo", "trivago"],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "tailwindCSS.classFunctions": ["clsx", "cn", "cva", "tw"],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "always"
+  },
+  "tailwindCSS.suggestions": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "tailwindCSS.experimental.configFile": "./packages/design-system/styles.css"
 }

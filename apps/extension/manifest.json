@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Pinback 핀백 - 북마크 관리와 리마인드 도구",
+  "version": "1.0.2",
+  "action": { "default_popup": "popup.html" },
+  "icons": {
+    "128": "icon.png",
+    "256": "icon.png",
+    "512": "icon.png"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "bookmarks",
+    "identity",
+    "identity.email"
+  ],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content.js"]
+    }
+  ],
+  "host_permissions": ["<all_urls>"]
+}

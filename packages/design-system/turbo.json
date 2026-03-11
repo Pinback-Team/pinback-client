@@ -1,0 +1,16 @@
+{
+  "$schema": "../../node_modules/turbo/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "with": ["build:storybook"]
+    },
+    "build:storybook": {
+      "outputs": ["storybook-static/**"]
+    },
+    "dev:storybook": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

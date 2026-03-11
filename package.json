@@ -4,17 +4,50 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:client": "turbo run dev --filter=@pinback/client",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "check-types": "turbo run check-types",
+    "test": "turbo run test",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^4.1.1",
+    "@pivanov/vite-plugin-svg-sprite": "^3.1.3",
+    "@storybook/addon-a11y": "^9.1.3",
+    "@storybook/addon-docs": "^9.1.3",
+    "@storybook/addon-vitest": "^9.1.3",
+    "@storybook/react-vite": "^9.1.3",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/react": "19",
+    "@types/react-dom": "19",
+    "@vitest/browser": "^3.2.4",
+    "@vitest/coverage-v8": "^3.2.4",
+    "playwright": "^1.55.0",
     "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "rollup-plugin-visualizer": "^6.0.5",
+    "storybook": "^9.1.3",
     "turbo": "^2.5.6",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vite": "7.1.2",
+    "vitest": "^3.2.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "7.1.2"
+    }
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "@swc/helpers": "^0.5.17",
+    "@tanstack/react-query": "^5.87.4",
+    "@types/react-router-dom": "^5.3.3",
+    "react-router-dom": "^7.8.2",
+    "yaml": "^2.4.2"
   }
 }

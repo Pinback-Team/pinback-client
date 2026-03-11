@@ -36,3 +36,10 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# typescript
+# 증분 빌드 정보 파일
+*.tsbuildinfo
+
+*storybook.log
+storybook-static

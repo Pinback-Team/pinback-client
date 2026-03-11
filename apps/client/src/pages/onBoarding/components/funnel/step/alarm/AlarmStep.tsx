@@ -1,0 +1,41 @@
+import dotori from '/assets/onBoarding/icons/dotori.svg';
+import AlarmBox from '../../AlarmBox';
+import { useEffect } from 'react';
+import { sendGAEvent } from '@pinback/design-system/ui';
+interface AlarmStepProps {
+  selected: 1 | 2 | 3;
+  setSelected: (n: 1 | 2 | 3) => void;
+}
+const AlarmStep = ({ selected, setSelected }: AlarmStepProps) => {
+  useEffect(() => {
+    sendGAEvent(
+      'onboard-alarm-step',
+      'onboard-alarm-step',
+      'onboard-alarm-step'
+    );
+  }, []);
+  return (
+    <div className="flex flex-col items-center justify-between">
+      <img src={dotori} className="mb-[1.2rem]" alt="dotori" />
+      <p className="head2 text-font-black-1">
+        도토리 찾으러 갈 시간을 정해볼까요?
+      </p>
+      <p className="body2-m text-font-gray-3 mb-[3.2rem] mt-[0.8rem] text-center">
+        매일 지정한 시간에 저장한 북마크를 리마인드해드려요
+      </p>
+
+      <div className="mb-[2rem] flex w-full items-center justify-center gap-[1.4rem]">
+        {([1, 2, 3] as const).map((n) => (
+          <AlarmBox
+            key={n}
+            select={n}
+            isDisabled={selected === n}
+            onClick={() => setSelected(n)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default AlarmStep;
