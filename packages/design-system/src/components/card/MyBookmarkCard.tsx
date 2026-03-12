@@ -33,7 +33,7 @@ const MyBookmarkCard = ({
     nickname && nickname.trim().length > 0 ? nickname : '도토리';
 
   return (
-    <BaseCard onClick={onClick} className="h-[33.8rem]">
+    <BaseCard onClick={onClick} className="h-auto">
       <div className="flex h-[12rem] w-full items-center justify-center overflow-hidden bg-[#F8F8FA]">
         {imageUrl ? (
           <img src={imageUrl} className="h-full w-full object-cover" />

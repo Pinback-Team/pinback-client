@@ -1,0 +1,16 @@
+{
+  "name": "@pinback/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./extension-messages": "./src/extension-messages.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@pinback/typescript-config": "workspace:*",
+    "typescript": "5.9.2"
+  }
+}

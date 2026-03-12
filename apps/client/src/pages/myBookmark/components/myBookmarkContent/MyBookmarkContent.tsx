@@ -98,7 +98,6 @@ const MyBookmarkContent = ({
                     queryClient.invalidateQueries({
                       queryKey: ['categoryBookmarkArticles'],
                     });
-                    queryClient.invalidateQueries({ queryKey: ['acorns'] });
                   },
                   onError: (error: any) => {
                     console.error(error);

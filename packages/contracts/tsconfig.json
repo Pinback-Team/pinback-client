@@ -1,0 +1,10 @@
+{
+  "extends": "../typescript-config/base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "lib": ["ES2022"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

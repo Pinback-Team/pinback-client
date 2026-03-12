@@ -29,6 +29,8 @@ import {
   JobsResponse,
 } from '@shared/types/api';
 import { fetchOGData } from '@shared/utils/fetchOgData';
+import { authStorage } from '@shared/utils/authStorage';
+import { extensionBridge } from '@shared/utils/extensionBridge';
 import {
   useMutation,
   UseMutationResult,
@@ -84,6 +86,7 @@ export const useGetAcorns = (): UseQueryResult<AcornsResponse, AxiosError> => {
   return useQuery({
     queryKey: ['acorns'],
     queryFn: () => getAcorns(),
+    refetchOnWindowFocus: true,
   });
 };
 
@@ -94,17 +97,8 @@ export const usePostSignUp = () => {
       const newToken = data?.data?.token || data?.token;
 
       if (newToken) {
-        localStorage.setItem('token', newToken);
-        const sendTokenToExtension = (token: string) => {
-          window.postMessage(
-            {
-              type: 'SET_TOKEN',
-              token,
-            },
-            window.location.origin
-          );
-        };
-        sendTokenToExtension(newToken);
+        authStorage.setAccessToken(newToken);
+        extensionBridge.syncToken(newToken);
       }
     },
     onError: (error) => {
@@ -129,6 +123,7 @@ export const usePutArticleReadStatus = (): UseMutationResult<
       });
       queryClient.invalidateQueries({
         queryKey: ['acorns'],
+        refetchType: 'none',
       });
       queryClient.invalidateQueries({
         queryKey: ['bookmarkReadArticles'],
