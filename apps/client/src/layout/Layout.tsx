@@ -2,6 +2,7 @@ import { ROUTES_CONFIG } from '@routes/routesConfig';
 import { useGetHasJob } from '@shared/apis/queries';
 import JobSelectionFunnel from '@shared/components/jobSelectionFunnel/JobSelectionFunnel';
 import { Sidebar } from '@shared/components/sidebar/Sidebar';
+import { authStorage } from '@shared/utils/authStorage';
 import { useQueryClient } from '@tanstack/react-query';
 import { Outlet, useLocation } from 'react-router-dom';
 
@@ -19,7 +20,7 @@ const Layout = () => {
     location.pathname.startsWith(ROUTES_CONFIG.onboardingCallback.path);
 
   const isSidebarHidden = isAuthPage || isPolicyPage;
-  const isLoggedIn = !!localStorage.getItem('token');
+  const isLoggedIn = authStorage.hasAccessToken();
 
   const { data: hasJobData, isLoading: isHasJobLoading } = useGetHasJob(
     isLoggedIn && !isAuthPage

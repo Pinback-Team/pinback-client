@@ -11,6 +11,7 @@
     "zip": "vite build && node scripts/zip.mjs"
   },
   "dependencies": {
+    "@pinback/contracts": "workspace:*",
     "@tanstack/react-query": "^5.85.5",
     "axios": "^1.11.0",
     "react": "^19.1.1",

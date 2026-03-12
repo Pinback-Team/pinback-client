@@ -1,3 +1,5 @@
+import { EXTENSION_MESSAGE_TYPE } from '@pinback/contracts/extension-messages';
+
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
     chrome.identity.getProfileUserInfo(function (info) {
@@ -14,7 +16,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 });
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === 'SET_TOKEN') {
+  if (message.type === EXTENSION_MESSAGE_TYPE.setToken) {
     chrome.storage.local.set({ token: message.token }, () => {
       console.log('Token saved!');
     });
@@ -22,7 +24,7 @@ chrome.runtime.onMessage.addListener((message) => {
 });
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === 'Extension-Logout') {
+  if (message.type === EXTENSION_MESSAGE_TYPE.logout) {
     chrome.storage.local.remove('token', () => {
       console.log('Token removed!');
     });

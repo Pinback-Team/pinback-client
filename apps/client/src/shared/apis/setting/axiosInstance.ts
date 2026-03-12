@@ -1,4 +1,34 @@
 import axios from 'axios';
+import { authStorage } from '@shared/utils/authStorage';
+import { extensionBridge } from '@shared/utils/extensionBridge';
+
+const noAuthNeeded = [
+  '/api/v1/auth/token',
+  '/api/v3/auth/signup',
+  '/api/v3/auth/google',
+  '/api/v3/auth/reissue',
+];
+
+const reissueToken = async () => {
+  return await axios.post(
+    `${import.meta.env.VITE_BASE_URL}/api/v3/auth/reissue`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+};
+
+const syncAccessToken = (token: string) => {
+  authStorage.setAccessToken(token);
+  extensionBridge.syncToken(token);
+};
+
+const clearAuthSessionAndRedirect = () => {
+  authStorage.clearSession();
+  extensionBridge.logout();
+  window.location.href = '/onboarding?step=SOCIAL_LOGIN';
+};
 
 // Axios 인스턴스
 const apiRequest = axios.create({
@@ -10,7 +40,7 @@ const apiRequest = axios.create({
 
 // 요청 인터셉터
 apiRequest.interceptors.request.use(async (config) => {
-  const token = localStorage.getItem('token');
+  const token = authStorage.getAccessToken();
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -24,13 +54,6 @@ apiRequest.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    const noAuthNeeded = [
-      '/api/v1/auth/token',
-      '/api/v3/auth/signup',
-      '/api/v3/auth/google',
-      '/api/v3/auth/reissue',
-    ];
 
     const isNoAuth = noAuthNeeded.some((url) =>
       originalRequest.url?.includes(url)
@@ -48,30 +71,21 @@ apiRequest.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const res = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/api/v3/auth/reissue`,
-          {},
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await reissueToken();
+        const newAccessToken = res.data?.data?.token;
 
-        const newAccessToken = res.data.data.token;
-        localStorage.setItem('token', newAccessToken);
+        if (!newAccessToken) {
+          throw new Error('토큰 재발급 응답에 access token이 없습니다.');
+        }
 
-        window.postMessage(
-          { type: 'SET_TOKEN', token: newAccessToken },
-          window.location.origin
-        );
-
+        syncAccessToken(newAccessToken);
+        originalRequest.headers = originalRequest.headers ?? {};
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return apiRequest(originalRequest);
       } catch (reissueError) {
         console.error('토큰 재발급 실패. 다시 로그인해주세요.', reissueError);
 
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        window.location.href = '/onboarding?step=SOCIAL_LOGIN';
+        clearAuthSessionAndRedirect();
 
         return Promise.reject(reissueError);
       }
