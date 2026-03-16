@@ -32,16 +32,15 @@ const clearAuthSessionAndRedirect = () => {
 
 // 대기열 패턴을 위한 상태 변수 선언
 let isRefreshing = false;
-let refreshSubscribers: ((token: string) => void)[] = [];
+let refreshSubscribers: ((token: string | null) => void)[] = [];
 
 // 대기 중인 요청들을 일괄 실행하고 큐를 비우는 함수
-const onRefreshed = (token: string) => {
+const onRefreshed = (token: string | null) => {
   refreshSubscribers.forEach((callback) => callback(token));
   refreshSubscribers = [];
 };
-
-// 대기열에 요청을 추가하는 함수
-const addRefreshSubscriber = (callback: (token: string) => void) => {
+// 대기열에 요청을 추가
+const addRefreshSubscriber = (callback: (token: string | null) => void) => {
   refreshSubscribers.push(callback);
 };
 
@@ -83,10 +82,16 @@ apiRequest.interceptors.response.use(
       !isLoginPage
     ) {
       if (isRefreshing) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
           addRefreshSubscriber((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            resolve(apiRequest(originalRequest));
+            if (token) {
+              originalRequest.headers.Authorization = `Bearer ${token}`;
+              resolve(apiRequest(originalRequest));
+            } else {
+              reject(
+                new Error('토큰 재발급에 실패하여 대기 중인 요청을 취소합니다.')
+              );
+            }
           });
         });
       }
@@ -116,7 +121,7 @@ apiRequest.interceptors.response.use(
 
         // 토큰 갱신 실패 처리
         isRefreshing = false;
-        refreshSubscribers = [];
+        onRefreshed(null);
         clearAuthSessionAndRedirect();
 
         return Promise.reject(reissueError);
