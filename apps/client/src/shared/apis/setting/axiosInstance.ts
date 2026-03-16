@@ -52,6 +52,7 @@ const apiRequest = axios.create({
   },
 });
 
+// 요청 인터셉터
 apiRequest.interceptors.request.use(async (config) => {
   const token = authStorage.getAccessToken();
 
@@ -62,6 +63,7 @@ apiRequest.interceptors.request.use(async (config) => {
   return config;
 });
 
+// 응답 인터셉터
 apiRequest.interceptors.response.use(
   (response) => response,
   async (error) => {
