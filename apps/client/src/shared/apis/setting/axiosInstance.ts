@@ -85,6 +85,9 @@ apiRequest.interceptors.response.use(
         return new Promise((resolve, reject) => {
           addRefreshSubscriber((token) => {
             if (token) {
+              originalRequest._retry = true;
+              originalRequest.headers = originalRequest.headers ?? {};
+
               originalRequest.headers.Authorization = `Bearer ${token}`;
               resolve(apiRequest(originalRequest));
             } else {
