@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
   return {
     define: {
       __ALLOWED_ORIGINS__: JSON.stringify(
-        env.VITE_ALLOWED_ORIGINS?.split(',') || []
+        env.VITE_ALLOWED_ORIGINS?.split(',').filter(Boolean) || []
       ),
     },
 
