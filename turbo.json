@@ -7,6 +7,17 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*", "!.env.sample"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
+
+    "build:dev": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "!.env.sample"],
+      "outputs": ["dist/**"]
+    },
+    "build:prod": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "!.env.sample"],
+      "outputs": ["dist/**"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
