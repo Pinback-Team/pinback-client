@@ -63,7 +63,13 @@ const Footer = () => {
             aria-label="Pinback 블로그"
             className="transition-opacity hover:opacity-80"
           >
-            <Icon name="palms" width={28} height={28} />
+            <img
+              src="/assets/palms.svg"
+              alt="Palms 로고"
+              width={28}
+              height={28}
+              className="object-contain"
+            />
           </a>
         </div>
       </div>

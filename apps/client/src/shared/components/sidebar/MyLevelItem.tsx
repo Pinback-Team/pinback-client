@@ -1,4 +1,3 @@
-import { Icon } from '@pinback/design-system/icons';
 import { Level, Progress } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
 import { getTreeLevel } from '@shared/utils/treeLevel';
@@ -34,11 +33,12 @@ export default function MyLevelItem({
         className="flex size-[4.6rem] items-center justify-center"
         aria-hidden
       >
-        <Icon
-          name="chippi_profile"
+        <img
+          src="/assets/chippi_profile.svg"
+          alt="치삐 프로필"
           width={46}
           height={46}
-          className="rounded-[0.4rem]"
+          className="object-cover"
         />
       </div>
 
