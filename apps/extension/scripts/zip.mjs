@@ -1,9 +1,12 @@
 /* global process */
 import AdmZip from 'adm-zip';
 import axios from 'axios';
+import dotenv from 'dotenv';
 import FormData from 'form-data';
 import fs from 'fs';
 import path from 'path';
+
+dotenv.config({ path: '.env.development' });
 
 const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL; // eslint-disable-line
 const DIST_DIR = path.resolve('dist');
