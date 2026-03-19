@@ -35,7 +35,7 @@ export default function MyLevelItem({
       >
         <img
           src="/assets/chippi_profile.svg"
-          alt="치삐 프로필"
+          alt=""
           width={46}
           height={46}
           className="object-cover"
