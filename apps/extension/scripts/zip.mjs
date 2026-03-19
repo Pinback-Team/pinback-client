@@ -74,12 +74,12 @@ async function run() {
       error: errorMsg,
     });
 
-    uploadToDiscord(failMessage).catch((e) =>
+    await uploadToDiscord(failMessage).catch((e) =>
       console.error('❌ 에러 알림 전송 실패:', e.message)
     );
 
     console.error('❌ 작업 실패:', errorMsg);
-    process.exit(1);
+    process.exitCode = 1;
   }
 }
 
