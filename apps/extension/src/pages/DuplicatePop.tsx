@@ -8,6 +8,7 @@ const DuplicatePop = ({ onLeftClick, onRightClick }: DuplicatePopProps) => {
   return (
     <div className="bg-white-bg common-shadow flex w-[26rem] cursor-pointer flex-col items-center justify-center rounded-[1.2rem] px-[1.6rem] py-[2.4rem]">
       <img
+        alt=""
         src={extesionPop}
         className="m-auto h-[7.2rem] w-[7.2rem] text-center"
       />
@@ -18,12 +19,14 @@ const DuplicatePop = ({ onLeftClick, onRightClick }: DuplicatePopProps) => {
         <button
           className="border-gray200 sub5-sb bg-white-bg text-font-black-1 w-[10.8rem] rounded-[0.4rem] border py-[0.85rem]"
           onClick={onLeftClick}
+          type="button"
         >
           수정하기
         </button>
         <button
           className="sub5-sb bg-gray900 text-white-bg w-[10.8rem] rounded-[0.4rem] py-[0.85rem]"
           onClick={onRightClick}
+          type="button"
         >
           대시보드
         </button>
