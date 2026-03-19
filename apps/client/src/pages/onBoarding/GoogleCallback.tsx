@@ -46,9 +46,7 @@ const GoogleCallback = () => {
     }
   };
 
-  const redirectUri = import.meta.env.PROD
-    ? import.meta.env.VITE_GOOGLE_REDIRECT_URI_PROD
-    : import.meta.env.VITE_GOOGLE_REDIRECT_URI_DEV;
+  const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
 
   const loginWithCode = async (code: string) => {
     try {
