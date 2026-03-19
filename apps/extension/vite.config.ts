@@ -1,36 +1,50 @@
-// vite.config.ts
-import { defineConfig } from 'vite';
+import { crx } from '@crxjs/vite-plugin';
+import svgSpritePlugin from '@pivanov/vite-plugin-svg-sprite';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { resolve } from 'path';
-import { crx } from '@crxjs/vite-plugin';
+import { defineConfig, loadEnv } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import manifest from './manifest.json';
-import svgSpritePlugin from '@pivanov/vite-plugin-svg-sprite';
 
-export default defineConfig({
-  plugins: [
-    react(),
-    tsconfigPaths({
-      projects: [resolve(__dirname, './tsconfig.json')],
-    }),
-    tailwindcss(),
-    crx({ manifest }),
-    svgSpritePlugin({
-      iconDirs: ['../../packages/design-system/src/icons/source'],
-      symbolId: 'icon-[name]',
-      inject: 'body-last',
-    }),
-  ],
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd());
 
-  build: {
-    outDir: 'dist',
-    copyPublicDir: true,
-  },
-  publicDir: 'public',
+  const dynamicManifest = {
+    ...manifest,
+    name: env.VITE_EXTENSION_NAME || manifest.name,
+  };
 
-  server: {
-    port: 5175,
-    strictPort: true,
-  },
+  return {
+    define: {
+      __ALLOWED_ORIGINS__: JSON.stringify(
+        env.VITE_ALLOWED_ORIGINS?.split(',').filter(Boolean) || []
+      ),
+    },
+
+    plugins: [
+      react(),
+      tsconfigPaths({
+        projects: [resolve(__dirname, './tsconfig.json')],
+      }),
+      tailwindcss(),
+      crx({ manifest: dynamicManifest }),
+      svgSpritePlugin({
+        iconDirs: ['../../packages/design-system/src/icons/source'],
+        symbolId: 'icon-[name]',
+        inject: 'body-last',
+      }),
+    ],
+
+    build: {
+      outDir: 'dist',
+      copyPublicDir: true,
+    },
+    publicDir: 'public',
+
+    server: {
+      port: 5175,
+      strictPort: true,
+    },
+  };
 });

@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { authStorage } from '@shared/utils/authStorage';
 import { extensionBridge } from '@shared/utils/extensionBridge';
+import axios from 'axios';
 
 const noAuthNeeded = [
   '/api/v1/auth/token',
@@ -30,7 +30,20 @@ const clearAuthSessionAndRedirect = () => {
   window.location.href = '/onboarding?step=SOCIAL_LOGIN';
 };
 
-// Axios 인스턴스
+// 대기열 패턴을 위한 상태 변수 선언
+let isRefreshing = false;
+let refreshSubscribers: ((token: string | null) => void)[] = [];
+
+// 대기 중인 요청들을 일괄 실행하고 큐를 비우는 함수
+const onRefreshed = (token: string | null) => {
+  refreshSubscribers.forEach((callback) => callback(token));
+  refreshSubscribers = [];
+};
+// 대기열에 요청을 추가
+const addRefreshSubscriber = (callback: (token: string | null) => void) => {
+  refreshSubscribers.push(callback);
+};
+
 const apiRequest = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
@@ -68,7 +81,26 @@ apiRequest.interceptors.response.use(
       !isNoAuth &&
       !isLoginPage
     ) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          addRefreshSubscriber((token) => {
+            if (token) {
+              originalRequest._retry = true;
+              originalRequest.headers = originalRequest.headers ?? {};
+
+              originalRequest.headers.Authorization = `Bearer ${token}`;
+              resolve(apiRequest(originalRequest));
+            } else {
+              reject(
+                new Error('토큰 재발급에 실패하여 대기 중인 요청을 취소합니다.')
+              );
+            }
+          });
+        });
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
 
       try {
         const res = await reissueToken();
@@ -79,12 +111,20 @@ apiRequest.interceptors.response.use(
         }
 
         syncAccessToken(newAccessToken);
+
+        // 토큰 갱신 성공 처리
+        isRefreshing = false;
+        onRefreshed(newAccessToken);
+
         originalRequest.headers = originalRequest.headers ?? {};
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return apiRequest(originalRequest);
       } catch (reissueError) {
         console.error('토큰 재발급 실패. 다시 로그인해주세요.', reissueError);
 
+        // 토큰 갱신 실패 처리
+        isRefreshing = false;
+        onRefreshed(null);
         clearAuthSessionAndRedirect();
 
         return Promise.reject(reissueError);

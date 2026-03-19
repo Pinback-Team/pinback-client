@@ -3,14 +3,16 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:dev": "turbo run build:dev --filter=@pinback/extension",
+    "build:prod": "turbo run build:prod --filter=@pinback/extension",
+    "build-storybook": "storybook build",
     "dev": "turbo run dev",
     "dev:client": "turbo run dev --filter=@pinback/client",
+    "storybook": "storybook dev -p 6006",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "test": "turbo run test",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "test": "turbo run test"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",

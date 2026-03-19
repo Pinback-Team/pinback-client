@@ -4,11 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "vite --mode development",
+    "build": "pnpm build:prod",
+    "build:dev": "tsc -b && vite build --mode development",
+    "build:prod": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "format": "prettier -w .",
-    "zip": "vite build && node scripts/zip.mjs"
+    "zip": "pnpm build:prod && node scripts/zip.mjs"
   },
   "dependencies": {
     "@pinback/contracts": "workspace:*",
