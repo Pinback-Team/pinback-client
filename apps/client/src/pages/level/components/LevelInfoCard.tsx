@@ -1,15 +1,14 @@
-import { cn } from '@pinback/design-system/utils';
-import { Level } from '@pinback/design-system/ui';
-import { Icon, type IconName } from '@pinback/design-system/icons';
 import { TREE_LEVEL_TABLE, TreeLevel } from '@pages/level/types/treeLevelType';
+import { Level } from '@pinback/design-system/ui';
+import { cn } from '@pinback/design-system/utils';
 
-const LEVEL_TOOLTIP_ICON = {
-  1: 'tooltip_1',
-  2: 'tooltip_2',
-  3: 'tooltip_3',
-  4: 'tooltip_4',
-  5: 'tooltip_5',
-} as const satisfies Record<TreeLevel, IconName>;
+const LEVEL_TOOLTIP_IMAGE = {
+  1: '/assets/tooltip_1.svg',
+  2: '/assets/tooltip_2.svg',
+  3: '/assets/tooltip_3.svg',
+  4: '/assets/tooltip_4.svg',
+  5: '/assets/tooltip_5.svg',
+} as const satisfies Record<TreeLevel, string>;
 
 export default function LevelInfoCard() {
   const rows = [...TREE_LEVEL_TABLE].reverse();
@@ -33,12 +32,12 @@ export default function LevelInfoCard() {
           >
             <div className="flex w-full items-center gap-[1.2rem]">
               <div className="bg-gray0 flex h-[4.6rem] w-[4.6rem] items-center justify-center rounded-[0.8rem]">
-                <Icon
-                  name={LEVEL_TOOLTIP_ICON[row.level]}
+                <img
+                  src={LEVEL_TOOLTIP_IMAGE[row.level]}
+                  alt={`${row.level} 썸네일 아이콘`}
                   width={46}
                   height={46}
-                  className="rounded-[0.8rem]"
-                  aria-label={`${row.level} 썸네일 아이콘`}
+                  className="object-cover"
                 />
               </div>
 
