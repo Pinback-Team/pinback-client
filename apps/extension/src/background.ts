@@ -1,5 +1,7 @@
 import { EXTENSION_MESSAGE_TYPE } from '@pinback/contracts/extension-messages';
 
+const webUrl = import.meta.env.VITE_WEB_URL || 'https://pinback.today';
+
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
     chrome.identity.getProfileUserInfo(function (info) {
@@ -8,7 +10,7 @@ chrome.runtime.onInstalled.addListener((details) => {
       });
       setTimeout(() => {
         chrome.tabs.create({
-          url: `https://pinback.today/onboarding?email=${info.email}`,
+          url: `${webUrl}/onboarding?email=${info.email}`,
         });
       }, 1000);
     });
@@ -21,9 +23,7 @@ chrome.runtime.onMessage.addListener((message) => {
       console.log('Token saved!');
     });
   }
-});
 
-chrome.runtime.onMessage.addListener((message) => {
   if (message.type === EXTENSION_MESSAGE_TYPE.logout) {
     chrome.storage.local.remove('token', () => {
       console.log('Token removed!');
