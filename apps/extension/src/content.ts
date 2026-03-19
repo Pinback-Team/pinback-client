@@ -2,6 +2,12 @@ import { EXTENSION_MESSAGE_TYPE } from '@pinback/contracts/extension-messages';
 
 const ALLOWED_ORIGINS = __ALLOWED_ORIGINS__;
 
+if (ALLOWED_ORIGINS.length === 0) {
+  console.warn(
+    '[Pinback] 허용된 도메인(ALLOWED_ORIGINS) 설정이 비어 있습니다. 토큰 동기화가 작동하지 않으니 .env 파일을 확인해주세요.'
+  );
+}
+
 window.addEventListener('message', (event) => {
   if (event.source !== window) return;
 
