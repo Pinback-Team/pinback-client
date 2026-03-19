@@ -6,9 +6,12 @@ import FormData from 'form-data';
 import fs from 'fs';
 import path from 'path';
 
-dotenv.config({ path: '.env.development' });
+if (fs.existsSync('.env.development')) {
+  dotenv.config({ path: '.env.development' });
+}
 
 const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL; // eslint-disable-line
+
 const DIST_DIR = path.resolve('dist');
 const OUT_DIR = path.resolve('out');
 const ZIP_NAME = 'pinback-ext-dev.zip';

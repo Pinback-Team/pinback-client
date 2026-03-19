@@ -33,5 +33,5 @@ jobs:
 
       - name: Build and Share Extension
         env:
-          VITE_DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: pnpm share:ext
