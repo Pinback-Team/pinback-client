@@ -2,6 +2,11 @@ name: 📦 Share Pinback Extension
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: '빌드할 브랜치를 확인하세요 (기본: develop)'
+        required: true
+        default: 'develop'
 
 jobs:
   build-and-send:
@@ -9,6 +14,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v3
