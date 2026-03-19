@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "format": "prettier -w .",
     "zip": "pnpm build:prod && node scripts/zip.mjs",
-    "share:dev": "pnpm build:dev && node scripts/zip.mjs"
+    "share:dev": "rm -rf dist out && pnpm build:dev && node scripts/zip.mjs"
   },
   "dependencies": {
     "@pinback/contracts": "workspace:*",

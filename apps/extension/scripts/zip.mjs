@@ -5,15 +5,21 @@ import dotenv from 'dotenv';
 import FormData from 'form-data';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-if (fs.existsSync('.env.development')) {
-  dotenv.config({ path: '.env.development' });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const APP_ROOT = path.resolve(__dirname, '..');
+
+if (fs.existsSync(path.join(APP_ROOT, '.env.development'))) {
+  dotenv.config({ path: path.join(APP_ROOT, '.env.development') });
 }
 
 const WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL; // eslint-disable-line
 
-const DIST_DIR = path.resolve('dist');
-const OUT_DIR = path.resolve('out');
+const DIST_DIR = path.resolve(APP_ROOT, 'dist');
+const OUT_DIR = path.resolve(APP_ROOT, 'out');
 const ZIP_NAME = 'pinback-ext-dev.zip';
 const ZIP_PATH = path.join(OUT_DIR, ZIP_NAME);
 
