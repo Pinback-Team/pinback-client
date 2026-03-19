@@ -1,6 +1,8 @@
 import { Icon } from '@pinback/design-system/icons';
 import LogOutImg from '/logout_chippi.svg';
 const LogOutPop = () => {
+  const webUrl = import.meta.env.VITE_WEB_URL || 'https://pinback.today';
+
   return (
     <div className="bg-white-bg common-shadow flex h-[37.5rem] w-[35.2rem] flex-col items-center justify-center rounded-[1.2rem] px-[3.2rem] py-[2.4rem] leading-normal">
       <div className="mr-auto">
@@ -25,7 +27,7 @@ const LogOutPop = () => {
         type="button"
         onClick={() => {
           chrome.tabs.create({
-            url: 'https://pinback.today/onboarding?step=SOCIAL_LOGIN',
+            url: `${webUrl}/onboarding?step=SOCIAL_LOGIN`,
           });
         }}
       >
