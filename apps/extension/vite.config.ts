@@ -39,6 +39,7 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'dist',
       copyPublicDir: true,
+      sourcemap: false,
     },
     publicDir: 'public',
 
