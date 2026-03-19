@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite --mode development",
+    "build": "pnpm build:prod",
     "build:dev": "tsc -b && vite build --mode development",
     "build:prod": "tsc -b && vite build --mode production",
-    "build": "yarn build:prod",
     "lint": "eslint .",
     "format": "prettier -w .",
-    "zip": "yarn build:prod && node scripts/zip.mjs"
+    "zip": "pnpm build:prod && node scripts/zip.mjs"
   },
   "dependencies": {
     "@pinback/contracts": "workspace:*",
