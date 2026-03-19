@@ -10,7 +10,8 @@
     "build:prod": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "format": "prettier -w .",
-    "zip": "pnpm build:prod && node scripts/zip.mjs"
+    "zip": "pnpm build:prod && node scripts/zip.mjs",
+    "share:dev": "pnpm build:dev && node --env-file=.env.development scripts/zip.mjs"
   },
   "dependencies": {
     "@pinback/contracts": "workspace:*",
