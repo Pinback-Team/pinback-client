@@ -17,11 +17,11 @@ function App() {
         <HeroSection />
       </section>
 
-      <section className="h-dvh snap-start" id="bookmark-section">
+      <section className="h-dvh snap-start">
         <ShareBookmarkSection />
       </section>
 
-      <section className="h-dvh snap-start" id="bookmark-section">
+      <section className="h-dvh snap-start">
         <FeatureBookmarkSection />
       </section>
 
