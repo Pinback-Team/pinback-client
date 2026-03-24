@@ -1,4 +1,4 @@
-import Bookmark from '../assets/Bookmark.png';
+import Bookmark from '../assets/Bookmark.png';
 
 const FeatureBookmarkSection = () => {
   return (
@@ -15,7 +15,7 @@ const FeatureBookmarkSection = () => {
 
         {/* 이미지 영역 */}
         <div className="flex items-center justify-center">
-          <img src={Bookmark} alt="Bookmark" />
+          <img src={Bookmark} alt="Bookmark" width={447} height={490} />
         </div>
       </div>
     </section>
