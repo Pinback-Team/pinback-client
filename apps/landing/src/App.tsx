@@ -1,10 +1,11 @@
 import './App.css';
-import HeroSection from './components/HeroSection';
 import FeatureBookmarkSection from './components/FeatureBookmarkSection';
 import FeatureReminderSection from './components/FeatureReminderSection';
 import FeatureRewardSection from './components/FeatureRewardSection';
 import FinalCTASection from './components/FinalCTASection';
 import Header from './components/Header';
+import HeroSection from './components/HeroSection';
+import ShareBookmarkSection from './components/ShareBookmarkSection';
 
 function App() {
   return (
@@ -14,6 +15,10 @@ function App() {
       {/* 각 섹션들 */}
       <section className="h-dvh snap-start">
         <HeroSection />
+      </section>
+
+      <section className="h-dvh snap-start" id="bookmark-section">
+        <ShareBookmarkSection />
       </section>
 
       <section className="h-dvh snap-start" id="bookmark-section">
