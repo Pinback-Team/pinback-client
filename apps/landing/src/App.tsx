@@ -16,7 +16,18 @@ function App() {
       const container = scrollRef.current;
       if (!container) return;
 
-      // 현재 브라우저의 높이(1vh)를 기준으로 이동 거리 산정
+      //예외 처리
+      const activeElement = document.activeElement as HTMLElement;
+      const isInputFocused =
+        activeElement.tagName === 'INPUT' ||
+        activeElement.tagName === 'TEXTAREA' ||
+        activeElement.tagName === 'SELECT' ||
+        activeElement.tagName === 'BUTTON' ||
+        activeElement.tagName === 'A' ||
+        activeElement.isContentEditable;
+
+      if (isInputFocused) return;
+
       const pageHeight = window.innerHeight;
 
       switch (e.key) {
@@ -36,44 +47,34 @@ function App() {
       }
     };
 
-    // window에 이벤트 리스너 등록
     window.addEventListener('keydown', handleKeyDown);
-
     // 클린업 함수: 컴포넌트 언마운트 시 리스너 제거
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   return (
     <div
       ref={scrollRef}
       className="h-dvh snap-y snap-mandatory overflow-y-scroll scroll-smooth outline-none"
-      tabIndex={0}
+      tabIndex={-1}
     >
       <Header />
 
-      {/* 각 섹션들 */}
       <section className="h-dvh snap-start">
         <HeroSection />
       </section>
-
       <section className="h-dvh snap-start">
         <ShareBookmarkSection />
       </section>
-
       <section className="h-dvh snap-start">
         <FeatureBookmarkSection />
       </section>
-
       <section className="h-dvh snap-start">
         <FeatureReminderSection />
       </section>
-
       <section className="h-dvh snap-start">
         <FeatureRewardSection />
       </section>
-
       <section className="h-dvh snap-start">
         <FinalCTASection />
       </section>
