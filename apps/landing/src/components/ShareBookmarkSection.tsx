@@ -1,23 +1,27 @@
-import Lottie from 'lottie-react';
-import Up from '../assets/4_up.json';
+import JobBookmark from '../assets/JobBookmark.svg';
 
 const ShareBookmarkSection = () => {
   return (
     <section className="flex h-dvh items-center justify-center bg-white">
-      <div className="flex items-start gap-[8rem]">
-        {/* 텍스트 영역 */}
-        <div className="flex flex-col items-start justify-end gap-[2.4rem] text-left">
-          <p className="head1">도토리 보상 루프</p>
-          <p className="sub2-sb text-font-gray-3">
-            내가 저장했던 지식을 활용할 때마다 도토리를
-            <br />
-            모아 성장해보세요.
-          </p>
-        </div>
-
-        {/* 이미지 영역 (로띠) */}
+      <div className="flex items-start gap-[7rem]">
+        {/* 이미지 영역 */}
         <div className="flex items-center justify-center">
-          <Lottie animationData={Up} loop autoplay />
+          <img src={JobBookmark} alt="JobBookmark" />
+        </div>
+        {/* 글씨 영역 */}
+        <div className="relative flex flex-1 flex-col items-end pr-[10rem] pt-[5rem] text-right">
+          <div className="bg-main500 sub3-sb text-white-bg inline-flex items-center gap-[0.8rem] rounded-full px-[1.6rem] py-[0.8rem]">
+            <span>새 기능이 출시됐어요!</span>
+          </div>
+
+          <h1 className="head1 text-font-black mb-[2.4rem] mt-[1.6rem]">
+            나와 같은 IT 분야 사람들이
+            <br />
+            저장한 글을 확인해요
+          </h1>
+          <p className="sub2-sb text-font-gray-3">
+            유용한 정보나 아티클을 쉽게 추천받을 수 있어요
+          </p>
         </div>
       </div>
     </section>
