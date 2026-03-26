@@ -1,49 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Contents from './components/contents/Contents';
+import { useKeyboardScroll } from './hooks/useKeyboardScroll'; // 훅 임포트
 
 function App() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const container = scrollRef.current;
-      if (!container) return;
-
-      const activeElement = document.activeElement as HTMLElement;
-      const isInputFocused =
-        activeElement.tagName === 'INPUT' ||
-        activeElement.tagName === 'TEXTAREA' ||
-        activeElement.tagName === 'SELECT' ||
-        activeElement.tagName === 'BUTTON' ||
-        activeElement.tagName === 'A' ||
-        activeElement.isContentEditable;
-
-      if (isInputFocused) return;
-
-      const pageHeight = window.innerHeight;
-
-      switch (e.key) {
-        case 'ArrowDown':
-        case 'PageDown':
-        case ' ':
-          e.preventDefault();
-          container.scrollBy({ top: pageHeight, behavior: 'smooth' });
-          break;
-        case 'ArrowUp':
-        case 'PageUp':
-          e.preventDefault();
-          container.scrollBy({ top: -pageHeight, behavior: 'smooth' });
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  useKeyboardScroll(scrollRef);
 
   return (
     <div
@@ -52,7 +16,6 @@ function App() {
       tabIndex={-1}
     >
       <Header />
-
       <main>
         <Contents />
       </main>
