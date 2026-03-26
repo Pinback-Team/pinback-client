@@ -1,4 +1,4 @@
-import JobBookmark from '../assets/JobBookmark.svg';
+import JobBookmark from '../../assets/JobBookmark.svg';
 
 const ShareBookmarkSection = () => {
   return (

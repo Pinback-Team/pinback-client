@@ -1,7 +1,7 @@
+import { Button, sendGAEvent } from '@pinback/design-system/ui';
 import Lottie from 'lottie-react';
-import Chippiface from '../assets/5_chippiface.json';
-import { sendGAEvent, Button } from '@pinback/design-system/ui';
-import Footer from './Footer';
+import Chippiface from '../../assets/5_chippiface.json';
+import Footer from '../Footer';
 const FinalCTASection = () => {
   const handleInstallClick = () => {
     sendGAEvent('landing', 'landing', '2-landing-bottomBtn');

@@ -1,4 +1,4 @@
-import Remind from '../assets/Remind.svg';
+import Remind from '../../assets/Remind.svg';
 
 const FeatureReminderSection = () => {
   return (

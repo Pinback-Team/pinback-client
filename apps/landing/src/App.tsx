@@ -1,12 +1,7 @@
 import { useEffect, useRef } from 'react';
 import './App.css';
-import FeatureBookmarkSection from './components/FeatureBookmarkSection';
-import FeatureReminderSection from './components/FeatureReminderSection';
-import FeatureRewardSection from './components/FeatureRewardSection';
-import FinalCTASection from './components/FinalCTASection';
 import Header from './components/Header';
-import HeroSection from './components/HeroSection';
-import ShareBookmarkSection from './components/ShareBookmarkSection';
+import Contents from './components/contents/Contents';
 
 function App() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -16,7 +11,6 @@ function App() {
       const container = scrollRef.current;
       if (!container) return;
 
-      //예외 처리
       const activeElement = document.activeElement as HTMLElement;
       const isInputFocused =
         activeElement.tagName === 'INPUT' ||
@@ -48,7 +42,6 @@ function App() {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    // 클린업 함수: 컴포넌트 언마운트 시 리스너 제거
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
@@ -60,24 +53,9 @@ function App() {
     >
       <Header />
 
-      <section className="h-dvh snap-start">
-        <HeroSection />
-      </section>
-      <section className="h-dvh snap-start">
-        <ShareBookmarkSection />
-      </section>
-      <section className="h-dvh snap-start">
-        <FeatureBookmarkSection />
-      </section>
-      <section className="h-dvh snap-start">
-        <FeatureReminderSection />
-      </section>
-      <section className="h-dvh snap-start">
-        <FeatureRewardSection />
-      </section>
-      <section className="h-dvh snap-start">
-        <FinalCTASection />
-      </section>
+      <main>
+        <Contents />
+      </main>
     </div>
   );
 }

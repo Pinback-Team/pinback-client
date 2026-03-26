@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
 import { Button } from '@pinback/design-system/ui';
-import landingmain from '../assets/1_landingmain.json';
 import Lottie from 'lottie-react';
-import landing_bell from '../assets/landing_bell.svg';
-import landing_icon from '../assets/landing_icon.svg';
+import { useEffect } from 'react';
+import landingmain from '../../assets/1_landingmain.json';
+import landing_bell from '../../assets/landing_bell.svg';
+import landing_icon from '../../assets/landing_icon.svg';
 
 const floatAnimationStyle = `
 @keyframes floatY {
