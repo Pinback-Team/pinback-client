@@ -1,0 +1,8 @@
+{
+  "name": "@pinback/analytics",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "dependencies": {
+    "@amplitude/unified": "^1.0.10"
+  }
+}

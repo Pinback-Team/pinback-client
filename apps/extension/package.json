@@ -16,6 +16,7 @@
   "dependencies": {
     "@pinback/contracts": "workspace:*",
     "@tanstack/react-query": "^5.85.5",
+    "@pinback/analytics": "workspace:*",
     "axios": "^1.11.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
