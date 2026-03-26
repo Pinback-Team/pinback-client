@@ -6,7 +6,7 @@ const ShareBookmarkSection = () => {
       <div className="flex items-start gap-[7rem]">
         {/* 이미지 영역 */}
         <div className="flex items-center justify-center">
-          <img src={JobBookmark} alt="JobBookmark" />
+          <img src={JobBookmark} alt="북마크 공유 기능 이미지" />
         </div>
         {/* 글씨 영역 */}
         <div className="relative flex flex-1 flex-col items-end pr-[10rem] pt-[5rem] text-right">

@@ -15,7 +15,12 @@ const FeatureBookmarkSection = () => {
 
         {/* 이미지 영역 */}
         <div className="flex items-center justify-center">
-          <img src={Bookmark} alt="Bookmark" width={447} height={490} />
+          <img
+            src={Bookmark}
+            alt="Bookmark 기능 이미지"
+            width={447}
+            height={490}
+          />
         </div>
       </div>
     </section>

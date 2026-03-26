@@ -16,7 +16,7 @@ const FeatureRewardSection = () => {
 
         {/* 이미지 영역 */}
         <div className="flex items-center justify-center">
-          <img src={Dotori} alt="Dotori" />
+          <img src={Dotori} alt="도토리 수집 보상 이미지" />
         </div>
       </div>
     </section>
