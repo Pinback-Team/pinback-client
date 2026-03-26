@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Contents from './components/contents/Contents';
-import { useKeyboardScroll } from './hooks/useKeyboardScroll'; // 훅 임포트
+import { useKeyboardScroll } from './hooks/useKeyboardScroll';
 
 function App() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
