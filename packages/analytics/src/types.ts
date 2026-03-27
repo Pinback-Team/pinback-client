@@ -1,7 +1,5 @@
 export interface UserProperties {
-  email?: string;
-  name?: string;
-  [key: string]: unknown;
+  job_role?: string;
 }
 
 export interface AnalyticsProvider {
