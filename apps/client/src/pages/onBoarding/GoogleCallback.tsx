@@ -1,3 +1,4 @@
+import { analytics } from '@pinback/analytics';
 import apiRequest from '@shared/apis/setting/axiosInstance';
 import LoadingChippi from '@shared/components/loadingChippi/LoadingChippi';
 import { authStorage } from '@shared/utils/authStorage';
@@ -65,6 +66,7 @@ const GoogleCallback = () => {
         res.data.data;
 
       authStorage.setUserIdentity(email, userId);
+      analytics.identify(String(userId));
 
       handleUserLogin(isUser, accessToken, refreshToken, hasJob);
     } catch (error) {
