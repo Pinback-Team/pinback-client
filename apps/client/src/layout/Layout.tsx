@@ -1,14 +1,25 @@
+import { analytics } from '@pinback/analytics';
 import { ROUTES_CONFIG } from '@routes/routesConfig';
 import { useGetHasJob } from '@shared/apis/queries';
 import JobSelectionFunnel from '@shared/components/jobSelectionFunnel/JobSelectionFunnel';
 import { Sidebar } from '@shared/components/sidebar/Sidebar';
 import { authStorage } from '@shared/utils/authStorage';
 import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 const Layout = () => {
   const location = useLocation();
   const queryClient = useQueryClient();
+
+  // TODO: 유저 프로퍼티 추가 시 전용 API + AmplitudeProvider 패턴으로 리팩토링 필요
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    const jobRole = authStorage.getJobRole();
+    if (userId) {
+      analytics.identify(userId, jobRole ? { job_role: jobRole } : undefined);
+    }
+  }, []);
 
   const isPolicyPage =
     location.pathname === ROUTES_CONFIG.privacyPolicy.path ||
