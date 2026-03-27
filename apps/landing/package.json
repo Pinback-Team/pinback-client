@@ -12,8 +12,7 @@
   "dependencies": {
     "lottie-react": "^2.4.1",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "@pinback/analytics": "workspace:*"
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
