@@ -1,14 +1,13 @@
 import { RefObject, useEffect } from 'react';
 
-export const useKeyboardScroll = (
-  scrollRef: RefObject<HTMLDivElement | null>
+export const useKeyboardScroll = <T extends HTMLElement>(
+  scrollRef: RefObject<T | null>
 ) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const container = scrollRef.current;
       if (!container) return;
 
-      // 포커스 된 요소가 입력 폼이나 버튼일 경우 무시
       const activeElement = document.activeElement as HTMLElement;
       const isInputFocused =
         ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'A'].includes(
