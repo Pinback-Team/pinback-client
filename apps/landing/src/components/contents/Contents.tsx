@@ -8,24 +8,12 @@ import ShareBookmarkSection from './ShareBookmarkSection';
 const Contents = () => {
   return (
     <>
-      <section className="h-dvh snap-start">
-        <HeroSection />
-      </section>
-      <section className="h-dvh snap-start">
-        <ShareBookmarkSection />
-      </section>
-      <section className="h-dvh snap-start">
-        <FeatureBookmarkSection />
-      </section>
-      <section className="h-dvh snap-start">
-        <FeatureReminderSection />
-      </section>
-      <section className="h-dvh snap-start">
-        <FeatureRewardSection />
-      </section>
-      <section className="h-dvh snap-start">
-        <FinalCTASection />
-      </section>
+      <HeroSection />
+      <ShareBookmarkSection />
+      <FeatureBookmarkSection />
+      <FeatureReminderSection />
+      <FeatureRewardSection />
+      <FinalCTASection />
     </>
   );
 };

@@ -10,7 +10,7 @@ const FinalCTASection = () => {
   };
 
   return (
-    <div className="relative flex h-dvh flex-col">
+    <div className="relative flex h-dvh snap-start flex-col">
       <section className="bg-white-bg mt-[10.3rem] flex w-full flex-col items-center justify-center gap-[2rem] overflow-hidden px-[17.2rem] text-center">
         <Lottie
           animationData={Chippiface}

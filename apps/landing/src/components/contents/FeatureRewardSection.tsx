@@ -2,7 +2,7 @@ import Dotori from '../../assets/Dotori.svg';
 
 const FeatureRewardSection = () => {
   return (
-    <section className="flex h-dvh items-center justify-center bg-white">
+    <section className="flex h-dvh snap-start items-center justify-center bg-white">
       <div className="flex items-start gap-[24rem]">
         {/* 글씨 영역 */}
         <div className="flex flex-col items-start gap-[2.4rem] pl-[3rem] pt-[14rem] text-left">

@@ -26,7 +26,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="bg-white-bg flex h-dvh w-full flex-col items-center justify-center px-[17.2rem] text-center">
+    <section className="bg-white-bg flex h-dvh w-full snap-start flex-col items-center justify-center px-[17.2rem] text-center">
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-row flex-nowrap items-end justify-center gap-[3rem]">
           <img src={landing_icon} alt="Landing Icon" />

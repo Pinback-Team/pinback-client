@@ -2,7 +2,7 @@ import JobBookmark from '../../assets/JobBookmark.svg';
 
 const ShareBookmarkSection = () => {
   return (
-    <section className="flex h-dvh items-center justify-center bg-white">
+    <section className="flex h-dvh snap-start items-center justify-center bg-white">
       <div className="flex items-start gap-[7rem]">
         {/* 이미지 영역 */}
         <div className="flex items-center justify-center">
