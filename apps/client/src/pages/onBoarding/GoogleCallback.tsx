@@ -1,4 +1,3 @@
-import { analytics } from '@pinback/analytics';
 import apiRequest from '@shared/apis/setting/axiosInstance';
 import LoadingChippi from '@shared/components/loadingChippi/LoadingChippi';
 import { authStorage } from '@shared/utils/authStorage';
@@ -62,13 +61,10 @@ const GoogleCallback = () => {
         }
       );
 
-      const { isUser, userId, email, accessToken, refreshToken, hasJob, jobRole } =
+      const { isUser, userId, email, accessToken, refreshToken, hasJob } =
         res.data.data;
 
       authStorage.setUserIdentity(email, userId);
-      // TODO: 유저 프로퍼티 추가 시 전용 API + AmplitudeProvider 패턴으로 리팩토링 필요
-      if (jobRole) authStorage.setJobRole(jobRole);
-      analytics.identify(String(userId), jobRole ? { job_role: jobRole } : undefined);
 
       handleUserLogin(isUser, accessToken, refreshToken, hasJob);
     } catch (error) {
