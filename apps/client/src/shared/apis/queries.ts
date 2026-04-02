@@ -222,16 +222,15 @@ export const useSuspenseGetJobs = () => {
   });
 };
 
-export const useGetAmplitudeUserProperties = (
-  enabled = true
-): UseQueryResult<AmplitudeUserPropertiesResponse, AxiosError> => {
-  return useQuery({
-    queryKey: ['amplitudeUserProperties'],
-    queryFn: getAmplitudeUserProperties,
-    enabled,
-    staleTime: Infinity,
-  });
-};
+export const useGetAmplitudeUserProperties =
+  (): UseQueryResult<AmplitudeUserPropertiesResponse, AxiosError> => {
+    return useQuery({
+      queryKey: ['amplitudeUserProperties'],
+      queryFn: getAmplitudeUserProperties,
+      staleTime: Infinity,
+      retry: false,
+    });
+  };
 
 export const usePatchUserJob = () => {
   const queryClient = useQueryClient();
