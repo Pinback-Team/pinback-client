@@ -60,3 +60,8 @@ export interface CategoryDetailResponse {
 export interface HasJobResponse {
   hasJob: boolean;
 }
+
+export interface AmplitudeUserPropertiesResponse {
+  userId: string;
+  jobRole: string | null;
+}

@@ -2,6 +2,7 @@ import {
   deleteCategory,
   deleteRemindArticle,
   getAcorns,
+  getAmplitudeUserProperties,
   getArticleDetail,
   getCategoryDetail,
   getDashboardCategories,
@@ -20,6 +21,7 @@ import {
 } from '@shared/apis/axios';
 import {
   AcornsResponse,
+  AmplitudeUserPropertiesResponse,
   ArticleDetailResponse,
   ArticleReadStatusResponse,
   CategoryDetailResponse,
@@ -220,6 +222,16 @@ export const useSuspenseGetJobs = () => {
   });
 };
 
+export const useGetAmplitudeUserProperties =
+  (): UseQueryResult<AmplitudeUserPropertiesResponse, AxiosError> => {
+    return useQuery({
+      queryKey: ['amplitudeUserProperties'],
+      queryFn: getAmplitudeUserProperties,
+      staleTime: Infinity,
+      retry: false,
+    });
+  };
+
 export const usePatchUserJob = () => {
   const queryClient = useQueryClient();
 
@@ -228,6 +240,9 @@ export const usePatchUserJob = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['hasJob'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['amplitudeUserProperties'],
       });
     },
   });

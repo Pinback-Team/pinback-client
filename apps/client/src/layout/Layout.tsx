@@ -9,6 +9,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 const Layout = () => {
   const location = useLocation();
   const queryClient = useQueryClient();
+  const isLoggedIn = authStorage.hasAccessToken();
 
   const isPolicyPage =
     location.pathname === ROUTES_CONFIG.privacyPolicy.path ||
@@ -20,7 +21,6 @@ const Layout = () => {
     location.pathname.startsWith(ROUTES_CONFIG.onboardingCallback.path);
 
   const isSidebarHidden = isAuthPage || isPolicyPage;
-  const isLoggedIn = authStorage.hasAccessToken();
 
   const { data: hasJobData, isLoading: isHasJobLoading } = useGetHasJob(
     isLoggedIn && !isAuthPage
