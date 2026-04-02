@@ -1,5 +1,6 @@
 import apiRequest from '@shared/apis/setting/axiosInstance';
 import {
+  AmplitudeUserPropertiesResponse,
   EditArticleRequest,
   HasJobResponse,
   JobsResponse,
@@ -117,3 +118,9 @@ export const getCategoryDetail = async (categoryId: number) => {
   const { data } = await apiRequest.get(`/api/v3/categories/${categoryId}`);
   return data.data;
 };
+
+export const getAmplitudeUserProperties =
+  async (): Promise<AmplitudeUserPropertiesResponse> => {
+    const { data } = await apiRequest.get('/api/v3/users/properties');
+    return data.data;
+  };
