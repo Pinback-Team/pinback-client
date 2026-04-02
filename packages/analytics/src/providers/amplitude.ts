@@ -23,9 +23,6 @@ export const amplitudeProvider: AnalyticsProvider = {
           webVitals: false,
         },
       },
-      sessionReplay: {
-        sampleRate: 1,
-      },
     });
   },
 
