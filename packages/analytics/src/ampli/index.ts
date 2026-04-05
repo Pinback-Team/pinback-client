@@ -66,6 +66,17 @@ export interface ClickedAlarmProperties {
   reminder_id?: string;
 }
 
+export interface ClickedMyBookmarkProperties {
+  /**
+   * 아티클 고유 ID (특정 아티클 재열람 확인 등)
+   */
+  article_id?: string;
+  /**
+   * 카테고리 고유 ID (어디에 저장됐는지, 공유 여부 확인 등)
+   */
+  category_id?: string;
+}
+
 export interface ClickedReminderProperties {
   /**
    * 아티클 고유 ID (특정 아티클 재열람 확인 등)
@@ -171,6 +182,16 @@ export class ClickedAlarm implements BaseEvent {
 
   constructor(
     public event_properties?: ClickedAlarmProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class ClickedMyBookmark implements BaseEvent {
+  event_type = 'Clicked_My_Bookmark';
+
+  constructor(
+    public event_properties?: ClickedMyBookmarkProperties,
   ) {
     this.event_properties = event_properties;
   }
@@ -368,6 +389,23 @@ export class Ampli {
     options?: EventOptions,
   ) {
     return this.track(new ClickedAlarm(properties), options);
+  }
+
+  /**
+   * Clicked_My_Bookmark
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/pinback/default/events/main/latest/Clicked_My_Bookmark)
+   *
+   * 대시보드 나의 북마크 카드를 클릭했을 때 발생 (여기서 나의 북마크는 북마크 전체, 카테고리 등 전체를 포함함.)
+   *
+   * @param properties The event's properties (e.g. article_id)
+   * @param options Amplitude event options.
+   */
+  clickedMyBookmark(
+    properties?: ClickedMyBookmarkProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new ClickedMyBookmark(properties), options);
   }
 
   /**
