@@ -55,6 +55,17 @@ export interface IdentifyProperties {
   job_role?: string;
 }
 
+export interface ClickedAlarmProperties {
+  /**
+   * 아티클 고유 ID (특정 아티클 재열람 확인 등)
+   */
+  article_id?: string;
+  /**
+   * 리마인드 아이디(보내고 클릭해졌는지 클릭률 계산 등)
+   */
+  reminder_id?: string;
+}
+
 export interface ClickedReminderProperties {
   /**
    * 아티클 고유 ID (특정 아티클 재열람 확인 등)
@@ -64,10 +75,6 @@ export interface ClickedReminderProperties {
    * 리마인드 아이디(보내고 클릭해졌는지 클릭률 계산 등)
    */
   reminder_id?: string;
-  /**
-   * 리마인드 유형
-   */
-  reminder_type?: string;
 }
 
 export interface ClickedSharedBookmarkProperties {
@@ -79,21 +86,6 @@ export interface ClickedSharedBookmarkProperties {
    * 카테고리 고유 ID (어디에 저장됐는지, 공유 여부 확인 등)
    */
   category_id?: string;
-}
-
-export interface OpenedSavedContentProperties {
-  /**
-   * 아티클 고유 ID (특정 아티클 재열람 확인 등)
-   */
-  article_id?: string;
-  /**
-   * 카테고리 고유 ID (어디에 저장됐는지, 공유 여부 확인 등)
-   */
-  category_id?: string;
-  /**
-   * 콘텐츠 유입 출처
-   */
-  source_type?: string;
 }
 
 export interface SavedArticleProperties {
@@ -113,14 +105,6 @@ export interface SavedArticleProperties {
    * 저장 대상 페이지 도메인
    */
   page_domain?: string;
-  /**
-   * 저장 방식
-   */
-  save_method?: string;
-  /**
-   * 저장이 발생한 위치
-   */
-  save_source?: string;
 }
 
 export interface SavedSharedBookmarkProperties {
@@ -129,17 +113,17 @@ export interface SavedSharedBookmarkProperties {
    */
   article_id?: string;
   /**
+   * 콘텐츠 유입 출처
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Enum Values | own, jobpin, remind |
+   */
+  bookmark_type?: "own" | "jobpin" | "remind";
+  /**
    * 카테고리 고유 ID (어디에 저장됐는지, 공유 여부 확인 등)
    */
   category_id?: string;
-  /**
-   * 저장이 발생한 위치
-   */
-  save_source?: string;
-  /**
-   * 콘텐츠 유입 출처
-   */
-  source_type?: string;
 }
 
 export interface TriggeredReminderProperties {
@@ -151,10 +135,6 @@ export interface TriggeredReminderProperties {
    * 카테고리 고유 ID (어디에 저장됐는지, 공유 여부 확인 등)
    */
   category_id?: string;
-  /**
-   * 리마인드 유형
-   */
-  reminder_type?: string;
 }
 
 export interface ViewedSavedContentProperties {
@@ -163,13 +143,17 @@ export interface ViewedSavedContentProperties {
    */
   article_id?: string;
   /**
+   * 콘텐츠 유입 출처
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Enum Values | own, jobpin, remind |
+   */
+  bookmark_type?: "own" | "jobpin" | "remind";
+  /**
    * 카테고리 고유 ID (어디에 저장됐는지, 공유 여부 확인 등)
    */
   category_id?: string;
-  /**
-   * 콘텐츠 유입 출처
-   */
-  source_type?: string;
 }
 
 export class Identify implements BaseEvent {
@@ -177,6 +161,16 @@ export class Identify implements BaseEvent {
 
   constructor(
     public event_properties?: IdentifyProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
+export class ClickedAlarm implements BaseEvent {
+  event_type = 'Clicked_alarm';
+
+  constructor(
+    public event_properties?: ClickedAlarmProperties,
   ) {
     this.event_properties = event_properties;
   }
@@ -197,16 +191,6 @@ export class ClickedSharedBookmark implements BaseEvent {
 
   constructor(
     public event_properties?: ClickedSharedBookmarkProperties,
-  ) {
-    this.event_properties = event_properties;
-  }
-}
-
-export class OpenedSavedContent implements BaseEvent {
-  event_type = 'Opened_Saved_Content';
-
-  constructor(
-    public event_properties?: OpenedSavedContentProperties,
   ) {
     this.event_properties = event_properties;
   }
@@ -250,10 +234,6 @@ export class ViewedSavedContent implements BaseEvent {
   ) {
     this.event_properties = event_properties;
   }
-}
-
-export class ViewedSharedBookmarkList implements BaseEvent {
-  event_type = 'Viewed_Shared_Bookmark_List';
 }
 
 export type PromiseResult<T> = { promise: Promise<T | void> };
@@ -374,11 +354,28 @@ export class Ampli {
   }
 
   /**
+   * Clicked_alarm
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/pinback/default/events/main/latest/Clicked_alarm)
+   *
+   * 알림을 클릭했을 때 발생
+   *
+   * @param properties The event's properties (e.g. article_id)
+   * @param options Amplitude event options.
+   */
+  clickedAlarm(
+    properties?: ClickedAlarmProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new ClickedAlarm(properties), options);
+  }
+
+  /**
    * Clicked_Reminder
    *
    * [View in Tracking Plan](https://data.amplitude.com/pinback/default/events/main/latest/Clicked_Reminder)
    *
-   * 사용자가 리마인드를 클릭했을 때 발생
+   * 대시보드 리마인드 카드를 클릭했을 때 발생
    *
    * @param properties The event's properties (e.g. article_id)
    * @param options Amplitude event options.
@@ -405,23 +402,6 @@ export class Ampli {
     options?: EventOptions,
   ) {
     return this.track(new ClickedSharedBookmark(properties), options);
-  }
-
-  /**
-   * Opened_Saved_Content
-   *
-   * [View in Tracking Plan](https://data.amplitude.com/pinback/default/events/main/latest/Opened_Saved_Content)
-   *
-   * 저장한 콘텐츠를 다시 클릭해 열었을 때 발생
-   *
-   * @param properties The event's properties (e.g. article_id)
-   * @param options Amplitude event options.
-   */
-  openedSavedContent(
-    properties?: OpenedSavedContentProperties,
-    options?: EventOptions,
-  ) {
-    return this.track(new OpenedSavedContent(properties), options);
   }
 
   /**
@@ -490,21 +470,6 @@ export class Ampli {
     options?: EventOptions,
   ) {
     return this.track(new ViewedSavedContent(properties), options);
-  }
-
-  /**
-   * Viewed_Shared_Bookmark_List
-   *
-   * [View in Tracking Plan](https://data.amplitude.com/pinback/default/events/main/latest/Viewed_Shared_Bookmark_List)
-   *
-   * 공유 북마크 목록을 조회했을 때 발생
-   *
-   * @param options Amplitude event options.
-   */
-  viewedSharedBookmarkList(
-    options?: EventOptions,
-  ) {
-    return this.track(new ViewedSharedBookmarkList(), options);
   }
 }
 
