@@ -8,6 +8,7 @@ import thumbImg from '@assets/extension_thumb.svg';
 import { useCategoryManager } from '@hooks/useCategoryManager';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
+import { analytics } from '@pinback/analytics';
 import { Icon } from '@pinback/design-system/icons';
 import {
   AutoDismissToast,
@@ -213,6 +214,12 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
         },
         {
           onSuccess: () => {
+            analytics.track('Saved_Article', {
+              // article_id: 응답 타입 미정의로 보류
+              category_id: selected ?? undefined,
+              // is_first_save: 판단 불가로 보류
+              page_domain: new URL(url).hostname,
+            });
             save({
               url,
               title,
