@@ -1,4 +1,5 @@
 import { useGetRemindArticles } from '@pages/remind/apis/queries';
+import { analytics } from '@pinback/analytics';
 import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
 import {
@@ -161,6 +162,9 @@ const Remind = () => {
                 category={article.category.categoryName}
                 categoryColor={article.category.categoryColor}
                 onClick={() => {
+                  analytics.track('Clicked_Reminder', {
+                    article_id: String(article.articleId),
+                  });
                   window.open(article.url, '_blank');
                   updateToReadStatus(article.articleId);
                 }}

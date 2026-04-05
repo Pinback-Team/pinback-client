@@ -6,6 +6,7 @@ import JobPinsBottomNotice from '@pages/jobPins/components/JobPinsBottomNotice';
 import MemoPopup from '@pages/jobPins/components/MemoPopup';
 import { useJobPinsBottomNotice } from '@pages/jobPins/hooks/useJobPinsBottomNotice';
 import Footer from '@pages/myBookmark/components/footer/Footer';
+import { analytics } from '@pinback/analytics';
 import { Card } from '@pinback/design-system/ui';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 
@@ -77,7 +78,13 @@ const JobPins = () => {
                 category={article.category?.categoryName}
                 categoryColor={article.category?.categoryColor}
                 nickname={article.ownerName}
-                onClick={() => getJobPinDetail(article.articleId)}
+                onClick={() => {
+                  analytics.track('Clicked_Shared_Bookmark', {
+                    article_id: String(article.articleId),
+                    category_id: String(article.category.categoryId),
+                  });
+                  getJobPinDetail(article.articleId);
+                }}
               />
             );
           })}

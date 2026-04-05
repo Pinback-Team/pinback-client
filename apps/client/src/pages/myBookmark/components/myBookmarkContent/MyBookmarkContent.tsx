@@ -1,7 +1,9 @@
 import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
 import { useMyBookmarkContentData } from '@pages/myBookmark/hooks/useMyBookmarkContentData';
+import { analytics } from '@pinback/analytics';
 import { Badge, Card } from '@pinback/design-system/ui';
+import { useQueryClient } from '@tanstack/react-query';
 import { MutableRefObject } from 'react';
 
 interface MyBookmarkContentProps {
@@ -11,7 +13,6 @@ interface MyBookmarkContentProps {
   categoryId: string | null;
   updateToReadStatus: (id: number, options?: any) => void;
   openMenu: (id: number, anchor: HTMLElement) => void;
-  queryClient: any;
   scrollContainerRef: MutableRefObject<HTMLDivElement | null>;
 }
 
@@ -22,9 +23,9 @@ const MyBookmarkContent = ({
   categoryId,
   updateToReadStatus,
   openMenu,
-  queryClient,
   scrollContainerRef,
 }: MyBookmarkContentProps) => {
+  const queryClient = useQueryClient();
   const { view, list, counts, pagination } = useMyBookmarkContentData({
     activeBadge,
     category,
@@ -83,6 +84,10 @@ const MyBookmarkContent = ({
               }
               date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
               onClick={() => {
+                analytics.track('Clicked_My_Bookmark', {
+                  article_id: String(article.articleId),
+                  category_id: article.category?.categoryId?.toString(),
+                });
                 window.open(article.url, '_blank');
                 updateToReadStatus(article.articleId, {
                   onSuccess: () => {
