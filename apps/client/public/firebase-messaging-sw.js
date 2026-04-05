@@ -1,6 +1,25 @@
 /* eslint-env serviceworker */
 /* eslint-disable no-undef */
 
+const AMPLITUDE_API_KEY = 'bb48a29e445e2f350a1d23ad67f38d55';
+
+const trackAmplitudeEvent = (eventType) => {
+  const isProd = self.location.hostname === 'pinback.today';
+  if (!isProd) {
+    console.log('[Analytics] track', eventType);
+    return;
+  }
+
+  fetch('https://api2.amplitude.com/2/httpapi', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      api_key: AMPLITUDE_API_KEY,
+      events: [{ device_id: 'serviceworker', event_type: eventType }],
+    }),
+  }).catch((err) => console.warn('[Amplitude] 이벤트 전송 실패', err));
+};
+
 const firebaseConfig = {
   apiKey: 'AIzaSyD3KM0IQ4Ro3Dd2fyAY8fnhE1bQ_NesrBc',
   authDomain: 'pinback-c55de.firebaseapp.com',
@@ -35,6 +54,8 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
+  trackAmplitudeEvent('Triggered_Reminder');
+
   const url = payload.data?.url || 'https://pinback.today';
   const notificationTitle = payload.notification?.title || 'pinback';
   const notificationOptions = {
@@ -49,6 +70,8 @@ messaging.onBackgroundMessage((payload) => {
 
 self.addEventListener('notificationclick', (event) => {
   const targetUrl = event.notification.data?.url || 'https://pinback.today';
+
+  trackAmplitudeEvent('Clicked_alarm');
 
   fetch(
     `https://www.google-analytics.com/mp/collect?measurement_id=G-847ZNSCC3J&api_secret=1hei57fPTKyGX5Cw73rwgA`,
