@@ -99,6 +99,25 @@ export interface ClickedSharedBookmarkProperties {
   category_id?: string;
 }
 
+export interface ImpressionSavedContentProperties {
+  /**
+   * 아티클 고유 ID (특정 아티클 재열람 확인 등)
+   */
+  article_id?: string;
+  /**
+   * 콘텐츠 유입 출처
+   *
+   * | Rule | Value |
+   * |---|---|
+   * | Enum Values | own, jobpin, remind |
+   */
+  bookmark_type?: "own" | "jobpin" | "remind";
+  /**
+   * 카테고리 고유 ID (어디에 저장됐는지, 공유 여부 확인 등)
+   */
+  category_id?: string;
+}
+
 export interface SavedArticleProperties {
   /**
    * 아티클 고유 ID (특정 아티클 재열람 확인 등)
@@ -142,25 +161,6 @@ export interface TriggeredReminderProperties {
    * 아티클 고유 ID (특정 아티클 재열람 확인 등)
    */
   article_id?: string;
-  /**
-   * 카테고리 고유 ID (어디에 저장됐는지, 공유 여부 확인 등)
-   */
-  category_id?: string;
-}
-
-export interface ViewedSavedContentProperties {
-  /**
-   * 아티클 고유 ID (특정 아티클 재열람 확인 등)
-   */
-  article_id?: string;
-  /**
-   * 콘텐츠 유입 출처
-   *
-   * | Rule | Value |
-   * |---|---|
-   * | Enum Values | own, jobpin, remind |
-   */
-  bookmark_type?: "own" | "jobpin" | "remind";
   /**
    * 카테고리 고유 ID (어디에 저장됐는지, 공유 여부 확인 등)
    */
@@ -217,6 +217,16 @@ export class ClickedSharedBookmark implements BaseEvent {
   }
 }
 
+export class ImpressionSavedContent implements BaseEvent {
+  event_type = 'Impression_Saved_Content';
+
+  constructor(
+    public event_properties?: ImpressionSavedContentProperties,
+  ) {
+    this.event_properties = event_properties;
+  }
+}
+
 export class SavedArticle implements BaseEvent {
   event_type = 'Saved_Article';
 
@@ -242,16 +252,6 @@ export class TriggeredReminder implements BaseEvent {
 
   constructor(
     public event_properties?: TriggeredReminderProperties,
-  ) {
-    this.event_properties = event_properties;
-  }
-}
-
-export class ViewedSavedContent implements BaseEvent {
-  event_type = 'Viewed_Saved_Content';
-
-  constructor(
-    public event_properties?: ViewedSavedContentProperties,
   ) {
     this.event_properties = event_properties;
   }
@@ -443,6 +443,23 @@ export class Ampli {
   }
 
   /**
+   * Impression_Saved_Content
+   *
+   * [View in Tracking Plan](https://data.amplitude.com/pinback/default/events/main/latest/Impression_Saved_Content)
+   *
+   * 저장한 콘텐츠 목록 또는 상세가 노출될 때 발생
+   *
+   * @param properties The event's properties (e.g. article_id)
+   * @param options Amplitude event options.
+   */
+  impressionSavedContent(
+    properties?: ImpressionSavedContentProperties,
+    options?: EventOptions,
+  ) {
+    return this.track(new ImpressionSavedContent(properties), options);
+  }
+
+  /**
    * Saved_Article
    *
    * [View in Tracking Plan](https://data.amplitude.com/pinback/default/events/main/latest/Saved_Article)
@@ -491,23 +508,6 @@ export class Ampli {
     options?: EventOptions,
   ) {
     return this.track(new TriggeredReminder(properties), options);
-  }
-
-  /**
-   * Viewed_Saved_Content
-   *
-   * [View in Tracking Plan](https://data.amplitude.com/pinback/default/events/main/latest/Viewed_Saved_Content)
-   *
-   * 저장한 콘텐츠 목록 또는 상세가 노출될 때 발생
-   *
-   * @param properties The event's properties (e.g. article_id)
-   * @param options Amplitude event options.
-   */
-  viewedSavedContent(
-    properties?: ViewedSavedContentProperties,
-    options?: EventOptions,
-  ) {
-    return this.track(new ViewedSavedContent(properties), options);
   }
 }
 
