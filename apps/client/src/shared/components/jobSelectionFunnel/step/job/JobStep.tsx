@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Checkbox } from '@pinback/design-system/ui';
-import { JobsResponse } from '@shared/types/api';
+import { type JobsResponse } from '@shared/types/api';
 import JobCards from './JobCards';
 import JobCardsSkeleton from './JobCardsSkeleton';
 

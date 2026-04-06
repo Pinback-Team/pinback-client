@@ -1,10 +1,10 @@
 import {
   Button,
   WheelPicker,
-  WheelPickerOption,
+  type WheelPickerOption,
   WheelPickerWrapper,
 } from '@pinback/design-system/ui';
-import { MouseEventHandler, useState } from 'react';
+import { type MouseEventHandler, useState } from 'react';
 
 const createArray = (length: number, add = 0): WheelPickerOption[] =>
   Array.from({ length }, (_, i) => {

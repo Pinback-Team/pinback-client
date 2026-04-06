@@ -1,6 +1,6 @@
 import {
   Step,
-  StepType,
+  type StepType,
   storySteps,
 } from '@pages/onBoarding/constants/onboardingSteps';
 import { useOnboardingFunnel } from '@pages/onBoarding/hooks/useOnboardingFunnel';

@@ -2,7 +2,7 @@ import { AlarmsType } from '@constants/alarms';
 import {
   Step,
   stepOrder,
-  StepType,
+  type StepType,
 } from '@pages/onBoarding/constants/onboardingSteps';
 import { normalizeTime } from '@pages/onBoarding/utils/formatRemindTime';
 import { registerServiceWorker } from '@pages/onBoarding/utils/registerServiceWorker';

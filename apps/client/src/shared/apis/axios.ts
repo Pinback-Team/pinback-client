@@ -1,9 +1,9 @@
 import apiRequest from '@shared/apis/setting/axiosInstance';
 import {
-  AmplitudeUserPropertiesResponse,
-  EditArticleRequest,
-  HasJobResponse,
-  JobsResponse,
+  type AmplitudeUserPropertiesResponse,
+  type EditArticleRequest,
+  type HasJobResponse,
+  type JobsResponse,
 } from '@shared/types/api';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 

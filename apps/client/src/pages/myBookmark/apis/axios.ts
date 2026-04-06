@@ -1,7 +1,7 @@
 import {
-  BookmarkArticlesCountResponse,
-  BookmarkArticlesResponse,
-  CategoryBookmarkArticleResponse,
+  type BookmarkArticlesCountResponse,
+  type BookmarkArticlesResponse,
+  type CategoryBookmarkArticleResponse,
 } from '@pages/myBookmark/types/api';
 import apiRequest from '@shared/apis/setting/axiosInstance';
 

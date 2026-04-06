@@ -22,7 +22,7 @@ const AnalyticsCardWrapper = ({
         bookmark_type: bookmarkType,
       });
     }
-  }, [inView]);
+  }, [inView, bookmarkType]);
 
   return <div ref={ref}>{children}</div>;
 };
