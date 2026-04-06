@@ -1,5 +1,6 @@
 import { useGetRemindArticles } from '@pages/remind/apis/queries';
 import { analytics } from '@pinback/analytics';
+import AnalyticsCardWrapper from '@shared/components/analyticsCardWrapper/AnalyticsCardWrapper';
 import NoReadArticles from '@pages/remind/components/noReadArticles/NoReadArticles';
 import NoUnreadArticles from '@pages/remind/components/noUnreadArticles/NoUnreadArticles';
 import {
@@ -152,28 +153,28 @@ const Remind = () => {
             const displayImageUrl = article.thumbnailUrl || undefined;
 
             return (
-              <Card
-                key={article.articleId}
-                type="remind"
-                title={displayTitle}
-                imageUrl={displayImageUrl}
-                content={article.memo}
-                timeRemaining={article.remindAt}
-                category={article.category.categoryName}
-                categoryColor={article.category.categoryColor}
-                onClick={() => {
-                  analytics.track('Clicked_Reminder', {
-                    article_id: String(article.articleId),
-                  });
-                  window.open(article.url, '_blank');
-                  updateToReadStatus(article.articleId);
-                }}
-                onOptionsClick={(e) => {
-                  e.stopPropagation();
-
-                  openMenu(article.articleId, e.currentTarget);
-                }}
-              />
+              <AnalyticsCardWrapper key={article.articleId} bookmarkType="remind">
+                <Card
+                  type="remind"
+                  title={displayTitle}
+                  imageUrl={displayImageUrl}
+                  content={article.memo}
+                  timeRemaining={article.remindAt}
+                  category={article.category.categoryName}
+                  categoryColor={article.category.categoryColor}
+                  onClick={() => {
+                    analytics.track('Clicked_Reminder', {
+                      article_id: String(article.articleId),
+                    });
+                    window.open(article.url, '_blank');
+                    updateToReadStatus(article.articleId);
+                  }}
+                  onOptionsClick={(e) => {
+                    e.stopPropagation();
+                    openMenu(article.articleId, e.currentTarget);
+                  }}
+                />
+              </AnalyticsCardWrapper>
             );
           })}
 
