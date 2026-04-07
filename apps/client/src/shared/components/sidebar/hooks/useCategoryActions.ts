@@ -4,9 +4,9 @@ import {
   usePatchCategory,
   usePostCategory,
 } from '@shared/apis/queries';
-import { SidebarTab } from '@shared/hooks/useSidebarNav';
+import { type SidebarTab } from '@shared/hooks/useSidebarNav';
 import { useQueryClient } from '@tanstack/react-query';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { type Dispatch, type SetStateAction, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface CategoryActionsParams {

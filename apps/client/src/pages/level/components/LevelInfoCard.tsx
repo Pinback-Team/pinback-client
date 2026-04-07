@@ -1,4 +1,4 @@
-import { TREE_LEVEL_TABLE, TreeLevel } from '@pages/level/types/treeLevelType';
+import { TREE_LEVEL_TABLE, type TreeLevel } from '@pages/level/types/treeLevelType';
 import { Level } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
 

@@ -6,7 +6,9 @@ import JobPinsBottomNotice from '@pages/jobPins/components/JobPinsBottomNotice';
 import MemoPopup from '@pages/jobPins/components/MemoPopup';
 import { useJobPinsBottomNotice } from '@pages/jobPins/hooks/useJobPinsBottomNotice';
 import Footer from '@pages/myBookmark/components/footer/Footer';
+import { analytics } from '@pinback/analytics';
 import { Card } from '@pinback/design-system/ui';
+import AnalyticsCardWrapper from '@shared/components/analyticsCardWrapper/AnalyticsCardWrapper';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 
 const JobPins = () => {
@@ -67,18 +69,30 @@ const JobPins = () => {
             const displayImageUrl = article.thumbnailUrl || undefined;
 
             return (
-              <Card
+              <AnalyticsCardWrapper
                 key={article.articleId}
-                type="bookmark"
-                variant="save"
-                title={displayTitle}
-                imageUrl={displayImageUrl}
-                content={article.memo}
-                category={article.category?.categoryName}
-                categoryColor={article.category?.categoryColor}
-                nickname={article.ownerName}
-                onClick={() => getJobPinDetail(article.articleId)}
-              />
+                bookmarkType="jobpin"
+              >
+                <Card
+                  type="bookmark"
+                  variant="save"
+                  title={displayTitle}
+                  imageUrl={displayImageUrl}
+                  content={article.memo}
+                  category={article.category?.categoryName}
+                  categoryColor={article.category?.categoryColor}
+                  nickname={article.ownerName}
+                  onClick={() => {
+                    analytics.track('Clicked_Shared_Bookmark', {
+                      article_id: String(article.articleId),
+                      category_id: article.category
+                        ? String(article.category.categoryId)
+                        : undefined,
+                    });
+                    getJobPinDetail(article.articleId);
+                  }}
+                />
+              </AnalyticsCardWrapper>
             );
           })}
 

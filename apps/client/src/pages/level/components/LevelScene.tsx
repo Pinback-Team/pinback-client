@@ -1,6 +1,6 @@
 import { cn } from '@pinback/design-system/utils';
-import { TreeLevel } from '@pages/level/types/treeLevelType';
-import { HTMLAttributes } from 'react';
+import { type TreeLevel } from '@pages/level/types/treeLevelType';
+import { type HTMLAttributes } from 'react';
 
 import chippi_level1 from '../../../assets/Lv.1.webp';
 import chippi_level2 from '../../../assets/Lv.2.webp';

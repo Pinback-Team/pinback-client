@@ -101,7 +101,6 @@ const MyBookmark = () => {
             onBadgeChange={setActiveBadge}
             updateToReadStatus={updateToReadStatus}
             openMenu={openMenu}
-            queryClient={queryClient}
             scrollContainerRef={scrollContainerRef}
           />
         </ErrorBoundary>

@@ -5,7 +5,7 @@ import {
   useGetCategoryBookmarkArticlesCount,
 } from '@pages/myBookmark/apis/queries';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
-import { MutableRefObject } from 'react';
+import { type MutableRefObject } from 'react';
 
 interface UseMyBookmarkContentDataParams {
   activeBadge: 'all' | 'notRead';

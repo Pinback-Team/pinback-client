@@ -3,6 +3,7 @@ import { amplitudeProvider } from './src/providers/amplitude';
 import { consoleProvider } from './src/providers/console';
 
 export type { AnalyticsProvider, UserProperties } from './src/types';
+export type * from './src/ampli';
 export { analytics };
 
 interface InitAnalyticsOptions {

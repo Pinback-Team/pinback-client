@@ -1,7 +1,7 @@
 import { useState, useId } from 'react';
 import { cn } from '@pinback/design-system/utils';
 import SideItem from './SideItem';
-import { IconToken } from './types/IconTokenType';
+import { type IconToken } from './types/IconTokenType';
 
 interface AccordionItemProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {

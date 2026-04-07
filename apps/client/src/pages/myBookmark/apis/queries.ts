@@ -3,7 +3,7 @@ import {
   useSuspenseInfiniteQuery,
   useSuspenseQuery,
 } from '@tanstack/react-query';
-import { CategoryBookmarkArticleResponse } from '../types/api';
+import { type CategoryBookmarkArticleResponse } from '../types/api';
 import {
   getBookmarkArticles,
   getBookmarkArticlesCount,

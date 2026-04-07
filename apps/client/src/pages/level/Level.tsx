@@ -1,5 +1,5 @@
 import LevelScene from '@pages/level/components/LevelScene';
-import { TreeLevel } from '@pages/level/types/treeLevelType';
+import { type TreeLevel } from '@pages/level/types/treeLevelType';
 import { Icon } from '@pinback/design-system/icons';
 import { Badge } from '@pinback/design-system/ui';
 import { cn } from '@pinback/design-system/utils';
