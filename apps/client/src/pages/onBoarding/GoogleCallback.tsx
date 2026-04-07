@@ -2,12 +2,14 @@ import apiRequest from '@shared/apis/setting/axiosInstance';
 import LoadingChippi from '@shared/components/loadingChippi/LoadingChippi';
 import { authStorage } from '@shared/utils/authStorage';
 import { extensionBridge } from '@shared/utils/extensionBridge';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const GoogleCallback = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const code = searchParams.get('code');
@@ -65,6 +67,7 @@ const GoogleCallback = () => {
         res.data.data;
 
       authStorage.setUserIdentity(email, userId);
+      queryClient.invalidateQueries({ queryKey: ['amplitudeUserProperties'] });
 
       handleUserLogin(isUser, accessToken, refreshToken, hasJob);
     } catch (error) {

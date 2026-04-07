@@ -1,9 +1,9 @@
-import { JobPinsResponse } from '@pages/jobPins/types/api';
+import { type JobPinsResponse } from '@pages/jobPins/types/api';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import {
   getJobPinsArticleDetail,
   getJobPinsArticles,
-  JobPinsDetailResponse,
+  type JobPinsDetailResponse,
 } from './axios';
 
 const PAGE_SIZE = 20;

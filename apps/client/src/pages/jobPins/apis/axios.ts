@@ -1,4 +1,4 @@
-import { JobPinsResponse } from '@pages/jobPins/types/api';
+import { type JobPinsResponse } from '@pages/jobPins/types/api';
 import apiRequest from '@shared/apis/setting/axiosInstance';
 
 interface ApiResponse<T> {

@@ -1,3 +1,4 @@
+import { analytics } from '@pinback/analytics';
 import { Icon } from '@pinback/design-system/icons';
 import { Button } from '@pinback/design-system/ui';
 import { useQueryClient } from '@tanstack/react-query';
@@ -44,6 +45,7 @@ export default function ProfilePopup({
   if (!open) return null;
 
   const handleLogout = () => {
+    analytics.reset();
     authStorage.clearSession();
     queryClient.clear();
     extensionBridge.logout();

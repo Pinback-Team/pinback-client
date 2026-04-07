@@ -2,6 +2,7 @@ import {
   deleteCategory,
   deleteRemindArticle,
   getAcorns,
+  getAmplitudeUserProperties,
   getArticleDetail,
   getCategoryDetail,
   getDashboardCategories,
@@ -11,35 +12,36 @@ import {
   getMyProfile,
   patchCategory,
   patchUserJob,
-  patchUserJobRequest,
+  type patchUserJobRequest,
   postCategory,
   postSignUp,
-  postSignUpRequest,
+  type postSignUpRequest,
   putArticleReadStatus,
   putEditArticle,
 } from '@shared/apis/axios';
 import {
-  AcornsResponse,
-  ArticleDetailResponse,
-  ArticleReadStatusResponse,
-  CategoryDetailResponse,
-  DashboardCategoriesResponse,
-  EditArticleRequest,
-  HasJobResponse,
-  JobsResponse,
+  type AcornsResponse,
+  type AmplitudeUserPropertiesResponse,
+  type ArticleDetailResponse,
+  type ArticleReadStatusResponse,
+  type CategoryDetailResponse,
+  type DashboardCategoriesResponse,
+  type EditArticleRequest,
+  type HasJobResponse,
+  type JobsResponse,
 } from '@shared/types/api';
 import { fetchOGData } from '@shared/utils/fetchOgData';
 import { authStorage } from '@shared/utils/authStorage';
 import { extensionBridge } from '@shared/utils/extensionBridge';
 import {
   useMutation,
-  UseMutationResult,
+  type UseMutationResult,
   useQuery,
   useQueryClient,
-  UseQueryResult,
+  type UseQueryResult,
   useSuspenseQuery,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { type AxiosError } from 'axios';
 
 export const useGetDashboardCategories = (): UseQueryResult<
   DashboardCategoriesResponse,
@@ -220,6 +222,16 @@ export const useSuspenseGetJobs = () => {
   });
 };
 
+export const useGetAmplitudeUserProperties =
+  (): UseQueryResult<AmplitudeUserPropertiesResponse, AxiosError> => {
+    return useQuery({
+      queryKey: ['amplitudeUserProperties'],
+      queryFn: getAmplitudeUserProperties,
+      staleTime: Infinity,
+      retry: false,
+    });
+  };
+
 export const usePatchUserJob = () => {
   const queryClient = useQueryClient();
 
@@ -228,6 +240,9 @@ export const usePatchUserJob = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['hasJob'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['amplitudeUserProperties'],
       });
     },
   });

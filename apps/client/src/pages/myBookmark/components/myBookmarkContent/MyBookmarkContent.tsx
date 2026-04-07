@@ -1,8 +1,11 @@
 import NoArticles from '@pages/myBookmark/components/NoArticles/NoArticles';
 import NoUnreadArticles from '@pages/myBookmark/components/noUnreadArticles/NoUnreadArticles';
 import { useMyBookmarkContentData } from '@pages/myBookmark/hooks/useMyBookmarkContentData';
+import { analytics } from '@pinback/analytics';
 import { Badge, Card } from '@pinback/design-system/ui';
-import { MutableRefObject } from 'react';
+import AnalyticsCardWrapper from '@shared/components/analyticsCardWrapper/AnalyticsCardWrapper';
+import { useQueryClient } from '@tanstack/react-query';
+import { type MutableRefObject } from 'react';
 
 interface MyBookmarkContentProps {
   activeBadge: 'all' | 'notRead';
@@ -11,7 +14,6 @@ interface MyBookmarkContentProps {
   categoryId: string | null;
   updateToReadStatus: (id: number, options?: any) => void;
   openMenu: (id: number, anchor: HTMLElement) => void;
-  queryClient: any;
   scrollContainerRef: MutableRefObject<HTMLDivElement | null>;
 }
 
@@ -22,9 +24,9 @@ const MyBookmarkContent = ({
   categoryId,
   updateToReadStatus,
   openMenu,
-  queryClient,
   scrollContainerRef,
 }: MyBookmarkContentProps) => {
+  const queryClient = useQueryClient();
   const { view, list, counts, pagination } = useMyBookmarkContentData({
     activeBadge,
     category,
@@ -65,50 +67,55 @@ const MyBookmarkContent = ({
           className="scrollbar-hide mt-[2.6rem] flex h-screen flex-wrap content-start gap-[1.6rem] overflow-y-auto scroll-smooth"
         >
           {list.articles.map((article) => (
-            <Card
-              key={article.articleId}
-              type="bookmark"
-              title={article.title || '제목 없음'}
-              imageUrl={article.thumbnailUrl || undefined}
-              content={article.memo ?? undefined}
-              category={
-                view.isCategoryView
-                  ? view.categoryName
-                  : article.category?.categoryName
-              }
-              categoryColor={
-                view.isCategoryView
-                  ? undefined
-                  : article.category?.categoryColor
-              }
-              date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
-              onClick={() => {
-                window.open(article.url, '_blank');
-                updateToReadStatus(article.articleId, {
-                  onSuccess: () => {
-                    queryClient.invalidateQueries({
-                      queryKey: ['bookmarkArticles'],
-                    });
-                    queryClient.invalidateQueries({
-                      queryKey: ['bookmarkArticlesCount'],
-                    });
-                    queryClient.invalidateQueries({
-                      queryKey: ['categoryBookmarkArticlesCount'],
-                    });
-                    queryClient.invalidateQueries({
-                      queryKey: ['categoryBookmarkArticles'],
-                    });
-                  },
-                  onError: (error: any) => {
-                    console.error(error);
-                  },
-                });
-              }}
-              onOptionsClick={(e) => {
-                e.stopPropagation();
-                openMenu(article.articleId, e.currentTarget);
-              }}
-            />
+            <AnalyticsCardWrapper key={article.articleId} bookmarkType="own">
+              <Card
+                type="bookmark"
+                title={article.title || '제목 없음'}
+                imageUrl={article.thumbnailUrl || undefined}
+                content={article.memo ?? undefined}
+                category={
+                  view.isCategoryView
+                    ? view.categoryName
+                    : article.category?.categoryName
+                }
+                categoryColor={
+                  view.isCategoryView
+                    ? undefined
+                    : article.category?.categoryColor
+                }
+                date={new Date(article.createdAt).toLocaleDateString('ko-KR')}
+                onClick={() => {
+                  analytics.track('Clicked_My_Bookmark', {
+                    article_id: String(article.articleId),
+                    category_id: article.category?.categoryId?.toString(),
+                  });
+                  window.open(article.url, '_blank');
+                  updateToReadStatus(article.articleId, {
+                    onSuccess: () => {
+                      queryClient.invalidateQueries({
+                        queryKey: ['bookmarkArticles'],
+                      });
+                      queryClient.invalidateQueries({
+                        queryKey: ['bookmarkArticlesCount'],
+                      });
+                      queryClient.invalidateQueries({
+                        queryKey: ['categoryBookmarkArticlesCount'],
+                      });
+                      queryClient.invalidateQueries({
+                        queryKey: ['categoryBookmarkArticles'],
+                      });
+                    },
+                    onError: (error: any) => {
+                      console.error(error);
+                    },
+                  });
+                }}
+                onOptionsClick={(e) => {
+                  e.stopPropagation();
+                  openMenu(article.articleId, e.currentTarget);
+                }}
+              />
+            </AnalyticsCardWrapper>
           ))}
 
           <div

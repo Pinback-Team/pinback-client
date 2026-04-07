@@ -1,0 +1,14 @@
+{
+  "name": "@pinback/analytics",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "ampli:pull": "ampli pull"
+  },
+  "dependencies": {
+    "@amplitude/unified": "^1.0.10"
+  },
+  "devDependencies": {
+    "@amplitude/ampli": "^1.36.2"
+  }
+}

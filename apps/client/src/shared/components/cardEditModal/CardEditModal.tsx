@@ -18,7 +18,7 @@ import {
   useGetDashboardCategories,
   usePutEditArticle,
 } from '@shared/apis/queries';
-import { ArticleDetailResponse, EditArticleRequest } from '@shared/types/api';
+import { type ArticleDetailResponse, type EditArticleRequest } from '@shared/types/api';
 import { combineDateTime } from '@shared/utils/datetime';
 import { updateDate, updateTime } from '@shared/utils/formatDateTime';
 import { useQueryClient } from '@tanstack/react-query';

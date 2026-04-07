@@ -1,8 +1,9 @@
 import apiRequest from '@shared/apis/setting/axiosInstance';
 import {
-  EditArticleRequest,
-  HasJobResponse,
-  JobsResponse,
+  type AmplitudeUserPropertiesResponse,
+  type EditArticleRequest,
+  type HasJobResponse,
+  type JobsResponse,
 } from '@shared/types/api';
 import { formatLocalDateTime } from '@shared/utils/formatDateTime';
 
@@ -117,3 +118,9 @@ export const getCategoryDetail = async (categoryId: number) => {
   const { data } = await apiRequest.get(`/api/v3/categories/${categoryId}`);
   return data.data;
 };
+
+export const getAmplitudeUserProperties =
+  async (): Promise<AmplitudeUserPropertiesResponse> => {
+    const { data } = await apiRequest.get('/api/v3/users/properties');
+    return data.data;
+  };

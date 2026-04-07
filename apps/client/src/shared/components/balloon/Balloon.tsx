@@ -1,6 +1,6 @@
 import { Icon } from '@pinback/design-system/icons';
 import { cn } from '@pinback/design-system/utils';
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 type BalloonVariant = 'gray' | 'main';
 

@@ -8,6 +8,7 @@ import thumbImg from '@assets/extension_thumb.svg';
 import { useCategoryManager } from '@hooks/useCategoryManager';
 import { usePageMeta } from '@hooks/usePageMeta';
 import { useSaveBookmark } from '@hooks/useSaveBookmarks';
+import { analytics } from '@pinback/analytics';
 import { Icon } from '@pinback/design-system/icons';
 import {
   AutoDismissToast,
@@ -22,7 +23,7 @@ import {
   validateDate,
   validateTime,
 } from '@pinback/design-system/ui';
-import { ArticleResponse } from '@shared-types/types';
+import { type ArticleResponse } from '@shared-types/types';
 import Header from '@shared/components/Header';
 import {
   combineDateTime,
@@ -213,6 +214,14 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
         },
         {
           onSuccess: () => {
+            analytics.track('Saved_Article', {
+              // article_id: 응답 타입 미정의로 보류
+              category_id: selected ?? undefined,
+              // is_first_save: 판단 불가로 보류
+              page_domain: URL.canParse(url)
+                ? new URL(url).hostname
+                : undefined,
+            });
             save({
               url,
               title,

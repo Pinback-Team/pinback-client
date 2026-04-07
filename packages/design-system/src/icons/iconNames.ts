@@ -1,12 +1,8 @@
 // 이 파일은 자동 생성 파일입니다. (직접 수정 금지)
 export const iconNames = [
   'check_circle',
-  'chippi_profile',
-  'dotori',
   'ext_home1',
   'ext_home2',
-  'extension_pop',
-  'extension_thumb',
   'google',
   'ic_arrow_down_active',
   'ic_arrow_down_disable',
@@ -26,16 +22,8 @@ export const iconNames = [
   'ic_plus',
   'instagram',
   'logo',
-  'logout_chippi.2512',
   'main_header_logo',
   'main_logo',
   'notsave_circle',
-  'palms',
-  'saved',
-  'tooltip_1',
-  'tooltip_2',
-  'tooltip_3',
-  'tooltip_4',
-  'tooltip_5',
 ] as const;
 export type IconName = (typeof iconNames)[number];

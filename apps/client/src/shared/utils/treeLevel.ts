@@ -1,7 +1,7 @@
 import {
   TREE_LEVEL_TABLE,
-  TreeLevelResult,
-  TreeLevelRow,
+  type TreeLevelResult,
+  type TreeLevelRow,
 } from '@pages/level/types/treeLevelType';
 
 function findLevelRow(count: number, rows: readonly TreeLevelRow[]) {
