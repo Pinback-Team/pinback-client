@@ -7,8 +7,8 @@ import MemoPopup from '@pages/jobPins/components/MemoPopup';
 import { useJobPinsBottomNotice } from '@pages/jobPins/hooks/useJobPinsBottomNotice';
 import Footer from '@pages/myBookmark/components/footer/Footer';
 import { analytics } from '@pinback/analytics';
-import AnalyticsCardWrapper from '@shared/components/analyticsCardWrapper/AnalyticsCardWrapper';
 import { Card } from '@pinback/design-system/ui';
+import AnalyticsCardWrapper from '@shared/components/analyticsCardWrapper/AnalyticsCardWrapper';
 import { useInfiniteScroll } from '@shared/hooks/useInfiniteScroll';
 
 const JobPins = () => {
@@ -69,7 +69,10 @@ const JobPins = () => {
             const displayImageUrl = article.thumbnailUrl || undefined;
 
             return (
-              <AnalyticsCardWrapper key={article.articleId} bookmarkType="jobpin">
+              <AnalyticsCardWrapper
+                key={article.articleId}
+                bookmarkType="jobpin"
+              >
                 <Card
                   type="bookmark"
                   variant="save"
@@ -82,7 +85,9 @@ const JobPins = () => {
                   onClick={() => {
                     analytics.track('Clicked_Shared_Bookmark', {
                       article_id: String(article.articleId),
-                      category_id: String(article.category.categoryId),
+                      category_id: article.category
+                        ? String(article.category.categoryId)
+                        : undefined,
                     });
                     getJobPinDetail(article.articleId);
                   }}

@@ -23,7 +23,7 @@ import {
   validateDate,
   validateTime,
 } from '@pinback/design-system/ui';
-import { ArticleResponse } from '@shared-types/types';
+import { type ArticleResponse } from '@shared-types/types';
 import Header from '@shared/components/Header';
 import {
   combineDateTime,
@@ -218,7 +218,9 @@ const MainPop = ({ type, savedData }: MainPopProps) => {
               // article_id: 응답 타입 미정의로 보류
               category_id: selected ?? undefined,
               // is_first_save: 판단 불가로 보류
-              page_domain: new URL(url).hostname,
+              page_domain: URL.canParse(url)
+                ? new URL(url).hostname
+                : undefined,
             });
             save({
               url,
