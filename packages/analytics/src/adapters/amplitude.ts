@@ -2,7 +2,7 @@ import { Identify, identify, setUserId, reset, track, initAll } from '@amplitude
 
 import type { AnalyticsProvider, UserProperties } from '../types';
 
-export const amplitudeProvider: AnalyticsProvider = {
+export const amplitudeAdapter: AnalyticsProvider = {
   init(apiKey: string) {
     initAll(apiKey, {
       analytics: {

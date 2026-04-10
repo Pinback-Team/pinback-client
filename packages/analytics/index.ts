@@ -1,6 +1,6 @@
 import { analytics } from './src/analytics';
-import { amplitudeProvider } from './src/providers/amplitude';
-import { consoleProvider } from './src/providers/console';
+import { amplitudeAdapter } from './src/adapters/amplitude';
+import { consoleAdapter } from './src/adapters/console';
 
 export type { AnalyticsProvider, UserProperties } from './src/types';
 export type * from './src/ampli';
@@ -13,16 +13,16 @@ interface InitAnalyticsOptions {
 
 export const initAnalytics = ({ apiKey, isDev }: InitAnalyticsOptions): void => {
   if (isDev || !apiKey) {
-    analytics.setProvider(consoleProvider);
+    analytics.setProvider(consoleAdapter);
     return;
   }
 
   try {
-    amplitudeProvider.init(apiKey);
-    analytics.setProvider(amplitudeProvider);
+    amplitudeAdapter.init(apiKey);
+    analytics.setProvider(amplitudeAdapter);
   } catch (error) {
-    console.error('[Analytics] Failed to initialize Amplitude, falling back to console provider', error);
-    analytics.setProvider(consoleProvider);
+    console.error('[Analytics] Failed to initialize Amplitude, falling back to console adapter', error);
+    analytics.setProvider(consoleAdapter);
   }
 };
 
