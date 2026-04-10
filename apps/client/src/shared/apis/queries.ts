@@ -229,6 +229,7 @@ export const useGetAmplitudeUserProperties =
       queryFn: getAmplitudeUserProperties,
       staleTime: Infinity,
       retry: false,
+      enabled: authStorage.hasAccessToken(),
     });
   };
 
