@@ -1,7 +1,7 @@
-import { noopProvider } from './providers/noop';
+import { noopAdapter } from './adapters/noop';
 import type { AnalyticsProvider, UserProperties } from './types';
 
-let provider: AnalyticsProvider = noopProvider;
+let provider: AnalyticsProvider = noopAdapter;
 
 export const analytics = {
   setProvider(newProvider: AnalyticsProvider): void {
