@@ -76,7 +76,7 @@ apiRequest.interceptors.response.use(
 
     if (
       error.response &&
-      (error.response.status === 401 || error.response.status === 403) &&
+      error.response.status === 401 &&
       !originalRequest._retry &&
       !isNoAuth &&
       !isLoginPage

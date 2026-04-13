@@ -6,10 +6,58 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+const REDIRECT_URI = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+
 const GoogleCallback = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
+
+  const saveSession = (params: {
+    accessToken: string | null;
+    refreshToken: string | null;
+    email: string;
+    userId: string;
+    hasJob?: boolean;
+  }) => {
+    const { accessToken, refreshToken, email, userId, hasJob } = params;
+
+    authStorage.setUserIdentity(email, userId);
+
+    if (accessToken) {
+      authStorage.setAccessToken(accessToken);
+      extensionBridge.syncToken(accessToken);
+    }
+
+    if (refreshToken) {
+      authStorage.setRefreshToken(refreshToken);
+    }
+
+    if (typeof hasJob === 'boolean') {
+      authStorage.setHasJob(hasJob);
+    }
+  };
+
+  const loginWithCode = async (code: string) => {
+    try {
+      const res = await apiRequest.post(
+        '/api/v3/auth/google',
+        { code, uri: REDIRECT_URI },
+        { withCredentials: true }
+      );
+
+      const { isUser, userId, email, accessToken, refreshToken, hasJob } =
+        res.data.data;
+
+      saveSession({ accessToken, refreshToken, email, userId, hasJob });
+      queryClient.invalidateQueries({ queryKey: ['amplitudeUserProperties'] });
+
+      navigate(isUser ? '/' : '/onboarding?step=JOB');
+    } catch (error) {
+      console.error('로그인 오류:', error);
+      navigate('/onboarding?step=SOCIAL_LOGIN');
+    }
+  };
 
   useEffect(() => {
     const code = searchParams.get('code');
@@ -22,59 +70,6 @@ const GoogleCallback = () => {
 
     loginWithCode(code);
   }, []);
-
-  const handleUserLogin = (
-    isUser: boolean,
-    accessToken: string | null,
-    refreshToken: string | null,
-    hasJob?: boolean
-  ) => {
-    if (isUser) {
-      if (accessToken) {
-        authStorage.setAccessToken(accessToken);
-        extensionBridge.syncToken(accessToken);
-      }
-
-      if (refreshToken) {
-        authStorage.setRefreshToken(refreshToken);
-      }
-
-      if (typeof hasJob === 'boolean') {
-        authStorage.setHasJob(hasJob);
-      }
-      navigate('/');
-    } else {
-      navigate('/onboarding?step=JOB');
-    }
-  };
-
-  const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
-
-  const loginWithCode = async (code: string) => {
-    try {
-      const res = await apiRequest.post(
-        '/api/v3/auth/google',
-        {
-          code,
-          uri: redirectUri,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-
-      const { isUser, userId, email, accessToken, refreshToken, hasJob } =
-        res.data.data;
-
-      authStorage.setUserIdentity(email, userId);
-      queryClient.invalidateQueries({ queryKey: ['amplitudeUserProperties'] });
-
-      handleUserLogin(isUser, accessToken, refreshToken, hasJob);
-    } catch (error) {
-      console.error('로그인 오류:', error);
-      navigate('/onboarding?step=SOCIAL_LOGIN');
-    }
-  };
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">
