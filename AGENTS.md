@@ -30,8 +30,9 @@ Claude Code / Codex 공통 진입점입니다.
 
 | 트리거 | Read 할 파일 |
 | ------ | ------------ |
+| "이슈 만들어줘", "이슈 올려줘", 새 작업 시작 전 | `.agents/skills/git/issue/SKILL.md` |
 | "이슈 #123 브랜치 만들어줘", "브랜치 새로 파줘" | `.agents/skills/git/branch/SKILL.md` |
-| "커밋해줘", "지금까지 한 거 커밋해줘" | `.agents/skills/git/commit/SKILL.md` |
+| "커밋해줘", "지금까지 한 거 커밋해줘", "변경사항 나눠서 커밋해줘" | `.agents/skills/git/commit/SKILL.md` |
 | "PR 만들어줘", "PR 열어줘" | `.agents/skills/git/pr/SKILL.md` |
 
 ### code
