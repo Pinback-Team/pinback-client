@@ -4,7 +4,7 @@
 const AMPLITUDE_API_KEY = 'bb48a29e445e2f350a1d23ad67f38d55';
 
 const trackAmplitudeEvent = (eventType) => {
-  const isProd = self.location.hostname === 'pinback.today';
+  const isProd = self.location.hostname === 'pinback.site';
   if (!isProd) {
     console.log('[Analytics] track', eventType);
     return;
@@ -56,7 +56,7 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   trackAmplitudeEvent('Triggered_Reminder');
 
-  const url = payload.data?.url || 'https://pinback.today';
+  const url = payload.data?.url || 'https://pinback.site';
   const notificationTitle = payload.notification?.title || 'pinback';
   const notificationOptions = {
     body: payload.notification?.body || '저장한 북마크를 확인해 보세요!',
@@ -69,7 +69,7 @@ messaging.onBackgroundMessage((payload) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
-  const targetUrl = event.notification.data?.url || 'https://pinback.today';
+  const targetUrl = event.notification.data?.url || 'https://pinback.site';
 
   trackAmplitudeEvent('Clicked_alarm');
 
