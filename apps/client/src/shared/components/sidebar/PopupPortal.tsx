@@ -1,8 +1,8 @@
-import { createPortal } from 'react-dom';
-import { useEffect, useState } from 'react';
 import { AutoDismissToast, Popup, Toast } from '@pinback/design-system/ui';
 import type { PopupState } from '@shared/hooks/useCategoryPopups';
 import { graphemeLength } from '@shared/utils/grapheme';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 interface Props {
   popup: PopupState | null;
@@ -48,7 +48,7 @@ export default function PopupPortal({
 
     setDraft(popup.kind === 'edit' ? (popup.name ?? '') : '');
 
-    setShareToJobUsers(popup.kind === 'edit' ? popup.isPublic : false);
+    setShareToJobUsers(popup.kind === 'edit' ? popup.isPublic : true);
   }, [popup]);
 
   if (!popup) return null;

@@ -35,7 +35,7 @@ const App = () => {
   };
 
   const handleDuplicateRightClick = () => {
-    chrome.tabs.create({ url: 'https://pinback.today/' });
+    chrome.tabs.create({ url: 'https://pinback.site/' });
   };
 
   return (

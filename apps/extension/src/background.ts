@@ -1,6 +1,6 @@
 import { EXTENSION_MESSAGE_TYPE } from '@pinback/contracts/extension-messages';
 
-const webUrl = import.meta.env.VITE_WEB_URL || 'https://pinback.today';
+const webUrl = import.meta.env.VITE_WEB_URL || 'https://pinback.site';
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {

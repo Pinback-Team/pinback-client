@@ -2,7 +2,7 @@ import { Icon } from '@pinback/design-system/icons';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const SERVICE_URL = 'https://pinback.today';
+  const SERVICE_URL = 'https://pinback.site';
 
   return (
     <footer className="border-gray100 absolute bottom-0 w-full border-t-2 px-[8rem] py-[3.2rem]">
